@@ -1,21 +1,24 @@
+import { EventService } from '@app/core/services/util/event.service';
 import {
   Component,
-  EventEmitter,
   OnDestroy,
   OnInit,
-  Output,
-  ViewChild,
   inject,
   input,
   ChangeDetectionStrategy,
+  effect,
+  computed,
+  viewChild,
+  output,
+  model,
+  untracked,
 } from '@angular/core';
 import {
   NavBarComponent,
   NavBarItem,
 } from '@app/standalone/nav-bar/nav-bar.component';
 import { STORAGE_KEYS } from '@app/core/services/util/global-storage.service';
-import { ContentGroup, GroupType } from '@app/core/models/content-group';
-import { map, take, takeUntil, throttleTime } from 'rxjs/operators';
+import { map, switchMap, take, takeUntil, throttleTime } from 'rxjs/operators';
 import { fromEvent, Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
@@ -25,12 +28,8 @@ import {
 } from '@app/core/directives/hotkey.directive';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { Content } from '@app/core/models/content';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
@@ -49,7 +48,6 @@ import { MatButton } from '@angular/material/button';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { KeyButtonBarComponent } from '@app/presentation/bars/key-button-bar/key-button-bar.component';
 import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-filter.component';
-import { ContentType } from '@app/core/models/content-type.enum';
 import {
   ToggleButtonBarComponent,
   ToggleButtonOption,
@@ -59,7 +57,17 @@ import {
   EventCategory,
   TrackingService,
 } from '@app/core/services/util/tracking.service';
-import { Tag } from '@gql/generated/graphql';
+import {
+  Content,
+  ContentType,
+  QuestionnairesByRoomIdGql,
+  QuestionnaireSummaryFragment,
+  QuestionnaireType,
+  Tag,
+} from '@gql/generated/graphql';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
+import { VisualizationType } from '@app/standalone/content-results/visualization/visualization-type';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -116,20 +124,50 @@ export class ControlBarComponent
   extends NavBarComponent
   implements OnInit, OnDestroy
 {
-  private announceService = inject(AnnounceService);
-  private hotkeyService = inject(HotkeyService);
-  private translateService = inject(TranslocoService);
-  private dialogService = inject(DialogService);
-  private notificationService = inject(NotificationService);
-  private presentationService = inject(PresentationService);
-  private trackingService = inject(TrackingService);
+  private readonly announceService = inject(AnnounceService);
+  private readonly eventService = inject(EventService);
+  private readonly hotkeyService = inject(HotkeyService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly dialogService = inject(DialogService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly presentationService = inject(PresentationService);
+  private readonly trackingService = inject(TrackingService);
+  protected readonly questionnairesByRoomId = inject(QuestionnairesByRoomIdGql);
+  private readonly contentResultsService = inject(ContentResultsService);
 
-  @ViewChild(ContentPresentationMenuComponent)
-  moreMenuComponent!: ContentPresentationMenuComponent;
-  @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
-  @Output() activeGroup: EventEmitter<string> = new EventEmitter<string>();
+  readonly questionnaireId = input<string>();
 
-  roomId = input.required<string>();
+  readonly questionnairesResult = toSignal(
+    toObservable(this.roomId).pipe(
+      switchMap((roomId) => {
+        return this.questionnairesByRoomId.watch({
+          variables: { roomId },
+        }).valueChanges;
+      })
+    )
+  );
+
+  readonly questionnaires = computed(() => {
+    return (
+      this.questionnairesResult()?.data?.questionnairesByRoomId ?? []
+    ).filter((n): n is QuestionnaireSummaryFragment => !!n);
+  });
+
+  protected readonly loadingQuestionnaires = computed(
+    () => this.questionnairesResult()?.loading ?? true
+  );
+
+  readonly activeQuestionnaire = model(this.questionnaires()[0] ?? undefined);
+
+  private readonly contentResultsVisible = computed(() =>
+    this.contentResultsService.resultsVisible()
+  );
+  private readonly contentCorrectResultsVisible = computed(() =>
+    this.contentResultsService.correctResultsVisible()
+  );
+
+  moreMenu = viewChild(ContentPresentationMenuComponent);
+  activeFeature = output<string | undefined>();
 
   isLoading = true;
   destroyed$ = new Subject<void>();
@@ -182,26 +220,24 @@ export class ControlBarComponent
   buttonHovered = false;
   HotkeyAction = HotkeyAction;
 
-  private contentResultsDisplayed = false;
-  private contentCorrectResultsDisplayed = false;
-
   private hotkeyRefs: symbol[] = [];
+  private initialised = false;
 
   activeWordcloudVisualiation =
-    this.presentationService.activeWordcloudVisualization;
+    this.contentResultsService.activeWordcloudVisualization;
 
   showShareOverlay = false;
 
   buttons: ToggleButtonOption[] = [
     {
-      id: 'cloud',
+      id: VisualizationType.WORDCLOUD,
       icon: 'cloud',
       tooltip: this.translateService.translate(
         'creator.statistic.show-wordcloud'
       ),
     },
     {
-      id: 'list',
+      id: VisualizationType.GRID,
       icon: 'grid_view',
       tooltip: this.translateService.translate(
         'creator.statistic.show-wordcloud-list'
@@ -220,6 +256,37 @@ export class ControlBarComponent
     this.showShareOverlay = this.globalStorageService.getItem(
       STORAGE_KEYS.SHOW_SHARE_OVERLAY
     );
+    effect(() => {
+      const questionnaireId = this.questionnaireId();
+      if (this.loadingQuestionnaires()) {
+        return;
+      }
+      if (!this.initialised) {
+        this.initialised = true;
+        untracked(() => this.afterInit());
+      }
+      const questionnaires = this.questionnaires();
+      if (questionnaires.length === 0) {
+        this.removeContentFeatureItem();
+      } else {
+        const first = questionnaires[0];
+        this.activeQuestionnaire.set(
+          questionnaireId
+            ? (questionnaires.find((q) => q.id === questionnaireId) ?? first)
+            : first
+        );
+      }
+    });
+    // The highlights follow the visibility both ways, so switching the
+    // results off has to reach them as well.
+    effect(() => {
+      this.contentResultsVisible();
+      this.determineResultsItemHighlighted();
+    });
+    effect(() => {
+      this.contentCorrectResultsVisible();
+      this.determineCorrectItemHighlighted();
+    });
   }
 
   ngOnDestroy() {
@@ -253,10 +320,10 @@ export class ControlBarComponent
       lastSort && lastSort !== CommentSort.VOTEASC
         ? lastSort
         : CommentSort.TIME;
-    this.setSurveyState(this.roomSettings.surveyEnabled);
-    if (this.groupName && this.contentGroups.length > 0) {
-      this.setContentGroupState();
-    }
+    this.setSurveyState(!!this.roomSettings()?.surveyEnabled);
+    // if (this.groupName && this.contentGroups.length > 0) {
+    //   this.setContentGroupState();
+    // }
     this.subscribeToStates();
     this.subscribeToEvents();
     setTimeout(() => {
@@ -346,20 +413,6 @@ export class ControlBarComponent
           });
         }
       });
-    this.presentationService
-      .getResultsDisplayed()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((resultsDisplayed) => {
-        this.contentResultsDisplayed = resultsDisplayed;
-        this.determineResultsItemHighlighted();
-      });
-    this.presentationService
-      .getCorrectResultsDisplayed()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((correctResultsDisplayed) => {
-        this.contentCorrectResultsDisplayed = correctResultsDisplayed;
-        this.determineCorrectItemHighlighted();
-      });
   }
 
   subscribeToEvents() {
@@ -380,12 +433,12 @@ export class ControlBarComponent
           { zoom: this.currentCommentZoom }
         );
       });
-    this.presentationService
-      .getContentGroupChanges()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((group) => {
-        this.group = group;
-      });
+    // this.presentationService
+    //   .getContentGroupChanges()
+    //   .pipe(takeUntil(this.destroyed$))
+    //   .subscribe((group) => {
+    //     this.group = group;
+    //   });
   }
 
   evaluateContentState(state?: ContentPresentationState) {
@@ -397,7 +450,12 @@ export class ControlBarComponent
         STORAGE_KEYS.LAST_INDEX,
         this.contentIndex
       );
-      if (this.group && this.group.contentIds?.length > 1) {
+      const questionnaire = this.activeQuestionnaire();
+      if (
+        questionnaire &&
+        questionnaire.contentCount &&
+        questionnaire.contentCount > 1
+      ) {
         this.setArrowsState(this.contentStepState);
       } else {
         this.setArrowItemsState(true, true);
@@ -431,17 +489,17 @@ export class ControlBarComponent
   }
 
   setContentGroupState() {
-    const group = this.contentGroups.find((g) => g.name === this.groupName);
-    if (group) {
-      this.group = group;
-    }
-    if (
-      this.isActiveFeature(RoutingFeature.CONTENTS) &&
-      this.group &&
-      this.isGroupLocked(this.group)
-    ) {
-      this.publishContentGroup(this.group);
-    }
+    // const group = this.contentGroups.find((g) => g.name === this.groupName);
+    // if (group) {
+    //   this.group = group;
+    // }
+    // if (
+    //   this.isActiveFeature(RoutingFeature.CONTENTS) &&
+    //   this.group &&
+    //   this.isGroupLocked(this.group)
+    // ) {
+    //   this.publishContentGroup(this.group);
+    // }
   }
 
   setArrowsState(state: PresentationStepPosition) {
@@ -476,9 +534,6 @@ export class ControlBarComponent
       this.activeFeature.emit(feature);
       if (feature === RoutingFeature.CONTENTS) {
         this.setArrowsState(this.contentStepState);
-        if (this.group && this.isGroupLocked(this.group)) {
-          this.publishContentGroup(this.group);
-        }
       } else if (feature === RoutingFeature.COMMENTS) {
         this.setArrowsState(this.commentStepState);
       }
@@ -540,15 +595,11 @@ export class ControlBarComponent
     }
   }
 
-  isGroupLocked(group: ContentGroup): boolean {
-    return !group.published;
-  }
-
   private determineGroupControls(): void {
     this.determineResultsItemHighlighted();
     this.determineContentControlCorrect();
     this.determineContentControlLeaderboard();
-    if (!this.content || this.content.format === ContentType.SLIDE) {
+    if (!this.content || this.content.formatData.format === ContentType.Slide) {
       this.groupItems.forEach((g) => (g.disabled = true));
     }
   }
@@ -556,18 +607,17 @@ export class ControlBarComponent
   private determineContentControlCorrect() {
     const correctItemIndex = this.getIndexOfGroupItem('correct');
     if (
-      this.group &&
-      ![GroupType.SURVEY, GroupType.FLASHCARDS].includes(this.group.groupType)
+      this.activeQuestionnaire() &&
+      ![QuestionnaireType.Survey, QuestionnaireType.Flashcards].includes(
+        this.activeQuestionnaire().type
+      )
     ) {
       if (this.getIndexOfGroupItem('correct') === -1) {
         this.groupItems.push(
           new KeyNavBarItem('correct', 'check_circle', '', 'c')
         );
       } else {
-        if (
-          this.content &&
-          !this.contentGroupService.isContentScorable(this.content)
-        ) {
+        if (this.content && !this.content.hasCorrectAnswer) {
           this.groupItems[correctItemIndex].disabled = true;
         } else {
           this.groupItems[correctItemIndex].disabled = false;
@@ -582,17 +632,17 @@ export class ControlBarComponent
   }
 
   private determineContentControlLeaderboard() {
-    if (this.group?.leaderboardEnabled) {
-      if (this.getIndexOfGroupItem('leaderboard') === -1) {
-        this.groupItems.push(
-          new KeyNavBarItem('leaderboard', 'emoji_events', '', 'l')
-        );
-      }
-    } else {
-      if (this.getIndexOfGroupItem('leaderboard') > -1) {
-        this.groupItems.splice(-1, 1);
-      }
-    }
+    // if (this.activeQuestionnaire()?.leaderboardEnabled) {
+    //   if (this.getIndexOfGroupItem('leaderboard') === -1) {
+    //     this.groupItems.push(
+    //       new KeyNavBarItem('leaderboard', 'emoji_events', '', 'l')
+    //     );
+    //   }
+    // } else {
+    //   if (this.getIndexOfGroupItem('leaderboard') > -1) {
+    //     this.groupItems.splice(-1, 1);
+    //   }
+    // }
   }
 
   private determineResultsItemHighlighted() {
@@ -600,7 +650,7 @@ export class ControlBarComponent
       const resultsItemIndex = this.getIndexOfGroupItem('results');
       if (resultsItemIndex > -1) {
         this.groupItems[resultsItemIndex].highlighted =
-          this.contentResultsDisplayed;
+          this.contentResultsVisible();
       }
     });
   }
@@ -610,7 +660,7 @@ export class ControlBarComponent
       const correctResultsItemIndex = this.getIndexOfGroupItem('correct');
       if (correctResultsItemIndex > -1) {
         this.groupItems[correctResultsItemIndex].highlighted =
-          this.contentCorrectResultsDisplayed;
+          this.contentCorrectResultsVisible();
       }
     });
   }
@@ -619,39 +669,11 @@ export class ControlBarComponent
     return this.groupItems.map((i) => i.name).indexOf(name);
   }
 
-  changeGroup(contentGroup: ContentGroup) {
-    if (this.group?.id !== contentGroup.id) {
-      if (!this.isGroupLocked(contentGroup)) {
-        this.updateGroup(contentGroup);
-      } else {
-        this.publishContentGroup(contentGroup);
-      }
+  changeGroup(questionnaire: QuestionnaireSummaryFragment) {
+    // Presenting an unpublished questionnaire offers to publish it.
+    if (this.activeQuestionnaire()?.id !== questionnaire.id) {
+      this.activeQuestionnaire.set(questionnaire);
     }
-  }
-
-  updateGroup(contentGroup: ContentGroup) {
-    this.contentResultsDisplayed = false;
-    this.contentCorrectResultsDisplayed = false;
-    this.setGroup(contentGroup);
-    this.activeGroup.emit(this.groupName);
-  }
-
-  publishContentGroup(contentGroup: ContentGroup) {
-    const dialogRef = this.dialogService.openPublishGroupDialog(contentGroup);
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const msg = this.translateService.translate(
-          'creator.content.group-published'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-        contentGroup.publishingMode = result;
-        contentGroup.published = true;
-        this.updateGroup(contentGroup);
-      }
-    });
   }
 
   showBar() {
@@ -731,12 +753,12 @@ export class ControlBarComponent
     );
   }
 
-  setActiveWordcloudVisualiation(viewId: string) {
-    this.presentationService.setActiveWordcloudVizualization(viewId);
-  }
-
-  isWordcloudVisualiationActive(id: string): boolean {
-    return this.activeWordcloudVisualiation() === id;
+  toggleWordcloudVisualiation() {
+    this.contentResultsService.setActiveWordcloudVizualization(
+      this.activeWordcloudVisualiation() === VisualizationType.WORDCLOUD
+        ? VisualizationType.GRID
+        : VisualizationType.WORDCLOUD
+    );
   }
 
   toggleShareOverview() {

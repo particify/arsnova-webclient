@@ -1,0 +1,87 @@
+@if (loadingContents() || loadingAnswerResults()) {
+  <app-loading-indicator></app-loading-indicator>
+} @else if (contents().length > 0) {
+  <div fxLayout="column" fxLayoutAlign="start center">
+    @if (currentIndex() > -1) {
+      <app-stepper
+        (newIndex)="updateContentIndexUrl($event)"
+        [listLength]="questionnaire().contentCount ?? 0"
+        [answerResults]="answerResults()"
+        [showSteps]="showStepper() && !focusModeEnabled()"
+        [allowNavigation]="!focusModeEnabled()"
+        [lockedContentsDisabled]="true"
+      >
+        @for (index of contentIndexes(); track index) {
+          <cdk-step>
+            @if (
+              currentStep !== undefined &&
+              currentStep >= index - 1 &&
+              currentStep <= index + 1
+            ) {
+              <div tabindex="0" [appAutofocus] id="step">
+                @let _userId = userId();
+                @let _content = contents()[index];
+                @if (_content && _userId) {
+                  <app-content-participant
+                    (next)="nextContent()"
+                    [shortId]="shortId()"
+                    [content]="_content"
+                    [questionnaire]="questionnaire()"
+                    [userId]="_userId"
+                    [lastContent]="
+                      index === (questionnaire().contentCount ?? 0) - 1 ||
+                      (!contents()[index + 1] &&
+                        questionnaire().publishingMode !==
+                          QuestionnairePublishingMode.Live)
+                    "
+                    [active]="currentStep === index"
+                    [index]="index"
+                    [statsPublished]="!!questionnaire().statisticsPublished"
+                    [correctOptionsPublished]="
+                      !!questionnaire().correctOptionsPublished
+                    "
+                    [attribution]="getAttribution()"
+                    [alias]="alias"
+                    [showCard]="showCard()"
+                    [answerResult]="answerResults()[index]?.result"
+                    [activeTab]="activeTab()"
+                    [settings]="settings()"
+                    [finished]="isFinished()"
+                    [language]="language()"
+                    [roomId]="roomId()"
+                  >
+                  </app-content-participant>
+                } @else {
+                  <app-base-card>
+                    <app-content-waiting
+                      [alias]="alias"
+                      [current]="index + 1"
+                      [totalCount]="questionnaire().contentCount ?? 0"
+                      [roomId]="roomId()"
+                      [isLocked]="true"
+                    ></app-content-waiting>
+                  </app-base-card>
+                }
+              </div>
+            }
+          </cdk-step>
+        }
+      </app-stepper>
+    } @else {
+      <app-series-overview
+        [questionnaire]="questionnaire()"
+        [answerResults]="answerResults()"
+        [contents]="contents()"
+        [finished]="isFinished()"
+        [isPureInfoSeries]="isPureInfoSeries()"
+        [alias]="alias"
+        [roomId]="roomId()"
+      >
+      </app-series-overview>
+    }
+  </div>
+} @else {
+  <span class="hint">{{
+    'participant.answer.no-contents-published' | transloco
+  }}</span>
+}

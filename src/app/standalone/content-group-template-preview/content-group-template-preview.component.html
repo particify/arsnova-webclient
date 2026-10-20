@@ -65,11 +65,11 @@
         <p class="template-description">{{ template.description }}</p>
         <div fxLayout="column" fxLayoutGap="1em">
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-            <app-content-group-info
+            <!-- <app-content-group-info
               [groupType]="template.groupType"
               [contentCount]="template.templateIds.length"
               [countColor]="true"
-            ></app-content-group-info>
+            ></app-content-group-info> -->
             @if (template.published && template.license) {
               <app-template-license
                 [ownerName]="template.attribution"

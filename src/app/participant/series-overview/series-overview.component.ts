@@ -1,12 +1,13 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  Input,
   OnDestroy,
   OnInit,
+  computed,
+  effect,
   inject,
-  ChangeDetectionStrategy,
+  input,
 } from '@angular/core';
-import { Content } from '@app/core/models/content';
 import {
   ArcElement,
   Chart,
@@ -16,20 +17,11 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ThemeService } from '@app/core/theme/theme.service';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ContentGroup, GroupType } from '@app/core/models/content-group';
-import {
-  AnswerResultOverview,
-  AnswerResultType,
-} from '@app/core/models/answer-result';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Router } from '@angular/router';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
@@ -48,19 +40,24 @@ import { NgStyle, NgClass } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 import { FlexModule } from '@angular/flex-layout';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
+import {
+  ContentAnswerResult,
+  AnswerResultState,
+  Content,
+  Questionnaire,
+  QuestionnaireType,
+  ContentType,
+  QuestionnaireAnswerResultsByQuestionnaireIdGql,
+} from '@gql/generated/graphql';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
-const RELOAD_INTERVAL = 2250;
-const RETRY_LIMIT = 4;
-
-interface ContentResultView {
-  body: string;
-  state: AnswerResultType;
-  duration?: number;
-}
+// const RELOAD_INTERVAL = 2250;
+// const RETRY_LIMIT = 4;
 
 @Component({
   selector: 'app-series-overview',
@@ -91,19 +88,75 @@ interface ContentResultView {
 })
 export class SeriesOverviewComponent implements OnInit, OnDestroy {
   private routingService = inject(RoutingService);
-  private authService = inject(AuthenticationService);
-  private contentGroupService = inject(ContentGroupService);
   private themeService = inject(ThemeService);
   private router = inject(Router);
   private contentCarouselService = inject(ContentCarouselService);
   private contentPublishService = inject(ContentPublishService);
   private answerService = inject(ContentAnswerService);
+  private readonly questionnaireAnswerResults = inject(
+    QuestionnaireAnswerResultsByQuestionnaireIdGql
+  );
 
-  @Input({ required: true }) group!: ContentGroup;
-  @Input({ required: true }) contents!: Content[];
-  @Input() finished = false;
-  @Input() isPureInfoSeries = false;
-  @Input() alias?: RoomUserAlias;
+  questionnaire = input.required<Questionnaire>();
+  contents = input.required<Content[]>();
+  answerResults = input.required<ContentAnswerResult[]>();
+  roomId = input.required<string>();
+  finished = input(false);
+  isPureInfoSeries = input(false);
+  alias = input<RoomUserAlias>();
+
+  readonly contentsWithResults = computed(() => {
+    return this.contents().map((c) => {
+      const r = this.answerResults().find((r) => r.contentId === c.id);
+      return {
+        id: c.id,
+        body: c.bodyRendered,
+        state: r?.result,
+        duration: r?.durationMs,
+      };
+    });
+  });
+
+  readonly isLoadingLastContent = computed(
+    () =>
+      this.answerResults().at(-1)?.result === AnswerResultState.Unanswered &&
+      this.hasAnsweredLastContent
+  );
+
+  private readonly answerResultsResult = toSignal(
+    toObservable(this.questionnaire).pipe(
+      switchMap((questionnaire) => {
+        return this.questionnaireAnswerResults.watch({
+          variables: { questionnaireId: questionnaire.id },
+        }).valueChanges;
+      })
+    )
+  );
+
+  readonly questionnaireResult = computed(
+    () =>
+      this.answerResultsResult()?.data
+        ?.questionnaireAnswerResultsByQuestionnaireId
+  );
+
+  readonly loadingAnswerResults = computed(
+    () => this.answerResultsResult()?.loading
+  );
+
+  readonly score = computed(() => {
+    const achievedScore = this.questionnaireResult()?.achievedScore;
+    const maxScore = this.questionnaireResult()?.maxScore;
+    return achievedScore && maxScore
+      ? Math.round((achievedScore / maxScore) * 100)
+      : 0;
+  });
+
+  currentAnswerCount = computed(
+    () =>
+      this.answerResults().filter(
+        (a) => a.result !== AnswerResultState.Unanswered
+      )?.length ?? 0
+  );
 
   hasAnsweredLastContent = false;
   private correctChart?: Chart;
@@ -115,28 +168,35 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     primary: '',
     gold: '',
   };
-  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  auth!: AuthenticatedUser;
-  private resultOverview!: AnswerResultOverview;
-  private quizAnswerTypes = [AnswerResultType.CORRECT, AnswerResultType.WRONG];
+  private quizAnswerTypes = [
+    AnswerResultState.Correct,
+    AnswerResultState.Wrong,
+  ];
 
-  contentsWithResults: ContentResultView[] = [];
-  resultTypes: typeof AnswerResultType = AnswerResultType;
+  resultTypes: typeof AnswerResultState = AnswerResultState;
   ContentType = ContentType;
-  currentAnswerCount = 0;
   totalContentCount = 0;
 
-  isLoading = true;
-  isLoadingLastContent = true;
   retryCount = 0;
-  hasScore = false;
-  score = 0;
+  hasScore = computed(
+    () =>
+      !!this.questionnaireResult()?.maxScore &&
+      !!this.questionnaire().correctOptionsPublished
+  );
   leaderboardPosition?: number;
   HintType = HintType;
   leaderboard?: LeaderboardItem[];
   userLeaderboardItem?: LeaderboardItem;
   selectedTabIndex = 0;
-  GroupType = GroupType;
+  QuestionnaireType = QuestionnaireType;
+
+  constructor() {
+    effect(() => {
+      if (this.questionnaireResult()) {
+        this.updateCharts();
+      }
+    });
+  }
 
   ngOnDestroy(): void {
     this.contentCarouselService.setLastContentAnswered(false);
@@ -146,109 +206,21 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     this.hasAnsweredLastContent =
       this.contentCarouselService.isLastContentAnswered();
     this.updateColors();
-    this.authService.getCurrentAuthentication().subscribe((auth) => {
-      this.auth = auth;
-      this.init();
-    });
-  }
-
-  loadLeaderboard(): void {
-    this.contentGroupService
-      .getLeaderboard(this.group.roomId, this.group.id)
-      .subscribe((leaderboard) => {
-        this.leaderboard = leaderboard;
-        this.userLeaderboardItem = this.leaderboard.find(
-          (l) => l.userAlias?.id === this.alias?.id
-        );
-        this.leaderboardPosition = this.getPosition();
-        this.updatePointsChart();
-        this.isLoading = false;
-      });
-  }
-
-  private init() {
-    this.contentGroupService
-      .getAnswerStats(this.group.roomId, this.group.id, this.auth.userId)
-      .subscribe(
-        (resultOverview) => {
-          this.totalContentCount = resultOverview.answerResults.length;
-          this.setResultOverview(resultOverview);
-          this.setViewData();
-          this.checkIfLastContentIsLoaded();
-          if (this.group.leaderboardEnabled) {
-            this.loadLeaderboard();
-          } else {
-            this.isLoading = false;
-          }
-          this.updateCharts();
-        },
-        () => {
-          this.getContentResultView();
-          this.isLoading = false;
-          this.isLoadingLastContent = false;
-        }
-      );
   }
 
   private updateCharts() {
-    if (!this.isPureInfoSeries) {
+    if (!this.isPureInfoSeries()) {
       this.updateProgressChart();
     }
-    if (this.hasScore) {
+    if (this.hasScore()) {
       this.updateCorrectChart();
     }
   }
 
-  private setResultOverview(resultOverview: AnswerResultOverview) {
-    this.resultOverview = resultOverview;
-    this.setAnswerResultsForPublishedContents();
-  }
-
-  private setAnswerResultsForPublishedContents() {
-    this.resultOverview.answerResults =
-      this.resultOverview.answerResults.filter((a) =>
-        this.checkIfContentIsPublished(a.contentId)
-      );
-  }
-
   private checkIfContentIsPublished(contentId: string) {
-    return this.contents.map((c) => c.id).includes(contentId);
-  }
-
-  private setViewData() {
-    this.hasScore = this.checkIfHasScore();
-    this.score = this.getScore();
-    this.currentAnswerCount = this.getCurrentAnswerCount();
-    this.getContentResultView();
-  }
-
-  private getCurrentAnswerCount() {
-    return this.resultOverview.answerResults.filter(
-      (a) => a.state !== AnswerResultType.UNANSWERED
-    ).length;
-  }
-
-  private getScore(): number {
-    return Math.round(
-      (this.resultOverview.achievedScore / this.resultOverview.maxScore) * 100
-    );
-  }
-
-  private checkIfHasScore(): boolean {
-    return (
-      this.resultOverview.maxScore > 0 && this.group.correctOptionsPublished
-    );
-  }
-
-  private getContentResultView() {
-    this.contentsWithResults = [];
-    this.contents.forEach((val, i) => {
-      this.contentsWithResults.push({
-        body: val.renderedBody,
-        state: this.resultOverview?.answerResults[i].state,
-        duration: this.resultOverview?.answerResults[i].duration,
-      });
-    });
+    return this.contents()
+      .map((c) => c.id)
+      .includes(contentId);
   }
 
   private updateColors() {
@@ -258,39 +230,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     this.colors.gold = this.themeService.getColor('gold');
   }
 
-  private checkIfLastContentIsLoaded() {
-    this.checkIfLastAnswerHasAnswered();
-    if (this.isLoadingLastContent && this.retryCount < RETRY_LIMIT) {
-      setTimeout(() => {
-        this.contentGroupService
-          .getAnswerStats(this.group.roomId, this.group.id, this.auth.userId)
-          .subscribe((resultOverview) => {
-            this.setResultOverview(resultOverview);
-            this.checkIfLastContentIsLoaded();
-          });
-        if (this.group.leaderboardEnabled) {
-          this.loadLeaderboard();
-        }
-        this.retryCount++;
-      }, RELOAD_INTERVAL);
-    } else if (!this.isLoading) {
-      this.setViewData();
-      this.updateCharts();
-    }
-  }
-
-  private checkIfLastAnswerHasAnswered() {
-    const lastResultState =
-      this.resultOverview.answerResults[
-        this.resultOverview.answerResults.length - 1
-      ].state;
-    this.isLoadingLastContent =
-      lastResultState === AnswerResultType.UNANSWERED &&
-      this.hasAnsweredLastContent;
-  }
-
   private getScoreData(): number[] {
-    return [this.score, 100 - this.score];
+    return [this.score(), 100 - this.score()];
   }
 
   private updateCorrectChart() {
@@ -309,8 +250,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private getProgressData() {
-    const totalCount = this.contentsWithResults.length;
-    return [this.currentAnswerCount, totalCount - this.currentAnswerCount];
+    const totalCount = this.contentsWithResults().length;
+    return [this.currentAnswerCount(), totalCount - this.currentAnswerCount()];
   }
 
   private updateProgressChart() {
@@ -399,63 +340,65 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  getIcon(state: AnswerResultType) {
+  getIcon(state: AnswerResultState) {
     return this.answerService.getAnswerResultIcon(state);
   }
 
-  hasAnsweredState(state: AnswerResultType): boolean {
+  hasAnsweredState(state: AnswerResultState): boolean {
     return (
-      state === AnswerResultType.NEUTRAL ||
-      (!this.group.correctOptionsPublished &&
+      state === AnswerResultState.Neutral ||
+      (!this.questionnaire().correctOptionsPublished &&
         this.quizAnswerTypes.includes(state))
     );
   }
 
-  goToContent(index: number) {
+  goToContent(id: string) {
     this.router.navigate([
       this.routingService.getRoleRoute(UserRole.PARTICIPANT),
       this.routingService.getShortId(),
       RoutingFeature.CONTENTS,
-      this.group.name,
-      index + 1,
+      this.questionnaire().id,
+      id,
     ]);
   }
 
   goToFirstUnanswered() {
-    const index = this.contentsWithResults.findIndex(
-      (c) => c.state === AnswerResultType.UNANSWERED
+    const content = this.contentsWithResults().find(
+      (c) => c.state === AnswerResultState.Unanswered
     );
-    if (index) {
-      this.goToContent(index);
+    if (content) {
+      this.goToContent(content.id);
     }
   }
 
   getHeaderText(): string {
-    if (this.isPureInfoSeries) {
-      return this.group.name;
+    if (this.isPureInfoSeries()) {
+      return this.questionnaire().name;
     } else {
-      return this.finished
+      return this.finished()
         ? 'participant.content.thanks-for-participation'
         : 'participant.content.continue-where-you-stopped';
     }
   }
 
   getSubHeaderText(): string {
-    if (this.isPureInfoSeries) {
+    if (this.isPureInfoSeries()) {
       return 'participant.content.pure-info-contents';
     } else {
-      return this.finished
+      return this.finished()
         ? 'participant.content.all-contents-answered'
         : 'participant.content.some-contents-answered';
     }
   }
 
   getProgressDataText(): string {
-    return this.currentAnswerCount + ' / ' + this.contentsWithResults.length;
+    return (
+      this.currentAnswerCount() + ' / ' + this.contentsWithResults().length
+    );
   }
 
   getLockedContentCount() {
-    return this.totalContentCount - this.contents.length;
+    return this.totalContentCount - this.contents().length;
   }
 
   private getPosition(): number {
@@ -477,7 +420,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   }
 
   isLiveMode(): boolean {
-    return this.contentPublishService.isGroupLive(this.group);
+    return this.contentPublishService.isLive(this.questionnaire());
   }
 
   getTrophyIconColor(): string {

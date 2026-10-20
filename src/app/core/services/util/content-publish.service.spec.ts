@@ -1,131 +1,60 @@
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import { TestBed } from '@angular/core/testing';
+import {
+  Content,
+  Questionnaire,
+  QuestionnairePublishingMode,
+} from '@gql/generated/graphql';
 import { ContentPublishService } from './content-publish.service';
-import { configureTestModule } from '@testing/test.setup';
 
-describe('PublishContentService', () => {
+describe('ContentPublishService', () => {
   let service: ContentPublishService;
+
+  function questionnaire(
+    publishingMode: QuestionnairePublishingMode,
+    position?: number,
+    published = true
+  ) {
+    return {
+      published,
+      publishingMode,
+      publishedUpToContent:
+        position === undefined ? null : ({ position } as Content),
+    } as Questionnaire;
+  }
+
   beforeEach(() => {
-    const testBed = configureTestModule([], [ContentPublishService]);
-    service = testBed.inject(ContentPublishService);
+    service = TestBed.inject(ContentPublishService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('publishes nothing of an unpublished questionnaire', () => {
+    const q = questionnaire(QuestionnairePublishingMode.All, undefined, false);
+
+    expect(service.isIndexPublished(q, 0)).toBeFalse();
   });
 
-  // Check if published
+  it('publishes every content in mode all', () => {
+    const q = questionnaire(QuestionnairePublishingMode.All);
 
-  it('should detect content as published if all contents are published with mode ALL', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.contentIds = ['0', '1', '2', '3', '4'];
-    contentGroup.publishingMode = PublishingMode.ALL;
-    const isPublished = service.isIndexPublished(contentGroup, 2);
-    expect(isPublished).toBe(true);
+    expect(service.isIndexPublished(q, 4)).toBeTrue();
   });
 
-  it('should detect content as published if all contents are published with mode UP_TO', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.contentIds = ['0', '1', '2', '3', '4'];
-    contentGroup.publishingMode = PublishingMode.UP_TO;
-    contentGroup.publishingIndex = 4;
-    const isPublished = service.isIndexPublished(contentGroup, 2);
-    expect(isPublished).toBe(true);
+  it('publishes up to and including the content of the range', () => {
+    const q = questionnaire(QuestionnairePublishingMode.UpTo, 1);
+
+    expect(service.isIndexPublished(q, 1)).toBeTrue();
+    expect(service.isIndexPublished(q, 2)).toBeFalse();
   });
 
-  it('should detect content as published if content is before publishedIndex when mode is UP_TO', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.contentIds = ['0', '1', '2', '3', '4'];
-    contentGroup.publishingMode = PublishingMode.UP_TO;
-    contentGroup.publishingIndex = 3;
-    const isPublished = service.isIndexPublished(contentGroup, 2);
-    expect(isPublished).toBe(true);
+  it('publishes the first content when published up to it', () => {
+    const q = questionnaire(QuestionnairePublishingMode.Live, 0);
+
+    expect(service.isIndexPublished(q, 0)).toBeTrue();
+    expect(service.isIndexPublished(q, 1)).toBeFalse();
   });
 
-  it('should detect content as published if content index is publishedIndex when mode is UP_TO', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.contentIds = ['0', '1', '2', '3', '4'];
-    contentGroup.publishingMode = PublishingMode.UP_TO;
-    contentGroup.publishingIndex = 2;
-    const isPublished = service.isIndexPublished(contentGroup, 2);
-    expect(isPublished).toBe(true);
-  });
+  it('publishes nothing of a range without a content', () => {
+    const q = questionnaire(QuestionnairePublishingMode.UpTo);
 
-  // Check if locked
-
-  it('should detect content as locked if all contents are locked with mode NONE', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.contentIds = ['0', '1', '2', '3', '4'];
-    contentGroup.published = false;
-    contentGroup.publishingIndex = 2;
-    const isPublished = service.isIndexPublished(contentGroup, 2);
-    expect(isPublished).toBe(false);
-  });
-
-  it('should detect content as locked if content is after publishedIndex with mode UP_TO', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.contentIds = ['0', '1', '2', '3', '4'];
-    contentGroup.publishingMode = PublishingMode.UP_TO;
-    contentGroup.publishingIndex = 1;
-    const isPublished = service.isIndexPublished(contentGroup, 2);
-    expect(isPublished).toBe(false);
-  });
-
-  // Check if content id list is filtered correctly by publishing state
-
-  it('should return list of all content ids if all contents are published with mode ALL', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.contentIds = ['0', '1', '2', '3', '4'];
-    contentGroup.publishingMode = PublishingMode.ALL;
-    const publishedContentIds = service.filterPublishedIds(contentGroup);
-    expect(publishedContentIds).toEqual(['0', '1', '2', '3', '4']);
-  });
-
-  it('should return list of content ids published with publishedIndex and mode UP_TO', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.contentIds = ['0', '1', '2', '3', '4'];
-    contentGroup.publishingMode = PublishingMode.UP_TO;
-    contentGroup.publishingIndex = 2;
-    const publishedContentIds = service.filterPublishedIds(contentGroup);
-    expect(publishedContentIds).toEqual(['0', '1', '2']);
-  });
-
-  // Check if publishing modes of group are detected correctly
-
-  it('should detect that group is locked with published false', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = false;
-    const isLocked = service.isGroupLocked(contentGroup);
-    expect(isLocked).toEqual(true);
-  });
-
-  it('should detect that group is published with mode ALL', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.publishingMode = PublishingMode.ALL;
-    const isLocked = service.isGroupLocked(contentGroup);
-    expect(isLocked).toEqual(false);
-  });
-
-  it('should detect that group is published with mode UP_TO', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.publishingMode = PublishingMode.UP_TO;
-    const isLocked = service.isGroupLocked(contentGroup);
-    expect(isLocked).toEqual(false);
-  });
-
-  it('should detect that group has published range with publishing mode UP_TO', () => {
-    const contentGroup = new ContentGroup();
-    contentGroup.published = true;
-    contentGroup.publishingMode = PublishingMode.UP_TO;
-    const isRangePublished = service.isRangePublished(contentGroup);
-    expect(isRangePublished).toEqual(true);
+    expect(service.isIndexPublished(q, 0)).toBeFalse();
   });
 });

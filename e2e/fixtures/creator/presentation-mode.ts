@@ -1,4 +1,5 @@
 import { Locator, Page } from '@playwright/test';
+import { waitForOperation } from '@e2e/fixtures/shared/graphql';
 
 export class PresentationModePage {
   constructor(
@@ -57,12 +58,7 @@ export class PresentationModePage {
       await this.page.getByRole('radio', { name: mode }).click();
     }
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/contentgroup/') &&
-          res.ok() &&
-          res.request().method() === 'PATCH'
-      ),
+      waitForOperation(this.page, 'UpdateQuestionnaire'),
       this.page.getByRole('button', { name: 'Publish' }).click(),
     ]);
   }
@@ -70,12 +66,7 @@ export class PresentationModePage {
   async startContent() {
     await this.hoverControlBar();
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/content/') &&
-          res.ok() &&
-          res.request().method() === 'GET'
-      ),
+      waitForOperation(this.page, 'StartQuestionnaireContent'),
       this.page.getByRole('button', { name: 'start the content' }).click(),
     ]);
   }
@@ -83,12 +74,7 @@ export class PresentationModePage {
   async stopContent() {
     await this.hoverControlBar();
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/content/') &&
-          res.ok() &&
-          res.request().method() === 'GET'
-      ),
+      waitForOperation(this.page, 'StopQuestionnaireContent'),
       this.page.getByRole('button', { name: 'stop the content' }).click(),
     ]);
   }
@@ -113,12 +99,7 @@ export class PresentationModePage {
     await this.openContentMoreMenu();
     await this.page.getByTestId('delete-content-answer-button').click();
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/answer') &&
-          res.ok() &&
-          res.request().method() === 'DELETE'
-      ),
+      waitForOperation(this.page, 'DeleteQuestionnaireAnswersByContentId'),
       this.page.getByRole('button', { name: 'Delete', exact: true }).click(),
     ]);
   }

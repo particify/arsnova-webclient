@@ -20,8 +20,12 @@ import { languageResolver } from '@app/core/resolver/language.resolver';
 
 const routes: Routes = [
   {
-    path: 'group',
-    redirectTo: 'series',
+    path: 'series/:seriesName/:contentIndex',
+    redirectTo: '',
+  },
+  {
+    path: 'series/:seriesName',
+    redirectTo: '',
   },
   {
     path: 'survey',
@@ -52,12 +56,12 @@ const routes: Routes = [
     title: 'settings',
   },
   {
-    path: 'series',
+    path: 'questionnaire',
     loadChildren: () =>
-      import('./content-group/content-group.module').then(
-        (m) => m.ContentGroupModule
+      import('./questionnaire/questionnaire.module').then(
+        (m) => m.QuestionnaireModule
       ),
-    title: 'series',
+    title: 'questionnaire',
   },
   {
     path: 'comments',

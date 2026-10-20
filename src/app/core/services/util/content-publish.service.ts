@@ -1,50 +1,46 @@
 import { Injectable } from '@angular/core';
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import {
+  Questionnaire,
+  QuestionnairePublishingMode,
+} from '@gql/generated/graphql';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ContentPublishService {
-  isIndexPublished(contentGroup: ContentGroup, index: number): boolean {
-    if (this.isGroupLocked(contentGroup)) {
+  isIndexPublished(questionnaire: Questionnaire, index: number): boolean {
+    if (this.isGroupLocked(questionnaire)) {
       return false;
     }
-    const publishingIndex = contentGroup.publishingIndex;
-    switch (contentGroup.publishingMode) {
-      case PublishingMode.ALL:
+    const publishingIndex = questionnaire.publishedUpToContent?.position;
+    switch (questionnaire.publishingMode) {
+      case QuestionnairePublishingMode.All:
         return true;
-      case PublishingMode.UP_TO:
-      case PublishingMode.LIVE:
-        return publishingIndex !== undefined && publishingIndex >= index;
+      case QuestionnairePublishingMode.UpTo:
+      case QuestionnairePublishingMode.Live:
+        return publishingIndex != null && publishingIndex >= index;
       default:
         return false;
     }
   }
 
-  filterPublishedIds(contentGroup: ContentGroup): string[] {
+  isGroupLocked(questionnaire: Questionnaire): boolean {
+    return !questionnaire.published;
+  }
+
+  hasSpecificPublishing(questionnaire: Questionnaire): boolean {
+    return this.isRangePublished(questionnaire);
+  }
+
+  isRangePublished(questionnaire: Questionnaire): boolean {
     return (
-      contentGroup.contentIds?.filter((id, index) =>
-        this.isIndexPublished(contentGroup, index)
-      ) || []
+      !this.isGroupLocked(questionnaire) &&
+      [
+        QuestionnairePublishingMode.UpTo,
+        QuestionnairePublishingMode.Live,
+      ].includes(questionnaire.publishingMode)
     );
   }
 
-  isGroupLocked(contentGroup: ContentGroup): boolean {
-    return !contentGroup.published;
-  }
-
-  hasSpecificPublishing(contentGroup: ContentGroup): boolean {
-    return this.isRangePublished(contentGroup);
-  }
-
-  isRangePublished(contentGroup: ContentGroup): boolean {
-    return (
-      !this.isGroupLocked(contentGroup) &&
-      [PublishingMode.UP_TO, PublishingMode.LIVE].includes(
-        contentGroup.publishingMode
-      )
-    );
-  }
-
-  isGroupLive(contentGroup: ContentGroup): boolean {
-    return contentGroup.publishingMode === PublishingMode.LIVE;
+  isLive(questionnaire: Questionnaire): boolean {
+    return questionnaire.publishingMode === QuestionnairePublishingMode.Live;
   }
 }

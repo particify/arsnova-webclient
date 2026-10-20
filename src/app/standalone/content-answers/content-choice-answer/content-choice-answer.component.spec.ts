@@ -48,11 +48,14 @@ describe('ContentChoiceAnswerComponent option labels', () => {
   ): ComponentFixture<ContentChoiceAnswerComponent> {
     translateService.setActiveLang(uiLang);
     const fixture = TestBed.createComponent(ContentChoiceAnswerComponent);
-    fixture.componentInstance.selectableAnswers = labels.map(
-      (label) => new SelectableAnswer(new AnswerOption(label), false)
+    fixture.componentRef.setInput(
+      'answerOptions',
+      labels.map(
+        (label) => new SelectableAnswer(new AnswerOption(label), false)
+      )
     );
-    fixture.componentInstance.translateOptions = translateOptions;
-    fixture.componentInstance.language = roomLang;
+    fixture.componentRef.setInput('translateOptions', translateOptions);
+    fixture.componentRef.setInput('language', roomLang);
     fixture.detectChanges();
     return fixture;
   }
@@ -60,9 +63,9 @@ describe('ContentChoiceAnswerComponent option labels', () => {
   function displayedLabels(
     fixture: ComponentFixture<ContentChoiceAnswerComponent>
   ): string[] {
-    return (fixture.componentInstance.displayAnswers ?? []).map(
-      (a) => a.answerOption.label
-    );
+    return fixture.componentInstance
+      .displayAnswers()
+      .map((a) => a.answerOption.label);
   }
 
   it('should use the UI language when the room has none', () => {
@@ -80,6 +83,15 @@ describe('ContentChoiceAnswerComponent option labels', () => {
     expect(displayedLabels(createComponent('en', 'de'))).toContain(
       SOMEWHAT_AGREE_DE
     );
+  });
+
+  it('should keep the selection of translated options', () => {
+    const fixture = createComponent('en');
+    fixture.componentInstance.updateSelection(1);
+    fixture.detectChanges();
+    expect(
+      fixture.componentInstance.displayAnswers().map((a) => a.checked)
+    ).toEqual([false, true, false, false, false]);
   });
 
   it('should keep the labels of a choice content untranslated', () => {

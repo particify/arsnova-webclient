@@ -14,6 +14,10 @@ import { ApiConfig } from '@app/core/models/api-config';
 import { BehaviorSubject } from 'rxjs';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 
+const CREATOR_ONLY_QUESTIONNAIRE_PAGE =
+  /(\/questionnaire\/[^/]+)\/(?:create|leaderboard|attributions)$/;
+const CONTENT_EDITING_PAGE = /(\/questionnaire\/[^/]+)\/edit\/([^/]+)$/;
+
 enum RoutePrefix {
   CREATOR = 'edit',
   PARTICIPANT = 'p',
@@ -39,7 +43,7 @@ export class RoutingService {
   isPreview = false;
   isPreview$ = new EventEmitter<boolean>();
   routeEvent = new EventEmitter<ActivatedRouteSnapshot>();
-  seriesName?: string;
+  questionnaireId?: string;
   showFooterLinks$ = new BehaviorSubject<boolean>(false);
   private readonly isHomeRoute = signal<boolean>(true);
 
@@ -69,9 +73,9 @@ export class RoutingService {
   getUrlData(route: ActivatedRouteSnapshot) {
     this.isHomeRoute.set(route.title === 'home');
     this.role = route.data.userRole;
-    const series = route.params['seriesName'];
-    if (series || route.data.room?.id !== this.roomId) {
-      this.seriesName = series;
+    const questionnaireId = route.params['questionnaireId'];
+    if (questionnaireId || route.data.room?.id !== this.roomId) {
+      this.questionnaireId = questionnaireId;
     }
     this.roomId = route.data.room?.id;
     this.role$.emit(this.role);
@@ -183,10 +187,22 @@ export class RoutingService {
 
   getPresentationUrl(url: string): string {
     return this.replaceRoleInUrl(
-      url,
+      this.toPresentedQuestionnairePath(url),
       this.getRoleRoute(this.viewRole),
       RoutePrefix.PRESENTATION
     );
+  }
+
+  /**
+   * The presentation has no pages for creating or editing a questionnaire's
+   * contents, nor for its creator-only pages, and would take their path
+   * segments for a content ID. Those map to the questionnaire itself, and
+   * editing a content to presenting it.
+   */
+  private toPresentedQuestionnairePath(url: string): string {
+    return url
+      .replace(CREATOR_ONLY_QUESTIONNAIRE_PAGE, '$1')
+      .replace(CONTENT_EDITING_PAGE, '$1/$2');
   }
 
   switchRole() {

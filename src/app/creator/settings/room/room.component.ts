@@ -50,6 +50,8 @@ import {
 } from '@gql/generated/graphql';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
+import { EventService } from '@app/core/services/util/event.service';
+import { RoomDeletionStarted } from '@app/core/models/events/room-deletion-started';
 @Component({
   selector: 'app-room-edit',
   templateUrl: './room.component.html',
@@ -84,6 +86,7 @@ export class RoomComponent extends FormComponent implements AfterViewInit {
   private readonly router = inject(Router);
   private readonly translateService = inject(TranslocoService);
   private readonly dialogService = inject(DialogService);
+  private readonly eventService = inject(EventService);
   private readonly formattingService = inject(FormattingService);
   private readonly focusModeService = inject(FocusModeService);
   private readonly roomByShortId = inject(RoomByShortIdGql);
@@ -134,7 +137,11 @@ export class RoomComponent extends FormComponent implements AfterViewInit {
       'dialog.really-delete-room',
       this.room()?.name,
       undefined,
-      () => this.deleteRoomGql.mutate({ variables: { id: this.roomId() } })
+      () => {
+        const event = new RoomDeletionStarted(this.roomId());
+        this.eventService.broadcast(event.type, event.payload);
+        return this.deleteRoomGql.mutate({ variables: { id: this.roomId() } });
+      }
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

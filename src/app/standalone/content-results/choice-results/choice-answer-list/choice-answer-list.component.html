@@ -1,0 +1,70 @@
+@if (presentationMode() && contentAnswersDirectlyBelowChart()) {
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    @for (answer of answers(); track answer) {
+      <div fxLayout="column" fxLayoutAlign="start center">
+        <p
+          [style.width]="answerLabelWidth()"
+          class="chart-answer-label"
+          [ngClass]="{
+            'not-correct': showCorrect() && !answer.isCorrect,
+          }"
+        >
+          <app-rendered-text
+            [rawText]="answer.label"
+            [renderedText]="answer.labelRendered"
+          />
+        </p>
+
+        @if (hasCorrectAnswer()) {
+          <mat-icon
+            class="correct-icon"
+            [ngClass]="{
+              'show-correct-icon': showCorrect() && answer.isCorrect,
+            }"
+          >
+            check
+          </mat-icon>
+        }
+      </div>
+    }
+  </div>
+} @else {
+  <div role="list">
+    @for (answer of answers(); track answer) {
+      <div
+        role="listitem"
+        tabindex="0"
+        class="answer-item"
+        [ngClass]="{
+          correct: showCorrect() && answer.isCorrect,
+
+          'no-background answer-text': presentationMode(),
+
+          'all-animations': !presentationMode(),
+        }"
+      >
+        <div fxFill fxLayoutAlign="space-between center" fxLayoutGap="12px">
+          <p class="answer-label">
+            {{ answer.labelLetter }}
+          </p>
+
+          <app-rendered-text
+            [rawText]="answer.label"
+            [renderedText]="answer.labelRendered"
+          />
+
+          @if (hasCorrectAnswer()) {
+            <mat-icon
+              class="correct-icon"
+              [ngClass]="{
+                'show-correct-icon': showCorrect() && answer.isCorrect,
+              }"
+            >
+              check
+            </mat-icon>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}

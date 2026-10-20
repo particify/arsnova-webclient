@@ -1,0 +1,155 @@
+<h2 mat-dialog-title>
+  {{ 'creator.content.content-group-settings' | transloco }}
+</h2>
+<mat-dialog-content fxLayout="column" fxLayoutGap="24px">
+  <mat-form-field appearance="outline" class="name-input">
+    <mat-label>{{
+      'creator.content.content-group-name' | transloco
+    }}</mat-label>
+    <input
+      #groupName
+      [formControl]="nameFormControl"
+      matInput
+      name="group-name"
+      maxlength="50"
+      (input)="(nameFormControl.valid)"
+    />
+    <mat-hint align="end" aria-hidden="true"
+      >{{ groupName.value.length }} / 50</mat-hint
+    >
+    @if (nameFormControl.hasError('required')) {
+      <mat-error>
+        {{ 'creator.content.no-empty-fields-allowed' | transloco }}
+      </mat-error>
+    }
+    @if (nameFormControl.hasError('validateUniqueName')) {
+      <mat-error>
+        {{ 'creator.content.duplicate-series-name' | transloco }}
+      </mat-error>
+    }
+  </mat-form-field>
+  <app-settings-slide-toggle
+    [label]="'creator.content.publish'"
+    [disabled]="formDisabled"
+    [isChecked]="questionnaire.published"
+    (toggleEvent)="questionnaire.published = $event"
+  ></app-settings-slide-toggle>
+  @if (questionnaire.type !== QuestionnaireType.Flashcards) {
+    <app-settings-slide-toggle
+      [matTooltip]="
+        'creator.content.reset-answers-to-disable-setting' | transloco
+      "
+      [matTooltipDisabled]="
+        !isLive() || !data.alreadyAnswered || !questionnaire.leaderboardEnabled
+      "
+      [label]="'creator.content.live-mode'"
+      [disabled]="
+        formDisabled ||
+        (isLive() && data.alreadyAnswered && !!questionnaire.leaderboardEnabled)
+      "
+      [isChecked]="isLive()"
+      (toggleEvent)="setLiveMode($event)"
+    ></app-settings-slide-toggle>
+  }
+  <div
+    fxLayout="column"
+    fxLayoutGap="8px"
+    [matTooltip]="
+      'creator.content.publishing-modes-not-available-in-live-mode' | transloco
+    "
+    [matTooltipDisabled]="!isLive()"
+  >
+    <span class="publishing-mode-label" [ngClass]="{ disabled: isLive() }">{{
+      'creator.content.publishing-mode' | transloco
+    }}</span>
+    <mat-button-toggle-group
+      name="publishingMode"
+      [hideSingleSelectionIndicator]="true"
+      [(ngModel)]="questionnaire.publishingMode"
+      class="mode-toggle-btn"
+    >
+      <div fxFlex>
+        <mat-button-toggle
+          fxFlex
+          [disabled]="isLive()"
+          [value]="PublishingMode.All"
+          >{{
+            'creator.content.publishing-mode-all' | transloco
+          }}</mat-button-toggle
+        >
+      </div>
+
+      <mat-button-toggle
+        fxFlex
+        [disabled]="isLive()"
+        [value]="PublishingMode.UpTo"
+        >{{
+          'creator.content.publishing-mode-up-to' | transloco
+        }}</mat-button-toggle
+      >
+    </mat-button-toggle-group>
+    <div class="publishing-mode-description">
+      @switch (questionnaire.publishingMode) {
+        @case (PublishingMode.All) {
+          <span>{{
+            'creator.content.publishing-mode-description-all' | transloco
+          }}</span>
+        }
+        @case (PublishingMode.UpTo) {
+          <span
+            >{{
+              'creator.content.publishing-mode-description-up-to' | transloco
+            }}
+          </span>
+        }
+      }
+    </div>
+  </div>
+  @if (questionnaire.type === QuestionnaireType.Quiz) {
+    <app-settings-slide-toggle
+      [matTooltip]="
+        'creator.content.reset-answers-to-disable-setting' | transloco
+      "
+      [matTooltipDisabled]="
+        !isLive() || !data.alreadyAnswered || !questionnaire.leaderboardEnabled
+      "
+      [label]="'creator.content.enable-leaderboard'"
+      [disabled]="
+        formDisabled ||
+        (isLive() && data.alreadyAnswered && !!questionnaire.leaderboardEnabled)
+      "
+      [isChecked]="!!questionnaire.leaderboardEnabled"
+      (toggleEvent)="questionnaire.leaderboardEnabled = $event"
+    ></app-settings-slide-toggle>
+  }
+  @if (questionnaire.type !== QuestionnaireType.Flashcards) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.publish-statistics'"
+      [disabled]="formDisabled"
+      [isChecked]="!!questionnaire.statisticsPublished"
+      (toggleEvent)="questionnaire.statisticsPublished = $event"
+    ></app-settings-slide-toggle>
+  }
+  @if (
+    [QuestionnaireType.Quiz, QuestionnaireType.Mixed].includes(
+      questionnaire.type
+    )
+  ) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.publish-correct-answers'"
+      [disabled]="formDisabled"
+      [isChecked]="!!questionnaire.correctOptionsPublished"
+      (toggleEvent)="questionnaire.correctOptionsPublished = $event"
+    ></app-settings-slide-toggle>
+  }
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button matDialogClose>
+    {{ 'dialog.cancel' | transloco }}
+  </button>
+  <app-loading-button
+    [isDialog]="true"
+    (clicked)="saveGroup()"
+    name="creator.content.save"
+  ></app-loading-button>
+</mat-dialog-actions>

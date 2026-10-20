@@ -1,23 +1,17 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, model } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
-import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 
 @Component({
   selector: 'app-content-wordcloud-answer',
   imports: [CoreModule],
   templateUrl: './content-wordcloud-answer.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-wordcloud-answer.component.scss'],
 })
 export class ContentWordcloudAnswerComponent {
   readonly maxLength = 25;
 
-  @Input({ required: true }) words!: string[];
-  @Input() givenAnswer?: MultipleTextsAnswer;
-  @Input() disabled = false;
-  currentInputIndex?: number;
+  words = model<string[]>([]);
+  disabled = input(false);
 
-  trackByIndex(index: number) {
-    return index;
-  }
+  currentInputIndex?: number;
 }

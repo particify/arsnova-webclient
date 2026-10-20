@@ -1,19 +1,27 @@
 import {
   Component,
-  Input,
   inject,
   ChangeDetectionStrategy,
+  input,
+  output,
+  linkedSignal,
 } from '@angular/core';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
-import { provideTranslocoScope } from '@jsverse/transloco';
-import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
-import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
-import { ContentWordcloud } from '@app/core/models/content-wordcloud';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
+import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { take } from 'rxjs';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
-import { AnswerResultType } from '@app/core/models/answer-result';
+import {
+  Answer,
+  AnswerResultState,
+  CreateQuestionnaireWordcloudAnswerGql,
+  WordcloudAnswerFormatData,
+  WordcloudContentFormatData,
+} from '@gql/generated/graphql';
+import { AnswerForm } from '@app/participant/content/answer-form';
 
 @Component({
   selector: 'app-content-wordcloud-participant',
@@ -22,25 +30,31 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
-export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
-  protected answerService = inject(ContentAnswerService);
+export class ContentWordcloudParticipantComponent implements AnswerForm {
+  private readonly translateService = inject(TranslocoService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly createAnswer = inject(CreateQuestionnaireWordcloudAnswerGql);
+  private readonly mutations = mutationHelper();
 
-  @Input({ required: true }) content!: ContentWordcloud;
-  @Input() answer?: MultipleTextsAnswer;
-
-  words: string[] = [];
-
-  init() {
-    if (this.answer) {
-      this.words = this.answer.texts;
-    } else {
-      this.words = new Array<string>(this.content.maxAnswers).fill('');
-    }
-    this.isLoading = false;
-  }
+  readonly contentId = input.required<string>();
+  readonly roundId = input.required<string>();
+  readonly contentFormatData = input.required<WordcloudContentFormatData>();
+  readonly answerFormatData = input<WordcloudAnswerFormatData>();
+  readonly result = input<AnswerResultState | undefined>(
+    AnswerResultState.Unanswered
+  );
+  readonly correctOptionsPublished = input<boolean>(false);
+  readonly answerCreated = output<Answer>();
+  readonly words = linkedSignal(
+    () =>
+      this.answerFormatData()?.words ??
+      new Array<string>(this.contentFormatData().maxAnswers).fill('')
+  );
 
   submitAnswer() {
-    const words = this.words.filter((w) => w);
+    const words = this.words()
+      .map((w) => w.trim())
+      .filter((w) => w);
     if (words.length === 0) {
       this.translateService
         .selectTranslate('participant.answer.please-answer')
@@ -53,48 +67,21 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
         });
       return;
     }
-    this.disableForm();
-    const answer = new MultipleTextsAnswer(
-      this.content.id,
-      this.content.state.round,
-      ContentType.WORDCLOUD
-    );
-    answer.texts = words;
-    this.answerService.addAnswer(this.content.roomId, answer).subscribe(
-      (answer) => {
-        this.answer = answer;
-        this.translateService
-          .selectTranslate('participant.answer.sent')
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.SUCCESS
-            );
-          });
-        this.sendStatusToParent(AnswerResultType.NEUTRAL);
-      },
-      () => {
-        this.enableForm();
-      }
-    );
-  }
-
-  abstain() {
-    this.words = [];
-    const answer = new MultipleTextsAnswer(
-      this.content.id,
-      this.content.state.round,
-      ContentType.WORDCLOUD
-    );
-    this.answerService.addAnswer(this.content.roomId, answer).subscribe(
-      (answer) => {
-        this.answer = answer;
-        this.sendStatusToParent(AnswerResultType.ABSTAINED);
-      },
-      () => {
-        this.enableForm();
-      }
-    );
+    this.createAnswer
+      .mutate({ variables: { input: { roundId: this.roundId(), words } } })
+      .pipe(this.mutations.handleErrors())
+      .subscribe({
+        next: (r) => {
+          const answer = r.data?.createQuestionnaireWordcloudAnswer;
+          if (answer) this.answerCreated.emit(answer as Answer);
+          const msg = this.translateService.translate(
+            'participant.answer.sent'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        },
+      });
   }
 }

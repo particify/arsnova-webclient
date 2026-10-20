@@ -41,11 +41,9 @@ test.describe('create room', () => {
 
   test('create two question series', async ({ page }) => {
     await roomOverviewPage.createQuestionSeries('Survey', 'Survey');
-    await page.waitForURL(/Survey/);
-    await page.goBack();
+    await roomOverviewPage.goto(shortId);
     await roomOverviewPage.createQuestionSeries('Quiz', 'Quiz');
-    await page.waitForURL(/Quiz/);
-    await page.goBack();
+    await roomOverviewPage.goto(shortId);
     await expect(page.getByRole('button', { name: 'Quiz' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Survey' })).toBeVisible();
   });

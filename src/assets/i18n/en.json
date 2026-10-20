@@ -528,7 +528,7 @@
   "sidebar": {
     "a11y-switch-to-feature": "Switch to {{feature}}.",
     "comments": "Q&A",
-    "series": "Question series",
+    "questionnaire": "Question series",
     "feedback": "Live Feedback",
     "overview": "Overview"
   },

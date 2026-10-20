@@ -559,7 +559,7 @@
   "sidebar": {
     "a11y-switch-to-feature": "Passa a {{feature}}.",
     "comments": "Domande e risposte",
-    "series": "Serie di domande",
+    "questionnaire": "Serie di domande",
     "feedback": "Feedback in tempo reale",
     "overview": "Panoramica"
   },

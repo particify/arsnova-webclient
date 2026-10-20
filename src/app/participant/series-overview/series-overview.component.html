@@ -1,8 +1,10 @@
 <div fxLayout="column" fxLayoutAlign="start center">
   <mat-card fxLayout="column" fxLayoutGap="16px">
-    @if (
-      !isLoading &&
-      (!group.leaderboardEnabled ||
+    @if (loadingAnswerResults()) {
+      <app-loading-indicator></app-loading-indicator>
+    } @else if (
+      !loadingAnswerResults() &&
+      (!questionnaire().leaderboardEnabled ||
         (userLeaderboardItem && leaderboardPosition && leaderboardPosition > 3))
     ) {
       <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="12px">
@@ -11,13 +13,10 @@
         </span>
       </div>
     }
-    @if (isLoading) {
-      <app-loading-indicator></app-loading-indicator>
-    }
     <div fxLayout="column" fxLayoutGap="24px">
       @if (
-        !isLoading &&
-        group.leaderboardEnabled &&
+        !loadingAnswerResults() &&
+        questionnaire().leaderboardEnabled &&
         userLeaderboardItem &&
         leaderboardPosition &&
         leaderboardPosition <= 3
@@ -36,13 +35,17 @@
           </span>
         </div>
       }
-      @if (!isLoading && !isPureInfoSeries) {
+      @if (!loadingAnswerResults() && !isPureInfoSeries()) {
         <div
           fxLayout="row wrap"
           fxLayoutAlign="space-around"
           class="info-chart-container"
         >
-          @if (group.leaderboardEnabled && leaderboard && userLeaderboardItem) {
+          @if (
+            questionnaire().leaderboardEnabled &&
+            leaderboard &&
+            userLeaderboardItem
+          ) {
             <app-info-chart
               id="points-info-chart"
               chartId="points-chart"
@@ -50,11 +53,11 @@
               [infoText]="'content.points' | transloco"
             ></app-info-chart>
           }
-          @if (hasScore) {
+          @if (hasScore()) {
             <app-info-chart
               id="correct-info-chart"
               chartId="correct-chart"
-              [dataText]="score + '%'"
+              [dataText]="score() + '%'"
               [infoText]="
                 'participant.content.answer-state-correct' | transloco
               "
@@ -68,11 +71,13 @@
           ></app-info-chart>
         </div>
       }
-      @if (!isLoading && !leaderboard && getLockedContentCount() > 0) {
+      @if (
+        !loadingAnswerResults() && !leaderboard && getLockedContentCount() > 0
+      ) {
         <app-hint
-          [ngStyle]="{ 'margin-top': isPureInfoSeries ? '0' : '-1em' }"
+          [ngStyle]="{ 'margin-top': isPureInfoSeries() ? '0' : '-1em' }"
           fxLayout="row"
-          [fxLayoutAlign]="isPureInfoSeries ? 'start' : 'center'"
+          [fxLayoutAlign]="isPureInfoSeries() ? 'start' : 'center'"
           [type]="HintType.INFO"
           [text]="
             (getLockedContentCount() === 1
@@ -82,7 +87,7 @@
           "
         ></app-hint>
       }
-      @if (group.leaderboardEnabled) {
+      @if (questionnaire().leaderboardEnabled) {
         <div fxLayout="row">
           <mat-tab-group
             (selectedTabChange)="selectedTabIndex = $event.index"
@@ -96,7 +101,7 @@
           </mat-tab-group>
         </div>
       }
-      @if (!group.leaderboardEnabled) {
+      @if (!questionnaire().leaderboardEnabled) {
         <div
           fxLayout.gt-xs="row"
           fxLayout.lt-sm="column"
@@ -105,7 +110,7 @@
           fxLayoutAlign.lt-sm="center center"
         >
           <span>{{ getSubHeaderText() | transloco }}</span>
-          @if (!isPureInfoSeries && !finished) {
+          @if (!isPureInfoSeries() && !finished()) {
             <button
               fxFlex="none"
               mat-raised-button
@@ -120,19 +125,22 @@
           }
         </div>
       }
-      @if (isLoading) {
+      @if (loadingAnswerResults()) {
         <app-loading-indicator></app-loading-indicator>
-      }
-      @if (
-        !isLoading && (!group.leaderboardEnabled || selectedTabIndex === 0)
+      } @else if (
+        !questionnaire().leaderboardEnabled || selectedTabIndex === 0
       ) {
         <mat-action-list>
-          @for (content of contentsWithResults; track content; let i = $index) {
+          @for (
+            content of contentsWithResults();
+            track content;
+            let i = $index
+          ) {
             <button
               mat-list-item
               disableRipple
               class="full-border"
-              (click)="goToContent(i)"
+              (click)="goToContent(content.id)"
             >
               <div
                 fxLayout="row"
@@ -140,59 +148,66 @@
                 fxLayoutGap="16px"
                 fxFill
               >
-                <div
-                  fxLayoutAlign="center center"
-                  [attr.aria-label]="
-                    ![ContentType.FLASHCARD, ContentType.SLIDE].includes(
-                      contents[i].format
-                    )
-                      ? ('participant.content.answer-state-' +
-                          content.state.toLowerCase() | transloco) + ':'
-                      : ''
-                  "
-                >
-                  @if (
-                    !(
-                      isLoadingLastContent &&
-                      i === contentsWithResults.length - 1
-                    )
-                  ) {
-                    <mat-icon
-                      [ngClass]="{
-                        correct: content.state === resultTypes.CORRECT,
-                        wrong: content.state === resultTypes.WRONG,
-                        grey: [
-                          resultTypes.ABSTAINED,
-                          resultTypes.UNANSWERED,
-                        ].includes(content.state),
-                        primary: hasAnsweredState(content.state),
-                      }"
-                      [matTooltip]="
-                        (![ContentType.FLASHCARD, ContentType.SLIDE].includes(
-                          contents[i].format
-                        )
-                          ? 'participant.content.answer-state-' +
-                            content.state.toLowerCase()
-                          : ''
-                        ) | transloco
-                      "
-                      [attr.data-testid]="content.state.toLowerCase() + '-icon'"
-                    >
-                      {{ getIcon(content.state) }}
-                    </mat-icon>
-                  }
-                  @if (
-                    isLoadingLastContent && i === contentsWithResults.length - 1
-                  ) {
-                    <app-loading-indicator [size]="20"></app-loading-indicator>
-                  }
-                </div>
+                @if (content.state) {
+                  <div
+                    fxLayoutAlign="center center"
+                    [attr.aria-label]="
+                      ![ContentType.Flashcard, ContentType.Slide].includes(
+                        contents()[i].formatData.format
+                      )
+                        ? ('participant.content.answer-state-' +
+                            content.state.toLowerCase() | transloco) + ':'
+                        : ''
+                    "
+                  >
+                    @if (
+                      !(
+                        isLoadingLastContent() &&
+                        i === contentsWithResults().length - 1
+                      )
+                    ) {
+                      <mat-icon
+                        [ngClass]="{
+                          correct: content.state === resultTypes.Correct,
+                          wrong: content.state === resultTypes.Wrong,
+                          grey: [
+                            resultTypes.Abstained,
+                            resultTypes.Unanswered,
+                          ].includes(content.state),
+                          primary: hasAnsweredState(content.state),
+                        }"
+                        [matTooltip]="
+                          (![ContentType.Flashcard, ContentType.Slide].includes(
+                            contents()[i].formatData.format
+                          )
+                            ? 'participant.content.answer-state-' +
+                              content.state.toLowerCase()
+                            : ''
+                          ) | transloco
+                        "
+                        [attr.data-testid]="
+                          content.state.toLowerCase() + '-icon'
+                        "
+                      >
+                        {{ getIcon(content.state) }}
+                      </mat-icon>
+                    }
+                    @if (
+                      isLoadingLastContent() &&
+                      i === contentsWithResults().length - 1
+                    ) {
+                      <app-loading-indicator
+                        [size]="20"
+                      ></app-loading-indicator>
+                    }
+                  </div>
+                }
                 <app-rendered-text
                   class="ellipsis body rendered-list-preview-container"
-                  [renderedText]="content.body"
+                  [renderedText]="content.body ?? undefined"
                   [listPreview]="true"
                   role="button"
-                  (keyup.enter)="goToContent(i)"
+                  (keyup.enter)="goToContent(content.id)"
                 ></app-rendered-text>
                 <span class="fill-remaining-space"></span>
                 @if (content.duration && isLiveMode()) {
@@ -206,23 +221,22 @@
         </mat-action-list>
       }
       @if (
-        !isLoading &&
-        group.leaderboardEnabled &&
+        !loadingAnswerResults() &&
+        questionnaire().leaderboardEnabled &&
         leaderboard &&
         selectedTabIndex === 1
       ) {
-        @if (alias?.id) {
+        @if (alias()?.id) {
           <app-leaderboard
             fxFill
             [leaderboardItems]="leaderboard"
-            [aliasId]="$safeNavigationMigration(alias?.id)"
+            [aliasId]="$safeNavigationMigration(alias()?.id)"
           ></app-leaderboard>
         } @else {
           <app-content-waiting
-            [alias]="alias"
-            [roomId]="group.roomId"
+            [alias]="alias()"
+            [roomId]="roomId()"
             [aliasRequired]="true"
-            (aliasSet)="loadLeaderboard()"
           ></app-content-waiting>
         }
       }

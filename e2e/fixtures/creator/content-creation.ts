@@ -1,4 +1,5 @@
 import { Locator, Page } from '@playwright/test';
+import { waitForOperation } from '@e2e/fixtures/shared/graphql';
 
 export class ContentCreationPage {
   private readonly createContentButton: Locator;
@@ -202,18 +203,7 @@ export class ContentCreationPage {
 
   async submitContent() {
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/content/') &&
-          res.ok() &&
-          res.request().method() === 'POST'
-      ),
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/contentgroup/') &&
-          res.ok() &&
-          res.request().method() === 'POST'
-      ),
+      waitForOperation(this.page, /^CreateQuestionnaire\w+Content$/),
       this.createContentButton.click(),
     ]);
   }

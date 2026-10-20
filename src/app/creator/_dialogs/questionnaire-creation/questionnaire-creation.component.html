@@ -1,0 +1,48 @@
+<form mat-dialog-content (ngSubmit)="addContentGroup()">
+  <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="1em">
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        'creator.dialog.content-group-name' | transloco
+      }}</mat-label>
+      <input
+        matInput
+        #nameInput
+        class="input-block"
+        type="text"
+        maxlength="50"
+        [(ngModel)]="name"
+        name="contentGroupName"
+        autocomplete="off"
+        [placeholder]="'creator.dialog.content-group-example' | transloco"
+      />
+      <mat-hint align="end"
+        ><span aria-hidden="true"
+          >{{ nameInput.value.length }} / 50</span
+        ></mat-hint
+      >
+    </mat-form-field>
+    <app-detail-radio-group
+      [selectedItemValue]="selectedType"
+      [items]="radioItems"
+      (itemValueChanged)="changeType($event)"
+    ></app-detail-radio-group>
+  </div>
+</form>
+<div fxLayoutAlign="end">
+  <mat-dialog-actions fxLayout="row-reverse">
+    <app-loading-button
+      name="creator.dialog.create-content-group"
+      [isDialog]="true"
+      (clicked)="addContentGroup()"
+    >
+    </app-loading-button>
+    <button
+      (click)="closeDialog()"
+      aria-labelledby="cancel"
+      mat-button
+      type="button"
+    >
+      {{ 'dialog.cancel' | transloco }}
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,191 +1,185 @@
-@if (showStepInfo && !isLoading && !isGroupLocked() && contents) {
-  <span class="step-info">
-    {{ currentStep + 1 + ' / ' + stepCount }}
-  </span>
-}
-@if (
-  showAnswerCount &&
-  !isLoading &&
-  !isGroupLocked() &&
-  canAnswerContent &&
-  content &&
-  (content.state.answeringEndTime || !isLiveMode())
-) {
-  <div
-    class="answer-count"
-    [ngClass]="{ 'over-control-bar': !noControlBar }"
-    fxLayout="column"
-    fxLayoutAlign="start end"
-    fxLayoutGap="4px"
-  >
-    @if (responseCounts.abstentions) {
-      <app-count
-        [count]="responseCounts.abstentions"
-        [label]="
-          (responseCounts.abstentions === 1
-            ? 'statistic.abstention'
-            : 'statistic.abstentions'
-          ) | transloco
-        "
-      ></app-count>
-    }
-    <app-answer-count
-      [count]="responseCounts.answers"
-      [biggerFont]="true"
-    ></app-answer-count>
-  </div>
-}
-@if (isLoading) {
+@let _questionnaire = questionnaire();
+@if (loading()) {
   <app-loading-indicator></app-loading-indicator>
-}
-@if (!isLoading) {
+} @else if (_questionnaire) {
+  @if (showStepInfo() && _questionnaire.published && contents()) {
+    <span class="step-info">
+      {{ currentIndex() + 1 + ' / ' + stepCount() }}
+    </span>
+  }
+  @if (
+    showAnswerCount() &&
+    _questionnaire.published &&
+    canAnswerContent &&
+    content()
+  ) {
+    <div
+      class="answer-count"
+      [ngClass]="{ 'over-control-bar': !hideControlBar() }"
+      fxLayout="column"
+      fxLayoutAlign="start end"
+      fxLayoutGap="4px"
+    >
+      @if (responseCounts().abstentions) {
+        <app-count
+          [count]="responseCounts().abstentions"
+          [label]="
+            (responseCounts().abstentions === 1
+              ? 'statistic.abstention'
+              : 'statistic.abstentions'
+            ) | transloco
+          "
+        ></app-count>
+      }
+      <app-answer-count
+        [count]="responseCounts().answers"
+        [biggerFont]="true"
+      ></app-answer-count>
+    </div>
+  }
+
   <div fxLayoutAlign="center center">
-    @if (!contents) {
+    @if (!contents()) {
       <p class="hint">
         {{ 'creator.content.no-contents-yet' | transloco }}
       </p>
     }
-    @if (isGroupLocked()) {
+    @if (!_questionnaire.published) {
       <p class="hint">
         {{ 'creator.content.group-not-published' | transloco }}
       </p>
     }
   </div>
-}
-<div>
-  @if (!isLoading) {
+
+  <div>
     <div tabindex="-1" [appAutofocus] class="visually-hidden">
       {{
         'creator.presentation.a11y-content-message'
-          | transloco: { group: contentGroup.name }
+          | transloco: { group: _questionnaire.name }
       }}
     </div>
-  }
-  <div
-    id="stepper-container"
-    fxLayout="column"
-    fxLayoutAlign="start center"
-    class="scalable"
-  >
-    @if (contents && contents.length > 0 && !isLoading && !isGroupLocked()) {
-      <app-content-stepper
-        [hidden]="showLeaderboard"
-        [contents]="contents"
-        [settings]="settings()"
-        [startIndex]="currentIndex"
-        [hideControls]="true"
-        [language]="language()"
-        [isLiveMode]="isLiveMode()"
-        (indexChanged)="updateURL($event)"
-      >
-      </app-content-stepper>
-    }
-    @if (showLeaderboard) {
-      <app-content-group-leaderboard
-        fxFill
-        [contentGroup]="contentGroup"
-        [room]="room"
-        [showAll]="true"
-        [allowScrolling]="true"
-        [ngClass]="{ 'over-control-bar': !noControlBar }"
-      ></app-content-group-leaderboard>
-    }
+
+    <div
+      id="stepper-container"
+      [ngStyle]="containerStyle()"
+      fxLayout="column"
+      fxLayoutAlign="start center"
+      class="scalable"
+    >
+      @if (contents() && contents().length > 0 && _questionnaire.published) {
+        <app-content-stepper
+          [hidden]="showLeaderboard"
+          [contents]="contents()"
+          [settings]="settings()"
+          [startIndex]="currentIndex()"
+          [hideControls]="true"
+          [language]="language()"
+          [isLiveMode]="isLiveMode()"
+          (indexChanged)="updateURL($event)"
+        >
+        </app-content-stepper>
+      }
+      @if (showLeaderboard) {
+        <app-content-group-leaderboard
+          fxFill
+          [questionnaire]="_questionnaire"
+          [showAll]="true"
+          [allowScrolling]="true"
+          [ngClass]="{ 'over-control-bar': !hideControlBar() }"
+        ></app-content-group-leaderboard>
+      }
+    </div>
   </div>
-</div>
-@if (
-  showHotkeyActionButtons &&
-  !isLoading &&
-  !isGroupLocked() &&
-  isLiveMode() &&
-  content &&
-  isPublished()
-) {
-  @if (!content.state.answeringEndTime) {
-    <div @hotkeyEnterLeaveAnimation fxFill>
-      <app-hotkey-action-button
-        hotkey="s"
-        [hotkeyTitle]="'creator.content.start-content' | transloco"
-        [action]="'creator.content.to-start-content' | transloco"
-        [isNavBarVisible]="!noControlBar"
-        (buttonClicked)="startCountdown()"
-      ></app-hotkey-action-button>
-    </div>
-  }
-  @if (endDate && !answeringLocked) {
-    <div @hotkeyEnterLeaveAnimation fxFill>
-      <app-hotkey-action-button
-        hotkey="s"
-        [hotkeyTitle]="'creator.content.stop-content' | transloco"
-        [action]="'creator.content.to-stop-content' | transloco"
-        [isNavBarVisible]="!noControlBar"
-        [additionalBottomSpace]="!answeringLocked"
-        (buttonClicked)="stopCountdown()"
-      ></app-hotkey-action-button>
-    </div>
-  }
-}
-<div
-  class="countdown-container"
-  [ngClass]="{ 'over-control-bar': !noControlBar }"
->
-  @if (content && endDate && !answeringLocked) {
-    @if (content.duration) {
-      <app-countdown-timer
-        [endDate]="endDate"
-        [duration]="content.duration"
-        [showIcon]="true"
-        [layout]="'column-reverse'"
-        [bigFontSize]="true"
-        (finished)="answeringLocked = true"
-      ></app-countdown-timer>
-    } @else {
-      <div
-        fxFill
-        fxLayout="row"
-        fxLayoutGap="8px"
-        fxLayoutAlign="center center"
-        class="live-info"
-      >
-        <app-pulsating-circle [size]="10"></app-pulsating-circle>
-        <span>{{ 'creator.content.live' | transloco }}</span>
+  @if (
+    showHotkeyActionButtons() &&
+    _questionnaire.published &&
+    isLiveMode() &&
+    content() &&
+    isPublished()
+  ) {
+    <!-- @if (!content.state.answeringEndTime) {
+      <div @hotkeyEnterLeaveAnimation fxFill>
+        <app-hotkey-action-button
+          hotkey="s"
+          [hotkeyTitle]="'creator.content.start-content' | transloco"
+          [action]="'creator.content.to-start-content' | transloco"
+          [isNavBarVisible]="!hideControlBar()"
+          (buttonClicked)="startCountdown()"
+        ></app-hotkey-action-button>
       </div>
     }
+    @if (endDate && !answeringLocked) {
+      <div @hotkeyEnterLeaveAnimation fxFill>
+        <app-hotkey-action-button
+          hotkey="s"
+          [hotkeyTitle]="'creator.content.stop-content' | transloco"
+          [action]="'creator.content.to-stop-content' | transloco"
+          [isNavBarVisible]="!hideControlBar()"
+          [additionalBottomSpace]="!answeringLocked"
+          (buttonClicked)="stopCountdown()"
+        ></app-hotkey-action-button>
+      </div>
+    } -->
   }
-</div>
-@if (
-  showHotkeyActionButtons &&
-  !isLoading &&
-  !isGroupLocked() &&
-  content &&
-  !isPublished() &&
-  !this.isPublishing
-) {
-  <app-hotkey-action-button
-    @hotkeyEnterLeaveAnimation
-    hotkey="p"
-    [hotkeyTitle]="'creator.content.publish-current-content' | transloco"
-    [action]="'creator.content.to-publish-content' | transloco"
-    [isNavBarVisible]="!noControlBar"
-    infoIcon="locked"
-    [infoLabel]="'creator.content.content-is-locked' | transloco"
-    (buttonClicked)="publishCurrentContent()"
-  ></app-hotkey-action-button>
-}
-@if (
-  !isLoading &&
-  isPublished() &&
-  answeringLocked &&
-  endDate &&
-  showHotkeyActionButtons
-) {
   <div
-    class="locked-hint"
-    [ngClass]="{ 'over-control-bar': !noControlBar }"
-    fxLayout="row"
-    fxLayoutAlign="start center"
-    fxLayoutGap="8px"
+    class="countdown-container"
+    [ngClass]="{ 'over-control-bar': !hideControlBar() }"
   >
-    <mat-icon>lock</mat-icon>
-    <span>{{ 'creator.content.answering-is-locked' | transloco }}</span>
+    @if (content() && endDate && !answeringLocked) {
+      @let duration = content().duration;
+      @if (duration) {
+        <app-countdown-timer
+          [endDate]="endDate"
+          [duration]="duration"
+          [showIcon]="true"
+          [layout]="'column-reverse'"
+          [bigFontSize]="true"
+          (finished)="answeringLocked = true"
+        ></app-countdown-timer>
+      } @else {
+        <div
+          fxFill
+          fxLayout="row"
+          fxLayoutGap="8px"
+          fxLayoutAlign="center center"
+          class="live-info"
+        >
+          <app-pulsating-circle [size]="10"></app-pulsating-circle>
+          <span>{{ 'creator.content.live' | transloco }}</span>
+        </div>
+      }
+    }
   </div>
+  @if (
+    showHotkeyActionButtons() &&
+    _questionnaire.published &&
+    content() &&
+    !isPublished() &&
+    !this.isPublishing
+  ) {
+    <app-hotkey-action-button
+      @hotkeyEnterLeaveAnimation
+      hotkey="p"
+      [hotkeyTitle]="'creator.content.publish-current-content' | transloco"
+      [action]="'creator.content.to-publish-content' | transloco"
+      [isNavBarVisible]="!hideControlBar()"
+      infoIcon="locked"
+      [infoLabel]="'creator.content.content-is-locked' | transloco"
+      (buttonClicked)="publishCurrentContent()"
+    ></app-hotkey-action-button>
+  }
+  @if (
+    isPublished() && answeringLocked && endDate && showHotkeyActionButtons()
+  ) {
+    <div
+      class="locked-hint"
+      [ngClass]="{ 'over-control-bar': !hideControlBar() }"
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      fxLayoutGap="8px"
+    >
+      <mat-icon>lock</mat-icon>
+      <span>{{ 'creator.content.answering-is-locked' | transloco }}</span>
+    </div>
+  }
 }

@@ -1,6 +1,6 @@
 export enum RoutingFeature {
   COMMENTS = 'comments',
-  CONTENTS = 'series',
+  CONTENTS = 'questionnaire',
   FEEDBACK = 'feedback',
   OVERVIEW = 'overview',
 }

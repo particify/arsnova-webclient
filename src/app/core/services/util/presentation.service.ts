@@ -1,15 +1,20 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { ContentGroup } from '@app/core/models/content-group';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { RoundState } from '@app/core/models/events/round-state';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Content } from '@app/core/models/content';
-import { ContentService } from '@app/core/services/http/content.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  debounceTime,
+  fromEvent,
+} from 'rxjs';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
+import { Content } from '@gql/generated/graphql';
 
 const SCALE_FACTOR = 1080;
 const MIN_SCALE = 1;
@@ -19,9 +24,6 @@ export const CARD_WIDTH = 640;
 
 @Injectable()
 export class PresentationService {
-  private contentService = inject(ContentService);
-  private contentGroupService = inject(ContentGroupService);
-
   private currentGroup$ = new Subject<string>();
   private feedbackStarted$ = new Subject<boolean>();
   private contentState$ = new BehaviorSubject<
@@ -34,8 +36,17 @@ export class PresentationService {
     undefined
   );
 
-  private useRatioScale = true;
-  private scaleFactor = SCALE_FACTOR;
+  private readonly useRatioScale = signal(true);
+  private readonly scaleFactor = signal(SCALE_FACTOR);
+  private readonly resized = toSignal(
+    fromEvent(window, 'resize').pipe(debounceTime(100))
+  );
+
+  /** The scale of the presentation view, following the window size. */
+  readonly scale = computed(() => {
+    this.resized();
+    return this.getScale();
+  });
 
   private commentSortChanged = new Subject<CommentSort>();
   private commentFilterChanged = new Subject<CommentFilter>();
@@ -48,21 +59,15 @@ export class PresentationService {
   private countdownChanged = new Subject<Content>();
   private wordcloudVisualizationCHanged = new Subject<boolean>();
   private leaderboardDisplayed = new Subject<boolean>();
-  private resultsDisplayed = new Subject<boolean>();
-  private correctResultsDisplayed = new Subject<boolean>();
 
   private currentContent?: Content;
-
-  private _activeWordcloudVisualization = signal<string>('cloud');
-  activeWordcloudVisualization =
-    this._activeWordcloudVisualization.asReadonly();
 
   getScale(factor = 1) {
     const ratioScale = innerHeight / innerWidth / ASPECT_RATIO;
     const deviceScale = parseFloat(
       (
-        (innerWidth / this.scaleFactor) *
-        (this.useRatioScale ? ratioScale : 1) *
+        (innerWidth / this.scaleFactor()) *
+        (this.useRatioScale() ? ratioScale : 1) *
         factor
       ).toFixed(1)
     );
@@ -70,11 +75,11 @@ export class PresentationService {
   }
 
   setUseRatioScale(useRatioScale: boolean): void {
-    this.useRatioScale = useRatioScale;
+    this.useRatioScale.set(useRatioScale);
   }
 
   setScaleFactor(scaleFactor: number): void {
-    this.scaleFactor = scaleFactor;
+    this.scaleFactor.set(scaleFactor);
   }
 
   getStepState(index: number, listLength: number) {
@@ -96,37 +101,12 @@ export class PresentationService {
   }
 
   startContent(contentGroupId: string): void {
-    if (this.currentContent) {
-      this.contentGroupService
-        .startContent(
-          this.currentContent.roomId,
-          contentGroupId,
-          this.currentContent.id
-        )
-        .subscribe(() => {
-          this.reloadCurrentContent();
-        });
-    }
+    console.log('start content:', contentGroupId);
   }
 
   stopContent(): void {
     if (this.currentContent) {
-      this.contentService
-        .stopContent(this.currentContent.roomId, this.currentContent.id)
-        .subscribe(() => {
-          this.reloadCurrentContent();
-        });
-    }
-  }
-
-  reloadCurrentContent(): void {
-    if (this.currentContent) {
-      this.contentService
-        .getContent(this.currentContent.roomId, this.currentContent.id)
-        .subscribe((content) => {
-          this.currentContent = content;
-          this.countdownChanged.next(content);
-        });
+      // TODO: Stop content
     }
   }
 
@@ -155,10 +135,6 @@ export class PresentationService {
 
   updateMultipleRoundState(state: boolean) {
     this.multipleRoundState$.next(state);
-  }
-
-  setActiveWordcloudVizualization(visualization: string) {
-    this._activeWordcloudVisualization.set(visualization);
   }
 
   // Events
@@ -253,21 +229,5 @@ export class PresentationService {
 
   getLeaderboardDisplayed(): Observable<boolean> {
     return this.leaderboardDisplayed;
-  }
-
-  updateResultsDisplayed(displayResults: boolean) {
-    this.resultsDisplayed.next(displayResults);
-  }
-
-  getResultsDisplayed(): Observable<boolean> {
-    return this.resultsDisplayed;
-  }
-
-  updateCorrectResultsDisplayed(displayCorrectResults: boolean) {
-    this.correctResultsDisplayed.next(displayCorrectResults);
-  }
-
-  getCorrectResultsDisplayed(): Observable<boolean> {
-    return this.correctResultsDisplayed;
   }
 }

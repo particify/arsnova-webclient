@@ -45,17 +45,6 @@ export enum PublishingMode {
   LIVE = 'LIVE',
 }
 
-export interface PublishingModeItem {
-  type: PublishingMode;
-  name: string;
-  icon: string;
-}
-
-export const PUBLISHING_MODE_ITEMS: PublishingModeItem[] = [
-  { type: PublishingMode.ALL, name: 'all', icon: 'lock_open' },
-  { type: PublishingMode.UP_TO, name: 'up-to', icon: 'expand_all' },
-];
-
 export enum GroupType {
   MIXED = 'MIXED',
   QUIZ = 'QUIZ',

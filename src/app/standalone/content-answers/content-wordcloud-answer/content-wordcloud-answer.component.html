@@ -1,12 +1,11 @@
 <div fxLayout="column" fxLayoutGap="0.5em">
-  @for (word of words; track $index; let i = $index) {
+  @for (word of words(); track $index; let i = $index) {
     <mat-form-field appearance="outline" class="no-field-hint">
       <input
         matInput
-        [disabled]="disabled"
-        [(ngModel)]="words[i]"
+        [disabled]="disabled()"
+        [(ngModel)]="words()[i]"
         placeholder="{{ ('answer.word' | transloco) + ' ' + (i + 1) }}"
-        [disabled]="!!givenAnswer"
         [maxLength]="maxLength"
         (focus)="currentInputIndex = i"
         (blur)="currentInputIndex = undefined"

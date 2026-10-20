@@ -60,7 +60,7 @@
                     id="content-group-create-button"
                     mat-raised-button
                     color="primary"
-                    (click)="openCreateContentGroupDialog()"
+                    (click)="openCreateQuestionnaireDialog()"
                     appHotkey="3"
                     [appHotkeyTitle]="
                       'creator.room-page.create-content-group' | transloco
@@ -86,13 +86,28 @@
                   </button>
                 </div>
               }
-              @if (isLoadingGroups()) {
+              @if (loadingQuestionnaires()) {
                 <app-loading-indicator></app-loading-indicator>
               } @else {
-                @if (contentGroups.length === 0) {
+                @let _questionnaires = questionnaires();
+                @let _shortId = shortId();
+                @if (
+                  _shortId && _questionnaires && _questionnaires.length > 0
+                ) {
+                  <div fxLayout="column" fxLayoutGap="8px">
+                    @for (
+                      questionnaire of _questionnaires;
+                      track questionnaire
+                    ) {
+                      <app-questionnaire
+                        [questionnaire]="questionnaire"
+                      ></app-questionnaire>
+                    }
+                  </div>
+                } @else {
                   <div class="group-types-container">
                     @for (
-                      type of groupTypes.keys();
+                      type of quesionnaireTypes.keys();
                       track type;
                       let i = $index
                     ) {
@@ -101,8 +116,8 @@
                         appearance="outlined"
                         tabindex="0"
                         role="button"
-                        (click)="openCreateContentGroupDialog(type)"
-                        (keyup.enter)="openCreateContentGroupDialog(type)"
+                        (click)="openCreateQuestionnaireDialog(type)"
+                        (keyup.enter)="openCreateQuestionnaireDialog(type)"
                         matRipple
                         [attr.aria-label]="
                           'creator.room-page.a11y-create-series-type'
@@ -125,7 +140,7 @@
                               [style]="
                                 'color: ' + 'var(--' + type.toLowerCase() + ')'
                               "
-                              >{{ groupTypes.get(type) }}</mat-icon
+                              >{{ quesionnaireTypes.get(type) }}</mat-icon
                             >
                             <span class="group-type">{{
                               'creator.content.group-type-' + type.toLowerCase()
@@ -141,7 +156,7 @@
                           </mat-icon>
                           <div fxLayout="row" fxLayoutGap="4px">
                             @for (
-                              format of groupContentFormatIcons
+                              format of questionnaireContentFormatIcons
                                 .get(type)
                                 ?.keys();
                               track format
@@ -153,25 +168,15 @@
                                     format.toLowerCase() | transloco
                                 "
                                 >{{
-                                  groupContentFormatIcons.get(type)?.get(format)
+                                  questionnaireContentFormatIcons
+                                    .get(type)
+                                    ?.get(format)
                                 }}</mat-icon
                               >
                             }
                           </div>
                         </div>
                       </mat-card>
-                    }
-                  </div>
-                }
-                @let _shortId = shortId();
-                @if (_shortId && contentGroups.length > 0) {
-                  <div fxLayout="column" fxLayoutGap="8px">
-                    @for (contentGroup of contentGroups; track contentGroup) {
-                      <app-content-groups
-                        [contentGroup]="contentGroup"
-                        [role]="viewRole()"
-                        [shortId]="_shortId"
-                      ></app-content-groups>
                     }
                   </div>
                 }

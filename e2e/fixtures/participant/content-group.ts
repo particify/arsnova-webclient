@@ -22,10 +22,20 @@ export class ContentGroupPage {
     this.contentResultsTab = page.getByTestId('content-tab-results');
   }
 
+  /**
+   * Questionnaire URLs carry the ID, so the series is opened from the room
+   * overview by its name, and then the content by its step.
+   */
   async goto(shortId: string, seriesName: string, index = 1) {
-    await this.page.goto(
-      `${this.baseURL}/p/${shortId}/series/${seriesName}/${index}`
-    );
+    await this.page.goto(`${this.baseURL}/p/${shortId}`);
+    await this.page.getByRole('button', { name: seriesName }).click();
+    await this.page.waitForURL(/\/questionnaire\/[^/]+/);
+    if (index > 1) {
+      await this.page
+        .locator('.step-btn')
+        .nth(index - 1)
+        .click();
+    }
   }
 
   async joinQuiz(nickname?: string) {

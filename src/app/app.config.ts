@@ -36,7 +36,6 @@ import {
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
-import { ContentResolver } from '@app/core/resolver/content.resolver';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -50,7 +49,6 @@ import { DemoService } from '@app/core/services/demo.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { RemoteService } from '@app/core/services/util/remote.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TitleStrategy } from '@angular/router';
 import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
@@ -170,7 +168,6 @@ export const AppConfig: ApplicationConfig = {
     TrackingService,
     ThemeService,
     ApiConfigResolver,
-    ContentResolver,
     AnnounceService,
     SystemInfoService,
     FormattingService,
@@ -185,7 +182,6 @@ export const AppConfig: ApplicationConfig = {
     HotkeyService,
     PresentationService,
     RemoteService,
-    ContentPublishService,
     { provide: Window, useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {

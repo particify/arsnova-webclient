@@ -11,10 +11,10 @@ import { CoreModule } from '@app/core/core.module';
 import { LICENSES } from '@app/core/models/licenses';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
 import { Room } from '@app/core/models/room';
-import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
+//import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
 
 @Component({
-  imports: [CoreModule, TemplateLicenseComponent, ContentGroupInfoComponent],
+  imports: [CoreModule, TemplateLicenseComponent], // ContentGroupInfoComponent],
   selector: 'app-content-group-template',
   templateUrl: './content-group-template.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

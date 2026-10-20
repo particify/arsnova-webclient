@@ -8,8 +8,8 @@ import { Answer } from '@app/core/models/answer';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
-import { AnswerResultType } from '@app/core/models/answer-result';
 import { AnswerResponse } from '@app/core/models/answer-response';
+import { AnswerResultState } from '@gql/generated/graphql';
 
 @Injectable()
 export class ContentAnswerService extends AbstractEntityService<Answer> {
@@ -202,13 +202,13 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     return answers;
   }
 
-  getAnswerResultIcon(state: AnswerResultType) {
+  getAnswerResultIcon(state?: AnswerResultState) {
     switch (state) {
-      case AnswerResultType.CORRECT:
+      case AnswerResultState.Correct:
         return 'check';
-      case AnswerResultType.WRONG:
+      case AnswerResultState.Wrong:
         return 'close';
-      case AnswerResultType.UNANSWERED:
+      case AnswerResultState.Unanswered:
         return 'horizontal_rule';
       default:
         return 'fiber_manual_record';

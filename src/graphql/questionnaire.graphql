@@ -1,0 +1,358 @@
+fragment QuestionnaireSummary on Questionnaire {
+  id
+  name
+  type
+  published
+  publishingMode
+  publishedUpToContent {
+    id
+    position
+  }
+  contentCount
+}
+
+fragment QuestionnaireDetails on Questionnaire {
+  id
+  name
+  type
+  published
+  publishingMode
+  publishedUpToContent {
+    id
+    position
+  }
+  statisticsPublished
+  correctOptionsPublished
+  leaderboardEnabled
+  contentCount
+}
+
+fragment ContentDetails on Content {
+  id
+  body
+  bodyRendered
+  activeRound {
+    id
+    roundNo
+    closed
+    started
+    answerable
+  }
+  formatData {
+    ... on ChoiceContentFormatData {
+      format
+      options {
+        label
+        labelRendered
+      }
+      correctOptionIndexes
+      multiple
+    }
+    ... on ScaleContentFormatData {
+      format
+    }
+    ... on TextContentFormatData {
+      format
+    }
+    ... on WordcloudContentFormatData {
+      format
+      maxAnswers
+    }
+  }
+  duration
+  abstentionsAllowed
+  hasCorrectAnswer
+  weight
+  answerCount
+  abstentionCount
+  position
+}
+
+fragment CreatorContentDetails on Content {
+  ...ContentDetails
+  correctAnswerCount
+  hasAnswers
+}
+
+fragment Answer on Answer {
+  id
+  result
+  formatData {
+    ... on ChoiceAnswerFormatData {
+      format
+      selectedChoiceIndexes
+    }
+    ... on WordcloudAnswerFormatData {
+      format
+      words
+    }
+  }
+}
+
+fragment ContentAnswerResult on ContentAnswerResult {
+  contentId
+  result
+  durationMs
+}
+
+fragment QuestionnaireAnswerResult on QuestionnaireAnswerResult {
+  correctAnswerCount
+  scorableContentCount
+  achievedScore
+  maxScore
+}
+
+fragment ChoiceContentRoundStats on ChoiceContentRoundStats {
+  selectionCounts
+}
+
+fragment WordcloudContentRoundStats on WordcloudContentRoundStats {
+  words
+  counts
+}
+
+query QuestionnairesByRoomId($roomId: UUID!) {
+  questionnairesByRoomId(roomId: $roomId) {
+    ...QuestionnaireSummary
+  }
+}
+
+query PublishedQuestionnairesByRoomId($roomId: UUID!) {
+  publishedQuestionnairesByRoomId(roomId: $roomId) {
+    ...QuestionnaireSummary
+  }
+}
+
+subscription QuestionnairesChanged($roomId: UUID!) {
+  questionnairesChanged(roomId: $roomId)
+}
+
+query QuestionnaireById($id: UUID!) {
+  questionnaireById(id: $id) {
+    ...QuestionnaireDetails
+  }
+}
+
+query QuestionnaireContentsByQuestionnaireId($questionnaireId: UUID!) {
+  questionnaireContentsByQuestionnaireId(questionnaireId: $questionnaireId) {
+    edges {
+      node {
+        ...CreatorContentDetails
+      }
+    }
+  }
+}
+
+query QuestionnairePublishedContentsByQuestionnaireId($questionnaireId: UUID!) {
+  questionnairePublishedContentsByQuestionnaireId(
+    questionnaireId: $questionnaireId
+  ) {
+    edges {
+      node {
+        ...ContentDetails
+      }
+    }
+  }
+}
+
+mutation CreateQuestionnaire($input: CreateQuestionnaireInput!) {
+  createQuestionnaire(input: $input) {
+    ...QuestionnaireDetails
+  }
+}
+
+mutation ToggleQuestionnairePublished($id: UUID!, $published: Boolean!) {
+  toggleQuestionnairePublished(id: $id, published: $published) {
+    ...QuestionnaireDetails
+  }
+}
+
+mutation CreateQuestionnaireChoiceContent($input: CreateChoiceContentInput!) {
+  createQuestionnaireChoiceContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireChoiceContent($input: UpdateChoiceContentInput!) {
+  updateQuestionnaireChoiceContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireWordcloudContent(
+  $input: CreateWordcloudContentInput!
+) {
+  createQuestionnaireWordcloudContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireWordcloudContent(
+  $input: UpdateWordcloudContentInput!
+) {
+  updateQuestionnaireWordcloudContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+query QuestionnaireContentById($id: UUID!) {
+  questionnaireContentById(id: $id) {
+    ...CreatorContentDetails
+  }
+}
+
+query QuestionnaireAnswerByRoundId($roundId: UUID!) {
+  questionnaireAnswerByRoundId(roundId: $roundId) {
+    ...Answer
+  }
+}
+
+query QuestionnaireContentAnswerResultsByQuestionnaireId(
+  $questionnaireId: UUID!
+) {
+  questionnaireContentAnswerResultsByQuestionnaireId(
+    questionnaireId: $questionnaireId
+  ) {
+    ...ContentAnswerResult
+  }
+}
+
+query QuestionnaireAnswerResultsByQuestionnaireId($questionnaireId: UUID!) {
+  questionnaireAnswerResultsByQuestionnaireId(
+    questionnaireId: $questionnaireId
+  ) {
+    ...QuestionnaireAnswerResult
+  }
+}
+
+query QuestionnaireChoiceRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireChoiceRoundStatsByRoundId(roundId: $roundId) {
+    ...ChoiceContentRoundStats
+  }
+}
+
+query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
+    ...WordcloudContentRoundStats
+  }
+}
+
+mutation CreateQuestionnaireChoiceAnswer($input: CreateChoiceAnswerInput!) {
+  createQuestionnaireChoiceAnswer(input: $input) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireWordcloudAnswer(
+  $input: CreateWordcloudAnswerInput!
+) {
+  createQuestionnaireWordcloudAnswer(input: $input) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireAbstention($roundId: UUID!) {
+  createQuestionnaireAbstention(roundId: $roundId) {
+    ...Answer
+  }
+}
+
+mutation DeleteQuestionnaireContent($id: ID!) {
+  deleteQuestionnaireContent(id: $id)
+}
+
+mutation DeleteQuestionnaire($id: ID!) {
+  deleteQuestionnaire(id: $id)
+}
+
+mutation DeleteQuestionnaireAnswersByContentId($contentId: UUID!) {
+  deleteQuestionnaireAnswersByContentId(contentId: $contentId)
+}
+
+mutation BanQuestionnaireWordcloudContentKeyword(
+  $contentId: UUID!
+  $keyword: String!
+) {
+  banQuestionnaireWordcloudContentKeyword(
+    contentId: $contentId
+    keyword: $keyword
+  ) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID!) {
+  resetBannedQuestionnaireWordcloudContentKeywords(contentId: $contentId) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation ResetQuestionnaireResults($id: UUID!) {
+  resetQuestionnaireResults(id: $id)
+}
+
+mutation UpdateQuestionnaire(
+  $id: UUID!
+  $name: String
+  $published: Boolean
+  $publishingMode: QuestionnairePublishingMode
+  $statisticsPublished: Boolean
+  $correctOptionsPublished: Boolean
+  $leaderboardEnabled: Boolean
+) {
+  updateQuestionnaire(
+    input: {
+      id: $id
+      name: $name
+      published: $published
+      publishingMode: $publishingMode
+      statisticsPublished: $statisticsPublished
+      correctOptionsPublished: $correctOptionsPublished
+      leaderboardEnabled: $leaderboardEnabled
+    }
+  ) {
+    ...QuestionnaireDetails
+  }
+}
+
+mutation DuplicateQuestionnaireContent($id: ID!) {
+  duplicateQuestionnaireContent(id: $id) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation CopyQuestionnaireContentToQuestionnaire(
+  $contentId: UUID!
+  $questionnaireId: UUID!
+) {
+  copyQuestionnaireContentToQuestionnaire(
+    contentId: $contentId
+    questionnaireId: $questionnaireId
+  ) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation MoveQuestionnaireContentToQuestionnaire(
+  $contentId: UUID!
+  $questionnaireId: UUID!
+) {
+  moveQuestionnaireContentToQuestionnaire(
+    contentId: $contentId
+    questionnaireId: $questionnaireId
+  ) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireContentOrder(
+  $questionnaireId: UUID!
+  $contentIds: [UUID!]!
+) {
+  updateQuestionnaireContentOrder(
+    questionnaireId: $questionnaireId
+    contentIds: $contentIds
+  ) {
+    id
+  }
+}

@@ -71,8 +71,8 @@ export class FocusModeService extends AbstractFocusModeService {
         const contentState = cur.focusState as ContentFocusState;
         this.navigateToFeature(
           newFeature,
-          contentState.contentGroupName,
-          contentState.contentIndex
+          contentState.contentGroupId,
+          contentState.contentId
         );
       } else {
         this.navigateToFeature(newFeature);
@@ -95,8 +95,8 @@ export class FocusModeService extends AbstractFocusModeService {
 
   private navigateToFeature(
     routingFeature: RoutingFeature,
-    series?: string,
-    index?: number
+    questionnaireId?: string,
+    contentId?: string
   ) {
     const route = [
       this.routingService.getRoleRoute(UserRole.PARTICIPANT),
@@ -105,11 +105,11 @@ export class FocusModeService extends AbstractFocusModeService {
     if (routingFeature !== RoutingFeature.OVERVIEW) {
       route.push(routingFeature);
     }
-    if (series) {
-      route.push(series);
+    if (questionnaireId) {
+      route.push(questionnaireId);
     }
-    if (index !== undefined) {
-      route.push((index + 1).toString());
+    if (contentId) {
+      route.push(contentId);
     }
     this.router.navigate(route);
   }

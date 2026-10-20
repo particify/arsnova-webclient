@@ -50,7 +50,7 @@
                   'primary-border bold': selectedIndex === i,
                 }"
               >
-                @if (answerResults.size > 0) {
+                @if (answerResults().length > 0) {
                   <div
                     fxLayout="column"
                     fxLayoutAlign="center center"
@@ -60,9 +60,10 @@
                     <mat-icon
                       [ngClass]="{
                         primary:
-                          answerResults.get(i) === AnswerResultType.NEUTRAL,
+                          answerResults()[i]?.result ===
+                          AnsweResultState.Neutral,
                       }"
-                      [class]="answerResults.get(i)?.toLowerCase() ?? ''"
+                      [class]="answerResults()[i]?.result?.toLowerCase() ?? ''"
                       >{{ getAnswerResultIcon(i) }}</mat-icon
                     >
                   </div>

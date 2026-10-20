@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -6,7 +7,7 @@ import {
   OnInit,
   Output,
   inject,
-  ChangeDetectionStrategy,
+  input,
 } from '@angular/core';
 import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import {
@@ -21,8 +22,8 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { take } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
-import { AnswerResultType } from '@app/core/models/answer-result';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentAnswerResult, AnswerResultState } from '@gql/generated/graphql';
 
 export const STEPPER_ANIMATION_DURATION = 300;
 
@@ -110,14 +111,15 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   private translateService = inject(TranslocoService);
   private answerService = inject(ContentAnswerService);
 
+  answerResults = input<ContentAnswerResult[]>([]);
+
   @Output() newIndex = new EventEmitter<number>();
   @Input() showSteps = true;
   @Input() allowNavigation = true;
   @Input() listLength = 0;
-  @Input() answerResults = new Map<number, AnswerResultType>();
   @Input() fixedWitdth = true;
   @Input() lockedContentsDisabled = false;
-  AnswerResultType = AnswerResultType;
+  AnsweResultState = AnswerResultState;
   headerPos = 0;
   stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
   headerAnimationState = HEADER_ANIMATION_STATE.INIT;
@@ -315,13 +317,12 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   getAnswerResultIcon(index: number) {
-    const state = this.answerResults.get(index);
-    if (state) {
-      return this.answerService.getAnswerResultIcon(state);
-    }
+    return this.answerService.getAnswerResultIcon(
+      this.answerResults()[index].result
+    );
   }
 
   isLocked(index: number): boolean {
-    return !this.answerResults.has(index);
+    return !this.answerResults()[index];
   }
 }

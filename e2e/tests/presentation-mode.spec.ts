@@ -68,11 +68,13 @@ test.describe('presentation mode', () => {
 
   test('open presentation mode from question series', async ({ page }) => {
     await roomOverviewPage.createQuestionSeries('Survey', 'Survey');
-    await page.waitForURL(/Survey/);
     await header.goToPresentation();
     await page.waitForURL(/present/);
+    // Presenting from the content creation presents the series itself.
+    await expect(page).not.toHaveURL(/\/create$/);
     await page.getByRole('button', { name: 'Publish' }).click();
     await expect(page.getByText('publish the question series')).toBeHidden();
+    await expect(page.getByText('Group is not published.')).toBeHidden();
     await presentationModePage.exitPresentation();
   });
 
@@ -120,12 +122,11 @@ test.describe('presentation mode', () => {
 
   test('navigate to series', async ({ page }) => {
     await roomOverviewPage.createQuestionSeries('Survey', 'Survey');
-    await page.waitForURL(/Survey/);
-    await page.goBack();
+    await roomOverviewPage.goto(shortId);
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await presentationModePage.goToQuestionSeries();
-    await expect(page).toHaveURL(/series/);
+    await expect(page).toHaveURL(/questionnaire/);
     await page.getByRole('button', { name: 'Publish' }).click();
     await expect(page.getByText('publish the question series')).toBeHidden();
     await presentationModePage.exitPresentation();

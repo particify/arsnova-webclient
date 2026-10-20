@@ -1,0 +1,338 @@
+@let _selectedFormat = selectedFormat();
+@if (_selectedFormat) {
+  <div fxLayout="row" fxLayoutGap="20px" fxFill>
+    <div
+      [class]="
+        _selectedFormat &&
+        [ContentType.Slide, ContentType.Flashcard].includes(
+          _selectedFormat.type
+        )
+          ? 'full-width'
+          : 'editing-container'
+      "
+      fxLayout="column"
+      fxLayoutAlign="space-between"
+    >
+      <div class="fixed-height" fxLayout="column" fxLayoutGap="16px">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+          <mat-form-field
+            appearance="outline"
+            class="no-field-hint primary-form-field smaller-select-input"
+          >
+            <mat-select
+              panelClass="bigger-panel"
+              [value]="_selectedFormat"
+              [disabled]="content() || isPreview()"
+              [hideSingleSelectionIndicator]="true"
+              panelWidth="500px"
+              appHotkey="f"
+              [appHotkeyTitle]="'creator.content.format' | transloco"
+              data-testid="format-selection"
+              fxLayoutAlign="start center"
+              (valueChange)="formatChanged($event)"
+            >
+              <mat-select-trigger
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxLayoutGap="12px"
+                class="primary"
+              >
+                <mat-icon class="format-button-icon">{{
+                  _selectedFormat.icon
+                }}</mat-icon>
+                <span>{{
+                  'creator.content.format-' + _selectedFormat.name | transloco
+                }}</span>
+              </mat-select-trigger>
+              @for (format of formats(); track format) {
+                <mat-option [value]="format" class="higher-option">
+                  <div
+                    fxLayout="row"
+                    fxLayoutAlign="start center"
+                    fxLayoutGap="12px"
+                  >
+                    <mat-icon class="format-icon">{{ format.icon }}</mat-icon>
+                    <div fxLayout="column" fxLayoutGap="2px">
+                      <span class="format-name">
+                        {{
+                          'creator.content.format-' + format.name | transloco
+                        }}</span
+                      >
+                      <span class="format-description">{{
+                        'creator.content.format-' + format.name + '-description'
+                          | transloco
+                      }}</span>
+                    </div>
+                  </div>
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <nav mat-tab-nav-bar [tabPanel]="tabPanel" fxLayout="column">
+            <a mat-tab-link [active]="!isPreview()" (click)="togglePreview()">
+              {{ 'creator.content.edit-content' | transloco }}
+            </a>
+            <a mat-tab-link [active]="isPreview()" (click)="togglePreview()">{{
+              'creator.room.preview' | transloco
+            }}</a>
+          </nav>
+        </div>
+        <div
+          style="flex: 1; overflow: auto; padding-bottom: 12px"
+          fxLayout="column"
+          fxLayoutGap="12px"
+        >
+          <mat-tab-nav-panel #tabPanel fxLayout="column" fxLayoutGap="20px">
+            <div
+              class="content-attributes"
+              [ngClass]="{ 'preview-container': isPreview() }"
+            >
+              @if (!isPreview()) {
+                <form fxLayout="column" fxLayoutGap="12px">
+                  <div
+                    fxLayout="row wrap"
+                    fxLayoutAlign="space-between center"
+                    fxLayoutGap="1em"
+                    tabindex="-1"
+                    [appAutofocus]
+                    [attr.aria-label]="
+                      (content()
+                        ? 'creator.content.a11y-content-edit-message'
+                        : 'creator.content.a11y-content-create-message'
+                      )
+                        | a11yIntro
+                        | async
+                    "
+                  >
+                    <app-formatting-toolbar
+                      [inputElement]="questionInput"
+                      (valueChanged)="question.set($event)"
+                    ></app-formatting-toolbar>
+                  </div>
+                  <mat-form-field
+                    appearance="outline"
+                    class="input-block no-field-hint"
+                  >
+                    <mat-label>{{
+                      (_selectedFormat.name !== 'slide'
+                        ? 'creator.content.body'
+                        : 'creator.content.body-neutral'
+                      ) | transloco
+                    }}</mat-label>
+                    <textarea
+                      #questionInput
+                      (input)="updateTextContainsImage(questionInput.value)"
+                      [(ngModel)]="question"
+                      [attr.aria-label]="
+                        (created
+                          ? 'creator.content.a11y-content-created'
+                          : 'creator.content.a11y-enter-body'
+                        ) | transloco
+                      "
+                      [cdkAutosizeMaxRows]="
+                        _selectedFormat.type === ContentType.Slide ? 24 : 8
+                      "
+                      [cdkAutosizeMinRows]="
+                        _selectedFormat.type === ContentType.Slide ? 6 : 3
+                      "
+                      matInput
+                      cdkTextareaAutosize
+                      [maxlength]="questionMaxLength"
+                      name="questionInput"
+                      appHotkey="c"
+                      [appHotkeyTitle]="'creator.content.body' | transloco"
+                      dir="auto"
+                    ></textarea>
+                    @if (
+                      questionInput.value.length >= questionMaxLength * 0.9
+                    ) {
+                      <mat-hint align="end"
+                        >{{ questionInput.value.length }} /
+                        {{ questionMaxLength }}
+                      </mat-hint>
+                    }
+                  </mat-form-field>
+                  @if (textContainsImage) {
+                    <app-hint
+                      text="creator.utils.formatting-image-hint"
+                      [type]="HintType.WARNING"
+                    ></app-hint>
+                  }
+                </form>
+              } @else {
+                <app-rendered-text
+                  [rawText]="question()"
+                  [dynamic]="true"
+                ></app-rendered-text>
+              }
+              @if (true) {
+                @let _formatComponent = formatComponent()?.component;
+                @if (_formatComponent) {
+                  <ng-container
+                    *ngComponentOutlet="
+                      _formatComponent;
+                      inputs: componentInputs()
+                    "
+                  />
+                }
+              }
+            </div>
+            @if (
+              ![
+                ContentType.Slide.toLowerCase(),
+                ContentType.Flashcard.toLowerCase(),
+              ].includes(_selectedFormat.name)
+            ) {
+              <div
+                [attr.hidden]="isPreview() || null"
+                class="settings-container-mobile"
+              >
+                <mat-divider></mat-divider>
+                <ng-template [ngTemplateOutlet]="settings"></ng-template>
+              </div>
+            }
+          </mat-tab-nav-panel>
+        </div>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="center"
+        fxLayoutGap="10px"
+        class="button-container"
+      >
+        <button [routerLink]="[content() ? '../..' : '..']" mat-button>
+          {{ 'dialog.cancel' | transloco }}
+        </button>
+
+        <app-loading-button
+          [name]="content() ? 'creator.content.save' : 'creator.content.create'"
+          (clicked)="submitContent()"
+        ></app-loading-button>
+      </div>
+    </div>
+    @if (!['slide', 'flashcard'].includes(_selectedFormat.name)) {
+      <div class="settings-container-desktop">
+        <mat-divider [vertical]="true"></mat-divider>
+        <div style="width: 100%" fxLayout="column" fxLayoutGap="20px">
+          <ng-template [ngTemplateOutlet]="settings"></ng-template>
+        </div>
+      </div>
+    }
+  </div>
+  <ng-template #settings>
+    @if (_selectedFormat.type === ContentType.Choice) {
+      <app-settings-slide-toggle
+        [label]="'creator.content.select-multiple-options'"
+        [isChecked]="multiple()"
+        [disabled]="isPreview()"
+        (toggleEvent)="multiple.set($event)"
+      ></app-settings-slide-toggle>
+    }
+    @if (
+      questionnaire().type === QuestionnaireType.Mixed &&
+      [ContentType.Choice, ContentType.Binary, ContentType.Numeric].includes(
+        _selectedFormat.type
+      )
+    ) {
+      <app-settings-slide-toggle
+        [label]="'creator.content.set-correct-answer'"
+        [isChecked]="hasCorrectAnswer()"
+        [disabled]="(content() && answered()) || isPreview()"
+        (toggleEvent)="hasCorrectAnswer.set($event)"
+      ></app-settings-slide-toggle>
+    }
+
+    <div
+      fxLayout="row"
+      fxLayoutGap="16px"
+      fxLayoutAlign="space-between center"
+      [matTooltip]="
+        (duration()
+          ? 'creator.content.timer-only-enabled-in-live-mode'
+          : 'creator.content.enable-live-mode-to-use-timer'
+        ) | transloco
+      "
+      [matTooltipDisabled]="isLiveMode()"
+    >
+      <label
+        [ngStyle]="{
+          opacity: isLiveMode() && !isPreview() ? 1 : 0.5,
+        }"
+      >
+        <div fxLayout="column" fxLayoutGap="4px" class="numeric-input-label">
+          <span> {{ 'creator.content.timer' | transloco }}</span>
+          <span> {{ 'creator.content.timer-info' | transloco }}</span>
+        </div></label
+      >
+      <div>
+        <mat-form-field
+          appearance="outline"
+          class="no-field-hint initial-width number-input-small"
+        >
+          <input
+            #durationInput
+            [value]="duration() ?? ''"
+            [disabled]="answered() || !isLiveMode() || isPreview()"
+            matInput
+            type="number"
+            max="600"
+            min="10"
+            step="1"
+            data-testid="content-duration-input"
+            (input)="setDuration(durationInput.value)"
+          />
+          <span
+            matTextSuffix
+            [ngClass]="{
+              disabled: answered() || !isLiveMode() || isPreview(),
+            }"
+            >s</span
+          >
+        </mat-form-field>
+      </div>
+    </div>
+    @if (questionnaire().type === QuestionnaireType.Quiz) {
+      <div
+        fxLayout="row"
+        fxLayoutGap="16px"
+        fxLayoutAlign="space-between center"
+      >
+        <label
+          [ngStyle]="{
+            opacity: !isPreview() ? 1 : 0.5,
+          }"
+        >
+          <div fxLayout="column" fxLayoutGap="4px" class="numeric-input-label">
+            <span> {{ 'creator.content.weight' | transloco }}</span>
+            <span> {{ 'creator.content.weight-info' | transloco }}</span>
+          </div>
+        </label>
+        <div>
+          <mat-form-field
+            appearance="outline"
+            class="no-field-hint initial-width number-input-small"
+          >
+            <input
+              #weightInput
+              [value]="weight()"
+              [disabled]="answered() || isPreview()"
+              matInput
+              type="number"
+              max="5"
+              min="1"
+              step="1"
+              data-testid="content-weight-input"
+              (input)="setWeight(weightInput.value)"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    }
+    <app-settings-slide-toggle
+      [label]="'creator.content.abstentions'"
+      [isChecked]="abstentionsAllowed()"
+      [disabled]="isPreview()"
+      (toggleEvent)="abstentionsAllowed.set($event)"
+    ></app-settings-slide-toggle>
+  </ng-template>
+}

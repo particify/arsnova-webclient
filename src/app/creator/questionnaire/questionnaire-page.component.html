@@ -1,0 +1,237 @@
+<div fxFill fxLayout="row" class="page-container">
+  @if (isDesktop || !childActive) {
+    <div fxLayout="column" fxLayoutGap="12px" class="group-container">
+      <div class="group-actions-container" fxLayout="column" fxLayoutGap="16px">
+        <div fxLayout="column" fxLayoutGap="16px">
+          <div
+            fxLayout="row wrap"
+            fxLayoutGap="8px"
+            fxLayoutAlign="space-between"
+          >
+            <button
+              mat-raised-button
+              color="primary"
+              [routerLink]="'create'"
+              [disabled]="creationMode || isModerator()"
+              appHotkey="1"
+              [appHotkeyDisabled]="creationMode || isModerator()"
+              [appHotkeyTitle]="'creator.room-page.create-content' | transloco"
+            >
+              <mat-icon>add</mat-icon>
+              {{ 'creator.room-page.create-content' | transloco }}
+            </button>
+            <div
+              fxLayout="row wrap"
+              fxLayoutAlign.xs="center"
+              fxLayoutGap="8px"
+            >
+              <div fxLayout="row" fxLayoutGap="8px">
+                @if (questionnaire()?.type === QuestionnaireType.Quiz) {
+                  <button
+                    mat-icon-button
+                    [disabled]="!questionnaire()?.leaderboardEnabled"
+                    [matTooltip]="'content.leaderboard' | transloco"
+                    (click)="toggleLeaderboard()"
+                    [ngClass]="{
+                      'primary-variant on-primary-variant': showLeaderboard,
+                    }"
+                    data-testid="leaderboard-btn"
+                  >
+                    <mat-icon>emoji_events</mat-icon>
+                  </button>
+                }
+                <button
+                  mat-icon-button
+                  [disabled]="isModerator()"
+                  (click)="openSettings()"
+                  [matTooltip]="'creator.content.group-settings' | transloco"
+                  data-testid="content-group-settings"
+                >
+                  <mat-icon>settings</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  [disabled]="isModerator()"
+                  [matMenuTriggerFor]="groupSettings"
+                  [matTooltip]="'creator.content.more-options' | transloco"
+                  data-testid="group-more-menu"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #groupSettings="matMenu">
+                  <button mat-menu-item [matMenuTriggerFor]="exportMenu">
+                    <mat-icon>download</mat-icon>
+                    {{ 'creator.content.export-content-group' | transloco }}
+                  </button>
+                  <mat-menu #exportMenu="matMenu">
+                    @if (questionnaire(); as q) {
+                      <lib-extension-point
+                        extensionId="series-results-export"
+                        [extensionData]="{
+                          questionnaire: q,
+                          shortId: shortId(),
+                        }"
+                      ></lib-extension-point>
+                    }
+                  </mat-menu>
+                  <div
+                    [matTooltip]="
+                      'creator.content.create-template-not-possible' | transloco
+                    "
+                    [matTooltipDisabled]="!isGuest()"
+                    matTooltipPosition="before"
+                  >
+                    <button
+                      *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
+                      mat-menu-item
+                      id="use-as-template"
+                      (click)="createTemplate()"
+                      [disabled]="contents().length < 1 || isGuest()"
+                      appTrackInteraction="Publish as template dialog opened"
+                    >
+                      <mat-icon>draft</mat-icon>
+                      {{ 'creator.content.use-as-template' | transloco }}
+                    </button>
+                  </div>
+                  <mat-divider></mat-divider>
+                  @if (questionnaire()?.type !== QuestionnaireType.Flashcards) {
+                    <button
+                      mat-menu-item
+                      (click)="deleteAllAnswers()"
+                      [disabled]="contents().length === 0"
+                    >
+                      <mat-icon>clear_all</mat-icon>
+                      <span>{{
+                        'creator.content.reset-group-results' | transloco
+                      }}</span>
+                    </button>
+                  }
+                  <button mat-menu-item (click)="deleteGroup()">
+                    <mat-icon color="warn">delete_forever</mat-icon>
+                    {{ 'creator.content.delete-content-group' | transloco }}
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+            <app-questionnaire-info
+              [contentCount]="questionnaire()?.contentCount ?? 0"
+              [questionnaireType]="questionnaire()?.type"
+              [published]="published()"
+            ></app-questionnaire-info>
+            @if (isLiveMode()) {
+              <div
+                fxLayout="row"
+                fxLayoutGap="4px"
+                fxLayoutAlign="start center"
+                class="live-mode-hint"
+                role="button"
+                (click)="openSettings()"
+              >
+                <mat-icon>play_circle</mat-icon>
+                <span>{{ 'creator.content.live-mode' | transloco }}</span>
+              </div>
+            }
+          </div>
+          @if (!loadingContents() && totalCorrect) {
+            <div
+              fxLayout="row"
+              fxLayoutGap="16px"
+              fxLayoutAlign="center center"
+              [matTooltip]="
+                'creator.content.group-progress-info'
+                  | transloco
+                    : {
+                        percent: totalCorrect,
+                        abstentions: totalAbstentions,
+                      }
+              "
+            >
+              <mat-progress-bar
+                mode="determinate"
+                value="{{ totalCorrect }}"
+                class="custom-height progress-background"
+                [class]="'progress-' + getProgressColor()"
+              ></mat-progress-bar>
+            </div>
+          }
+
+          @if (!published()) {
+            <div
+              fxLayout="column"
+              fxLayoutGap="16px"
+              fxLayoutAlign="center center"
+            >
+              <span class="hint-sm">{{
+                'creator.content.group-is-hidden-for-participants' | transloco
+              }}</span>
+              <button mat-stroked-button color="primary" (click)="publish()">
+                <mat-icon>lock_open</mat-icon
+                >{{ 'creator.content.publish' | transloco }}
+              </button>
+            </div>
+          }
+        </div>
+        @if (loadingContents()) {
+          <app-loading-indicator></app-loading-indicator>
+        } @else if (contents().length === 0) {
+          <div fxLayoutAlign="center">
+            <span class="hint">
+              {{ 'creator.content.no-contents-yet' | transloco }}
+            </span>
+          </div>
+        } @else {
+          <div class="list-container">
+            @let _questionnaire = questionnaire();
+            @if (_questionnaire) {
+              <app-content-list
+                [roomId]="roomId()"
+                [questionnaire]="_questionnaire"
+                [contents]="contents()"
+                [isModerator]="isModerator()"
+                [attributionsExist]="attributionsExist"
+                [selectedContentId]="selectedContentId()"
+                (startedContentChanged)="handleActiveContentChanged($event)"
+              ></app-content-list>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+  @if (isDesktop) {
+    <div class="action-container">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="center"
+        [ngStyle.lt-xl]="{
+          height: editMode || creationMode ? '100%' : '',
+        }"
+        [ngStyle.xl]="{
+          'max-height': editMode || creationMode ? '100%' : '',
+        }"
+      >
+        <mat-card class="action-card">
+          <router-outlet></router-outlet>
+        </mat-card>
+      </div>
+    </div>
+  } @else if (childActive) {
+    @if (loadingContents()) {
+      <app-loading-indicator></app-loading-indicator>
+    } @else {
+      <div fxLayout="column" fxLayoutGap="16px">
+        <div>
+          <app-back-button
+            [text]="'creator.content.back-to-series' | transloco"
+            [backRoute]="['.']"
+          ></app-back-button>
+        </div>
+        <mat-card>
+          <router-outlet></router-outlet>
+        </mat-card>
+      </div>
+    }
+  }
+</div>

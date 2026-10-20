@@ -1,0 +1,519 @@
+<div fxLayout="column" fxLayoutAlign="start center" class="list-container">
+  @if (sortableContents().length > 0) {
+    <mat-action-list
+      cdkDropList
+      (cdkDropListSorted)="onSortChanged($event)"
+      [cdkDropListData]="contents()"
+      fxFill
+      fxLayout="column"
+      class="content-list"
+    >
+      @for (content of sortableContents(); track content; let i = $index) {
+        <div
+          [ngClass]="{
+            'item-with-top-space': i === 0,
+          }"
+        >
+          <button
+            disableRipple
+            cdkDrag
+            cdkDragBoundary=".list-container"
+            [cdkDragStartDelay]="{ touch: 200, mouse: 20 }"
+            (cdkDragDropped)="
+              dropContent($event.previousIndex, $event.currentIndex)
+            "
+            (keyup)="moveAnswer($event, i)"
+            #sortListItem
+            mat-list-item
+            [attr.aria-label]="
+              'creator.content.a11y-content-item-selected'
+                | transloco
+                  : {
+                      index: i + 1,
+                      length: contents().length,
+                      body:
+                        content.bodyRendered ?? content.body | a11yRenderedBody,
+                    }
+            "
+            class="content-box"
+            [routerLink]="content.id"
+            [ngClass]="{
+              'not-supported':
+                contentTypes.indexOf(content.formatData.format) === -1,
+              'locked-item': !isPublished(i),
+              'no-pointer-events': publishingChangeActive,
+            }"
+            [ngClass.gt-sm]="{
+              'primary-border-color': selectedContentId() === content.id,
+            }"
+            [ngStyle]="{
+              'border-color': publishingChangeActive ? 'transparent' : null,
+            }"
+            data-testid="content-item"
+          >
+            <div fxLayout="column" fxLayoutGap="8px">
+              <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
+                <div fxLayout="column" class="ellipsis" fxLayoutGap="8px">
+                  <div
+                    class="ellipsis"
+                    fxLayout="row"
+                    fxLayoutAlign="start center"
+                    fxLayoutGap="12px"
+                  >
+                    <app-rendered-text
+                      class="ellipsis rendered-list-preview-container"
+                      [renderedText]="content.bodyRendered ?? content.body"
+                      [markdownFeatureset]="markdownFeatureset"
+                      [listPreview]="true"
+                      [minimalHeight]="true"
+                    ></app-rendered-text>
+                  </div>
+                  <div class="hide-lt-lg">
+                    <ng-template [ngTemplateOutlet]="contentInfo"></ng-template>
+                  </div>
+                </div>
+                <div
+                  fxLayout="row"
+                  fxLayoutAlign="center center"
+                  class="button-bar"
+                  [ngClass]="{
+                    'show-bar':
+                      i === activeMenuIndex ||
+                      content.id === activeContentId ||
+                      isLiveMode(),
+                  }"
+                >
+                  @if (contentTypes.indexOf(content.formatData.format) > -1) {
+                    <div fxLayout="row">
+                      @if (!isModerator() && isLiveMode()) {
+                        @if (false) {
+                          <button
+                            mat-icon-button
+                            style="margin-right: 8px"
+                            class="stop-button"
+                            [matTooltip]="
+                              'creator.content.stop-content' | transloco
+                            "
+                            [attr.data-testid]="'stop-content-' + i"
+                          >
+                            <mat-icon>stop</mat-icon>
+                          </button>
+                        } @else {
+                          <div
+                            (click)="$event.stopPropagation()"
+                            [matTooltip]="
+                              (startedContentId !== undefined
+                                ? 'creator.content.stop-active-content-to-start'
+                                : hasFormatRounds(content.formatData.format)
+                                  ? 'creator.content.starting-new-round-not-possible'
+                                  : 'creator.content.starting-multiple-rounds-not-available-for-content-type'
+                              ) | transloco
+                            "
+                            [matTooltipDisabled]="
+                              startedContentId == undefined &&
+                              !(
+                                finishedContents.get(content.id) &&
+                                ((content.activeRound &&
+                                  content.activeRound.roundNo > 1) ||
+                                  !hasFormatRounds(content.formatData.format))
+                              )
+                            "
+                          >
+                            <button
+                              mat-icon-button
+                              [disabled]="
+                                startedContentId !== undefined ||
+                                (finishedContents.get(content.id) &&
+                                  ((content.activeRound &&
+                                    content.activeRound.roundNo > 1) ||
+                                    !hasFormatRounds(
+                                      content.formatData.format
+                                    )))
+                              "
+                              style="margin-right: 8px"
+                              class="start-button"
+                              [matTooltip]="
+                                'creator.content.start-content' | transloco
+                              "
+                              [attr.data-testid]="'start-content-' + i"
+                            >
+                              <mat-icon>play_arrow</mat-icon>
+                            </button>
+                          </div>
+                        }
+                      }
+                      @if (!isModerator()) {
+                        <button
+                          fxHide.xs
+                          mat-icon-button
+                          color="primary"
+                          [routerLink]="['edit', content.id]"
+                          (click)="$event.stopPropagation()"
+                          [matTooltip]="
+                            'creator.content.edit-content' | transloco
+                          "
+                        >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button
+                          mat-icon-button
+                          color="primary"
+                          #menuTrigger="matMenuTrigger"
+                          [matMenuTriggerFor]="moreActions"
+                          (click)="$event.stopPropagation()"
+                          (menuOpened)="openedMenu(i)"
+                          matTooltip="{{
+                            'creator.content.more-options' | transloco
+                          }}"
+                          [attr.data-testid]="'open-more-options-' + i"
+                        >
+                          <mat-icon>more_vert</mat-icon>
+                        </button>
+                      }
+                      <mat-menu
+                        #moreActions="matMenu"
+                        xPosition="before"
+                        (closed)="closedMenu()"
+                      >
+                        <button
+                          fxHide.gt-xs
+                          mat-menu-item
+                          [routerLink]="['edit', content.id]"
+                        >
+                          <mat-icon>edit</mat-icon>
+                          {{ 'creator.content.edit-content' | transloco }}
+                        </button>
+                        <button
+                          mat-menu-item
+                          [matMenuTriggerFor]="chooseGroups"
+                          [matMenuTriggerData]="{ action: 'copy' }"
+                        >
+                          <mat-icon>library_add</mat-icon>
+                          <span>{{
+                            'creator.content.copy-content-to-group' | transloco
+                          }}</span>
+                        </button>
+                        <button
+                          mat-menu-item
+                          [matMenuTriggerFor]="chooseGroups"
+                          [matMenuTriggerData]="{ action: 'move' }"
+                        >
+                          <mat-icon>drive_file_move_outline</mat-icon>
+                          <span>{{
+                            'creator.content.move-content-to-group' | transloco
+                          }}</span>
+                        </button>
+                        <button
+                          mat-menu-item
+                          (click)="duplicateContent(content.id)"
+                        >
+                          <mat-icon>dynamic_feed</mat-icon>
+                          <span>{{
+                            'creator.content.duplicate-content' | transloco
+                          }}</span>
+                        </button>
+                        <mat-divider></mat-divider>
+                        @if (
+                          [
+                            ContentType.Wordcloud,
+                            ContentType.ShortAnswer,
+                          ].includes(content.formatData.format)
+                        ) {
+                          <button
+                            mat-menu-item
+                            (click)="resetBannedAnswers(content.id)"
+                          >
+                            <mat-icon>lock_reset</mat-icon>
+                            <span>{{
+                              'creator.content.reset-banned-answers' | transloco
+                            }}</span>
+                          </button>
+                        }
+                        @if (
+                          questionnaire().type !== QuestionnaireType.Flashcards
+                        ) {
+                          <div
+                            [matTooltip]="
+                              'creator.content.stop-content-to-delete-answers'
+                                | transloco
+                            "
+                            [matTooltipDisabled]="true"
+                          >
+                            <button
+                              mat-menu-item
+                              (click)="deleteAnswers(content)"
+                              [disabled]="true"
+                            >
+                              <mat-icon>clear_all</mat-icon>
+                              <span>{{
+                                'creator.content.delete-answers' | transloco
+                              }}</span>
+                            </button>
+                          </div>
+                        }
+                        @if (
+                          hasFormatRounds(content.formatData.format) &&
+                          !isLiveMode()
+                        ) {
+                          <div
+                            [matTooltip]="
+                              'creator.content.starting-new-round-not-possible'
+                                | transloco
+                            "
+                            [matTooltipDisabled]="
+                              content.activeRound?.roundNo === 1
+                            "
+                            matTooltipPosition="before"
+                          >
+                            <button
+                              mat-menu-item
+                              [disabled]="
+                                content.activeRound &&
+                                content.activeRound.roundNo > 1
+                              "
+                            >
+                              <mat-icon>replay</mat-icon>
+                              {{
+                                'creator.content.start-new-round' | transloco
+                              }}
+                            </button>
+                          </div>
+                        }
+                        <button
+                          mat-menu-item
+                          (click)="deleteContent(content.id, content.body)"
+                        >
+                          <mat-icon color="warn">delete_forever</mat-icon>
+                          <span>{{
+                            'creator.content.delete-content' | transloco
+                          }}</span>
+                        </button>
+                      </mat-menu>
+                      <mat-menu #chooseGroups="matMenu" xPosition="before">
+                        <ng-template matMenuContent let-action="action">
+                          @for (q of questionnaires(); track q.id) {
+                            <button
+                              mat-menu-item
+                              [disabled]="
+                                q.id === questionnaire().id ||
+                                !isCompatibleWithQuestionnaireType(
+                                  content,
+                                  q.type
+                                )
+                              "
+                              [attr.aria-label]="
+                                'creator.content.a11y-add-to-this-content-group'
+                                  | transloco: { name: q.name }
+                              "
+                              (click)="
+                                performContentAction(action, content.id, q)
+                              "
+                            >
+                              <span>{{ q.name }}</span>
+                            </button>
+                          }
+
+                          <mat-divider></mat-divider>
+                          <button
+                            mat-menu-item
+                            [attr.aria-label]="
+                              'creator.content.a11y-new-content-group'
+                                | transloco
+                            "
+                            (click)="performContentAction(action, content.id)"
+                          >
+                            <mat-icon>add</mat-icon>
+                            <span>{{
+                              'creator.content.new-content-group' | transloco
+                            }}</span>
+                          </button>
+                        </ng-template>
+                      </mat-menu>
+                    </div>
+                  }
+                  @if (contentTypes.indexOf(content.formatData.format) === -1) {
+                    <button
+                      class="not-supported"
+                      mat-icon-button
+                      #warning="matTooltip"
+                      matTooltip="{{
+                        'creator.content.format-not-supported' | transloco
+                      }}"
+                      (click)="warning.toggle(); $event.stopPropagation()"
+                    >
+                      <mat-icon class="icon-warn-soft">warning</mat-icon>
+                    </button>
+                  }
+                </div>
+              </div>
+              <div class="hide-gt-lg">
+                <ng-template [ngTemplateOutlet]="contentInfo"></ng-template>
+              </div>
+            </div>
+          </button>
+        </div>
+        @if (
+          isRangePublished() &&
+          questionnaire().publishedUpToContent?.position === i
+        ) {
+          <div
+            #publishingDivider
+            cdkDrag
+            [cdkDragDisabled]="isLiveMode()"
+            (cdkDragStarted)="publishingChangeActive = true"
+            (cdkDragDropped)="dropPublishingDivider($event)"
+            (keyup.control.ArrowUp)="movePublishingDividerUp(i)"
+            (keyup.control.ArrowDown)="movePublishingDividerDown(i)"
+            cdkDragBoundary=".content-list"
+            class="locked-divider-container"
+            [ngClass]="{ 'static-divider': isLiveMode() }"
+            [tabindex]="isLiveMode() ? -1 : 0"
+            [attr.aria-label]="
+              (isLiveMode()
+                ? 'creator.content.publishing-index-info-live'
+                : 'creator.content.publishing-index-info'
+              )
+                | transloco
+                  : {
+                      index:
+                        (questionnaire().publishedUpToContent?.position ?? 0) +
+                        1,
+                    }
+            "
+            appHotkey="p"
+            [appHotkeyDisabled]="isLiveMode()"
+            [appHotkeyTitle]="'creator.content.edit-publishing' | transloco"
+          >
+            <div
+              class="locked-divider"
+              [ngClass]="{ 'primary-background': !isLiveMode() }"
+            ></div>
+            <div
+              class="locked-drag"
+              [ngClass]="{ 'primary primary-border': !isLiveMode() }"
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              fxLayoutGap="4px"
+            >
+              <mat-icon>lock_open</mat-icon>
+              <span>{{
+                'creator.content.published-up-to-here' | transloco
+              }}</span>
+            </div>
+          </div>
+        }
+        <ng-template #contentInfo>
+          <div fxLayout="row" fxLayoutGap="12px">
+            <mat-icon
+              class="type-icon"
+              [ngClass]="{
+                'locked-content': !isPublished(i),
+              }"
+              [matTooltip]="
+                'creator.content.format-' +
+                  content.formatData.format.toLowerCase() | transloco
+              "
+              >{{ iconList().get(content.formatData.format) }}</mat-icon
+            >
+            @if (content.answerCount != null) {
+              <div
+                fxLayout="row"
+                fxLayoutGap="8px"
+                fxLayoutAlign="start center"
+                class="content-stats-info"
+              >
+                <span>{{
+                  (content.answerCount === 1
+                    ? 'creator.content.answer-count'
+                    : 'creator.content.answers-count'
+                  )
+                    | transloco
+                      : {
+                          count: content.answerCount,
+                        }
+                }}</span>
+
+                @if (
+                  content.hasCorrectAnswer &&
+                  content.correctAnswerCount != null &&
+                  content.answerCount
+                ) {
+                  <span>{{
+                    'creator.content.answer-correct'
+                      | transloco
+                        : {
+                            percentage: getPercentageString(
+                              (content.correctAnswerCount /
+                                content.answerCount) *
+                                100
+                            ),
+                          }
+                  }}</span>
+                }
+              </div>
+            }
+
+            @if (isLiveMode() && endDate) {
+              <div
+                fxLayout="row"
+                fxLayoutGap="4px"
+                fxLayoutAlign="start center"
+                class="live-info"
+              >
+                @if (content.duration) {
+                  <app-countdown-timer
+                    [endDate]="endDate"
+                    [duration]="content.duration"
+                    [showProgressBar]="false"
+                    fontSize="12px"
+                    (finished)="finishAnswering()"
+                  >
+                  </app-countdown-timer>
+                } @else {
+                  <div
+                    fxLayout="row"
+                    fxLayoutGap="4px"
+                    fxLayoutAlign="start center"
+                  >
+                    <app-pulsating-circle></app-pulsating-circle>
+                    <span>{{ 'creator.content.live' | transloco }}</span>
+                  </div>
+                }
+              </div>
+            }
+            @if (finishedContents.get(content.id)) {
+              <div
+                fxLayout="row"
+                fxLayoutGap="4px"
+                fxLayoutAlign="start center"
+                class="content-stats-info live-info"
+              >
+                <mat-icon>sports_score</mat-icon>
+                <span>{{
+                  'creator.content.answering-finished' | transloco
+                }}</span>
+              </div>
+            }
+          </div>
+        </ng-template>
+      }
+      @if (attributionsExist()) {
+        <button
+          disableRipple
+          mat-list-item
+          [ngClass]="{ primary: !selectedContentId() }"
+          [routerLink]="'attributions'"
+        >
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <mat-icon
+              [ngClass]="{ primary: !selectedContentId() }"
+              class="type-icon"
+              >attribution</mat-icon
+            >
+            <p>{{ 'creator.content.attribution-info-slide' | transloco }}</p>
+          </div>
+        </button>
+      }
+    </mat-action-list>
+  }
+</div>

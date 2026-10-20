@@ -28,9 +28,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
-  /** A slightly refined version of RFC-3339 compliant DateTime Scalar */
   DateTime: { input: string; output: string };
-  /** A universally unique identifier compliant UUID Scalar */
   UUID: { input: string; output: string };
 };
 
@@ -164,6 +162,119 @@ export type AnnouncementsMeta = {
   readAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export type Answer = {
+  __typename?: 'Answer';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  durationMs?: Maybe<Scalars['Int']['output']>;
+  formatData?: Maybe<AnswerFormatData>;
+  hidden: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  result: AnswerResultState;
+};
+
+export type AnswerFormatData =
+  ChoiceAnswerFormatData | WordcloudAnswerFormatData;
+
+export type AnswerOption = {
+  __typename?: 'AnswerOption';
+  label: Scalars['String']['output'];
+  labelRendered?: Maybe<Scalars['String']['output']>;
+};
+
+export enum AnswerResultState {
+  Abstained = 'ABSTAINED',
+  Correct = 'CORRECT',
+  Neutral = 'NEUTRAL',
+  Unanswered = 'UNANSWERED',
+  Wrong = 'WRONG',
+}
+
+export type ChoiceAnswerFormatData = {
+  __typename?: 'ChoiceAnswerFormatData';
+  format: ContentType;
+  selectedChoiceIndexes: Array<Scalars['Int']['output']>;
+};
+
+export type ChoiceContentFormatData = {
+  __typename?: 'ChoiceContentFormatData';
+  correctOptionIndexes?: Maybe<Array<Scalars['Int']['output']>>;
+  format: ContentType;
+  multiple?: Maybe<Scalars['Boolean']['output']>;
+  options: Array<AnswerOption>;
+};
+
+export type ChoiceContentRoundStats = {
+  __typename?: 'ChoiceContentRoundStats';
+  selectionCounts?: Maybe<Array<Scalars['Int']['output']>>;
+};
+
+export type Content = {
+  __typename?: 'Content';
+  abstentionCount?: Maybe<Scalars['Int']['output']>;
+  abstentionsAllowed?: Maybe<Scalars['Boolean']['output']>;
+  activeRound?: Maybe<Round>;
+  answerCount?: Maybe<Scalars['Int']['output']>;
+  body: Scalars['String']['output'];
+  bodyRendered?: Maybe<Scalars['String']['output']>;
+  correctAnswerCount?: Maybe<Scalars['Int']['output']>;
+  duration?: Maybe<Scalars['Int']['output']>;
+  formatData: ContentFormatData;
+  hasAnswers: Scalars['Boolean']['output'];
+  hasCorrectAnswer?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['ID']['output'];
+  position?: Maybe<Scalars['Int']['output']>;
+  weight?: Maybe<Scalars['Int']['output']>;
+};
+
+export type ContentAnswerResult = {
+  __typename?: 'ContentAnswerResult';
+  contentId: Scalars['UUID']['output'];
+  durationMs?: Maybe<Scalars['Int']['output']>;
+  result: AnswerResultState;
+};
+
+export type ContentConnection = {
+  __typename?: 'ContentConnection';
+  edges?: Maybe<Array<Maybe<ContentEdge>>>;
+  pageInfo: PageInfo;
+};
+
+export type ContentEdge = {
+  __typename?: 'ContentEdge';
+  cursor: Scalars['String']['output'];
+  node: Content;
+};
+
+export type ContentFormatData =
+  | ChoiceContentFormatData
+  | ScaleContentFormatData
+  | TextContentFormatData
+  | WordcloudContentFormatData;
+
+export enum ContentType {
+  Binary = 'BINARY',
+  Choice = 'CHOICE',
+  Flashcard = 'FLASHCARD',
+  Numeric = 'NUMERIC',
+  Prioritization = 'PRIORITIZATION',
+  Scale = 'SCALE',
+  ShortAnswer = 'SHORT_ANSWER',
+  Slide = 'SLIDE',
+  Sort = 'SORT',
+  Text = 'TEXT',
+  Wordcloud = 'WORDCLOUD',
+}
+
+export type ContentWithAnswer = {
+  __typename?: 'ContentWithAnswer';
+  abstentionsAllowed?: Maybe<Scalars['Boolean']['output']>;
+  answerResult?: Maybe<AnswerResultState>;
+  bodyRendered?: Maybe<Scalars['String']['output']>;
+  duration?: Maybe<Scalars['Int']['output']>;
+  formatData: ContentFormatData;
+  id: Scalars['ID']['output'];
+};
+
 export enum CorrectState {
   Correct = 'CORRECT',
   Unset = 'UNSET',
@@ -176,6 +287,22 @@ export type CreateAnnouncementInput = {
   title: Scalars['String']['input'];
 };
 
+export type CreateChoiceAnswerInput = {
+  roundId: Scalars['UUID']['input'];
+  selectedChoiceIndexes: Array<Scalars['Int']['input']>;
+};
+
+export type CreateChoiceContentInput = {
+  abstentionsAllowed?: InputMaybe<Scalars['Boolean']['input']>;
+  body: Scalars['String']['input'];
+  correctOptionIndexes?: InputMaybe<Array<Scalars['Int']['input']>>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  multiple?: InputMaybe<Scalars['Boolean']['input']>;
+  options: Array<Scalars['String']['input']>;
+  questionnaireId: Scalars['UUID']['input'];
+  weight?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type CreatePostInput = {
   body: Scalars['String']['input'];
   qnaId: Scalars['UUID']['input'];
@@ -185,6 +312,12 @@ export type CreatePostInput = {
 export type CreateQnaInput = {
   roomId: Scalars['UUID']['input'];
   topic?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateQuestionnaireInput = {
+  name: Scalars['String']['input'];
+  roomId: Scalars['UUID']['input'];
+  type: QuestionnaireType;
 };
 
 export type CreateReplyEvent = {
@@ -207,15 +340,27 @@ export type CreateTagInput = {
   qnaId: Scalars['UUID']['input'];
 };
 
+export type CreateWordcloudAnswerInput = {
+  roundId: Scalars['UUID']['input'];
+  words: Array<Scalars['String']['input']>;
+};
+
+export type CreateWordcloudContentInput = {
+  abstentionsAllowed?: InputMaybe<Scalars['Boolean']['input']>;
+  body: Scalars['String']['input'];
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  maxAnswers: Scalars['Int']['input'];
+  questionnaireId: Scalars['UUID']['input'];
+};
+
 export type DuplicateRoomInput = {
   id: Scalars['ID']['input'];
   newName: Scalars['String']['input'];
 };
 
-export type JoinRoomInput = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  shortId?: InputMaybe<Scalars['ID']['input']>;
-};
+export type JoinRoomInput =
+  | { id: Scalars['ID']['input']; shortId?: never }
+  | { id?: never; shortId: Scalars['ID']['input'] };
 
 export enum ModerationState {
   Accepted = 'ACCEPTED',
@@ -231,34 +376,55 @@ export type Mutation = {
   adminDeleteUserById: Scalars['UUID']['output'];
   adminTransferRoom: AdminRoom;
   adminVerifyUserById: AdminUser;
+  banQuestionnaireWordcloudContentKeyword?: Maybe<Content>;
   claimUnverifiedUser?: Maybe<User>;
+  copyQuestionnaireContentToQuestionnaire?: Maybe<Content>;
   createAnnouncement: Announcement;
   createQnaPost: Post;
   createQnaReply: Reply;
   createQnaTag: Tag;
+  createQuestionnaire: Questionnaire;
+  createQuestionnaireAbstention?: Maybe<Answer>;
+  createQuestionnaireChoiceAnswer?: Maybe<Answer>;
+  createQuestionnaireChoiceContent?: Maybe<Content>;
+  createQuestionnaireWordcloudAnswer?: Maybe<Answer>;
+  createQuestionnaireWordcloudContent?: Maybe<Content>;
   createRoom: Room;
   deleteAnnouncement: Scalars['ID']['output'];
   deleteQnaPost: Scalars['ID']['output'];
   deleteQnaPostsByQnaId: Scalars['Int']['output'];
   deleteQnaReply: Scalars['ID']['output'];
   deleteQnaTag: Scalars['ID']['output'];
+  deleteQuestionnaire?: Maybe<Scalars['ID']['output']>;
+  deleteQuestionnaireAnswersByContentId?: Maybe<Scalars['Boolean']['output']>;
+  deleteQuestionnaireContent?: Maybe<Scalars['ID']['output']>;
   deleteRoom: Scalars['UUID']['output'];
   deleteUser?: Maybe<Scalars['UUID']['output']>;
   duplicateDemoRoom: Room;
+  duplicateQuestionnaire: Questionnaire;
+  duplicateQuestionnaireContent?: Maybe<Content>;
   duplicateRoom: Room;
   grantRoomRole: RoomMember;
   grantRoomRoleByInvitation: RoomMember;
   joinRoom: RoomMembership;
+  moveQuestionnaireContentToQuestionnaire?: Maybe<Content>;
   pauseQna: Qna;
+  publishQuestionnaireUpToContent: Questionnaire;
   rejectQnaPost: Post;
   requestUserPasswordReset?: Maybe<Scalars['Boolean']['output']>;
   requestUserPasswordSetup?: Maybe<Scalars['Boolean']['output']>;
   resendVerificationMail?: Maybe<Scalars['Boolean']['output']>;
+  resetBannedQuestionnaireWordcloudContentKeywords?: Maybe<Content>;
+  resetQuestionnaireResults?: Maybe<Scalars['Boolean']['output']>;
   resetUserPassword?: Maybe<User>;
   revokeRoomMembership: RoomMembership;
   revokeRoomRole: RoomMember;
   startQna: Qna;
+  startQuestionnaireContent: Questionnaire;
+  startQuestionnaireContentRound: Round;
   stopQna: Qna;
+  stopQuestionnaireContent: Questionnaire;
+  toggleQuestionnairePublished: Questionnaire;
   updateAnnouncement: Announcement;
   updateQnaActivePostId: Qna;
   updateQnaAutoPublish: Qna;
@@ -266,6 +432,10 @@ export type Mutation = {
   updateQnaPostFavorite: Post;
   updateQnaReply: Reply;
   updateQnaThreshold: Qna;
+  updateQuestionnaire: Questionnaire;
+  updateQuestionnaireChoiceContent?: Maybe<Content>;
+  updateQuestionnaireContentOrder?: Maybe<Questionnaire>;
+  updateQuestionnaireWordcloudContent?: Maybe<Content>;
   updateRoomDescription: Room;
   updateRoomFocusMode: Room;
   updateRoomLanguage: Room;
@@ -305,9 +475,19 @@ export type MutationAdminVerifyUserByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type MutationBanQuestionnaireWordcloudContentKeywordArgs = {
+  contentId: Scalars['UUID']['input'];
+  keyword: Scalars['String']['input'];
+};
+
 export type MutationClaimUnverifiedUserArgs = {
   mailAddress: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type MutationCopyQuestionnaireContentToQuestionnaireArgs = {
+  contentId: Scalars['UUID']['input'];
+  questionnaireId: Scalars['UUID']['input'];
 };
 
 export type MutationCreateAnnouncementArgs = {
@@ -324,6 +504,30 @@ export type MutationCreateQnaReplyArgs = {
 
 export type MutationCreateQnaTagArgs = {
   input?: InputMaybe<CreateTagInput>;
+};
+
+export type MutationCreateQuestionnaireArgs = {
+  input: CreateQuestionnaireInput;
+};
+
+export type MutationCreateQuestionnaireAbstentionArgs = {
+  roundId: Scalars['UUID']['input'];
+};
+
+export type MutationCreateQuestionnaireChoiceAnswerArgs = {
+  input: CreateChoiceAnswerInput;
+};
+
+export type MutationCreateQuestionnaireChoiceContentArgs = {
+  input: CreateChoiceContentInput;
+};
+
+export type MutationCreateQuestionnaireWordcloudAnswerArgs = {
+  input: CreateWordcloudAnswerInput;
+};
+
+export type MutationCreateQuestionnaireWordcloudContentArgs = {
+  input: CreateWordcloudContentInput;
 };
 
 export type MutationCreateRoomArgs = {
@@ -351,7 +555,28 @@ export type MutationDeleteQnaTagArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type MutationDeleteQuestionnaireArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteQuestionnaireAnswersByContentIdArgs = {
+  contentId: Scalars['UUID']['input'];
+};
+
+export type MutationDeleteQuestionnaireContentArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type MutationDeleteRoomArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationDuplicateQuestionnaireArgs = {
+  id: Scalars['UUID']['input'];
+  newName: Scalars['String']['input'];
+};
+
+export type MutationDuplicateQuestionnaireContentArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -375,8 +600,18 @@ export type MutationJoinRoomArgs = {
   input: JoinRoomInput;
 };
 
+export type MutationMoveQuestionnaireContentToQuestionnaireArgs = {
+  contentId: Scalars['UUID']['input'];
+  questionnaireId: Scalars['UUID']['input'];
+};
+
 export type MutationPauseQnaArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type MutationPublishQuestionnaireUpToContentArgs = {
+  contentId: Scalars['UUID']['input'];
+  questionnaireId: Scalars['UUID']['input'];
 };
 
 export type MutationRejectQnaPostArgs = {
@@ -385,6 +620,14 @@ export type MutationRejectQnaPostArgs = {
 
 export type MutationRequestUserPasswordResetArgs = {
   mailAddress: Scalars['String']['input'];
+};
+
+export type MutationResetBannedQuestionnaireWordcloudContentKeywordsArgs = {
+  contentId: Scalars['UUID']['input'];
+};
+
+export type MutationResetQuestionnaireResultsArgs = {
+  id: Scalars['UUID']['input'];
 };
 
 export type MutationResetUserPasswordArgs = {
@@ -406,8 +649,25 @@ export type MutationStartQnaArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type MutationStartQuestionnaireContentArgs = {
+  contentId: Scalars['UUID']['input'];
+};
+
+export type MutationStartQuestionnaireContentRoundArgs = {
+  contentId: Scalars['UUID']['input'];
+};
+
 export type MutationStopQnaArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type MutationStopQuestionnaireContentArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type MutationToggleQuestionnairePublishedArgs = {
+  id: Scalars['UUID']['input'];
+  published: Scalars['Boolean']['input'];
 };
 
 export type MutationUpdateAnnouncementArgs = {
@@ -442,6 +702,23 @@ export type MutationUpdateQnaReplyArgs = {
 export type MutationUpdateQnaThresholdArgs = {
   id: Scalars['ID']['input'];
   threshold?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type MutationUpdateQuestionnaireArgs = {
+  input: UpdateQuestionnaireInput;
+};
+
+export type MutationUpdateQuestionnaireChoiceContentArgs = {
+  input: UpdateChoiceContentInput;
+};
+
+export type MutationUpdateQuestionnaireContentOrderArgs = {
+  contentIds: Array<Scalars['UUID']['input']>;
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type MutationUpdateQuestionnaireWordcloudContentArgs = {
+  input: UpdateWordcloudContentInput;
 };
 
 export type MutationUpdateRoomDescriptionArgs = {
@@ -607,9 +884,23 @@ export type Query = {
   announcementsForCurrentUser?: Maybe<AnnouncementConnection>;
   announcementsMetaForCurrentUser?: Maybe<AnnouncementsMeta>;
   currentUser?: Maybe<User>;
+  publishedQuestionnairesByRoomId?: Maybe<Array<Questionnaire>>;
   qnaPostCountsByQnaId?: Maybe<PostCountSummary>;
   qnaPostsByQnaId?: Maybe<PostConnection>;
   qnasByRoomId?: Maybe<QnaConnection>;
+  questionnaireAnswerByRoundId?: Maybe<Answer>;
+  questionnaireAnswerResultsByQuestionnaireId?: Maybe<QuestionnaireAnswerResult>;
+  questionnaireById?: Maybe<Questionnaire>;
+  questionnaireChoiceRoundStatsByRoundId?: Maybe<ChoiceContentRoundStats>;
+  questionnaireContentAnswerResultsByQuestionnaireId?: Maybe<
+    Array<ContentAnswerResult>
+  >;
+  questionnaireContentById?: Maybe<Content>;
+  questionnaireContentsByQuestionnaireId?: Maybe<ContentConnection>;
+  questionnairePublishedContentsByQuestionnaireId?: Maybe<ContentConnection>;
+  questionnaireRoundsByContentId?: Maybe<Array<Round>>;
+  questionnaireWordcloudRoundStatsByRoundId?: Maybe<WordcloudContentRoundStats>;
+  questionnairesByRoomId?: Maybe<Array<Questionnaire>>;
   roomById?: Maybe<Room>;
   roomByShortId?: Maybe<Room>;
   roomManagingMembersByRoomId?: Maybe<Array<RoomMember>>;
@@ -687,6 +978,10 @@ export type QueryAnnouncementsForCurrentUserArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type QueryPublishedQuestionnairesByRoomIdArgs = {
+  roomId: Scalars['UUID']['input'];
+};
+
 export type QueryQnaPostCountsByQnaIdArgs = {
   qnaId: Scalars['UUID']['input'];
 };
@@ -704,6 +999,50 @@ export type QueryQnasByRoomIdArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  roomId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireAnswerByRoundIdArgs = {
+  roundId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireAnswerResultsByQuestionnaireIdArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireByIdArgs = {
+  id: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireChoiceRoundStatsByRoundIdArgs = {
+  roundId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireContentAnswerResultsByQuestionnaireIdArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireContentByIdArgs = {
+  id: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireContentsByQuestionnaireIdArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnairePublishedContentsByQuestionnaireIdArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireRoundsByContentIdArgs = {
+  contentId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireWordcloudRoundStatsByRoundIdArgs = {
+  roundId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnairesByRoomIdArgs = {
   roomId: Scalars['UUID']['input'];
 };
 
@@ -754,6 +1093,43 @@ export type QueryRoomsByUserIdArgs = {
 export type QueryUserByDisplayIdArgs = {
   displayId: Scalars['ID']['input'];
 };
+
+export type Questionnaire = {
+  __typename?: 'Questionnaire';
+  activeRound?: Maybe<Round>;
+  contentCount?: Maybe<Scalars['Int']['output']>;
+  correctOptionsPublished?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['ID']['output'];
+  leaderboardEnabled?: Maybe<Scalars['Boolean']['output']>;
+  name: Scalars['String']['output'];
+  published: Scalars['Boolean']['output'];
+  publishedUpToContent?: Maybe<Content>;
+  publishingMode: QuestionnairePublishingMode;
+  statisticsPublished?: Maybe<Scalars['Boolean']['output']>;
+  type: QuestionnaireType;
+};
+
+export type QuestionnaireAnswerResult = {
+  __typename?: 'QuestionnaireAnswerResult';
+  achievedScore?: Maybe<Scalars['Int']['output']>;
+  correctAnswerCount?: Maybe<Scalars['Int']['output']>;
+  maxScore?: Maybe<Scalars['Int']['output']>;
+  questionnaireId: Scalars['UUID']['output'];
+  scorableContentCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export enum QuestionnairePublishingMode {
+  All = 'ALL',
+  Live = 'LIVE',
+  UpTo = 'UP_TO',
+}
+
+export enum QuestionnaireType {
+  Flashcards = 'FLASHCARDS',
+  Mixed = 'MIXED',
+  Quiz = 'QUIZ',
+  Survey = 'SURVEY',
+}
 
 export type Reply = {
   __typename?: 'Reply';
@@ -838,6 +1214,22 @@ export type RoomStats = {
   id: Scalars['ID']['output'];
 };
 
+export type Round = {
+  __typename?: 'Round';
+  answerable: Scalars['Boolean']['output'];
+  answeringEndTime?: Maybe<Scalars['DateTime']['output']>;
+  closed: Scalars['Boolean']['output'];
+  contentId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
+  roundNo: Scalars['Int']['output'];
+  started: Scalars['Boolean']['output'];
+};
+
+export type ScaleContentFormatData = {
+  __typename?: 'ScaleContentFormatData';
+  format: ContentType;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   activeQnaPostUpdated?: Maybe<Qna>;
@@ -851,6 +1243,11 @@ export type Subscription = {
   qnaPostReplied: CreateReplyEvent;
   qnaPostVoted: Post;
   qnaStateChanged?: Maybe<Qna>;
+  questionnaireChoiceRoundStatsUpdated?: Maybe<ChoiceContentRoundStats>;
+  questionnaireContentUpdated?: Maybe<Content>;
+  questionnaireUpdated?: Maybe<Questionnaire>;
+  questionnaireWordcloudRoundStatsUpdated?: Maybe<WordcloudContentRoundStats>;
+  questionnairesChanged: Scalars['ID']['output'];
 };
 
 export type SubscriptionActiveQnaPostUpdatedArgs = {
@@ -897,16 +1294,62 @@ export type SubscriptionQnaStateChangedArgs = {
   roomId: Scalars['UUID']['input'];
 };
 
+export type SubscriptionQuestionnaireChoiceRoundStatsUpdatedArgs = {
+  roundId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQuestionnaireContentUpdatedArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQuestionnaireUpdatedArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQuestionnaireWordcloudRoundStatsUpdatedArgs = {
+  roundId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQuestionnairesChangedArgs = {
+  roomId: Scalars['UUID']['input'];
+};
+
 export type Tag = {
   __typename?: 'Tag';
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
 };
 
+export type TextContentFormatData = {
+  __typename?: 'TextContentFormatData';
+  format: ContentType;
+};
+
 export type UpdateAnnouncementInput = {
   body?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateChoiceContentInput = {
+  abstentionsAllowed?: InputMaybe<Scalars['Boolean']['input']>;
+  body: Scalars['String']['input'];
+  correctOptionIndexes?: InputMaybe<Array<Scalars['Int']['input']>>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['UUID']['input'];
+  multiple?: InputMaybe<Scalars['Boolean']['input']>;
+  options: Array<Scalars['String']['input']>;
+  weight?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateQuestionnaireInput = {
+  correctOptionsPublished?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['UUID']['input'];
+  leaderboardEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  published?: InputMaybe<Scalars['Boolean']['input']>;
+  publishingMode?: InputMaybe<QuestionnairePublishingMode>;
+  statisticsPublished?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateUserDetailsInput = {
@@ -919,6 +1362,14 @@ export type UpdateUserUiSettingsInput = {
   contentVisualizationUnitPercent?: InputMaybe<Scalars['Boolean']['input']>;
   rotateWordcloudItems?: InputMaybe<Scalars['Boolean']['input']>;
   showContentResultsDirectly?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type UpdateWordcloudContentInput = {
+  abstentionsAllowed?: InputMaybe<Scalars['Boolean']['input']>;
+  body: Scalars['String']['input'];
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['UUID']['input'];
+  maxAnswers: Scalars['Int']['input'];
 };
 
 export type User = {
@@ -945,6 +1396,24 @@ export type UserUiSettings = {
 export type VoteInput = {
   postId: Scalars['UUID']['input'];
   value: Scalars['Int']['input'];
+};
+
+export type WordcloudAnswerFormatData = {
+  __typename?: 'WordcloudAnswerFormatData';
+  format: ContentType;
+  words: Array<Scalars['String']['output']>;
+};
+
+export type WordcloudContentFormatData = {
+  __typename?: 'WordcloudContentFormatData';
+  format: ContentType;
+  maxAnswers: Scalars['Int']['output'];
+};
+
+export type WordcloudContentRoundStats = {
+  __typename?: 'WordcloudContentRoundStats';
+  counts?: Maybe<Array<Scalars['Int']['output']>>;
+  words?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 export type AdminUserDetailsFragment = {
@@ -1944,6 +2413,1146 @@ export type QnaPostVotedSubscription = {
   qnaPostVoted: { __typename?: 'Post'; id: string; score?: number | null };
 };
 
+export type QuestionnaireSummaryFragment = {
+  __typename?: 'Questionnaire';
+  id: string;
+  name: string;
+  type: QuestionnaireType;
+  published: boolean;
+  publishingMode: QuestionnairePublishingMode;
+  contentCount?: number | null;
+  publishedUpToContent?: {
+    __typename?: 'Content';
+    id: string;
+    position?: number | null;
+  } | null;
+};
+
+export type QuestionnaireDetailsFragment = {
+  __typename?: 'Questionnaire';
+  id: string;
+  name: string;
+  type: QuestionnaireType;
+  published: boolean;
+  publishingMode: QuestionnairePublishingMode;
+  statisticsPublished?: boolean | null;
+  correctOptionsPublished?: boolean | null;
+  leaderboardEnabled?: boolean | null;
+  contentCount?: number | null;
+  publishedUpToContent?: {
+    __typename?: 'Content';
+    id: string;
+    position?: number | null;
+  } | null;
+};
+
+export type ContentDetailsFragment = {
+  __typename?: 'Content';
+  id: string;
+  body: string;
+  bodyRendered?: string | null;
+  duration?: number | null;
+  abstentionsAllowed?: boolean | null;
+  hasCorrectAnswer?: boolean | null;
+  weight?: number | null;
+  answerCount?: number | null;
+  abstentionCount?: number | null;
+  position?: number | null;
+  activeRound?: {
+    __typename?: 'Round';
+    id: string;
+    roundNo: number;
+    closed: boolean;
+    started: boolean;
+    answerable: boolean;
+  } | null;
+  formatData:
+    | {
+        __typename?: 'ChoiceContentFormatData';
+        format: ContentType;
+        correctOptionIndexes?: Array<number> | null;
+        multiple?: boolean | null;
+        options: Array<{
+          __typename?: 'AnswerOption';
+          label: string;
+          labelRendered?: string | null;
+        }>;
+      }
+    | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+    | { __typename?: 'TextContentFormatData'; format: ContentType }
+    | {
+        __typename?: 'WordcloudContentFormatData';
+        format: ContentType;
+        maxAnswers: number;
+      };
+};
+
+export type CreatorContentDetailsFragment = {
+  __typename?: 'Content';
+  correctAnswerCount?: number | null;
+  hasAnswers: boolean;
+  id: string;
+  body: string;
+  bodyRendered?: string | null;
+  duration?: number | null;
+  abstentionsAllowed?: boolean | null;
+  hasCorrectAnswer?: boolean | null;
+  weight?: number | null;
+  answerCount?: number | null;
+  abstentionCount?: number | null;
+  position?: number | null;
+  activeRound?: {
+    __typename?: 'Round';
+    id: string;
+    roundNo: number;
+    closed: boolean;
+    started: boolean;
+    answerable: boolean;
+  } | null;
+  formatData:
+    | {
+        __typename?: 'ChoiceContentFormatData';
+        format: ContentType;
+        correctOptionIndexes?: Array<number> | null;
+        multiple?: boolean | null;
+        options: Array<{
+          __typename?: 'AnswerOption';
+          label: string;
+          labelRendered?: string | null;
+        }>;
+      }
+    | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+    | { __typename?: 'TextContentFormatData'; format: ContentType }
+    | {
+        __typename?: 'WordcloudContentFormatData';
+        format: ContentType;
+        maxAnswers: number;
+      };
+};
+
+export type AnswerFragment = {
+  __typename?: 'Answer';
+  id: string;
+  result: AnswerResultState;
+  formatData?:
+    | {
+        __typename?: 'ChoiceAnswerFormatData';
+        format: ContentType;
+        selectedChoiceIndexes: Array<number>;
+      }
+    | {
+        __typename?: 'WordcloudAnswerFormatData';
+        format: ContentType;
+        words: Array<string>;
+      }
+    | null;
+};
+
+export type ContentAnswerResultFragment = {
+  __typename?: 'ContentAnswerResult';
+  contentId: string;
+  result: AnswerResultState;
+  durationMs?: number | null;
+};
+
+export type QuestionnaireAnswerResultFragment = {
+  __typename?: 'QuestionnaireAnswerResult';
+  correctAnswerCount?: number | null;
+  scorableContentCount?: number | null;
+  achievedScore?: number | null;
+  maxScore?: number | null;
+};
+
+export type ChoiceContentRoundStatsFragment = {
+  __typename?: 'ChoiceContentRoundStats';
+  selectionCounts?: Array<number> | null;
+};
+
+export type WordcloudContentRoundStatsFragment = {
+  __typename?: 'WordcloudContentRoundStats';
+  words?: Array<string> | null;
+  counts?: Array<number> | null;
+};
+
+export type QuestionnairesByRoomIdQueryVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnairesByRoomIdQuery = {
+  __typename?: 'Query';
+  questionnairesByRoomId?: Array<{
+    __typename?: 'Questionnaire';
+    id: string;
+    name: string;
+    type: QuestionnaireType;
+    published: boolean;
+    publishingMode: QuestionnairePublishingMode;
+    contentCount?: number | null;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
+  }> | null;
+};
+
+export type PublishedQuestionnairesByRoomIdQueryVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type PublishedQuestionnairesByRoomIdQuery = {
+  __typename?: 'Query';
+  publishedQuestionnairesByRoomId?: Array<{
+    __typename?: 'Questionnaire';
+    id: string;
+    name: string;
+    type: QuestionnaireType;
+    published: boolean;
+    publishingMode: QuestionnairePublishingMode;
+    contentCount?: number | null;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
+  }> | null;
+};
+
+export type QuestionnairesChangedSubscriptionVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnairesChangedSubscription = {
+  __typename?: 'Subscription';
+  questionnairesChanged: string;
+};
+
+export type QuestionnaireByIdQueryVariables = Exact<{
+  id: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireByIdQuery = {
+  __typename?: 'Query';
+  questionnaireById?: {
+    __typename?: 'Questionnaire';
+    id: string;
+    name: string;
+    type: QuestionnaireType;
+    published: boolean;
+    publishingMode: QuestionnairePublishingMode;
+    statisticsPublished?: boolean | null;
+    correctOptionsPublished?: boolean | null;
+    leaderboardEnabled?: boolean | null;
+    contentCount?: number | null;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
+  } | null;
+};
+
+export type QuestionnaireContentsByQuestionnaireIdQueryVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireContentsByQuestionnaireIdQuery = {
+  __typename?: 'Query';
+  questionnaireContentsByQuestionnaireId?: {
+    __typename?: 'ContentConnection';
+    edges?: Array<{
+      __typename?: 'ContentEdge';
+      node: {
+        __typename?: 'Content';
+        correctAnswerCount?: number | null;
+        hasAnswers: boolean;
+        id: string;
+        body: string;
+        bodyRendered?: string | null;
+        duration?: number | null;
+        abstentionsAllowed?: boolean | null;
+        hasCorrectAnswer?: boolean | null;
+        weight?: number | null;
+        answerCount?: number | null;
+        abstentionCount?: number | null;
+        position?: number | null;
+        activeRound?: {
+          __typename?: 'Round';
+          id: string;
+          roundNo: number;
+          closed: boolean;
+          started: boolean;
+          answerable: boolean;
+        } | null;
+        formatData:
+          | {
+              __typename?: 'ChoiceContentFormatData';
+              format: ContentType;
+              correctOptionIndexes?: Array<number> | null;
+              multiple?: boolean | null;
+              options: Array<{
+                __typename?: 'AnswerOption';
+                label: string;
+                labelRendered?: string | null;
+              }>;
+            }
+          | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+          | { __typename?: 'TextContentFormatData'; format: ContentType }
+          | {
+              __typename?: 'WordcloudContentFormatData';
+              format: ContentType;
+              maxAnswers: number;
+            };
+      };
+    } | null> | null;
+  } | null;
+};
+
+export type QuestionnairePublishedContentsByQuestionnaireIdQueryVariables =
+  Exact<{
+    questionnaireId: Scalars['UUID']['input'];
+  }>;
+
+export type QuestionnairePublishedContentsByQuestionnaireIdQuery = {
+  __typename?: 'Query';
+  questionnairePublishedContentsByQuestionnaireId?: {
+    __typename?: 'ContentConnection';
+    edges?: Array<{
+      __typename?: 'ContentEdge';
+      node: {
+        __typename?: 'Content';
+        id: string;
+        body: string;
+        bodyRendered?: string | null;
+        duration?: number | null;
+        abstentionsAllowed?: boolean | null;
+        hasCorrectAnswer?: boolean | null;
+        weight?: number | null;
+        answerCount?: number | null;
+        abstentionCount?: number | null;
+        position?: number | null;
+        activeRound?: {
+          __typename?: 'Round';
+          id: string;
+          roundNo: number;
+          closed: boolean;
+          started: boolean;
+          answerable: boolean;
+        } | null;
+        formatData:
+          | {
+              __typename?: 'ChoiceContentFormatData';
+              format: ContentType;
+              correctOptionIndexes?: Array<number> | null;
+              multiple?: boolean | null;
+              options: Array<{
+                __typename?: 'AnswerOption';
+                label: string;
+                labelRendered?: string | null;
+              }>;
+            }
+          | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+          | { __typename?: 'TextContentFormatData'; format: ContentType }
+          | {
+              __typename?: 'WordcloudContentFormatData';
+              format: ContentType;
+              maxAnswers: number;
+            };
+      };
+    } | null> | null;
+  } | null;
+};
+
+export type CreateQuestionnaireMutationVariables = Exact<{
+  input: CreateQuestionnaireInput;
+}>;
+
+export type CreateQuestionnaireMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaire: {
+    __typename?: 'Questionnaire';
+    id: string;
+    name: string;
+    type: QuestionnaireType;
+    published: boolean;
+    publishingMode: QuestionnairePublishingMode;
+    statisticsPublished?: boolean | null;
+    correctOptionsPublished?: boolean | null;
+    leaderboardEnabled?: boolean | null;
+    contentCount?: number | null;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
+  };
+};
+
+export type ToggleQuestionnairePublishedMutationVariables = Exact<{
+  id: Scalars['UUID']['input'];
+  published: Scalars['Boolean']['input'];
+}>;
+
+export type ToggleQuestionnairePublishedMutation = {
+  __typename?: 'Mutation';
+  toggleQuestionnairePublished: {
+    __typename?: 'Questionnaire';
+    id: string;
+    name: string;
+    type: QuestionnaireType;
+    published: boolean;
+    publishingMode: QuestionnairePublishingMode;
+    statisticsPublished?: boolean | null;
+    correctOptionsPublished?: boolean | null;
+    leaderboardEnabled?: boolean | null;
+    contentCount?: number | null;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
+  };
+};
+
+export type CreateQuestionnaireChoiceContentMutationVariables = Exact<{
+  input: CreateChoiceContentInput;
+}>;
+
+export type CreateQuestionnaireChoiceContentMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireChoiceContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type UpdateQuestionnaireChoiceContentMutationVariables = Exact<{
+  input: UpdateChoiceContentInput;
+}>;
+
+export type UpdateQuestionnaireChoiceContentMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaireChoiceContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type CreateQuestionnaireWordcloudContentMutationVariables = Exact<{
+  input: CreateWordcloudContentInput;
+}>;
+
+export type CreateQuestionnaireWordcloudContentMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireWordcloudContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type UpdateQuestionnaireWordcloudContentMutationVariables = Exact<{
+  input: UpdateWordcloudContentInput;
+}>;
+
+export type UpdateQuestionnaireWordcloudContentMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaireWordcloudContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type QuestionnaireContentByIdQueryVariables = Exact<{
+  id: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireContentByIdQuery = {
+  __typename?: 'Query';
+  questionnaireContentById?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type QuestionnaireAnswerByRoundIdQueryVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireAnswerByRoundIdQuery = {
+  __typename?: 'Query';
+  questionnaireAnswerByRoundId?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type QuestionnaireContentAnswerResultsByQuestionnaireIdQueryVariables =
+  Exact<{
+    questionnaireId: Scalars['UUID']['input'];
+  }>;
+
+export type QuestionnaireContentAnswerResultsByQuestionnaireIdQuery = {
+  __typename?: 'Query';
+  questionnaireContentAnswerResultsByQuestionnaireId?: Array<{
+    __typename?: 'ContentAnswerResult';
+    contentId: string;
+    result: AnswerResultState;
+    durationMs?: number | null;
+  }> | null;
+};
+
+export type QuestionnaireAnswerResultsByQuestionnaireIdQueryVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireAnswerResultsByQuestionnaireIdQuery = {
+  __typename?: 'Query';
+  questionnaireAnswerResultsByQuestionnaireId?: {
+    __typename?: 'QuestionnaireAnswerResult';
+    correctAnswerCount?: number | null;
+    scorableContentCount?: number | null;
+    achievedScore?: number | null;
+    maxScore?: number | null;
+  } | null;
+};
+
+export type QuestionnaireChoiceRoundStatsByRoundIdQueryVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireChoiceRoundStatsByRoundIdQuery = {
+  __typename?: 'Query';
+  questionnaireChoiceRoundStatsByRoundId?: {
+    __typename?: 'ChoiceContentRoundStats';
+    selectionCounts?: Array<number> | null;
+  } | null;
+};
+
+export type QuestionnaireWordcloudRoundStatsByRoundIdQueryVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireWordcloudRoundStatsByRoundIdQuery = {
+  __typename?: 'Query';
+  questionnaireWordcloudRoundStatsByRoundId?: {
+    __typename?: 'WordcloudContentRoundStats';
+    words?: Array<string> | null;
+    counts?: Array<number> | null;
+  } | null;
+};
+
+export type CreateQuestionnaireChoiceAnswerMutationVariables = Exact<{
+  input: CreateChoiceAnswerInput;
+}>;
+
+export type CreateQuestionnaireChoiceAnswerMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireChoiceAnswer?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type CreateQuestionnaireWordcloudAnswerMutationVariables = Exact<{
+  input: CreateWordcloudAnswerInput;
+}>;
+
+export type CreateQuestionnaireWordcloudAnswerMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireWordcloudAnswer?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type CreateQuestionnaireAbstentionMutationVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type CreateQuestionnaireAbstentionMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireAbstention?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type DeleteQuestionnaireContentMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteQuestionnaireContentMutation = {
+  __typename?: 'Mutation';
+  deleteQuestionnaireContent?: string | null;
+};
+
+export type DeleteQuestionnaireMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteQuestionnaireMutation = {
+  __typename?: 'Mutation';
+  deleteQuestionnaire?: string | null;
+};
+
+export type DeleteQuestionnaireAnswersByContentIdMutationVariables = Exact<{
+  contentId: Scalars['UUID']['input'];
+}>;
+
+export type DeleteQuestionnaireAnswersByContentIdMutation = {
+  __typename?: 'Mutation';
+  deleteQuestionnaireAnswersByContentId?: boolean | null;
+};
+
+export type BanQuestionnaireWordcloudContentKeywordMutationVariables = Exact<{
+  contentId: Scalars['UUID']['input'];
+  keyword: Scalars['String']['input'];
+}>;
+
+export type BanQuestionnaireWordcloudContentKeywordMutation = {
+  __typename?: 'Mutation';
+  banQuestionnaireWordcloudContentKeyword?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type ResetBannedQuestionnaireWordcloudContentKeywordsMutationVariables =
+  Exact<{
+    contentId: Scalars['UUID']['input'];
+  }>;
+
+export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
+  __typename?: 'Mutation';
+  resetBannedQuestionnaireWordcloudContentKeywords?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type ResetQuestionnaireResultsMutationVariables = Exact<{
+  id: Scalars['UUID']['input'];
+}>;
+
+export type ResetQuestionnaireResultsMutation = {
+  __typename?: 'Mutation';
+  resetQuestionnaireResults?: boolean | null;
+};
+
+export type UpdateQuestionnaireMutationVariables = Exact<{
+  id: Scalars['UUID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  published?: InputMaybe<Scalars['Boolean']['input']>;
+  publishingMode?: InputMaybe<QuestionnairePublishingMode>;
+  statisticsPublished?: InputMaybe<Scalars['Boolean']['input']>;
+  correctOptionsPublished?: InputMaybe<Scalars['Boolean']['input']>;
+  leaderboardEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type UpdateQuestionnaireMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaire: {
+    __typename?: 'Questionnaire';
+    id: string;
+    name: string;
+    type: QuestionnaireType;
+    published: boolean;
+    publishingMode: QuestionnairePublishingMode;
+    statisticsPublished?: boolean | null;
+    correctOptionsPublished?: boolean | null;
+    leaderboardEnabled?: boolean | null;
+    contentCount?: number | null;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
+  };
+};
+
+export type DuplicateQuestionnaireContentMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DuplicateQuestionnaireContentMutation = {
+  __typename?: 'Mutation';
+  duplicateQuestionnaireContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type CopyQuestionnaireContentToQuestionnaireMutationVariables = Exact<{
+  contentId: Scalars['UUID']['input'];
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type CopyQuestionnaireContentToQuestionnaireMutation = {
+  __typename?: 'Mutation';
+  copyQuestionnaireContentToQuestionnaire?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type MoveQuestionnaireContentToQuestionnaireMutationVariables = Exact<{
+  contentId: Scalars['UUID']['input'];
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type MoveQuestionnaireContentToQuestionnaireMutation = {
+  __typename?: 'Mutation';
+  moveQuestionnaireContentToQuestionnaire?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type UpdateQuestionnaireContentOrderMutationVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+  contentIds: Array<Scalars['UUID']['input']> | Scalars['UUID']['input'];
+}>;
+
+export type UpdateQuestionnaireContentOrderMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaireContentOrder?: {
+    __typename?: 'Questionnaire';
+    id: string;
+  } | null;
+};
+
 export type RoomDetailsFragmentFragment = {
   __typename?: 'Room';
   id: string;
@@ -2699,6 +4308,129 @@ export const PostDetailsFragmentDoc = gql`
     moderationState
   }
   ${ReplyDetailsFragmentDoc}
+`;
+export const QuestionnaireSummaryFragmentDoc = gql`
+  fragment QuestionnaireSummary on Questionnaire {
+    id
+    name
+    type
+    published
+    publishingMode
+    publishedUpToContent {
+      id
+      position
+    }
+    contentCount
+  }
+`;
+export const QuestionnaireDetailsFragmentDoc = gql`
+  fragment QuestionnaireDetails on Questionnaire {
+    id
+    name
+    type
+    published
+    publishingMode
+    publishedUpToContent {
+      id
+      position
+    }
+    statisticsPublished
+    correctOptionsPublished
+    leaderboardEnabled
+    contentCount
+  }
+`;
+export const ContentDetailsFragmentDoc = gql`
+  fragment ContentDetails on Content {
+    id
+    body
+    bodyRendered
+    activeRound {
+      id
+      roundNo
+      closed
+      started
+      answerable
+    }
+    formatData {
+      ... on ChoiceContentFormatData {
+        format
+        options {
+          label
+          labelRendered
+        }
+        correctOptionIndexes
+        multiple
+      }
+      ... on ScaleContentFormatData {
+        format
+      }
+      ... on TextContentFormatData {
+        format
+      }
+      ... on WordcloudContentFormatData {
+        format
+        maxAnswers
+      }
+    }
+    duration
+    abstentionsAllowed
+    hasCorrectAnswer
+    weight
+    answerCount
+    abstentionCount
+    position
+  }
+`;
+export const CreatorContentDetailsFragmentDoc = gql`
+  fragment CreatorContentDetails on Content {
+    ...ContentDetails
+    correctAnswerCount
+    hasAnswers
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+export const AnswerFragmentDoc = gql`
+  fragment Answer on Answer {
+    id
+    result
+    formatData {
+      ... on ChoiceAnswerFormatData {
+        format
+        selectedChoiceIndexes
+      }
+      ... on WordcloudAnswerFormatData {
+        format
+        words
+      }
+    }
+  }
+`;
+export const ContentAnswerResultFragmentDoc = gql`
+  fragment ContentAnswerResult on ContentAnswerResult {
+    contentId
+    result
+    durationMs
+  }
+`;
+export const QuestionnaireAnswerResultFragmentDoc = gql`
+  fragment QuestionnaireAnswerResult on QuestionnaireAnswerResult {
+    correctAnswerCount
+    scorableContentCount
+    achievedScore
+    maxScore
+  }
+`;
+export const ChoiceContentRoundStatsFragmentDoc = gql`
+  fragment ChoiceContentRoundStats on ChoiceContentRoundStats {
+    selectionCounts
+  }
+`;
+export const WordcloudContentRoundStatsFragmentDoc = gql`
+  fragment WordcloudContentRoundStats on WordcloudContentRoundStats {
+    words
+    counts
+  }
 `;
 export const RoomDetailsFragmentFragmentDoc = gql`
   fragment RoomDetailsFragment on Room {
@@ -4052,6 +5784,760 @@ export class QnaPostVotedGql extends Apollo.Subscription<
   QnaPostVotedSubscriptionVariables
 > {
   document = QnaPostVotedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnairesByRoomIdDocument = gql`
+  query QuestionnairesByRoomId($roomId: UUID!) {
+    questionnairesByRoomId(roomId: $roomId) {
+      ...QuestionnaireSummary
+    }
+  }
+  ${QuestionnaireSummaryFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnairesByRoomIdGql extends Apollo.Query<
+  QuestionnairesByRoomIdQuery,
+  QuestionnairesByRoomIdQueryVariables
+> {
+  document = QuestionnairesByRoomIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const PublishedQuestionnairesByRoomIdDocument = gql`
+  query PublishedQuestionnairesByRoomId($roomId: UUID!) {
+    publishedQuestionnairesByRoomId(roomId: $roomId) {
+      ...QuestionnaireSummary
+    }
+  }
+  ${QuestionnaireSummaryFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PublishedQuestionnairesByRoomIdGql extends Apollo.Query<
+  PublishedQuestionnairesByRoomIdQuery,
+  PublishedQuestionnairesByRoomIdQueryVariables
+> {
+  document = PublishedQuestionnairesByRoomIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnairesChangedDocument = gql`
+  subscription QuestionnairesChanged($roomId: UUID!) {
+    questionnairesChanged(roomId: $roomId)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnairesChangedGql extends Apollo.Subscription<
+  QuestionnairesChangedSubscription,
+  QuestionnairesChangedSubscriptionVariables
+> {
+  document = QuestionnairesChangedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireByIdDocument = gql`
+  query QuestionnaireById($id: UUID!) {
+    questionnaireById(id: $id) {
+      ...QuestionnaireDetails
+    }
+  }
+  ${QuestionnaireDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireByIdGql extends Apollo.Query<
+  QuestionnaireByIdQuery,
+  QuestionnaireByIdQueryVariables
+> {
+  document = QuestionnaireByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireContentsByQuestionnaireIdDocument = gql`
+  query QuestionnaireContentsByQuestionnaireId($questionnaireId: UUID!) {
+    questionnaireContentsByQuestionnaireId(questionnaireId: $questionnaireId) {
+      edges {
+        node {
+          ...CreatorContentDetails
+        }
+      }
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireContentsByQuestionnaireIdGql extends Apollo.Query<
+  QuestionnaireContentsByQuestionnaireIdQuery,
+  QuestionnaireContentsByQuestionnaireIdQueryVariables
+> {
+  document = QuestionnaireContentsByQuestionnaireIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnairePublishedContentsByQuestionnaireIdDocument = gql`
+  query QuestionnairePublishedContentsByQuestionnaireId(
+    $questionnaireId: UUID!
+  ) {
+    questionnairePublishedContentsByQuestionnaireId(
+      questionnaireId: $questionnaireId
+    ) {
+      edges {
+        node {
+          ...ContentDetails
+        }
+      }
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnairePublishedContentsByQuestionnaireIdGql extends Apollo.Query<
+  QuestionnairePublishedContentsByQuestionnaireIdQuery,
+  QuestionnairePublishedContentsByQuestionnaireIdQueryVariables
+> {
+  document = QuestionnairePublishedContentsByQuestionnaireIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireDocument = gql`
+  mutation CreateQuestionnaire($input: CreateQuestionnaireInput!) {
+    createQuestionnaire(input: $input) {
+      ...QuestionnaireDetails
+    }
+  }
+  ${QuestionnaireDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireGql extends Apollo.Mutation<
+  CreateQuestionnaireMutation,
+  CreateQuestionnaireMutationVariables
+> {
+  document = CreateQuestionnaireDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ToggleQuestionnairePublishedDocument = gql`
+  mutation ToggleQuestionnairePublished($id: UUID!, $published: Boolean!) {
+    toggleQuestionnairePublished(id: $id, published: $published) {
+      ...QuestionnaireDetails
+    }
+  }
+  ${QuestionnaireDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ToggleQuestionnairePublishedGql extends Apollo.Mutation<
+  ToggleQuestionnairePublishedMutation,
+  ToggleQuestionnairePublishedMutationVariables
+> {
+  document = ToggleQuestionnairePublishedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireChoiceContentDocument = gql`
+  mutation CreateQuestionnaireChoiceContent($input: CreateChoiceContentInput!) {
+    createQuestionnaireChoiceContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireChoiceContentGql extends Apollo.Mutation<
+  CreateQuestionnaireChoiceContentMutation,
+  CreateQuestionnaireChoiceContentMutationVariables
+> {
+  document = CreateQuestionnaireChoiceContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireChoiceContentDocument = gql`
+  mutation UpdateQuestionnaireChoiceContent($input: UpdateChoiceContentInput!) {
+    updateQuestionnaireChoiceContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireChoiceContentGql extends Apollo.Mutation<
+  UpdateQuestionnaireChoiceContentMutation,
+  UpdateQuestionnaireChoiceContentMutationVariables
+> {
+  document = UpdateQuestionnaireChoiceContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireWordcloudContentDocument = gql`
+  mutation CreateQuestionnaireWordcloudContent(
+    $input: CreateWordcloudContentInput!
+  ) {
+    createQuestionnaireWordcloudContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireWordcloudContentGql extends Apollo.Mutation<
+  CreateQuestionnaireWordcloudContentMutation,
+  CreateQuestionnaireWordcloudContentMutationVariables
+> {
+  document = CreateQuestionnaireWordcloudContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireWordcloudContentDocument = gql`
+  mutation UpdateQuestionnaireWordcloudContent(
+    $input: UpdateWordcloudContentInput!
+  ) {
+    updateQuestionnaireWordcloudContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireWordcloudContentGql extends Apollo.Mutation<
+  UpdateQuestionnaireWordcloudContentMutation,
+  UpdateQuestionnaireWordcloudContentMutationVariables
+> {
+  document = UpdateQuestionnaireWordcloudContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireContentByIdDocument = gql`
+  query QuestionnaireContentById($id: UUID!) {
+    questionnaireContentById(id: $id) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireContentByIdGql extends Apollo.Query<
+  QuestionnaireContentByIdQuery,
+  QuestionnaireContentByIdQueryVariables
+> {
+  document = QuestionnaireContentByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireAnswerByRoundIdDocument = gql`
+  query QuestionnaireAnswerByRoundId($roundId: UUID!) {
+    questionnaireAnswerByRoundId(roundId: $roundId) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireAnswerByRoundIdGql extends Apollo.Query<
+  QuestionnaireAnswerByRoundIdQuery,
+  QuestionnaireAnswerByRoundIdQueryVariables
+> {
+  document = QuestionnaireAnswerByRoundIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireContentAnswerResultsByQuestionnaireIdDocument = gql`
+  query QuestionnaireContentAnswerResultsByQuestionnaireId(
+    $questionnaireId: UUID!
+  ) {
+    questionnaireContentAnswerResultsByQuestionnaireId(
+      questionnaireId: $questionnaireId
+    ) {
+      ...ContentAnswerResult
+    }
+  }
+  ${ContentAnswerResultFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireContentAnswerResultsByQuestionnaireIdGql extends Apollo.Query<
+  QuestionnaireContentAnswerResultsByQuestionnaireIdQuery,
+  QuestionnaireContentAnswerResultsByQuestionnaireIdQueryVariables
+> {
+  document = QuestionnaireContentAnswerResultsByQuestionnaireIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireAnswerResultsByQuestionnaireIdDocument = gql`
+  query QuestionnaireAnswerResultsByQuestionnaireId($questionnaireId: UUID!) {
+    questionnaireAnswerResultsByQuestionnaireId(
+      questionnaireId: $questionnaireId
+    ) {
+      ...QuestionnaireAnswerResult
+    }
+  }
+  ${QuestionnaireAnswerResultFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireAnswerResultsByQuestionnaireIdGql extends Apollo.Query<
+  QuestionnaireAnswerResultsByQuestionnaireIdQuery,
+  QuestionnaireAnswerResultsByQuestionnaireIdQueryVariables
+> {
+  document = QuestionnaireAnswerResultsByQuestionnaireIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireChoiceRoundStatsByRoundIdDocument = gql`
+  query QuestionnaireChoiceRoundStatsByRoundId($roundId: UUID!) {
+    questionnaireChoiceRoundStatsByRoundId(roundId: $roundId) {
+      ...ChoiceContentRoundStats
+    }
+  }
+  ${ChoiceContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireChoiceRoundStatsByRoundIdGql extends Apollo.Query<
+  QuestionnaireChoiceRoundStatsByRoundIdQuery,
+  QuestionnaireChoiceRoundStatsByRoundIdQueryVariables
+> {
+  document = QuestionnaireChoiceRoundStatsByRoundIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireWordcloudRoundStatsByRoundIdDocument = gql`
+  query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
+    questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
+      ...WordcloudContentRoundStats
+    }
+  }
+  ${WordcloudContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireWordcloudRoundStatsByRoundIdGql extends Apollo.Query<
+  QuestionnaireWordcloudRoundStatsByRoundIdQuery,
+  QuestionnaireWordcloudRoundStatsByRoundIdQueryVariables
+> {
+  document = QuestionnaireWordcloudRoundStatsByRoundIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireChoiceAnswerDocument = gql`
+  mutation CreateQuestionnaireChoiceAnswer($input: CreateChoiceAnswerInput!) {
+    createQuestionnaireChoiceAnswer(input: $input) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireChoiceAnswerGql extends Apollo.Mutation<
+  CreateQuestionnaireChoiceAnswerMutation,
+  CreateQuestionnaireChoiceAnswerMutationVariables
+> {
+  document = CreateQuestionnaireChoiceAnswerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireWordcloudAnswerDocument = gql`
+  mutation CreateQuestionnaireWordcloudAnswer(
+    $input: CreateWordcloudAnswerInput!
+  ) {
+    createQuestionnaireWordcloudAnswer(input: $input) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireWordcloudAnswerGql extends Apollo.Mutation<
+  CreateQuestionnaireWordcloudAnswerMutation,
+  CreateQuestionnaireWordcloudAnswerMutationVariables
+> {
+  document = CreateQuestionnaireWordcloudAnswerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireAbstentionDocument = gql`
+  mutation CreateQuestionnaireAbstention($roundId: UUID!) {
+    createQuestionnaireAbstention(roundId: $roundId) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireAbstentionGql extends Apollo.Mutation<
+  CreateQuestionnaireAbstentionMutation,
+  CreateQuestionnaireAbstentionMutationVariables
+> {
+  document = CreateQuestionnaireAbstentionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteQuestionnaireContentDocument = gql`
+  mutation DeleteQuestionnaireContent($id: ID!) {
+    deleteQuestionnaireContent(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteQuestionnaireContentGql extends Apollo.Mutation<
+  DeleteQuestionnaireContentMutation,
+  DeleteQuestionnaireContentMutationVariables
+> {
+  document = DeleteQuestionnaireContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteQuestionnaireDocument = gql`
+  mutation DeleteQuestionnaire($id: ID!) {
+    deleteQuestionnaire(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteQuestionnaireGql extends Apollo.Mutation<
+  DeleteQuestionnaireMutation,
+  DeleteQuestionnaireMutationVariables
+> {
+  document = DeleteQuestionnaireDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteQuestionnaireAnswersByContentIdDocument = gql`
+  mutation DeleteQuestionnaireAnswersByContentId($contentId: UUID!) {
+    deleteQuestionnaireAnswersByContentId(contentId: $contentId)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteQuestionnaireAnswersByContentIdGql extends Apollo.Mutation<
+  DeleteQuestionnaireAnswersByContentIdMutation,
+  DeleteQuestionnaireAnswersByContentIdMutationVariables
+> {
+  document = DeleteQuestionnaireAnswersByContentIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const BanQuestionnaireWordcloudContentKeywordDocument = gql`
+  mutation BanQuestionnaireWordcloudContentKeyword(
+    $contentId: UUID!
+    $keyword: String!
+  ) {
+    banQuestionnaireWordcloudContentKeyword(
+      contentId: $contentId
+      keyword: $keyword
+    ) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class BanQuestionnaireWordcloudContentKeywordGql extends Apollo.Mutation<
+  BanQuestionnaireWordcloudContentKeywordMutation,
+  BanQuestionnaireWordcloudContentKeywordMutationVariables
+> {
+  document = BanQuestionnaireWordcloudContentKeywordDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ResetBannedQuestionnaireWordcloudContentKeywordsDocument = gql`
+  mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID!) {
+    resetBannedQuestionnaireWordcloudContentKeywords(contentId: $contentId) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ResetBannedQuestionnaireWordcloudContentKeywordsGql extends Apollo.Mutation<
+  ResetBannedQuestionnaireWordcloudContentKeywordsMutation,
+  ResetBannedQuestionnaireWordcloudContentKeywordsMutationVariables
+> {
+  document = ResetBannedQuestionnaireWordcloudContentKeywordsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ResetQuestionnaireResultsDocument = gql`
+  mutation ResetQuestionnaireResults($id: UUID!) {
+    resetQuestionnaireResults(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ResetQuestionnaireResultsGql extends Apollo.Mutation<
+  ResetQuestionnaireResultsMutation,
+  ResetQuestionnaireResultsMutationVariables
+> {
+  document = ResetQuestionnaireResultsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireDocument = gql`
+  mutation UpdateQuestionnaire(
+    $id: UUID!
+    $name: String
+    $published: Boolean
+    $publishingMode: QuestionnairePublishingMode
+    $statisticsPublished: Boolean
+    $correctOptionsPublished: Boolean
+    $leaderboardEnabled: Boolean
+  ) {
+    updateQuestionnaire(
+      input: {
+        id: $id
+        name: $name
+        published: $published
+        publishingMode: $publishingMode
+        statisticsPublished: $statisticsPublished
+        correctOptionsPublished: $correctOptionsPublished
+        leaderboardEnabled: $leaderboardEnabled
+      }
+    ) {
+      ...QuestionnaireDetails
+    }
+  }
+  ${QuestionnaireDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireGql extends Apollo.Mutation<
+  UpdateQuestionnaireMutation,
+  UpdateQuestionnaireMutationVariables
+> {
+  document = UpdateQuestionnaireDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DuplicateQuestionnaireContentDocument = gql`
+  mutation DuplicateQuestionnaireContent($id: ID!) {
+    duplicateQuestionnaireContent(id: $id) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DuplicateQuestionnaireContentGql extends Apollo.Mutation<
+  DuplicateQuestionnaireContentMutation,
+  DuplicateQuestionnaireContentMutationVariables
+> {
+  document = DuplicateQuestionnaireContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CopyQuestionnaireContentToQuestionnaireDocument = gql`
+  mutation CopyQuestionnaireContentToQuestionnaire(
+    $contentId: UUID!
+    $questionnaireId: UUID!
+  ) {
+    copyQuestionnaireContentToQuestionnaire(
+      contentId: $contentId
+      questionnaireId: $questionnaireId
+    ) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CopyQuestionnaireContentToQuestionnaireGql extends Apollo.Mutation<
+  CopyQuestionnaireContentToQuestionnaireMutation,
+  CopyQuestionnaireContentToQuestionnaireMutationVariables
+> {
+  document = CopyQuestionnaireContentToQuestionnaireDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const MoveQuestionnaireContentToQuestionnaireDocument = gql`
+  mutation MoveQuestionnaireContentToQuestionnaire(
+    $contentId: UUID!
+    $questionnaireId: UUID!
+  ) {
+    moveQuestionnaireContentToQuestionnaire(
+      contentId: $contentId
+      questionnaireId: $questionnaireId
+    ) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MoveQuestionnaireContentToQuestionnaireGql extends Apollo.Mutation<
+  MoveQuestionnaireContentToQuestionnaireMutation,
+  MoveQuestionnaireContentToQuestionnaireMutationVariables
+> {
+  document = MoveQuestionnaireContentToQuestionnaireDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireContentOrderDocument = gql`
+  mutation UpdateQuestionnaireContentOrder(
+    $questionnaireId: UUID!
+    $contentIds: [UUID!]!
+  ) {
+    updateQuestionnaireContentOrder(
+      questionnaireId: $questionnaireId
+      contentIds: $contentIds
+    ) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireContentOrderGql extends Apollo.Mutation<
+  UpdateQuestionnaireContentOrderMutation,
+  UpdateQuestionnaireContentOrderMutationVariables
+> {
+  document = UpdateQuestionnaireContentOrderDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

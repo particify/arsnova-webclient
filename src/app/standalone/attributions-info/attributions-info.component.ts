@@ -33,14 +33,14 @@ export class AttributionsInfoComponent {
       ),
   });
 
-  attributions = rxResource({
-    params: () => ({ contentGroup: this.contentGroup() }),
-    stream: ({ params }) =>
-      this.contentGroupService.getAttributions(
-        params.contentGroup.roomId,
-        params.contentGroup.id
-      ),
-  });
+  // attributions = rxResource({
+  //   params: () => ({ contentGroup: this.contentGroup() }),
+  //   stream: ({ params }) =>
+  //     this.contentGroupService.getAttributions(
+  //       params.contentGroup.roomId,
+  //       params.contentGroup.id
+  //     ),
+  // });
 
   LICENSES = LICENSES;
 

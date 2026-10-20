@@ -1,186 +1,225 @@
-import { ComponentFixture, waitForAsync } from '@angular/core/testing';
-
-import { RoomOverviewPageComponent } from './room-overview-page.component';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { MockRouter } from '@testing/test-helpers';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
-import { of } from 'rxjs';
-import { ContentGroup, GroupType } from '@app/core/models/content-group';
-import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
-import { RoomStats } from '@app/core/models/room-stats';
-import { ContentService } from '@app/core/services/http/content.service';
-import { ContentType } from '@app/core/models/content-type.enum';
-import { configureTestModule } from '@testing/test.setup';
-import { RoomService } from '@app/core/services/http/room.service';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
-import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '@app/core/services/util/global-storage.service';
+import {
+  ContentType,
+  QuestionnairesByRoomIdGql,
+  QuestionnairesChangedGql,
+  QuestionnaireType,
+  RoomByShortIdGql,
+} from '@gql/generated/graphql';
+import { configureTestModule } from '@testing/test.setup';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { MockRouter } from '@testing/test-helpers';
+import { Subject, of } from 'rxjs';
+import { RoomOverviewPageComponent } from './room-overview-page.component';
 
-describe('RoomOverviewPageComponent', () => {
-  let component: RoomOverviewPageComponent;
+describe('RoomOverviewPageComponent (creator)', () => {
   let fixture: ComponentFixture<RoomOverviewPageComponent>;
+  let component: RoomOverviewPageComponent;
+  let router: MockRouter;
+  let questionnairesByRoomId: jasmine.SpyObj<QuestionnairesByRoomIdGql>;
+  let questionnairesChanged$: Subject<unknown>;
+  let refetch: jasmine.Spy;
+  let dialogService: jasmine.SpyObj<DialogService>;
+  let globalStorageService: jasmine.SpyObj<GlobalStorageService>;
 
-  const mockRoomStatsService = jasmine.createSpyObj('RoomStatsService', [
-    'getStats',
-  ]);
-  mockRoomStatsService.getStats.and.returnValue(of({}));
+  function setUp(userRole = UserRole.OWNER, expandDescription = false) {
+    // Covers the questionnaire handling; the feature cards have their own specs.
+    TestBed.overrideComponent(RoomOverviewPageComponent, {
+      set: { template: '', imports: [] },
+    });
+    refetch = jasmine.createSpy('refetch').and.resolveTo({});
+    questionnairesByRoomId = jasmine.createSpyObj('QuestionnairesByRoomIdGql', [
+      'watch',
+    ]);
+    questionnairesByRoomId.watch.and.returnValue({
+      valueChanges: of({
+        loading: false,
+        data: {
+          questionnairesByRoomId: [
+            { id: 'q-1', name: 'Quiz', type: QuestionnaireType.Quiz },
+            null,
+          ],
+        },
+      }),
+      refetch,
+    } as never);
+    questionnairesChanged$ = new Subject();
+    const questionnairesChanged = jasmine.createSpyObj(
+      'QuestionnairesChangedGql',
+      ['subscribe']
+    );
+    questionnairesChanged.subscribe.and.returnValue(questionnairesChanged$);
+    const roomByShortId = jasmine.createSpyObj('RoomByShortIdGql', ['fetch']);
+    roomByShortId.fetch.and.returnValue(
+      of({ data: { roomByShortId: { id: 'room-1', name: 'Room' } } })
+    );
+    const contentService = jasmine.createSpyObj('ContentService', [
+      'getTypeIcons',
+    ]);
+    contentService.getTypeIcons.and.returnValue(
+      new Map([
+        [ContentType.Choice, 'list'],
+        [ContentType.Slide, 'info'],
+        [ContentType.Wordcloud, 'cloud'],
+      ])
+    );
+    dialogService = jasmine.createSpyObj('DialogService', [
+      'openQuestionnaireCreationDialog',
+    ]);
+    globalStorageService = jasmine.createSpyObj('GlobalStorageService', [
+      'getItem',
+      'setItem',
+      'removeItem',
+    ]);
+    globalStorageService.getItem.and.callFake((key: symbol) =>
+      key === STORAGE_KEYS.EXPAND_ROOM_DESCRIPTION
+        ? expandDescription
+        : undefined
+    );
 
-  const mockContentGroupService = jasmine.createSpyObj('ContentGroupService', [
-    'getByRoomIdAndName',
-    'getById',
-    'getByIds',
-    'isIndexPublished',
-    'sortContentGroupsByName',
-    'getTypeIcons',
-  ]);
-  mockContentGroupService.getByRoomIdAndName.and.returnValue(
-    of(new ContentGroup('roomId', 'name', [], true))
-  );
-  mockContentGroupService.getById.and.returnValue(
-    of(new ContentGroup('roomId', 'name', [], true))
-  );
-  mockContentGroupService.getByIds.and.returnValue(
-    of([new ContentGroup('roomId', 'name', [], true)])
-  );
-  mockContentGroupService.isIndexPublished.and.returnValue(true);
-  mockContentGroupService.sortContentGroupsByName.and.returnValue([
-    new ContentGroup('roomId', 'name', [], true),
-  ]);
-  mockContentGroupService.getTypeIcons.and.returnValue(
-    new Map<GroupType, string>()
-  );
+    configureTestModule(
+      [getTranslocoModule(), RoomOverviewPageComponent],
+      [
+        { provide: Router, useClass: MockRouter },
+        {
+          provide: QuestionnairesByRoomIdGql,
+          useValue: questionnairesByRoomId,
+        },
+        { provide: QuestionnairesChangedGql, useValue: questionnairesChanged },
+        { provide: RoomByShortIdGql, useValue: roomByShortId },
+        { provide: ContentService, useValue: contentService },
+        { provide: DialogService, useValue: dialogService },
+        { provide: GlobalStorageService, useValue: globalStorageService },
+        ContentGroupService,
+        { provide: RoomStatsService, useValue: {} },
+      ]
+    ).compileComponents();
 
-  const mockContentService = jasmine.createSpyObj(ContentService, [
-    'getTypeIcons',
-  ]);
-  mockContentService.getTypeIcons.and.returnValue(
-    new Map<ContentType, string>()
-  );
-
-  const mockRoomService = jasmine.createSpyObj(['changeFeedbackLock']);
-
-  const mockFeedbackService = jasmine.createSpyObj([
-    'get',
-    'startSub',
-    'getMessages',
-  ]);
-  mockFeedbackService.get.and.returnValue(of([0, 0, 0, 0]));
-  mockFeedbackService.getMessages.and.returnValue(of());
-
-  class MockRoomSettingsService {
-    getByRoomId() {
-      return of({
-        surveyEnabled: true,
-        surveyType: LiveFeedbackType.FEEDBACK,
-        commentThresholdEnabled: false,
-      });
-    }
+    router = TestBed.inject(Router) as unknown as MockRouter;
+    fixture = TestBed.createComponent(RoomOverviewPageComponent);
+    component = fixture.componentInstance;
+    fixture.componentRef.setInput('room', new Room());
+    fixture.componentRef.setInput('roomId', 'room-1');
+    fixture.componentRef.setInput('shortId', '12345678');
+    fixture.componentRef.setInput('viewRole', userRole);
+    fixture.componentRef.setInput('userRole', userRole);
+    fixture.detectChanges();
   }
 
-  beforeEach(waitForAsync(() => {
-    const testBed = configureTestModule(
-      [
-        getTranslocoModule(),
-        RoomOverviewPageComponent,
-        A11yIntroPipe,
-        SplitShortIdPipe,
-      ],
-      [
-        {
-          provide: RoomStatsService,
-          useValue: mockRoomStatsService,
-        },
-        {
-          provide: ContentGroupService,
-          useValue: mockContentGroupService,
-        },
-        {
-          provide: Router,
-          useClass: MockRouter,
-        },
-        {
-          provide: ContentService,
-          useValue: mockContentService,
-        },
-        {
-          provide: RoomService,
-          useValue: mockRoomService,
-        },
-        {
-          provide: FeedbackService,
-          useValue: mockFeedbackService,
-        },
-        {
-          provide: RoomSettingsService,
-          useClass: MockRoomSettingsService,
-        },
-        ContentPublishService,
-      ]
+  it('lists the questionnaires of the room', () => {
+    setUp();
+
+    expect(questionnairesByRoomId.watch).toHaveBeenCalledWith({
+      variables: { roomId: 'room-1' },
+    });
+    expect(component.questionnaires().map((q) => q.id)).toEqual(['q-1']);
+    expect(component.loadingQuestionnaires()).toBeFalse();
+  });
+
+  it('reloads the questionnaires once they have changed', () => {
+    setUp();
+
+    questionnairesChanged$.next({});
+
+    expect(refetch).toHaveBeenCalled();
+  });
+
+  it('shows the formats each questionnaire type supports, without slides', () => {
+    setUp();
+
+    const formats = (type: QuestionnaireType) => [
+      ...(component.questionnaireContentFormatIcons.get(type)?.keys() ?? []),
+    ];
+    expect(formats(QuestionnaireType.Quiz)).toEqual([ContentType.Choice]);
+    expect(formats(QuestionnaireType.Mixed)).toEqual([
+      ContentType.Choice,
+      ContentType.Wordcloud,
+    ]);
+  });
+
+  it('shows the formats in the order they are offered, not by icon', () => {
+    setUp();
+    const contentService = TestBed.inject(
+      ContentService
+    ) as jasmine.SpyObj<ContentService>;
+    // An icon map in alphabetical order must not dictate the order shown
+    contentService.getTypeIcons.and.returnValue(
+      new Map([
+        [ContentType.Binary, 'rule'],
+        [ContentType.Choice, 'list'],
+        [ContentType.Scale, 'mood'],
+        [ContentType.Wordcloud, 'cloud'],
+      ])
     );
-    testBed.compileComponents();
-    fixture = testBed.createComponent(RoomOverviewPageComponent);
-    fixture.componentRef.setInput('room', new Room());
-    fixture.componentRef.setInput('roomId', '1234');
-    fixture.componentRef.setInput('shortId', '12345678');
-    fixture.componentRef.setInput('userRole', UserRole.EDITOR);
+    fixture = TestBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
-  }));
 
-  it('should create', () => {
-    fixture.detectChanges();
-    expect(component).toBeTruthy();
+    expect([
+      ...(component.questionnaireContentFormatIcons
+        .get(QuestionnaireType.Mixed)
+        ?.keys() ?? []),
+    ]).toEqual([
+      ContentType.Choice,
+      ContentType.Scale,
+      ContentType.Binary,
+      ContentType.Wordcloud,
+    ]);
   });
 
-  it('should initialize stats', () => {
-    const initializeStatsSpy = spyOn(component, 'initializeStats');
-    fixture.detectChanges();
-    expect(initializeStatsSpy).toHaveBeenCalled();
+  it('opens a questionnaire after creating it', () => {
+    setUp();
+    dialogService.openQuestionnaireCreationDialog.and.returnValue({
+      afterClosed: () => of({ id: 'q-new' }),
+    } as never);
+
+    component.openCreateQuestionnaireDialog(QuestionnaireType.Survey);
+
+    expect(dialogService.openQuestionnaireCreationDialog).toHaveBeenCalledWith(
+      'room-1',
+      QuestionnaireType.Survey
+    );
+    expect(router.navigate).toHaveBeenCalledWith([
+      'edit',
+      '12345678',
+      'questionnaire',
+      'q-new',
+    ]);
   });
 
-  it('should load content groups if there are group stats in room stats', () => {
-    const groupStats = [
-      {
-        id: 'groupId',
-        groupName: 'groupName',
-        contentCount: 5,
-        groupType: GroupType.MIXED,
-        published: false,
-      },
-    ];
-    const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
-    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
-    fixture.detectChanges();
-    expect(mockContentGroupService.getByIds).toHaveBeenCalled();
+  it('stays on the overview if creating a questionnaire is cancelled', () => {
+    setUp();
+    dialogService.openQuestionnaireCreationDialog.and.returnValue({
+      afterClosed: () => of(undefined),
+    } as never);
+
+    component.openCreateQuestionnaireDialog();
+
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  it('should call afterGroupsLoadHook if content groups exist', () => {
-    const afterGroupsLoadHookSpy = spyOn(component, 'afterGroupsLoadHook');
-    const groupStats = [
-      {
-        id: 'groupId',
-        groupName: 'groupName',
-        contentCount: 5,
-        groupType: GroupType.MIXED,
-        published: false,
-      },
-    ];
-    const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
-    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
-    fixture.detectChanges();
-    expect(afterGroupsLoadHookSpy).toHaveBeenCalled();
+  it('recognizes a moderator', () => {
+    setUp(UserRole.MODERATOR);
+
+    expect(component.isModerator()).toBeTrue();
   });
 
-  it('should call afterGroupsLoadHook also if no content groups exist', () => {
-    const afterGroupsLoadHookSpy = spyOn(component, 'afterGroupsLoadHook');
-    const roomStats = new RoomStats([], 0, 0, 0, 0);
-    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
-    fixture.detectChanges();
-    expect(afterGroupsLoadHookSpy).toHaveBeenCalled();
+  it('expands the description only once when requested', () => {
+    setUp(UserRole.OWNER, true);
+
+    expect(component.expandDescription).toBeTrue();
+    expect(globalStorageService.removeItem).toHaveBeenCalledWith(
+      STORAGE_KEYS.EXPAND_ROOM_DESCRIPTION
+    );
   });
 });

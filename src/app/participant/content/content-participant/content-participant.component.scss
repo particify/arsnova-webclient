@@ -28,6 +28,10 @@ p {
   z-index: 1;
 }
 
+.answering-not-started {
+  padding: 24px 0;
+}
+
 .attribution-button {
   > mat-icon {
     opacity: 0.5;

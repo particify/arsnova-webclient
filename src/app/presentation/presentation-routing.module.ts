@@ -7,13 +7,13 @@ import {
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { PresentationComponent } from './presentation/presentation.component';
 import { QrCodeComponent } from '@app/standalone/qr-code/qr-code.component';
-import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 import { legacyRoomResolver } from '@app/core/resolver/legacy-room.resolver';
 import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
 import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { userSettingsResolver } from '@app/core/resolver/user-settings.resolver';
 import { languageResolver } from '@app/core/resolver/language.resolver';
+import { questionnaireResolver } from '@app/core/resolver/questionnaire.resolver';
 
 const routes: Routes = [
   {
@@ -47,32 +47,36 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'series/:seriesName',
+    path: 'questionnaire/:questionnaireId',
     loadComponent: () =>
       import('@app/standalone/content-presentation/contents-page.component').then(
         (m) => m.ContentsPageComponent
       ),
     data: { extendedView: true },
     resolve: {
-      contentGroup: ContentGroupResolver,
+      questionnaire: questionnaireResolver,
+      settings: userSettingsResolver,
+    },
+  },
+  {
+    path: 'questionnaire/:questionnaireId/:contentId',
+    loadComponent: () =>
+      import('@app/standalone/content-presentation/contents-page.component').then(
+        (m) => m.ContentsPageComponent
+      ),
+    data: { extendedView: true },
+    resolve: {
+      questionnaire: questionnaireResolver,
       settings: userSettingsResolver,
     },
   },
   {
     path: 'series/:seriesName/:contentIndex',
-    loadComponent: () =>
-      import('@app/standalone/content-presentation/contents-page.component').then(
-        (m) => m.ContentsPageComponent
-      ),
-    data: { extendedView: true },
-    resolve: {
-      contentGroup: ContentGroupResolver,
-      settings: userSettingsResolver,
-    },
+    redirectTo: '',
   },
   {
-    path: 'series/:seriesName/edit/:contentId',
-    redirectTo: 'series/:seriesName',
+    path: 'series/:seriesName',
+    redirectTo: '',
   },
 ];
 
