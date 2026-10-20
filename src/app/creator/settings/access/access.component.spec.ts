@@ -23,6 +23,7 @@ import {
   GrantRoomRoleByInvitationMutation,
   GrantRoomRoleDocument,
   GrantRoomRoleMutation,
+  RoomRole,
   UserByDisplayIdDocument,
   UserByDisplayIdQuery,
 } from '@gql/generated/graphql';
@@ -120,8 +121,10 @@ xdescribe('AccessComponent', () => {
     const op1 = controller.expectOne(UserByDisplayIdDocument);
     op1.flushData({
       userByDisplayId: {
+        __typename: 'User',
         id: '2222',
         displayId: 'b@b.cd',
+        displayName: null,
         verified: true,
       },
     } satisfies UserByDisplayIdQuery);
@@ -129,7 +132,12 @@ xdescribe('AccessComponent', () => {
     await addButton.click();
     const op2 = controller.expectOne(GrantRoomRoleDocument);
     op2.flushData({
-      grantRoomRole: { room: { id: '1234' }, user: { id: '2222' } },
+      grantRoomRole: {
+        __typename: 'RoomMember',
+        role: RoomRole.Moderator,
+        room: { __typename: 'Room', id: '1234' },
+        user: { __typename: 'User', id: '2222' },
+      },
     } satisfies GrantRoomRoleMutation);
   });
 
@@ -152,7 +160,12 @@ xdescribe('AccessComponent', () => {
     await inviteButton.click();
     const op2 = controller.expectOne(GrantRoomRoleByInvitationDocument);
     op2.flushData({
-      grantRoomRoleByInvitation: { room: { id: '1234' }, user: { id: '2222' } },
+      grantRoomRoleByInvitation: {
+        __typename: 'RoomMember',
+        role: RoomRole.Moderator,
+        room: { __typename: 'Room', id: '1234' },
+        user: { __typename: 'User', id: '2222' },
+      },
     } satisfies GrantRoomRoleByInvitationMutation);
   });
 
@@ -169,13 +182,24 @@ xdescribe('AccessComponent', () => {
     component.getUser();
     const op1 = controller.expectOne(UserByDisplayIdDocument);
     op1.flushData({
-      userByDisplayId: { id: '2222', displayId: 'b@b.cd', verified: true },
+      userByDisplayId: {
+        __typename: 'User',
+        id: '2222',
+        displayId: 'b@b.cd',
+        displayName: null,
+        verified: true,
+      },
     } satisfies UserByDisplayIdQuery);
     fixture.detectChanges();
     await inviteButton.click();
     const op2 = controller.expectOne(GrantRoomRoleByInvitationDocument);
     op2.flushData({
-      grantRoomRoleByInvitation: { room: { id: '1234' }, user: { id: '2222' } },
+      grantRoomRoleByInvitation: {
+        __typename: 'RoomMember',
+        role: RoomRole.Moderator,
+        room: { __typename: 'Room', id: '1234' },
+        user: { __typename: 'User', id: '2222' },
+      },
     } satisfies GrantRoomRoleByInvitationMutation);
     component.newMemberId = '';
     fixture.detectChanges();
@@ -190,7 +214,12 @@ xdescribe('AccessComponent', () => {
     await inviteButton.click();
     const op4 = controller.expectOne(GrantRoomRoleByInvitationDocument);
     op4.flushData({
-      grantRoomRoleByInvitation: { room: { id: '1234' }, user: { id: '2222' } },
+      grantRoomRoleByInvitation: {
+        __typename: 'RoomMember',
+        role: RoomRole.Moderator,
+        room: { __typename: 'Room', id: '1234' },
+        user: { __typename: 'User', id: '2222' },
+      },
     } satisfies GrantRoomRoleByInvitationMutation);
   });
 
@@ -207,13 +236,24 @@ xdescribe('AccessComponent', () => {
     component.getUser();
     const op1 = controller.expectOne(UserByDisplayIdDocument);
     op1.flushData({
-      userByDisplayId: { id: '2222', displayId: 'b@a.cd', verified: true },
+      userByDisplayId: {
+        __typename: 'User',
+        id: '2222',
+        displayId: 'b@a.cd',
+        displayName: null,
+        verified: true,
+      },
     } satisfies UserByDisplayIdQuery);
     fixture.detectChanges();
     await addButton.click();
     const op2 = controller.expectOne(GrantRoomRoleDocument);
     op2.flushData({
-      grantRoomRole: { room: { id: '1234' }, user: { id: '2222' } },
+      grantRoomRole: {
+        __typename: 'RoomMember',
+        role: RoomRole.Moderator,
+        room: { __typename: 'Room', id: '1234' },
+        user: { __typename: 'User', id: '2222' },
+      },
     } satisfies GrantRoomRoleMutation);
     component.newMemberId = '';
     fixture.detectChanges();
@@ -244,13 +284,24 @@ xdescribe('AccessComponent', () => {
     component.getUser();
     const op1 = controller.expectOne(UserByDisplayIdDocument);
     op1.flushData({
-      userByDisplayId: { id: '2222', displayId: 'b@a.cd', verified: true },
+      userByDisplayId: {
+        __typename: 'User',
+        id: '2222',
+        displayId: 'b@a.cd',
+        displayName: null,
+        verified: true,
+      },
     } satisfies UserByDisplayIdQuery);
     fixture.detectChanges();
     await addButton.click();
     const op2 = controller.expectOne(GrantRoomRoleDocument);
     op2.flushData({
-      grantRoomRole: { room: { id: '1234' }, user: { id: '2222' } },
+      grantRoomRole: {
+        __typename: 'RoomMember',
+        role: RoomRole.Moderator,
+        room: { __typename: 'Room', id: '1234' },
+        user: { __typename: 'User', id: '2222' },
+      },
     } satisfies GrantRoomRoleMutation);
   });
 

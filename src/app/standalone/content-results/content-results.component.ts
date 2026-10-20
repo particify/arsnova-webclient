@@ -43,6 +43,21 @@ import { ContentResultsService } from './content-results.service';
 import { RESULT_REGISTRY } from './result-registry';
 import { VisualizationType } from './visualization/visualization-type';
 
+/** The fields read here, which participants' and creators' selections both provide. */
+export type ContentResultsContent = Pick<
+  Content,
+  | 'abstentionCount'
+  | 'activeRound'
+  | 'answerCount'
+  | 'body'
+  | 'bodyRendered'
+  | 'correctAnswerCount'
+  | 'formatData'
+  | 'hasCorrectAnswer'
+  | 'id'
+  | 'position'
+>;
+
 @Component({
   selector: 'app-content-results',
   templateUrl: './content-results.component.html',
@@ -67,7 +82,7 @@ export class ContentResultsComponent {
     QuestionnaireRoundsByContentIdGql
   );
 
-  content = input.required<Content>();
+  content = input.required<ContentResultsContent>();
   active = input(false, { transform: booleanAttribute });
   directShow = input(false, { transform: booleanAttribute });
   showCorrect = input(false, { transform: booleanAttribute });

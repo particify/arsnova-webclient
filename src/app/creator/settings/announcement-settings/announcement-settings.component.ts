@@ -31,9 +31,9 @@ import { AnnouncementComponent } from '@app/standalone/announcement/announcement
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import {
   AnnoucentmentsByRoomIdGql,
+  AnnoucentmentsByRoomIdQueryVariables,
   CreateAnnouncementGql,
   DeleteAnnouncementGql,
-  Exact,
   UpdateAnnouncementGql,
 } from '@gql/generated/graphql';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -74,7 +74,10 @@ export class AnnouncementSettingsComponent extends FormComponent {
   private updateAnnouncement = inject(UpdateAnnouncementGql);
   roomId = input.required<string>();
 
-  private announcementsQueryRef?: QueryRef<any, Exact<{ roomId: string }>>;
+  private announcementsQueryRef?: QueryRef<
+    any,
+    AnnoucentmentsByRoomIdQueryVariables
+  >;
   private announcementResult = toSignal(
     toObservable(this.roomId).pipe(
       switchMap((roomId) => {

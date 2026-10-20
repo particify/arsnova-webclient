@@ -37,9 +37,13 @@ describe('ContentShortAnswerParticipantComponent', () => {
       of({
         data: {
           createQuestionnaireShortAnswerAnswer: {
+            __typename: 'Answer',
             id: 'answer-1',
             result: AnswerResultState.Correct,
             hidden: false,
+            createdAt: null,
+            durationMs: null,
+            formatData: null,
           },
         },
       })

@@ -1,17 +1,27 @@
 overwrite: true
 schema: http://user%40example.com:user@apisix:9080/api/graphql
 documents: src/graphql/*.graphql
+config:
+  scalars:
+    DateTime: string
+    ID: string
+    UUID: string
 generates:
-  ./src/graphql/generated/graphql.ts:
-    config:
-      querySuffix: Gql
-      mutationSuffix: Gql
-      subscriptionSuffix: Gql
-      scalars:
-        DateTime: string
-        UUID: string
+  ./src/graphql/generated/schema-types.ts:
     plugins:
       - typescript
+  ./src/graphql/generated/graphql.ts:
+    config:
+      importSchemaTypesFrom: ./src/graphql/generated/schema-types.ts
+      inputMaybeValue: 'T | null'
+      mutationSuffix: Gql
+      nonOptionalTypename: true
+      querySuffix: Gql
+      skipTypeNameForRoot: true
+      subscriptionSuffix: Gql
+    plugins:
+      - add:
+          content: "export * from './schema-types';"
       - typescript-operations
       - typescript-apollo-angular
 hooks:

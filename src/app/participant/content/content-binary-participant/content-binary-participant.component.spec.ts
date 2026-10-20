@@ -50,9 +50,13 @@ describe('ContentBinaryParticipantComponent', () => {
       of({
         data: {
           createQuestionnaireBinaryAnswer: {
+            __typename: 'Answer',
             id: 'answer-1',
             result: AnswerResultState.Correct,
             hidden: false,
+            createdAt: null,
+            durationMs: null,
+            formatData: null,
           },
         },
       })

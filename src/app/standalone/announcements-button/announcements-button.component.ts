@@ -68,7 +68,11 @@ export class AnnouncementsButtonComponent {
       },
     });
     dialogRef.afterClosed().subscribe((newReadTimestamp) => {
-      this.localAnnouncementMeta.set({ readAt: newReadTimestamp, count: 0 });
+      this.localAnnouncementMeta.set({
+        __typename: 'AnnouncementsMeta',
+        readAt: newReadTimestamp,
+        count: 0,
+      });
     });
   }
 }

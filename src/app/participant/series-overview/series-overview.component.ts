@@ -44,7 +44,7 @@ import { ContentWaitingComponent } from '@app/standalone/content-waiting/content
 import {
   ContentAnswerResult,
   AnswerResultState,
-  Content,
+  ContentDetailsFragment,
   Questionnaire,
   QuestionnaireType,
   ContentType,
@@ -112,7 +112,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   );
 
   questionnaire = input.required<Questionnaire>();
-  contents = input.required<Content[]>();
+  contents = input.required<ContentDetailsFragment[]>();
   answerResults = input.required<ContentAnswerResult[]>();
   roomId = input.required<string>();
   finished = input(false);

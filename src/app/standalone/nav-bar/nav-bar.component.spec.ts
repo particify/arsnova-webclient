@@ -411,11 +411,18 @@ describe('NavBarComponent', () => {
   });
 
   /** A range-published questionnaire releasing up to `position`. */
-  function releasedUpTo(position: number, contentCount = 5) {
+  function releasedUpTo(
+    position: number,
+    contentCount = 5
+  ): QuestionnaireSummaryFragment {
     return {
       ...quiz,
       publishingMode: QuestionnairePublishingMode.UpTo,
-      publishedUpToContent: { id: `c-${position}`, position },
+      publishedUpToContent: {
+        __typename: 'Content',
+        id: `c-${position}`,
+        position,
+      },
       contentCount,
     };
   }

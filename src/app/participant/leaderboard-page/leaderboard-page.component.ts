@@ -37,7 +37,7 @@ export class LeaderboardPageComponent implements OnInit {
   );
   private leaderboardUpdated = inject(QuestionnaireLeaderboardUpdatedGql);
 
-  @Input({ required: true }) content!: Content;
+  @Input({ required: true }) content!: Pick<Content, 'duration' | 'id'>;
   @Input({ required: true }) aliasId!: string;
   @Input({ required: true }) groupId!: string;
   leaderboardPage: LeaderboardPage = { entries: [], totalCount: 0 };
