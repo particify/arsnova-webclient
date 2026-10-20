@@ -35,8 +35,9 @@
       {{ 'content.flashcard-back' | transloco }}
     </h3>
     <mat-card appearance="outlined">
-      @if (additionalText) {
-        <app-rendered-text [rawText]="additionalText" [dynamic]="true">
+      @let _answerText = answerText();
+      @if (_answerText) {
+        <app-rendered-text [rawText]="_answerText" [dynamic]="true">
         </app-rendered-text>
       }
     </mat-card>

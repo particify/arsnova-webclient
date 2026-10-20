@@ -10,9 +10,7 @@ export const FORMAT_REGISTRY: Record<ContentType, FormatDefinition> = {
   [ContentType.Binary]: {
     component: ContentChoiceParticipantComponent,
   },
-  [ContentType.Flashcard]: {
-    component: ContentChoiceParticipantComponent,
-  },
+  [ContentType.Flashcard]: {},
   [ContentType.Numeric]: {
     component: ContentChoiceParticipantComponent,
   },
@@ -25,9 +23,7 @@ export const FORMAT_REGISTRY: Record<ContentType, FormatDefinition> = {
   [ContentType.ShortAnswer]: {
     component: ContentChoiceParticipantComponent,
   },
-  [ContentType.Slide]: {
-    component: ContentChoiceParticipantComponent,
-  },
+  [ContentType.Slide]: {},
   [ContentType.Sort]: {
     component: ContentChoiceParticipantComponent,
   },
@@ -40,5 +36,5 @@ export const FORMAT_REGISTRY: Record<ContentType, FormatDefinition> = {
 };
 
 interface FormatDefinition {
-  component: Type<unknown>;
+  component?: Type<unknown>;
 }

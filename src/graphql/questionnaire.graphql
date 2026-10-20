@@ -67,6 +67,13 @@ fragment ContentDetails on Content {
       format
       maxAnswers
     }
+    ... on FlashcardContentFormatData {
+      format
+      answer
+    }
+    ... on SlideContentFormatData {
+      format
+    }
   }
   duration
   abstentionsAllowed
@@ -202,6 +209,34 @@ mutation UpdateQuestionnaireWordcloudContent(
   $input: UpdateWordcloudContentInput!
 ) {
   updateQuestionnaireWordcloudContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireFlashcardContent(
+  $input: CreateFlashcardContentInput!
+) {
+  createQuestionnaireFlashcardContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireFlashcardContent(
+  $input: UpdateFlashcardContentInput!
+) {
+  updateQuestionnaireFlashcardContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireSlideContent($input: CreateSlideContentInput!) {
+  createQuestionnaireSlideContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireSlideContent($input: UpdateSlideContentInput!) {
+  updateQuestionnaireSlideContent(input: $input) {
     ...CreatorContentDetails
   }
 }

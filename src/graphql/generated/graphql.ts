@@ -247,7 +247,9 @@ export type ContentEdge = {
 
 export type ContentFormatData =
   | ChoiceContentFormatData
+  | FlashcardContentFormatData
   | ScaleContentFormatData
+  | SlideContentFormatData
   | TextContentFormatData
   | WordcloudContentFormatData;
 
@@ -303,6 +305,12 @@ export type CreateChoiceContentInput = {
   weight?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type CreateFlashcardContentInput = {
+  answer: Scalars['String']['input'];
+  body: Scalars['String']['input'];
+  questionnaireId: Scalars['UUID']['input'];
+};
+
 export type CreatePostInput = {
   body: Scalars['String']['input'];
   qnaId: Scalars['UUID']['input'];
@@ -335,6 +343,11 @@ export type CreateRoomInput = {
   name: Scalars['String']['input'];
 };
 
+export type CreateSlideContentInput = {
+  body: Scalars['String']['input'];
+  questionnaireId: Scalars['UUID']['input'];
+};
+
 export type CreateTagInput = {
   name: Scalars['String']['input'];
   qnaId: Scalars['UUID']['input'];
@@ -356,6 +369,13 @@ export type CreateWordcloudContentInput = {
 export type DuplicateRoomInput = {
   id: Scalars['ID']['input'];
   newName: Scalars['String']['input'];
+};
+
+export type FlashcardContentFormatData = {
+  __typename?: 'FlashcardContentFormatData';
+  answer: Scalars['String']['output'];
+  answerRendered?: Maybe<Scalars['String']['output']>;
+  format: ContentType;
 };
 
 export type JoinRoomInput =
@@ -387,6 +407,8 @@ export type Mutation = {
   createQuestionnaireAbstention?: Maybe<Answer>;
   createQuestionnaireChoiceAnswer?: Maybe<Answer>;
   createQuestionnaireChoiceContent?: Maybe<Content>;
+  createQuestionnaireFlashcardContent?: Maybe<Content>;
+  createQuestionnaireSlideContent?: Maybe<Content>;
   createQuestionnaireWordcloudAnswer?: Maybe<Answer>;
   createQuestionnaireWordcloudContent?: Maybe<Content>;
   createRoom: Room;
@@ -435,6 +457,8 @@ export type Mutation = {
   updateQuestionnaire: Questionnaire;
   updateQuestionnaireChoiceContent?: Maybe<Content>;
   updateQuestionnaireContentOrder?: Maybe<Questionnaire>;
+  updateQuestionnaireFlashcardContent?: Maybe<Content>;
+  updateQuestionnaireSlideContent?: Maybe<Content>;
   updateQuestionnaireWordcloudContent?: Maybe<Content>;
   updateRoomDescription: Room;
   updateRoomFocusMode: Room;
@@ -520,6 +544,14 @@ export type MutationCreateQuestionnaireChoiceAnswerArgs = {
 
 export type MutationCreateQuestionnaireChoiceContentArgs = {
   input: CreateChoiceContentInput;
+};
+
+export type MutationCreateQuestionnaireFlashcardContentArgs = {
+  input: CreateFlashcardContentInput;
+};
+
+export type MutationCreateQuestionnaireSlideContentArgs = {
+  input: CreateSlideContentInput;
 };
 
 export type MutationCreateQuestionnaireWordcloudAnswerArgs = {
@@ -715,6 +747,14 @@ export type MutationUpdateQuestionnaireChoiceContentArgs = {
 export type MutationUpdateQuestionnaireContentOrderArgs = {
   contentIds: Array<Scalars['UUID']['input']>;
   questionnaireId: Scalars['UUID']['input'];
+};
+
+export type MutationUpdateQuestionnaireFlashcardContentArgs = {
+  input: UpdateFlashcardContentInput;
+};
+
+export type MutationUpdateQuestionnaireSlideContentArgs = {
+  input: UpdateSlideContentInput;
 };
 
 export type MutationUpdateQuestionnaireWordcloudContentArgs = {
@@ -1230,6 +1270,11 @@ export type ScaleContentFormatData = {
   format: ContentType;
 };
 
+export type SlideContentFormatData = {
+  __typename?: 'SlideContentFormatData';
+  format: ContentType;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   activeQnaPostUpdated?: Maybe<Qna>;
@@ -1342,6 +1387,12 @@ export type UpdateChoiceContentInput = {
   weight?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type UpdateFlashcardContentInput = {
+  answer: Scalars['String']['input'];
+  body: Scalars['String']['input'];
+  id: Scalars['UUID']['input'];
+};
+
 export type UpdateQuestionnaireInput = {
   correctOptionsPublished?: InputMaybe<Scalars['Boolean']['input']>;
   id: Scalars['UUID']['input'];
@@ -1350,6 +1401,11 @@ export type UpdateQuestionnaireInput = {
   published?: InputMaybe<Scalars['Boolean']['input']>;
   publishingMode?: InputMaybe<QuestionnairePublishingMode>;
   statisticsPublished?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type UpdateSlideContentInput = {
+  body: Scalars['String']['input'];
+  id: Scalars['UUID']['input'];
 };
 
 export type UpdateUserDetailsInput = {
@@ -2501,7 +2557,13 @@ export type ContentDetailsFragment = {
           labelRendered?: string | null;
         }>;
       }
+    | {
+        __typename?: 'FlashcardContentFormatData';
+        format: ContentType;
+        answer: string;
+      }
     | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+    | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | { __typename?: 'TextContentFormatData'; format: ContentType }
     | {
         __typename?: 'WordcloudContentFormatData';
@@ -2546,7 +2608,13 @@ export type CreatorContentDetailsFragment = {
           labelRendered?: string | null;
         }>;
       }
+    | {
+        __typename?: 'FlashcardContentFormatData';
+        format: ContentType;
+        answer: string;
+      }
     | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+    | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | { __typename?: 'TextContentFormatData'; format: ContentType }
     | {
         __typename?: 'WordcloudContentFormatData';
@@ -2735,7 +2803,13 @@ export type QuestionnaireContentsByQuestionnaireIdQuery = {
                 labelRendered?: string | null;
               }>;
             }
+          | {
+              __typename?: 'FlashcardContentFormatData';
+              format: ContentType;
+              answer: string;
+            }
           | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+          | { __typename?: 'SlideContentFormatData'; format: ContentType }
           | { __typename?: 'TextContentFormatData'; format: ContentType }
           | {
               __typename?: 'WordcloudContentFormatData';
@@ -2792,7 +2866,13 @@ export type QuestionnairePublishedContentsByQuestionnaireIdQuery = {
                 labelRendered?: string | null;
               }>;
             }
+          | {
+              __typename?: 'FlashcardContentFormatData';
+              format: ContentType;
+              answer: string;
+            }
           | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+          | { __typename?: 'SlideContentFormatData'; format: ContentType }
           | { __typename?: 'TextContentFormatData'; format: ContentType }
           | {
               __typename?: 'WordcloudContentFormatData';
@@ -2917,7 +2997,13 @@ export type CreateQuestionnaireChoiceContentMutation = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -2969,7 +3055,13 @@ export type UpdateQuestionnaireChoiceContentMutation = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3021,7 +3113,13 @@ export type CreateQuestionnaireWordcloudContentMutation = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3073,7 +3171,245 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type CreateQuestionnaireFlashcardContentMutationVariables = Exact<{
+  input: CreateFlashcardContentInput;
+}>;
+
+export type CreateQuestionnaireFlashcardContentMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireFlashcardContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type UpdateQuestionnaireFlashcardContentMutationVariables = Exact<{
+  input: UpdateFlashcardContentInput;
+}>;
+
+export type UpdateQuestionnaireFlashcardContentMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaireFlashcardContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type CreateQuestionnaireSlideContentMutationVariables = Exact<{
+  input: CreateSlideContentInput;
+}>;
+
+export type CreateQuestionnaireSlideContentMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireSlideContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type UpdateQuestionnaireSlideContentMutationVariables = Exact<{
+  input: UpdateSlideContentInput;
+}>;
+
+export type UpdateQuestionnaireSlideContentMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaireSlideContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3125,7 +3461,13 @@ export type QuestionnaireContentByIdQuery = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3368,7 +3710,13 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3421,7 +3769,13 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3523,7 +3877,13 @@ export type DuplicateQuestionnaireContentMutation = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3576,7 +3936,13 @@ export type CopyQuestionnaireContentToQuestionnaireMutation = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3629,7 +3995,13 @@ export type MoveQuestionnaireContentToQuestionnaireMutation = {
             labelRendered?: string | null;
           }>;
         }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
       | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | { __typename?: 'TextContentFormatData'; format: ContentType }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3698,6 +4070,7 @@ export type QuestionnaireContentUpdatedSubscription = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   } | null;
@@ -4677,6 +5050,13 @@ export const ContentDetailsFragmentDoc = gql`
       ... on WordcloudContentFormatData {
         format
         maxAnswers
+      }
+      ... on FlashcardContentFormatData {
+        format
+        answer
+      }
+      ... on SlideContentFormatData {
+        format
       }
     }
     duration
@@ -6370,6 +6750,98 @@ export class UpdateQuestionnaireWordcloudContentGql extends Apollo.Mutation<
   UpdateQuestionnaireWordcloudContentMutationVariables
 > {
   document = UpdateQuestionnaireWordcloudContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireFlashcardContentDocument = gql`
+  mutation CreateQuestionnaireFlashcardContent(
+    $input: CreateFlashcardContentInput!
+  ) {
+    createQuestionnaireFlashcardContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireFlashcardContentGql extends Apollo.Mutation<
+  CreateQuestionnaireFlashcardContentMutation,
+  CreateQuestionnaireFlashcardContentMutationVariables
+> {
+  document = CreateQuestionnaireFlashcardContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireFlashcardContentDocument = gql`
+  mutation UpdateQuestionnaireFlashcardContent(
+    $input: UpdateFlashcardContentInput!
+  ) {
+    updateQuestionnaireFlashcardContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireFlashcardContentGql extends Apollo.Mutation<
+  UpdateQuestionnaireFlashcardContentMutation,
+  UpdateQuestionnaireFlashcardContentMutationVariables
+> {
+  document = UpdateQuestionnaireFlashcardContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireSlideContentDocument = gql`
+  mutation CreateQuestionnaireSlideContent($input: CreateSlideContentInput!) {
+    createQuestionnaireSlideContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireSlideContentGql extends Apollo.Mutation<
+  CreateQuestionnaireSlideContentMutation,
+  CreateQuestionnaireSlideContentMutationVariables
+> {
+  document = CreateQuestionnaireSlideContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireSlideContentDocument = gql`
+  mutation UpdateQuestionnaireSlideContent($input: UpdateSlideContentInput!) {
+    updateQuestionnaireSlideContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireSlideContentGql extends Apollo.Mutation<
+  UpdateQuestionnaireSlideContentMutation,
+  UpdateQuestionnaireSlideContentMutationVariables
+> {
+  document = UpdateQuestionnaireSlideContentDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

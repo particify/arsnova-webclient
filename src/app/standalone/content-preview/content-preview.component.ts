@@ -30,17 +30,22 @@ export class ContentPreviewComponent {
   showTitle = input<boolean>(true);
   language = input<string>();
 
-  additionalText?: string;
+  readonly answerText = computed(() => {
+    const formatData = this.contentFormatData();
+    return formatData.__typename === 'FlashcardContentFormatData'
+      ? formatData.answer
+      : undefined;
+  });
 
-  FORM_REGISTRY: Record<ContentType, Type<unknown>> = {
+  FORM_REGISTRY: Record<ContentType, Type<unknown> | undefined> = {
     [ContentType.Choice]: ContentChoiceAnswerComponent,
     [ContentType.Binary]: ContentChoiceAnswerComponent,
-    [ContentType.Flashcard]: ContentChoiceAnswerComponent,
+    [ContentType.Flashcard]: undefined,
     [ContentType.Numeric]: ContentChoiceAnswerComponent,
     [ContentType.Prioritization]: ContentChoiceAnswerComponent,
     [ContentType.Scale]: ContentChoiceAnswerComponent,
     [ContentType.ShortAnswer]: ContentChoiceAnswerComponent,
-    [ContentType.Slide]: ContentChoiceAnswerComponent,
+    [ContentType.Slide]: undefined,
     [ContentType.Sort]: ContentChoiceAnswerComponent,
     [ContentType.Text]: ContentTextAnswerComponent,
     [ContentType.Wordcloud]: ContentWordcloudAnswerComponent,

@@ -2,6 +2,8 @@ import { ContentType } from '@gql/generated/graphql';
 import { FormDefinition } from './form-definition';
 import { ChoiceContentFormComponent } from './choice-content-form/choice-content-form.component';
 import { WordcloudContentFormComponent } from './wordcloud-content-form/wordcloud-content-form.component';
+import { FlashcardContentFormComponent } from './flashcard-content-form/flashcard-content-form.component';
+import { SlideContentFormComponent } from './slide-content-form/slide-content-form.component';
 
 export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
   [ContentType.Choice]: {
@@ -11,7 +13,7 @@ export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
     component: ChoiceContentFormComponent,
   },
   [ContentType.Flashcard]: {
-    component: ChoiceContentFormComponent,
+    component: FlashcardContentFormComponent,
   },
   [ContentType.Numeric]: {
     component: ChoiceContentFormComponent,
@@ -26,7 +28,7 @@ export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
     component: ChoiceContentFormComponent,
   },
   [ContentType.Slide]: {
-    component: ChoiceContentFormComponent,
+    component: SlideContentFormComponent,
   },
   [ContentType.Sort]: {
     component: ChoiceContentFormComponent,
