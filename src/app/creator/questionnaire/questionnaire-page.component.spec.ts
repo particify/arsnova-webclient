@@ -59,6 +59,7 @@ describe('QuestionnairePageComponent (creator)', () => {
   let router: { events: Subject<unknown>; navigate: jasmine.Spy };
   let route: { firstChild: unknown };
   let contents$: BehaviorSubject<unknown>;
+  let breakpoint$: BehaviorSubject<{ matches: boolean }>;
   let dialogService: jasmine.SpyObj<DialogService>;
   let globalStorageService: jasmine.SpyObj<GlobalStorageService>;
   let pageService: QuestionnairePageService;
@@ -119,9 +120,8 @@ describe('QuestionnairePageComponent (creator)', () => {
     const breakpointObserver = jasmine.createSpyObj('BreakpointObserver', [
       'observe',
     ]);
-    breakpointObserver.observe.and.returnValue(
-      new BehaviorSubject({ matches: isDesktop })
-    );
+    breakpoint$ = new BehaviorSubject({ matches: isDesktop });
+    breakpointObserver.observe.and.returnValue(breakpoint$);
     const authenticationService = jasmine.createSpyObj(
       'AuthenticationService',
       ['getCurrentAuthentication']
@@ -847,5 +847,14 @@ describe('QuestionnairePageComponent (creator)', () => {
       questionnaire: jasmine.objectContaining({ id: 'q-1', name: 'Quiz' }),
       shortId: '12345678',
     });
+  });
+
+  it('stops observing the breakpoint once destroyed', () => {
+    setUp();
+    expect(breakpoint$.observed).toBeTrue();
+
+    fixture.destroy();
+
+    expect(breakpoint$.observed).toBeFalse();
   });
 });

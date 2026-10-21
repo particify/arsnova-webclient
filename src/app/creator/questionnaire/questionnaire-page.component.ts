@@ -322,6 +322,7 @@ export class QuestionnairePageComponent {
     });
     this.breakpointObserver
       .observe(['(min-width: 1000px)'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((changes) => {
         const temp = this.isDesktop();
         this.isDesktop.set(changes.matches);
