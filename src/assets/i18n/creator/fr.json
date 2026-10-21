@@ -148,6 +148,7 @@
     "set-correct-answer": "Définir la bonne réponse",
     "set-correct-answer-info": "Définis une réponse correcte pour cette question.",
     "import-failed": "L'importation a échoué en raison d'un format de fichier non valide.",
+    "import-file-too-large": "Le fichier est trop volumineux pour être importé. Il ne doit pas dépasser {{size}}.",
     "max-keywords": "Mots clés par réponse",
     "import-successful": "Votre contenu a été importé.",
     "group-locked": "La série de questions a été verrouillée.",

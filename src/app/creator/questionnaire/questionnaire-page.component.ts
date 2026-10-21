@@ -109,6 +109,10 @@ const IMPORT_MEDIA_TYPES = [
   'text/tab-separated-values',
 ];
 
+// The server rejects larger files.
+const MAX_IMPORT_FILE_SIZE = 1024 * 1024;
+const MAX_IMPORT_FILE_SIZE_LABEL = '1 MB';
+
 const IMPORT_ERROR_MESSAGES: Record<ContentCsvImportErrorReason, string> = {
   [ContentCsvImportErrorReason.INCOMPATIBLE_FORMAT]:
     'creator.dialog.csv-import-error-incompatible-format',
@@ -480,6 +484,7 @@ export class QuestionnairePageComponent {
       .pipe(
         take(1),
         filter((file): file is Blob => !!file),
+        filter((file) => this.isImportFileSizeAccepted(file)),
         switchMap((file) =>
           this.csvService.importContents(this.questionnaireId(), file)
         ),
@@ -495,6 +500,19 @@ export class QuestionnairePageComponent {
           ],
         });
       });
+  }
+
+  private isImportFileSizeAccepted(file: Blob): boolean {
+    if (file.size <= MAX_IMPORT_FILE_SIZE) {
+      return true;
+    }
+    this.notificationService.showAdvanced(
+      this.translateService.translate('creator.content.import-file-too-large', {
+        size: MAX_IMPORT_FILE_SIZE_LABEL,
+      }),
+      AdvancedSnackBarTypes.FAILED
+    );
+    return false;
   }
 
   private showImportResult(result: ContentCsvImportResult) {

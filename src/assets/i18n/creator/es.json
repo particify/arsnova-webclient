@@ -183,6 +183,7 @@
     "numeric-tolerance-negative": "La tolerancia no puede ser negativa.",
     "select-correct-number-in-defined-range": "La respuesta correcta debe encontrarse dentro del intervalo definido.",
     "import-failed": "El formato del archivo no es válido.",
+    "import-file-too-large": "El archivo es demasiado grande para importarlo. Puede tener como máximo {{size}}.",
     "publish-correct-answers-info": "Los participantes pueden ver las respuestas correctas después de haber contestado.",
     "group-progress-info": "Por término medio, {{percent}}% de las respuestas son correctas. {{abstentions}}% se han abstenido.",
     "enable-leaderboard-info": "Los participantes toman parte en el concurso utilizando un seudónimo y pueden compararse en una tabla de clasificación.",

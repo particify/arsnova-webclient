@@ -171,6 +171,7 @@
     "group-settings": "Einstellungen",
     "import-successful": "Deine Inhalte wurden importiert.",
     "import-failed": "Import wegen ungültigem Format fehlgeschlagen.",
+    "import-file-too-large": "Die Datei ist zu groß für den Import. Sie darf höchstens {{size}} groß sein.",
     "max-keywords": "Schlagworte pro Antwort",
     "max-keywords-out-of-range": "Schlagwortanzahl muss zwischen {{min}} und {{max}} liegen.",
     "no-contents-yet": "Keine Inhalte vorhanden.",

@@ -115,6 +115,7 @@
     "group-settings": "Impostazioni",
     "import-successful": "Il tuo contenuto è stato importato.",
     "import-failed": "Importazione fallita a causa di un formato di file non valido.",
+    "import-file-too-large": "Il file è troppo grande per essere importato. Può essere al massimo di {{size}}.",
     "max-keywords": "Parole chiave per ogni risposta",
     "max-keywords-out-of-range": "Il limite di parole chiave deve essere compreso tra {{min}} e {{max}}.",
     "no-contents-yet": "Non ci sono contenuti.",

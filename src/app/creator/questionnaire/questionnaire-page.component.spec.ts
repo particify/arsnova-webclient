@@ -22,7 +22,10 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { LocalFileService } from '@app/core/services/util/local-file.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import {
@@ -861,6 +864,35 @@ describe('QuestionnairePageComponent (creator)', () => {
         jasmine.anything()
       );
       expect(dialogService.openDialog).not.toHaveBeenCalled();
+    });
+
+    it('rejects a file larger than the server accepts before uploading it', () => {
+      const translate = spyOn(
+        TestBed.inject(TranslocoService),
+        'translate'
+      ).and.callThrough();
+      const file = new File([new Uint8Array(1024 * 1024 + 1)], 'contents.csv');
+
+      importFile(file, of({ totalLines: 1, importedLines: 1, errorLines: [] }));
+
+      expect(csvService.importContents).not.toHaveBeenCalled();
+      expect(translate).toHaveBeenCalledWith(
+        'creator.content.import-file-too-large',
+        { size: '1 MB' }
+      );
+      expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+        'creator.content.import-file-too-large',
+        AdvancedSnackBarTypes.FAILED
+      );
+      expect(refetchQueries).not.toHaveBeenCalled();
+    });
+
+    it('uploads a file of exactly the accepted size', () => {
+      const file = new File([new Uint8Array(1024 * 1024)], 'contents.csv');
+
+      importFile(file, of({ totalLines: 1, importedLines: 1, errorLines: [] }));
+
+      expect(csvService.importContents).toHaveBeenCalledOnceWith('q-1', file);
     });
 
     it('leaves a rejected file to the service', () => {
