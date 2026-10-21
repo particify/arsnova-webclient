@@ -498,8 +498,10 @@ export class QuestionnairePageComponent {
   }
 
   private showImportResult(result: ContentCsvImportResult) {
+    const unknownColumns = result.unknownColumns ?? [];
     if (
       result.errorLines.length === 0 &&
+      unknownColumns.length === 0 &&
       result.importedLines >= result.totalLines
     ) {
       this.notificationService.showAdvanced(
@@ -520,11 +522,26 @@ export class QuestionnairePageComponent {
             totalLines: result.totalLines,
           }
         ),
-        additionalBody: this.describeImportErrors(result.errorLines),
+        additionalBody: [
+          this.describeUnknownColumns(unknownColumns),
+          this.describeImportErrors(result.errorLines),
+        ]
+          .filter((description) => !!description)
+          .join(' '),
         confirmLabel: 'dialog.close',
         type: 'button-primary',
       },
     });
+  }
+
+  private describeUnknownColumns(columns: string[]): string {
+    if (columns.length === 0) {
+      return '';
+    }
+    return this.translateService.translate(
+      'creator.dialog.csv-import-unknown-columns',
+      { columns: columns.join(', ') }
+    );
   }
 
   /** `line` counts entries after the header row, not lines of the file. */

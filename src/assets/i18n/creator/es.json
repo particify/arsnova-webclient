@@ -435,6 +435,7 @@
     "csv-import-error-malformed-record": "Entradas omitidas porque no se pudieron leer: {{entries}}.",
     "csv-import-error-missing-body": "Entradas omitidas por falta de texto: {{entries}}.",
     "csv-import-error-unknown-format": "Entradas omitidas por un formato de contenido desconocido: {{entries}}.",
+    "csv-import-unknown-columns": "Columnas ignoradas por ser desconocidas: {{columns}}.",
     "csv-import-errors-header": "Importación incompleta"
   },
   "utils": {

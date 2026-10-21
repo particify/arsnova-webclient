@@ -410,6 +410,7 @@
     "csv-import-error-malformed-record": "Entrées ignorées car elles n'ont pas pu être lues : {{entries}}.",
     "csv-import-error-missing-body": "Entrées ignorées en raison d'un texte manquant : {{entries}}.",
     "csv-import-error-unknown-format": "Entrées ignorées en raison d'un format de contenu inconnu : {{entries}}.",
+    "csv-import-unknown-columns": "Colonnes ignorées car elles sont inconnues : {{columns}}.",
     "ban": "Bannir",
     "really-reset-group-results": "Voulez-vous vraiment réinitialiser les résultats de cette série de questions ?",
     "really-discard-announcement": "Voulez-vous vraiment annuler votre saisie ?",

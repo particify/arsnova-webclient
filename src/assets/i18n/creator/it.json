@@ -393,6 +393,7 @@
     "csv-import-error-malformed-record": "Voci saltate perché non è stato possibile leggerle: {{entries}}.",
     "csv-import-error-missing-body": "Voci saltate a causa di testo mancante: {{entries}}.",
     "csv-import-error-unknown-format": "Voci saltate a causa di un formato di contenuto sconosciuto: {{entries}}.",
+    "csv-import-unknown-columns": "Colonne ignorate perché sconosciute: {{columns}}.",
     "please-enter-name": "Inserisci un nome.",
     "publish": "Pubblicare",
     "start": "Inizio"

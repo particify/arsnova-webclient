@@ -912,6 +912,69 @@ describe('QuestionnairePageComponent (creator)', () => {
       );
       expect(notificationService.showAdvanced).not.toHaveBeenCalled();
     });
+
+    it('warns about unknown columns even when every entry was imported', () => {
+      const translate = spyOn(
+        TestBed.inject(TranslocoService),
+        'translate'
+      ).and.callThrough();
+
+      importFile(
+        new File(['format,body,colour'], 'contents.csv'),
+        of({
+          totalLines: 1,
+          importedLines: 1,
+          errorLines: [],
+          unknownColumns: ['colour', 'size'],
+        })
+      );
+
+      expect(translate).toHaveBeenCalledWith(
+        'creator.dialog.csv-import-unknown-columns',
+        { columns: 'colour, size' }
+      );
+      expect(dialogService.openDialog).toHaveBeenCalledOnceWith(
+        BaseDialogComponent,
+        jasmine.objectContaining({
+          data: jasmine.objectContaining({
+            additionalBody: 'creator.dialog.csv-import-unknown-columns',
+          }),
+        })
+      );
+      expect(notificationService.showAdvanced).not.toHaveBeenCalled();
+    });
+
+    it('does not warn about unknown columns without any', () => {
+      const translate = spyOn(
+        TestBed.inject(TranslocoService),
+        'translate'
+      ).and.callThrough();
+
+      importFile(
+        new File(['format,body'], 'contents.csv'),
+        of({
+          totalLines: 2,
+          importedLines: 1,
+          errorLines: [
+            { line: 2, reason: ContentCsvImportErrorReason.MISSING_BODY },
+          ],
+          unknownColumns: [],
+        })
+      );
+
+      expect(translate).not.toHaveBeenCalledWith(
+        'creator.dialog.csv-import-unknown-columns',
+        jasmine.anything()
+      );
+      expect(dialogService.openDialog).toHaveBeenCalledOnceWith(
+        BaseDialogComponent,
+        jasmine.objectContaining({
+          data: jasmine.objectContaining({
+            additionalBody: 'creator.dialog.csv-import-error-missing-body',
+          }),
+        })
+      );
+    });
   });
 
   describe('quiz progress', () => {

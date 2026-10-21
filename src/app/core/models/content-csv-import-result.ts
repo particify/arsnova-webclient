@@ -17,4 +17,6 @@ export interface ContentCsvImportResult {
   totalLines: number;
   importedLines: number;
   errorLines: ContentCsvImportError[];
+  /** Header columns the import did not recognize and therefore ignored. */
+  unknownColumns?: string[];
 }
