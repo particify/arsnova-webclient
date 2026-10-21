@@ -8,6 +8,16 @@ export function sortedRoundNumbers(
     .sort((a, b) => a - b);
 }
 
+/** The selected rounds in round order; rounds not known yet go last. */
+export function sortedRoundIds(
+  rounds: { id: string; roundNo: number }[],
+  selectedRoundIds: string[]
+): string[] {
+  const roundNo = (id: string) =>
+    rounds.find((round) => round.id === id)?.roundNo ?? Infinity;
+  return [...selectedRoundIds].sort((a, b) => roundNo(a) - roundNo(b));
+}
+
 export function toggleRoundSelection(
   selectedRoundIds: string[],
   roundId: string,

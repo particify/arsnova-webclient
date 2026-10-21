@@ -39,6 +39,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 import { RoundSelectorComponent } from '@app/standalone/round-selector/round-selector.component';
+import { sortedRoundIds } from '@app/standalone/round-selector/round-selection';
 import { ContentResultsService } from './content-results.service';
 import { RESULT_REGISTRY } from './result-registry';
 import { VisualizationType } from './visualization/visualization-type';
@@ -241,7 +242,8 @@ export class ContentResultsComponent {
   };
 
   readonly componentInputs = computed<Record<string, unknown>>(() => ({
-    roundIds: this.selectedRoundIds(),
+    // In round order, whatever the order of selection.
+    roundIds: sortedRoundIds(this.rounds(), this.selectedRoundIds()),
     resultsVisible: this.resultsVisible(),
     ...(this.formatInputs[this.content().formatData.format]?.() ?? {
       rounds: this.rounds(),

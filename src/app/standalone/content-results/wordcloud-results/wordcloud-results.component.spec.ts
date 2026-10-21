@@ -262,4 +262,16 @@ describe('WordcloudResultsComponent', () => {
     ]);
     expect(console.error).toHaveBeenCalled();
   });
+
+  it('shows the words of the lowest selected round when comparing rounds', () => {
+    setUp({ roundIds: ['round-1', 'round-2'] });
+
+    expect(roundStats.watch).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
+    });
+    expect(roundStatsUpdated.subscribe).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-1' },
+    });
+  });
 });

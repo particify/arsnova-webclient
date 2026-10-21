@@ -1,4 +1,4 @@
-import { toggleRoundSelection } from './round-selection';
+import { sortedRoundIds, toggleRoundSelection } from './round-selection';
 
 describe('toggleRoundSelection', () => {
   it('replaces the selection instead of comparing when comparison is disallowed', () => {
@@ -22,5 +22,20 @@ describe('toggleRoundSelection', () => {
 
   it('never deselects the last remaining round', () => {
     expect(toggleRoundSelection(['r1'], 'r1', true)).toEqual(['r1']);
+  });
+});
+
+describe('sortedRoundIds', () => {
+  const rounds = [
+    { id: 'r1', roundNo: 1 },
+    { id: 'r2', roundNo: 2 },
+  ];
+
+  it('orders the selected rounds by round number', () => {
+    expect(sortedRoundIds(rounds, ['r2', 'r1'])).toEqual(['r1', 'r2']);
+  });
+
+  it('puts a round that is not known yet last', () => {
+    expect(sortedRoundIds(rounds, ['r3', 'r2'])).toEqual(['r2', 'r3']);
   });
 });

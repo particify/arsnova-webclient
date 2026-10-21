@@ -286,4 +286,14 @@ describe('TextResultsComponent', () => {
     expect(bodies()).toEqual(['First', 'Second']);
     expect(console.error).toHaveBeenCalled();
   });
+
+  it('lists the answers of the lowest selected round when comparing rounds', () => {
+    setUp({ roundIds: ['round-1', 'round-2'] });
+
+    expect(answersByRoundId.watch).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
+    });
+    expect(bodies()).toEqual(['First', 'Second']);
+  });
 });
