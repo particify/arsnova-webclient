@@ -118,10 +118,8 @@ describe('ContentWaitingComponent', () => {
     expect(component.formDisabled).toBeFalse();
   });
 
-  it('announces the alias once it is set', () => {
-    const aliasSet = spyOn(component.aliasSet, 'emit');
-    component.setAlias();
-    expect(aliasSet).toHaveBeenCalledTimes(1);
+  it('announces the alias through the cache write only', () => {
+    expect('aliasSet' in component).toBeFalse();
   });
 
   it('writes the persisted alias into the query the proposal came from', () => {

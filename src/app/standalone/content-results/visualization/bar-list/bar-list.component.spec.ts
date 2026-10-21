@@ -28,7 +28,8 @@ describe('BarListComponent', () => {
       ]
     ).compileComponents();
 
-    fixture = TestBed.createComponent(BarListComponent);
+    // A real <app-bar-list> host, as the global label rule is scoped to it.
+    fixture = TestBed.createComponent(BarListComponent, { inferTagName: true });
     fixture.componentRef.setInput('items', items);
     if (width) {
       // The host is an inline element until told otherwise, so a width alone
@@ -272,5 +273,25 @@ describe('BarListComponent', () => {
     );
     expect(labelToBarGap(oneLine)).toBeGreaterThan(0);
     expect(labelToBarGap(wrapped)).toBeCloseTo(labelToBarGap(oneLine), 1);
+  });
+
+  it('drops the margins of a label paragraph', () => {
+    setUp([renderedItem('inside')]);
+    const paragraph = rows()[0].querySelector('.rendered-text > p');
+    expect(getComputedStyle(paragraph as HTMLElement).marginBottom).toBe('0px');
+  });
+
+  it('leaves the margins of a paragraph outside a bar list alone', () => {
+    const outside = document.createElement('div');
+    outside.innerHTML =
+      '<div class="bar-list"><div class="bar-label"><div class="rendered-text">' +
+      '<p>outside</p></div></div></div>';
+    document.body.appendChild(outside);
+    try {
+      const paragraph = outside.querySelector('p') as HTMLElement;
+      expect(getComputedStyle(paragraph).marginBottom).not.toBe('0px');
+    } finally {
+      outside.remove();
+    }
   });
 });
