@@ -15,8 +15,9 @@
     class="form-container"
   >
     <mat-form-field
-      class="input-block no-field-hint email-input"
+      class="input-block email-input"
       appearance="outline"
+      subscriptSizing="dynamic"
       fxFlex.gt-xs="50"
     >
       <mat-label>
@@ -32,6 +33,9 @@
         [(ngModel)]="loginId"
         [formControl]="usernameFormControl"
       />
+      @if (loginIdIsEmail && usernameFormControl.hasError('email')) {
+        <mat-error>{{ 'login.email-invalid' | transloco }}</mat-error>
+      }
     </mat-form-field>
 
     <div fxFlex>

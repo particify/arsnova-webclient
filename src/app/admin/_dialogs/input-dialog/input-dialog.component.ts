@@ -26,6 +26,7 @@ import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { FormService } from '@app/core/services/util/form.service';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import {
+  MatError,
   MatFormField,
   MatLabel,
   MatPrefix,
@@ -51,6 +52,7 @@ export interface DialogData {
   inputName: string;
   primaryAction: string;
   useUserSearch?: boolean;
+  validateMailAddress?: boolean;
   input: string;
 }
 
@@ -63,6 +65,7 @@ export interface DialogData {
     FormsModule,
     CdkScrollable,
     MatDialogContent,
+    MatError,
     MatFormField,
     MatLabel,
     MatInput,
@@ -99,6 +102,7 @@ export class InputDialogComponent {
   inputName: string;
   primaryAction: string;
   useUserSearch: boolean;
+  validateMailAddress: boolean;
 
   formControl = new FormControl<string | AdminUser | undefined>(undefined, [
     Validators.required,
@@ -108,6 +112,10 @@ export class InputDialogComponent {
     this.primaryAction = data.primaryAction;
     this.inputName = data.inputName;
     this.useUserSearch = data.useUserSearch || false;
+    this.validateMailAddress = data.validateMailAddress || false;
+    if (this.validateMailAddress) {
+      this.formControl.addValidators(Validators.email);
+    }
     this.formControl.setValue(data.input);
     if (this.useUserSearch) {
       this.formControl.valueChanges
@@ -173,7 +181,13 @@ export class InputDialogComponent {
       if (this.formControl.valid) {
         this.formService.disableForm();
         if (typeof this.formControl.value === 'string')
-          this.clicked$.emit(this.formControl.value);
+          this.clicked$.emit(
+            this.validateMailAddress
+              ? this.formControl.value.trim()
+              : this.formControl.value
+          );
+      } else {
+        this.formControl.markAsTouched();
       }
     }
   }

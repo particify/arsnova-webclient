@@ -15,7 +15,6 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { PasswordResetErrorStateMatcher } from '@app/core/components/password-reset/password-reset.component';
 import { Router } from '@angular/router';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { first, switchMap } from 'rxjs';
@@ -58,35 +57,24 @@ export class RequestPasswordResetComponent
   private readonly challengeService = inject(ChallengeService);
   private readonly requestPasswordReset = inject(RequestUserPasswordResetGql);
 
-  usernameFormControl = new UntypedFormControl();
-  matcher = new PasswordResetErrorStateMatcher();
+  usernameFormControl = new UntypedFormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
   deviceWidth = innerWidth;
   username = '';
 
   ngOnInit(): void {
     this.setFormControl(this.usernameFormControl);
-    this.usernameFormControl.clearValidators();
     const userData = history.state.data;
     if (userData && userData.username) {
       this.username = userData.username;
     }
   }
 
-  activateValidators() {
-    this.usernameFormControl.setValidators([
-      Validators.required,
-      Validators.email,
-    ]);
-    this.usernameFormControl.updateValueAndValidity();
-  }
-
   resetPassword(): void {
-    if (
-      this.username &&
-      !this.usernameFormControl.hasError('required') &&
-      !this.usernameFormControl.hasError('email')
-    ) {
-      this.username = this.username.trim();
+    if (this.usernameFormControl.valid) {
+      this.username = this.usernameFormControl.value.trim();
       this.disableForm();
       this.challengeService
         .authenticateByChallenge()
@@ -125,6 +113,7 @@ export class RequestPasswordResetComponent
           },
         });
     } else {
+      this.usernameFormControl.markAsTouched();
       const msg = this.translationService.translate('login.input-incorrect');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     }

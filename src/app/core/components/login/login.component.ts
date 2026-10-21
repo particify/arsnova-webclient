@@ -128,7 +128,6 @@ export class LoginComponent
 
   ngOnInit() {
     this.setFormControl(this.loginIdFormControl);
-    this.loginIdFormControl.clearValidators();
     this.route.data.subscribe((data) => {
       this.authProviders = data.apiConfig.authenticationProviders;
       this.allowRegister =
@@ -159,9 +158,14 @@ export class LoginComponent
             this.dbLoginEnabled = true;
             if (this.usernamePasswordProviders.length === 1) {
               this.loginIdIsEmail = true;
+              this.loginIdFormControl.setValidators([
+                Validators.required,
+                Validators.email,
+              ]);
             } else {
               this.loginIdFormControl.setValidators([Validators.required]);
             }
+            this.loginIdFormControl.updateValueAndValidity();
           }
         }
         this.ssoProviders = this.authProviders.filter(
@@ -213,14 +217,6 @@ export class LoginComponent
       });
   }
 
-  activateValidators() {
-    this.loginIdFormControl.setValidators([
-      Validators.required,
-      Validators.email,
-    ]);
-    this.loginIdFormControl.updateValueAndValidity();
-  }
-
   loginWithUsernamePassword(providerId = 'user-db'): void {
     const password = this.passwordEntry.getPassword();
     if (this.loginIdFormControl.valid && password) {
@@ -232,6 +228,7 @@ export class LoginComponent
           this.checkLogin(loginSuccessful);
         });
     } else {
+      this.loginIdFormControl.markAsTouched();
       this.translationService
         .selectTranslate('login.input-incorrect')
         .pipe(take(1))

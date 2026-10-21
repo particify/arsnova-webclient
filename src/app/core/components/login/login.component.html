@@ -38,13 +38,11 @@
               <input
                 [appAutofocus]
                 [(ngModel)]="username"
-                [errorStateMatcher]="matcher"
                 [formControl]="loginIdFormControl"
                 matInput
                 type="email"
                 id="loginid-input"
                 name="loginid"
-                (blur)="activateValidators()"
               />
               @if (
                 loginIdFormControl.hasError('email') &&

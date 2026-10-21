@@ -232,7 +232,7 @@ export class UserProfileComponent extends FormComponent {
     this.location.replaceState(`account/${page}`);
   }
 
-  updateMailAddress(mailAddress: string) {
+  updateMailAddress() {
     if (this.newMailAddressFormControl.invalid) {
       const msg = this.translationService.translate(
         'user-profile.please-enter-valid-address'
@@ -250,6 +250,7 @@ export class UserProfileComponent extends FormComponent {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
+    const mailAddress = (this.newMailAddressFormControl.value ?? '').trim();
     this.disableForm();
     this.updateUserMail
       .mutate({

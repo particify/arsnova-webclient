@@ -170,6 +170,7 @@ export class UserManagementComponent {
       data: {
         inputName: 'login-id',
         primaryAction: 'add-account',
+        validateMailAddress: true,
       },
     });
     dialogRef.componentInstance.clicked$.subscribe((mailAddress) => {

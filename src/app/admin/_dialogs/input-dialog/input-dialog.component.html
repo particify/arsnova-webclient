@@ -39,7 +39,15 @@
     } @else {
       <mat-form-field appearance="outline">
         <mat-label>{{ 'admin.admin-area.' + inputName | transloco }}</mat-label>
-        <input matInput [formControl]="formControl" autocomplete="off" />
+        <input
+          matInput
+          [formControl]="formControl"
+          [type]="validateMailAddress ? 'email' : 'text'"
+          autocomplete="off"
+        />
+        @if (formControl.hasError('email')) {
+          <mat-error>{{ 'login.email-invalid' | transloco }}</mat-error>
+        }
       </mat-form-field>
     }
   </div>

@@ -38,7 +38,7 @@ import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FlexModule } from '@angular/flex-layout';
 import { HintComponent } from '@app/standalone/hint/hint.component';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 import { MatSelect } from '@angular/material/select';
@@ -81,6 +81,7 @@ export interface Role {
   imports: [
     FlexModule,
     HintComponent,
+    MatError,
     MatFormField,
     MatLabel,
     MatInput,
@@ -134,7 +135,7 @@ export class AccessComponent
   );
   isGuest = computed(() => !this.user()?.verified);
 
-  usernameFormControl = new UntypedFormControl('', [Validators.email]);
+  usernameFormControl = new UntypedFormControl('');
   currentInputIsChecked = true;
 
   HintType = HintType;
@@ -173,6 +174,16 @@ export class AccessComponent
     // Set here rather than in ngAfterViewInit so the guest state below already applies to the
     // real control on the first change detection pass.
     this.setFormControl(this.usernameFormControl);
+    this.authenticationService
+      .isLoginIdEmailAddress()
+      .pipe(takeUntilDestroyed())
+      .subscribe((loginIdIsEmail) => {
+        this.loginIdIsEmail = loginIdIsEmail;
+        this.usernameFormControl.setValidators(
+          loginIdIsEmail ? [Validators.email] : []
+        );
+        this.usernameFormControl.updateValueAndValidity();
+      });
     // Guests may not assign access rights. Applied to this panel's own controls instead of
     // disableForm(), whose disabled state FormService shares with every other form.
     effect(() => {
@@ -189,11 +200,6 @@ export class AccessComponent
 
   ngAfterViewInit() {
     this.selectedRole = this.roles[0];
-    this.authenticationService
-      .isLoginIdEmailAddress()
-      .subscribe((loginIdIsEmail) => {
-        this.loginIdIsEmail = loginIdIsEmail;
-      });
     this.usernameFormControl.valueChanges
       .pipe(
         map(() => this.changesMade()),
@@ -294,11 +300,15 @@ export class AccessComponent
   }
 
   inviteModerator() {
+    if (this.usernameFormControl.invalid) {
+      this.usernameFormControl.markAsTouched();
+      return;
+    }
     this.grantRoomRoleByInvitationGql
       .mutate({
         variables: {
           roomId: this.roomId(),
-          mailAddress: this.loginId,
+          mailAddress: this.loginId.trim(),
           role: this.selectedRole,
         },
       })
