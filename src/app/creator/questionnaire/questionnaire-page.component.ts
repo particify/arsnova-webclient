@@ -23,17 +23,28 @@ import {
 } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { DialogService } from '@app/core/services/util/dialog.service';
+import {
+  DIALOG_SIZES,
+  DialogService,
+} from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { LocalFileService } from '@app/core/services/util/local-file.service';
 import {
+  ContentCsvImportError,
+  ContentCsvImportErrorReason,
+  ContentCsvImportResult,
+} from '@app/core/models/content-csv-import-result';
+import { QuestionnaireCsvService } from '@app/core/services/http/questionnaire-csv.service';
+import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/_dialogs/create-content-group-template/create-content-group-template.component';
+import { ExportOptions } from '@app/creator/questionnaire/_dialogs/export/export.component';
+import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { QuestionnaireSettingsComponent } from '@app/standalone/questionnaire-settings/questionnaire-settings.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
@@ -48,6 +59,7 @@ import {
   ignoreElements,
   EMPTY,
   tap,
+  take,
 } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -69,6 +81,7 @@ import {
   CreatorContentDetailsFragment,
   CreatorQuestionnaireContentUpdatedGql,
   DeleteQuestionnaireGql,
+  QuestionnaireByIdDocument,
   QuestionnaireDetailsFragment,
   QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnaireByIdGql,
@@ -88,6 +101,26 @@ const STATUS_OKAY = 50;
 const STATUS_BETTER = 62.5;
 const STATUS_GOOD = 75;
 const STATUS_EXCELLENT = 87.5;
+
+const IMPORT_MEDIA_TYPES = [
+  '.csv',
+  '.tsv',
+  'text/csv',
+  'text/tab-separated-values',
+];
+
+const IMPORT_ERROR_MESSAGES: Record<ContentCsvImportErrorReason, string> = {
+  [ContentCsvImportErrorReason.INCOMPATIBLE_FORMAT]:
+    'creator.dialog.csv-import-error-incompatible-format',
+  [ContentCsvImportErrorReason.INVALID_FORMAT_DATA]:
+    'creator.dialog.csv-import-error-invalid-format-data',
+  [ContentCsvImportErrorReason.MALFORMED_RECORD]:
+    'creator.dialog.csv-import-error-malformed-record',
+  [ContentCsvImportErrorReason.MISSING_BODY]:
+    'creator.dialog.csv-import-error-missing-body',
+  [ContentCsvImportErrorReason.UNKNOWN_FORMAT]:
+    'creator.dialog.csv-import-error-unknown-format',
+};
 
 export interface ContentStats {
   count: number;
@@ -175,6 +208,7 @@ export class QuestionnairePageComponent {
   );
   private readonly questionnaireUpdated = inject(QuestionnaireUpdatedGql);
   private readonly apollo = inject(Apollo);
+  private readonly csvService = inject(QuestionnaireCsvService);
 
   readonly userRole = input.required<UserRole>();
   readonly roomId = input.required<string>();
@@ -423,11 +457,90 @@ export class QuestionnairePageComponent {
   }
 
   exportToCsv() {
-    // TODO: Export contents to CSV
+    this.dialogService
+      .openExportDialog()
+      .afterClosed()
+      .pipe(filter((options): options is ExportOptions => !!options))
+      .subscribe((options) =>
+        // Named .csv whatever the delimiter, as before.
+        this.localFileService.download(
+          this.csvService.exportContents(
+            this.questionnaireId(),
+            options.exportType,
+            options.charset
+          ),
+          this.generateExportFilename('csv')
+        )
+      );
   }
 
   importFromCsv() {
-    // TODO: Import contents from CSV
+    this.localFileService
+      .upload(IMPORT_MEDIA_TYPES)
+      .pipe(
+        take(1),
+        filter((file): file is Blob => !!file),
+        switchMap((file) =>
+          this.csvService.importContents(this.questionnaireId(), file)
+        ),
+        // The service has reported a rejected file already.
+        catchError(() => EMPTY)
+      )
+      .subscribe((result) => {
+        this.showImportResult(result);
+        this.apollo.client.refetchQueries({
+          include: [
+            QuestionnaireContentsByQuestionnaireIdDocument,
+            QuestionnaireByIdDocument,
+          ],
+        });
+      });
+  }
+
+  private showImportResult(result: ContentCsvImportResult) {
+    if (
+      result.errorLines.length === 0 &&
+      result.importedLines >= result.totalLines
+    ) {
+      this.notificationService.showAdvanced(
+        this.translateService.translate('creator.content.import-successful'),
+        AdvancedSnackBarTypes.SUCCESS
+      );
+      return;
+    }
+    this.dialogService.openDialog(BaseDialogComponent, {
+      width: DIALOG_SIZES.small,
+      data: {
+        dialogId: 'csv-import-result',
+        headerLabel: 'creator.dialog.csv-import-errors-header',
+        body: this.translateService.translate(
+          'creator.dialog.csv-import-errors',
+          {
+            importedLines: result.importedLines,
+            totalLines: result.totalLines,
+          }
+        ),
+        additionalBody: this.describeImportErrors(result.errorLines),
+        confirmLabel: 'dialog.close',
+        type: 'button-primary',
+      },
+    });
+  }
+
+  /** `line` counts entries after the header row, not lines of the file. */
+  private describeImportErrors(errors: ContentCsvImportError[]): string {
+    const entriesByReason = new Map<ContentCsvImportErrorReason, number[]>();
+    for (const error of errors) {
+      const entries = entriesByReason.get(error.reason) ?? [];
+      entriesByReason.set(error.reason, [...entries, error.line]);
+    }
+    return [...entriesByReason]
+      .map(([reason, entries]) =>
+        this.translateService.translate(IMPORT_ERROR_MESSAGES[reason], {
+          entries: entries.join(', '),
+        })
+      )
+      .join(' ');
   }
 
   deleteAllAnswers() {

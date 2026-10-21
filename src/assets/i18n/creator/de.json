@@ -431,7 +431,11 @@
     "start": "Starten",
     "csv-import-errors-header": "Import unvollständig",
     "csv-import-errors": "{{importedLines}} von {{totalLines}} Inhalten wurden importiert.",
-    "csv-import-errors-line-info": "Die folgenden Zeilen wurden aufgrund von ungültigen Daten übersprungen: {{errorLines}}"
+    "csv-import-error-incompatible-format": "Übersprungene Einträge, da das Inhaltsformat in dieser Fragenserie nicht verfügbar ist: {{entries}}.",
+    "csv-import-error-invalid-format-data": "Übersprungene Einträge wegen ungültiger Daten für das Inhaltsformat: {{entries}}.",
+    "csv-import-error-malformed-record": "Übersprungene Einträge, da sie nicht gelesen werden konnten: {{entries}}.",
+    "csv-import-error-missing-body": "Übersprungene Einträge wegen fehlendem Text: {{entries}}.",
+    "csv-import-error-unknown-format": "Übersprungene Einträge wegen unbekanntem Inhaltsformat: {{entries}}."
   },
   "utils": {
     "formatting-image-hint": "Bitte beachte, dass Bilder mit hoher Dateigröße die Ladezeiten beeinträchtigen können."

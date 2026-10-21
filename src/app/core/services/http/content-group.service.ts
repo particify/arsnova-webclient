@@ -64,53 +64,6 @@ export class ContentGroupService {
     return contentGroups.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  // import(
-  //   roomId: string,
-  //   groupId: string,
-  //   blob: Blob
-  // ): Observable<ImportResult> {
-  //   const connectionUrl = this.buildUri(`/${groupId}/import`, roomId);
-  //   const formData = new FormData();
-  //   formData.append('file', blob);
-  //   return this.http.post<ImportResult>(connectionUrl, formData).pipe(
-  //     tap((r) => this.handleImportResult(r)),
-  //     catchError(
-  //       this.handleError<ImportResult>(
-  //         'importContentGroup',
-  //         undefined,
-  //         'creator.content.import-failed'
-  //       )
-  //     )
-  //   );
-  // }
-
-  // private handleImportResult(result: ImportResult) {
-  //   if (result.importedLines >= result.totalLines) {
-  //     return;
-  //   }
-  //   const message1 = this.translateService.translate(
-  //     'creator.dialog.csv-import-errors',
-  //     { importedLines: result.importedLines, totalLines: result.totalLines }
-  //   );
-  //   const message2 =
-  //     result.importedLines > 0
-  //       ? ' ' +
-  //         this.translateService.translate(
-  //           'creator.dialog.csv-import-errors-line-info',
-  //           { errorLines: result.errorLines.join(', ') }
-  //         )
-  //       : '';
-  //   this.dialog.open(BaseDialogComponent, {
-  //     width: DIALOG_SIZES.small,
-  //     data: {
-  //       headerLabel: 'creator.dialog.csv-import-errors-header',
-  //       body: message1 + message2,
-  //       confirmLabel: 'dialog.close',
-  //       type: 'button-primary',
-  //     },
-  //   });
-  // }
-
   getQuestionnaireTypeIcons(): Map<QuestionnaireType, string> {
     return this.questionnaireTypeIcons;
   }

@@ -6,7 +6,11 @@ import {
 } from '@angular/material/dialog';
 
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { ExportFileType } from '@app/core/models/export-file-type';
+import {
+  DELIMITED_TEXT_CHARSETS,
+  DelimitedTextCharset,
+} from '@app/core/utils/delimited-text';
+import { DelimitedTextFormat } from '@app/core/models/delimited-text-format';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { FlexModule } from '@angular/flex-layout';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -15,13 +19,9 @@ import { FormsModule } from '@angular/forms';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatButton } from '@angular/material/button';
 
-const charsets = ['UTF-8', 'UTF-16LE'] as const;
-
-type Charset = (typeof charsets)[number];
-
 export interface ExportOptions {
-  exportType: ExportFileType;
-  charset: Charset;
+  exportType: DelimitedTextFormat;
+  charset: DelimitedTextCharset;
 }
 
 @Component({
@@ -49,10 +49,10 @@ export class ExportComponent {
   readonly dialogId = 'export';
 
   exportTypes = [
-    { label: 'creator.export.tsv', value: ExportFileType.TSV },
-    { label: 'creator.export.csv', value: ExportFileType.CSV },
+    { label: 'creator.export.tsv', value: DelimitedTextFormat.TSV },
+    { label: 'creator.export.csv', value: DelimitedTextFormat.CSV },
   ];
-  charsets = charsets;
+  charsets = DELIMITED_TEXT_CHARSETS;
   selectedExportType = this.exportTypes[0];
   selectedCharset = this.charsets[1];
 

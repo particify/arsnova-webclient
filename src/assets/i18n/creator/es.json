@@ -430,7 +430,11 @@
     "how-to-publish-group": "¿Cómo le gustaría publicar la serie de preguntas?",
     "want-publish-group": "¿Le gustaría publicar la serie de preguntas?",
     "csv-import-errors": "Se ha importado {{importedLines}} del contenido de {{totalLines}}.",
-    "csv-import-errors-line-info": "Se han omitido las siguientes líneas debido a datos no válidos: {{errorLines}}",
+    "csv-import-error-incompatible-format": "Entradas omitidas porque el formato de contenido no está disponible en esta serie de preguntas: {{entries}}.",
+    "csv-import-error-invalid-format-data": "Entradas omitidas por datos no válidos para el formato de contenido: {{entries}}.",
+    "csv-import-error-malformed-record": "Entradas omitidas porque no se pudieron leer: {{entries}}.",
+    "csv-import-error-missing-body": "Entradas omitidas por falta de texto: {{entries}}.",
+    "csv-import-error-unknown-format": "Entradas omitidas por un formato de contenido desconocido: {{entries}}.",
     "csv-import-errors-header": "Importación incompleta"
   },
   "utils": {

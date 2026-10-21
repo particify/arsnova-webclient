@@ -28,6 +28,7 @@ import {
   LanguageService,
 } from '@app/core/services/util/language.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { QuestionnaireCsvService } from '@app/core/services/http/questionnaire-csv.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import {
   GlobalStorageService,
@@ -161,6 +162,7 @@ export const AppConfig: ApplicationConfig = {
     ContentAnswerService,
     LanguageService,
     ContentGroupService,
+    QuestionnaireCsvService,
     WsCommentService,
     ApiConfigService,
     GlobalStorageService,

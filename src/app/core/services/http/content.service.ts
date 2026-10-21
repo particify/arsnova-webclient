@@ -11,7 +11,6 @@ import { IMessage } from '@stomp/stompjs';
 import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ContentType as LegacyContentType } from '@app/core/models/content-type.enum';
 import { ContentCreated } from '@app/core/models/events/content-created';
-import { ExportFileType } from '@app/core/models/export-file-type';
 import { Router } from '@angular/router';
 import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -370,20 +369,6 @@ export class ContentService extends AbstractEntityService<Content> {
   getSupportedContents(contents: Content[]) {
     return contents.filter(
       (content) => Object.values(LegacyContentType).indexOf(content.format) > -1
-    );
-  }
-
-  export(
-    fileType: ExportFileType,
-    roomId: string,
-    contentIds: string[],
-    charset?: string
-  ): Observable<Blob> {
-    const connectionUrl = this.buildUri('/-/export', roomId);
-    return this.http.post(
-      connectionUrl,
-      { fileType: fileType, contentIds: contentIds, charset: charset },
-      { responseType: 'blob' }
     );
   }
 
