@@ -5,13 +5,18 @@ import { MatIconButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatMenuHarness } from '@angular/material/menu/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentCsvImportErrorReason } from '@app/core/models/content-csv-import-result';
+import { DelimitedTextFormat } from '@app/core/models/delimited-text-format';
+import { QuestionnaireCsvService } from '@app/core/services/http/questionnaire-csv.service';
+import { ExportOptions } from '@app/creator/questionnaire/_dialogs/export/export.component';
+import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -25,6 +30,7 @@ import {
   CreatorQuestionnaireContentUpdatedDocument,
   CreatorQuestionnaireContentUpdatedGql,
   DeleteQuestionnaireGql,
+  QuestionnaireByIdDocument,
   QuestionnaireByIdGql,
   QuestionnaireChoiceRoundStatsByRoundIdDocument,
   QuestionnaireContentUpdatedGql,
@@ -50,6 +56,7 @@ import {
   from,
   lastValueFrom,
   of,
+  throwError,
 } from 'rxjs';
 import { QuestionnairePageComponent } from './questionnaire-page.component';
 import { QuestionnairePageService } from './questionnaire-page.service';
@@ -137,6 +144,7 @@ describe('QuestionnairePageComponent (creator)', () => {
     dialogService = jasmine.createSpyObj('DialogService', [
       'openDeleteDialog',
       'openDialog',
+      'openExportDialog',
     ]);
     globalStorageService = jasmine.createSpyObj('GlobalStorageService', [
       'setItem',
@@ -176,8 +184,19 @@ describe('QuestionnairePageComponent (creator)', () => {
         { provide: QuestionnaireContentUpdatedGql, useValue: contentUpdated },
         provideNoopAnimations(),
         spyProvider(ContentGroupService, ['updateGroupInMemoryStorage']),
-        spyProvider(LocalFileService, ['generateFilename']),
-        spyProvider(NotificationService, ['showAdvanced']),
+        spyProvider(LocalFileService, [
+          'download',
+          'generateFilename',
+          'upload',
+        ]),
+        spyProvider(QuestionnaireCsvService, [
+          'exportContents',
+          'importContents',
+        ]),
+        spyProvider(NotificationService, [
+          'showAdvanced',
+          'showOnRequestClientError',
+        ]),
         spyProvider(DeleteQuestionnaireGql, ['mutate']),
         spyProvider(ResetQuestionnaireResultsGql, ['mutate']),
         spyProvider(ToggleQuestionnairePublishedGql, ['mutate']),
@@ -721,7 +740,7 @@ describe('QuestionnairePageComponent (creator)', () => {
     expect(query('app-back-button')).toBeNull();
   });
 
-  it('offers no CSV import or export while they are not available', async () => {
+  it('offers CSV import and export in the questionnaire menu', async () => {
     setUp(true, null, true);
     emitContents(contents);
     const loader = TestbedHarnessEnvironment.loader(fixture);
@@ -732,8 +751,7 @@ describe('QuestionnairePageComponent (creator)', () => {
     await menu.open();
     const items = await menu.getItems();
     const texts = await Promise.all(items.map((item) => item.getText()));
-    expect(texts.join()).toContain('creator.content.export-content-group');
-    expect(texts.join()).not.toContain('creator.import.import-contents');
+    expect(texts.join()).toContain('creator.import.import-contents');
 
     const exportItem =
       items[
@@ -741,8 +759,159 @@ describe('QuestionnairePageComponent (creator)', () => {
           t.includes('creator.content.export-content-group')
         )
       ];
+    // Hovering alone does not open the submenu in time.
+    await exportItem.click();
     const exportMenu = await exportItem.getSubmenu();
-    expect(await exportMenu?.getItems()).toEqual([]);
+    const exportItems = (await exportMenu?.getItems()) ?? [];
+    expect(exportItems.length).toBe(1);
+    expect(await exportItems[0].getText()).toBe('creator.export.export-series');
+  });
+
+  describe('CSV export', () => {
+    let csvService: jasmine.SpyObj<QuestionnaireCsvService>;
+    let localFileService: jasmine.SpyObj<LocalFileService>;
+    const file$ = of(new Blob(['format\tbody']));
+
+    function exportWith(options?: ExportOptions) {
+      dialogService.openExportDialog.and.returnValue({
+        afterClosed: () => of(options),
+      } as never);
+      component.exportToCsv();
+    }
+
+    beforeEach(() => {
+      setUp();
+      csvService = TestBed.inject(
+        QuestionnaireCsvService
+      ) as jasmine.SpyObj<QuestionnaireCsvService>;
+      csvService.exportContents.and.returnValue(file$);
+      localFileService = TestBed.inject(
+        LocalFileService
+      ) as jasmine.SpyObj<LocalFileService>;
+      localFileService.generateFilename.and.returnValue('Quiz_12345678');
+    });
+
+    it('downloads the contents in the chosen format and charset', () => {
+      exportWith({
+        exportType: DelimitedTextFormat.TSV,
+        charset: 'UTF-16LE',
+      });
+
+      expect(csvService.exportContents).toHaveBeenCalledOnceWith(
+        'q-1',
+        DelimitedTextFormat.TSV,
+        'UTF-16LE'
+      );
+      expect(localFileService.download).toHaveBeenCalledOnceWith(
+        file$,
+        'Quiz_12345678.csv'
+      );
+    });
+
+    it('does nothing when the export is cancelled', () => {
+      exportWith(undefined);
+
+      expect(csvService.exportContents).not.toHaveBeenCalled();
+      expect(localFileService.download).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('CSV import', () => {
+    let csvService: jasmine.SpyObj<QuestionnaireCsvService>;
+    let notificationService: jasmine.SpyObj<NotificationService>;
+    let refetchQueries: jasmine.Spy;
+
+    function importFile(file: File, result$: Observable<unknown>) {
+      const localFileService = TestBed.inject(
+        LocalFileService
+      ) as jasmine.SpyObj<LocalFileService>;
+      localFileService.upload.and.returnValue(of(file));
+      csvService.importContents.and.returnValue(result$ as never);
+      component.importFromCsv();
+    }
+
+    beforeEach(() => {
+      setUp();
+      csvService = TestBed.inject(
+        QuestionnaireCsvService
+      ) as jasmine.SpyObj<QuestionnaireCsvService>;
+      notificationService = TestBed.inject(
+        NotificationService
+      ) as jasmine.SpyObj<NotificationService>;
+      refetchQueries = spyOn(
+        TestBed.inject(Apollo).client,
+        'refetchQueries'
+      ).and.returnValue(Promise.resolve([]) as never);
+    });
+
+    it('uploads the file and refreshes the contents', () => {
+      const file = new File(['format,body'], 'contents.csv');
+
+      importFile(file, of({ totalLines: 1, importedLines: 1, errorLines: [] }));
+
+      expect(csvService.importContents).toHaveBeenCalledOnceWith('q-1', file);
+      expect(refetchQueries).toHaveBeenCalledOnceWith({
+        include: [
+          QuestionnaireContentsByQuestionnaireIdDocument,
+          QuestionnaireByIdDocument,
+        ],
+      });
+      expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+        'creator.content.import-successful',
+        jasmine.anything()
+      );
+      expect(dialogService.openDialog).not.toHaveBeenCalled();
+    });
+
+    it('leaves a rejected file to the service', () => {
+      importFile(
+        new File(['nonsense'], 'contents.csv'),
+        throwError(() => new Error('400'))
+      );
+
+      expect(refetchQueries).not.toHaveBeenCalled();
+      expect(notificationService.showAdvanced).not.toHaveBeenCalled();
+      expect(dialogService.openDialog).not.toHaveBeenCalled();
+    });
+
+    it('lists the skipped entries by reason', () => {
+      const translate = spyOn(
+        TestBed.inject(TranslocoService),
+        'translate'
+      ).and.callThrough();
+      const file = new File(['format,body'], 'contents.csv');
+
+      importFile(
+        file,
+        of({
+          totalLines: 4,
+          importedLines: 1,
+          errorLines: [
+            { line: 2, reason: ContentCsvImportErrorReason.UNKNOWN_FORMAT },
+            { line: 3, reason: ContentCsvImportErrorReason.MISSING_BODY },
+            { line: 4, reason: ContentCsvImportErrorReason.UNKNOWN_FORMAT },
+          ],
+        })
+      );
+
+      expect(translate).toHaveBeenCalledWith(
+        'creator.dialog.csv-import-error-unknown-format',
+        { entries: '2, 4' }
+      );
+      expect(translate).toHaveBeenCalledWith(
+        'creator.dialog.csv-import-error-missing-body',
+        { entries: '3' }
+      );
+      expect(dialogService.openDialog).toHaveBeenCalledOnceWith(
+        BaseDialogComponent,
+        jasmine.objectContaining({
+          data: jasmine.objectContaining({
+            headerLabel: 'creator.dialog.csv-import-errors-header',
+          }),
+        })
+      );
+      expect(notificationService.showAdvanced).not.toHaveBeenCalled();
+    });
   });
 
   describe('quiz progress', () => {
