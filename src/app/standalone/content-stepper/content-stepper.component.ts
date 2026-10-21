@@ -9,7 +9,7 @@ import {
   booleanAttribute,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
-import { Content, UserUiSettings } from '@gql/generated/graphql';
+import { ContentDetailsFragment, UserUiSettings } from '@gql/generated/graphql';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
@@ -34,7 +34,7 @@ export class ContentStepperComponent {
 
   stepper = viewChild.required(StepperComponent);
 
-  contents = input.required<Content[]>();
+  contents = input.required<ContentDetailsFragment[]>();
   settings = input.required<UserUiSettings>();
   startIndex = input.required<number>();
   startedContentId = input<string>();
@@ -61,7 +61,7 @@ export class ContentStepperComponent {
    * A live content waits for its start only once: going back to a content
    * which already ran shows it again, not the waiting screen.
    */
-  hasStarted(content: Content): boolean {
+  hasStarted(content: ContentDetailsFragment): boolean {
     return (
       content.id === this.startedContentId() || !!content.activeRound?.started
     );

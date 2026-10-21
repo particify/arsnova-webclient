@@ -5,18 +5,21 @@ import {
   ResolveFn,
   Router,
 } from '@angular/router';
-import { Questionnaire, QuestionnaireByIdGql } from '@gql/generated/graphql';
+import {
+  QuestionnaireByIdGql,
+  QuestionnaireDetailsFragment,
+} from '@gql/generated/graphql';
 import { catchError, map, of } from 'rxjs';
 
 /**
- * A resolver that returns the current questionnaire (Questionnaire).
+ * A resolver that returns the current questionnaire.
  *
  * A questionnaire the user may not read, such as an unpublished one for a
  * participant, or one that no longer exists leads back to the room instead of
  * failing the navigation. It always asks the server, as release and
  * permissions may have changed since the questionnaire was last cached.
  */
-export const questionnaireResolver: ResolveFn<Questionnaire> = (
+export const questionnaireResolver: ResolveFn<QuestionnaireDetailsFragment> = (
   route: ActivatedRouteSnapshot
 ) => {
   const router = inject(Router);
@@ -32,7 +35,8 @@ export const questionnaireResolver: ResolveFn<Questionnaire> = (
     .pipe(
       map(
         (r) =>
-          (r.data?.questionnaireById as Questionnaire | undefined) ?? toRoom()
+          (r.data?.questionnaireById as
+            QuestionnaireDetailsFragment | undefined) ?? toRoom()
       ),
       catchError(() => of(toRoom()))
     );

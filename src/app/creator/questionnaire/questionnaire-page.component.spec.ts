@@ -36,6 +36,7 @@ import {
   ResetQuestionnaireResultsDocument,
   ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
+  CreatorContentDetailsFragment,
 } from '@gql/generated/graphql';
 import { ApolloClient, ApolloLink, gql, InMemoryCache } from '@apollo/client';
 import { Apollo } from 'apollo-angular';
@@ -66,7 +67,9 @@ describe('QuestionnairePageComponent (creator)', () => {
   let creatorContentUpdated: jasmine.SpyObj<CreatorQuestionnaireContentUpdatedGql>;
   let contentUpdated: jasmine.SpyObj<QuestionnaireContentUpdatedGql>;
 
-  const contents = ['c-1', 'c-2'].map((id) => ({ id }) as Content);
+  const contents = ['c-1', 'c-2'].map(
+    (id) => ({ id }) as CreatorContentDetailsFragment
+  );
 
   function childRoute(path: string, params: Record<string, string> = {}) {
     return { snapshot: { routeConfig: { path }, params } };

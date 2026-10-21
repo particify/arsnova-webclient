@@ -1,8 +1,8 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
-  Content,
-  Questionnaire,
+  CreatorContentDetailsFragment,
+  QuestionnaireDetailsFragment,
   QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnaireUpdatedGql,
@@ -37,7 +37,7 @@ export class ContentPresentationService {
           .watch({ variables: { id } })
           .valueChanges.pipe(
             map((r) => r.data?.questionnaireById),
-            filter((n): n is Questionnaire => !!n)
+            filter((n): n is QuestionnaireDetailsFragment => !!n)
           );
       })
     )
@@ -86,7 +86,11 @@ export class ContentPresentationService {
     const edges =
       this.contentsResult()?.data?.questionnaireContentsByQuestionnaireId
         ?.edges;
-    return edges?.map((e) => e?.node).filter((n): n is Content => !!n) ?? [];
+    return (
+      edges
+        ?.map((e) => e?.node)
+        .filter((n): n is CreatorContentDetailsFragment => !!n) ?? []
+    );
   });
 
   readonly loadingContents = computed(() => this.contentsResult()?.loading);
@@ -94,7 +98,8 @@ export class ContentPresentationService {
   readonly currentContentIndex = this._currentContentIndex.asReadonly();
 
   readonly currentContent = computed(
-    (): Content | undefined => this.contents()[this._currentContentIndex()]
+    (): CreatorContentDetailsFragment | undefined =>
+      this.contents()[this._currentContentIndex()]
   );
 
   setQuestionnaireId(id: string) {

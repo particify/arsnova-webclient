@@ -38,7 +38,7 @@ import {
 import {
   ContentType,
   PublishQuestionnaireUpToContentGql,
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnaireByIdGql,
   QuestionnaireContentUpdatedGql,
   QuestionnairePublishingMode,
@@ -169,7 +169,7 @@ export class ContentsPageComponent {
       switchMap((id) =>
         this.questionnaireById.watch({ variables: { id } }).valueChanges.pipe(
           map((r) => r.data?.questionnaireById),
-          filter((n): n is Questionnaire => !!n)
+          filter((n): n is QuestionnaireDetailsFragment => !!n)
         )
       )
     )
@@ -331,7 +331,7 @@ export class ContentsPageComponent {
    * starts with asking to publish it. The watched questionnaire picks up the
    * result.
    */
-  private offerPublishing(questionnaire: Questionnaire) {
+  private offerPublishing(questionnaire: QuestionnaireDetailsFragment) {
     this.dialogService
       .openPublishGroupDialog(questionnaire.id, questionnaire.publishingMode)
       .afterClosed()

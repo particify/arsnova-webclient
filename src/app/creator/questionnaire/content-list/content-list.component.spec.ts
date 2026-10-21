@@ -35,6 +35,7 @@ import {
   StopQuestionnaireContentGql,
   ToggleQuestionnaireTextContentAnswersPublishedGql,
   UpdateQuestionnaireContentOrderGql,
+  CreatorContentDetailsFragment,
 } from '@gql/generated/graphql';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { configureTestModule } from '@testing/test.setup';
@@ -60,7 +61,7 @@ describe('ContentListComponent', () => {
         position,
         body: `Content ${position}`,
         formatData: { format: ContentType.Choice },
-      }) as Content
+      }) as CreatorContentDetailsFragment
   );
 
   function questionnaire(overrides: Partial<Questionnaire> = {}) {
@@ -457,7 +458,7 @@ describe('ContentListComponent', () => {
         publishedUpToContent: {
           id: `c-${position}`,
           position,
-        } as Content,
+        } as CreatorContentDetailsFragment,
       });
 
     function publishedUpTo() {
@@ -607,7 +608,7 @@ describe('ContentListComponent', () => {
       const wordcloud = contents.map((c) => ({
         ...c,
         formatData: { format: ContentType.Wordcloud },
-      })) as Content[];
+      })) as CreatorContentDetailsFragment[];
       setUp(live(), undefined, wordcloud);
       // Only some formats support several rounds; starting the first one must not depend on it.
       (
@@ -635,7 +636,7 @@ describe('ContentListComponent', () => {
           closed: false,
           answerable: true,
         },
-      })) as Content[];
+      })) as CreatorContentDetailsFragment[];
       setUp(
         live({ id: 'round-1', closed: false, answerable: true }),
         undefined,
@@ -658,7 +659,7 @@ describe('ContentListComponent', () => {
           closed: i === 1,
           answerable: i !== 1,
         },
-      })) as Content[];
+      })) as CreatorContentDetailsFragment[];
       setUp(
         live({ id: 'round-1', closed: true, answerable: false }),
         undefined,
@@ -677,7 +678,7 @@ describe('ContentListComponent', () => {
       ({
         ...contents[0],
         activeRound: { id: 'round-1', roundNo: 1, closed, answerable: !closed },
-      }) as Content;
+      }) as CreatorContentDetailsFragment;
 
     it('starts a new round once confirmed', () => {
       setUp();
@@ -759,7 +760,7 @@ describe('ContentListComponent', () => {
         component.supportsRounds({
           ...contents[0],
           formatData: { format: ContentType.Slide },
-        } as Content)
+        } as CreatorContentDetailsFragment)
       ).toBeFalse();
     });
   });
@@ -786,7 +787,9 @@ describe('ContentListComponent', () => {
         }),
         undefined,
         contents.map((c) =>
-          c.id === 'c-1' ? ({ ...c, activeRound } as Content) : c
+          c.id === 'c-1'
+            ? ({ ...c, activeRound } as CreatorContentDetailsFragment)
+            : c
         )
       );
     }
@@ -843,13 +846,13 @@ describe('ContentListComponent', () => {
         component.isLiveRow({
           ...contents[1],
           activeRound: round(inSeconds(-1)),
-        } as Content)
+        } as CreatorContentDetailsFragment)
       ).toBeFalse();
       expect(
         component.canModifyAnswersOrRounds({
           ...contents[1],
           activeRound: round(inSeconds(-1)),
-        } as Content)
+        } as CreatorContentDetailsFragment)
       ).toBeTrue();
     });
 
@@ -863,7 +866,7 @@ describe('ContentListComponent', () => {
         component.isLiveRow({
           ...contents[1],
           activeRound: round(inSeconds(-30)),
-        } as Content)
+        } as CreatorContentDetailsFragment)
       ).toBeTrue();
     });
 
@@ -883,7 +886,7 @@ describe('ContentListComponent', () => {
           format: ContentType.Text,
           answersPublished,
         },
-      }) as Content;
+      }) as CreatorContentDetailsFragment;
 
     function toggled() {
       return mutation(ToggleQuestionnaireTextContentAnswersPublishedGql);
@@ -943,7 +946,12 @@ describe('ContentListComponent', () => {
 
   describe('banned answers', () => {
     function listedWith(format: ContentType) {
-      return [{ ...contents[0], formatData: { format } } as Content];
+      return [
+        {
+          ...contents[0],
+          formatData: { format },
+        } as CreatorContentDetailsFragment,
+      ];
     }
 
     async function menuItemTexts(): Promise<string[]> {

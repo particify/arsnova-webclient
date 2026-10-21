@@ -13,7 +13,7 @@ import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-tog
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { provideTranslocoScope } from '@jsverse/transloco';
 import {
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnairePublishingMode,
   QuestionnaireType,
   UpdateQuestionnaireGql,
@@ -45,14 +45,14 @@ export class QuestionnaireSettingsComponent
   private dialogRef =
     inject<MatDialogRef<QuestionnaireSettingsComponent>>(MatDialogRef);
   data = inject<{
-    questionnaire: Questionnaire;
+    questionnaire: QuestionnaireDetailsFragment;
     alreadyAnswered: boolean;
   }>(MAT_DIALOG_DATA);
   private readonly updateQuestionnaire = inject(UpdateQuestionnaireGql);
   private readonly notificationService = inject(NotificationService);
 
   nameFormControl = new UntypedFormControl();
-  questionnaire: Questionnaire;
+  questionnaire: QuestionnaireDetailsFragment;
   QuestionnaireType = QuestionnaireType;
   PublishingMode = QuestionnairePublishingMode;
 

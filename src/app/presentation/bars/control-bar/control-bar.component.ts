@@ -58,7 +58,7 @@ import {
   TrackingService,
 } from '@app/core/services/util/tracking.service';
 import {
-  Content,
+  ContentDetailsFragment,
   ContentType,
   QuestionnairesByRoomIdGql,
   QuestionnaireSummaryFragment,
@@ -189,7 +189,7 @@ export class ControlBarComponent
   currentCommentTags: Tag[] = [];
   commentSortTypes = [CommentSort.TIME, CommentSort.VOTEDESC];
   contentIndex = 0;
-  content?: Content;
+  content?: ContentDetailsFragment;
 
   features: NavBarItem[] = [
     new NavBarItem(RoutingFeature.COMMENTS, 'question_answer'),

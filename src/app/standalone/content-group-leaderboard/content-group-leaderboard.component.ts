@@ -17,7 +17,7 @@ import {
 } from '@app/core/services/util/leaderboard.service';
 import {
   LeaderboardPage,
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnaireLeaderboardByQuestionnaireIdGql,
   QuestionnaireLeaderboardUpdatedGql,
 } from '@gql/generated/graphql';
@@ -37,7 +37,7 @@ export class ContentGroupLeaderboardComponent implements OnInit {
   );
   private leaderboardUpdated = inject(QuestionnaireLeaderboardUpdatedGql);
 
-  @Input({ required: true }) questionnaire!: Questionnaire;
+  @Input({ required: true }) questionnaire!: QuestionnaireDetailsFragment;
   @Input() showAll = false;
   @Input() allowScrolling = false;
   leaderboardPage: LeaderboardPage = { entries: [], totalCount: 0 };
