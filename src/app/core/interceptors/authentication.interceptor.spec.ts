@@ -115,4 +115,28 @@ describe('AuthenticationInterceptor', () => {
     // No further request is expected. This is asserted by verify() in
     // afterEach().
   });
+
+  for (const sessionToken of [ACCESS_TOKEN, undefined]) {
+    it(`should leave a request with its own token alone ${sessionToken ? 'with' : 'without'} a session`, () => {
+      authenticationService.setAccessToken(sessionToken);
+      const handleUnauthorizedError = spyOn(
+        authenticationService,
+        'handleUnauthorizedError'
+      ).and.callThrough();
+      let error: unknown;
+      httpClient
+        .get(REQUEST_URI, {
+          headers: { Authorization: 'Bearer check-token' },
+        })
+        .subscribe({ error: (e) => (error = e) });
+      const req = httpTestingController.expectOne(REQUEST_URI);
+      expect(req.request.headers.get('Authorization')).toBe(
+        'Bearer check-token'
+      );
+      req.flush(null, { status: 401, statusText: 'Unauthorized' });
+
+      expect(error).toBeDefined();
+      expect(handleUnauthorizedError).not.toHaveBeenCalled();
+    });
+  }
 });

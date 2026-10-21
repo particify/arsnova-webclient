@@ -7,6 +7,11 @@ export enum ErrorClassification {
   NotFound = 'NOT_FOUND',
 }
 
+/** Distinguishes errors of one classification, e.g. a too weak password from other bad requests. */
+export enum ErrorCode {
+  WeakPassword = 'WEAK_PASSWORD',
+}
+
 type ErrorHandler = () => void;
 
 export const FALLBACK_HANDLER = 'fallback';
@@ -26,6 +31,17 @@ export function classifyOperationError(
   }
   const classification = response.errors[0].extensions?.['classification'];
   return Object.values(ErrorClassification).find((c) => c === classification);
+}
+
+/** The code of a failed operation's first error, if it is a known one. */
+export function getOperationErrorCode(
+  response: unknown
+): ErrorCode | undefined {
+  if (!CombinedGraphQLErrors.is(response)) {
+    return undefined;
+  }
+  const code = response.errors[0].extensions?.['code'];
+  return Object.values(ErrorCode).find((c) => c === code);
 }
 
 export function handleOperationErrors(

@@ -7347,6 +7347,19 @@ export type CurrentUserWithSettingsQuery = {
   } | null;
 };
 
+export type UserPasswordStrengthQueryVariables = Exact<{
+  query: Types.UserPasswordStrengthQueryInput;
+}>;
+
+export type UserPasswordStrengthQuery = {
+  userPasswordStrength: {
+    __typename: 'UserPasswordStrength';
+    acceptable: boolean;
+    relativeStrength: number;
+    hint: string | null;
+  } | null;
+};
+
 export type ClaimUnverifiedUserMutationVariables = Exact<{
   mailAddress: string;
   password: string;
@@ -12350,6 +12363,29 @@ export class CurrentUserWithSettingsGql extends Apollo.Query<
   CurrentUserWithSettingsQueryVariables
 > {
   document = CurrentUserWithSettingsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UserPasswordStrengthDocument = gql`
+  query UserPasswordStrength($query: UserPasswordStrengthQueryInput!) {
+    userPasswordStrength(query: $query) {
+      acceptable
+      relativeStrength
+      hint
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UserPasswordStrengthGql extends Apollo.Query<
+  UserPasswordStrengthQuery,
+  UserPasswordStrengthQueryVariables
+> {
+  document = UserPasswordStrengthDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

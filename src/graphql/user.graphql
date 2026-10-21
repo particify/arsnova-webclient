@@ -36,6 +36,14 @@ query CurrentUserWithSettings {
   }
 }
 
+query UserPasswordStrength($query: UserPasswordStrengthQueryInput!) {
+  userPasswordStrength(query: $query) {
+    acceptable
+    relativeStrength
+    hint
+  }
+}
+
 mutation ClaimUnverifiedUser($mailAddress: String!, $password: String!) {
   claimUnverifiedUser(mailAddress: $mailAddress, password: $password) {
     id

@@ -25,7 +25,11 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { VerifyUserMailAddressUnauthenticatedGql } from '@gql/generated/graphql';
-import { ErrorClassification } from '@gql/helper/handle-operation-error';
+import {
+  ErrorClassification,
+  ErrorCode,
+  getOperationErrorCode,
+} from '@gql/helper/handle-operation-error';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { first, switchMap } from 'rxjs';
 import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
@@ -71,7 +75,8 @@ export class VerifyUserInvitationComponent extends FormComponent {
   );
 
   verify(): void {
-    if (!this.validateForm()) {
+    const password = this.passwordField().getPassword();
+    if (!this.validateForm(password)) {
       return;
     }
     this.disableForm();
@@ -84,7 +89,7 @@ export class VerifyUserInvitationComponent extends FormComponent {
             variables: {
               verificationCode: this.code(),
               userId: this.userId(),
-              password: this.passwordField().getPassword(),
+              password,
             },
             context: {
               headers: new HttpHeaders({ Authorization: `Bearer ${t}` }),
@@ -107,6 +112,14 @@ export class VerifyUserInvitationComponent extends FormComponent {
           }
         },
         error: (e) => {
+          this.enableForm();
+          if (getOperationErrorCode(e) === ErrorCode.WeakPassword) {
+            this.notificationService.showAdvanced(
+              this.translationService.translate('password.password-too-weak'),
+              AdvancedSnackBarTypes.FAILED
+            );
+            return;
+          }
           this.notificationService.showOnRequestClientError(e, {
             [ErrorClassification.BadRequest]: {
               message: this.translationService.translate(
@@ -119,8 +132,8 @@ export class VerifyUserInvitationComponent extends FormComponent {
       });
   }
 
-  private validateForm(): boolean {
-    if (!this.passwordField().getPassword()) {
+  private validateForm(password: string): boolean {
+    if (!password) {
       this.notificationService.showAdvanced(
         this.translationService.translate('password.unsuccessful'),
         AdvancedSnackBarTypes.WARNING

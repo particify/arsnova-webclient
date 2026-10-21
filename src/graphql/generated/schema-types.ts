@@ -1340,6 +1340,7 @@ export type Query = {
   templateLicenses: Array<TemplateLicense>;
   templateTagsByLanguage: Array<TemplateTag>;
   userByDisplayId?: Maybe<User>;
+  userPasswordStrength?: Maybe<UserPasswordStrength>;
 };
 
 export type QueryAdminActiveRoomStatsArgs = {
@@ -1588,6 +1589,10 @@ export type QueryTemplateTagsByLanguageArgs = {
 
 export type QueryUserByDisplayIdArgs = {
   displayId: Scalars['ID']['input'];
+};
+
+export type QueryUserPasswordStrengthArgs = {
+  query: UserPasswordStrengthQueryInput;
 };
 
 export type Questionnaire = {
@@ -2173,6 +2178,18 @@ export type User = {
   uiSettings?: Maybe<UserUiSettings>;
   unverifiedMailAddress?: Maybe<Scalars['String']['output']>;
   verified: Scalars['Boolean']['output'];
+};
+
+export type UserPasswordStrength = {
+  __typename?: 'UserPasswordStrength';
+  acceptable: Scalars['Boolean']['output'];
+  hint?: Maybe<Scalars['String']['output']>;
+  relativeStrength: Scalars['Float']['output'];
+};
+
+export type UserPasswordStrengthQueryInput = {
+  mailAddress?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
 };
 
 export type UserUiSettings = {

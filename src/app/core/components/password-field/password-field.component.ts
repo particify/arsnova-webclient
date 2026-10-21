@@ -1,22 +1,23 @@
 import {
   AfterViewInit,
   Component,
+  OnInit,
   ElementRef,
   ViewChild,
   inject,
   input,
   ChangeDetectionStrategy,
 } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import {
   UntypedFormControl,
-  ValidatorFn,
+  ValidationErrors,
   Validators,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { AutofillMonitor } from '@angular/cdk/text-field';
 import { FormComponent } from '@app/standalone/form/form.component';
 import {
@@ -27,32 +28,30 @@ import {
   MatHint,
 } from '@angular/material/form-field';
 import { NgClass } from '@angular/common';
-import { ExtendedModule } from '@angular/flex-layout/extended';
 import { MatInput } from '@angular/material/input';
 import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
-import { FlexModule } from '@angular/flex-layout';
+import {
+  MIN_PASSWORD_LENGTH,
+  MIN_RATED_PASSWORD_LENGTH,
+  PasswordStrength,
+  PasswordStrengthResult,
+  PasswordStrengthService,
+  isSameRequest,
+} from '@app/core/services/util/password-strength.service';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { combineLatest, distinctUntilChanged, map, takeUntil } from 'rxjs';
 
-enum Strength {
-  WEAK = 1,
-  OKAY = 2,
-  STRONG = 4,
-}
+/**
+ * The strength bar moves in steps, so small changes of the rating do not make it jitter. It is
+ * rounded down, and only full once the password is acceptable.
+ */
+const STRENGTH_STEPS = 5;
+/** Fill of the strength bar from which a password counts as weak rather than very weak. */
+const WEAK_PROGRESS = 0.6;
 
-const LENGTH_PATTERN = /.{20,}/;
-const NUMBER_PATTERN = /\d/;
-const LOWER_CASE_PATTERN = /\p{Ll}/u;
-const UPPER_CASE_PATTERN = /\p{Lu}/u;
-const SPECIAL_CHARACTERS_PATTERN = /[\p{P}\p{S}\p{Z}]/u;
-
-const PATTERNS: RegExp[] = [
-  LENGTH_PATTERN,
-  NUMBER_PATTERN,
-  LOWER_CASE_PATTERN,
-  UPPER_CASE_PATTERN,
-  SPECIAL_CHARACTERS_PATTERN,
-];
+let nextStrengthBarId = 0;
 
 @Component({
   selector: 'app-password-field',
@@ -62,7 +61,6 @@ const PATTERNS: RegExp[] = [
   imports: [
     MatFormField,
     NgClass,
-    ExtendedModule,
     MatLabel,
     MatInput,
     FormsModule,
@@ -72,17 +70,18 @@ const PATTERNS: RegExp[] = [
     MatTooltip,
     MatIcon,
     MatError,
-    FlexModule,
     MatHint,
+    MatProgressBar,
     TranslocoPipe,
   ],
 })
 export class PasswordFieldComponent
   extends FormComponent
-  implements AfterViewInit
+  implements OnInit, AfterViewInit
 {
   notificationService = inject(NotificationService);
   private _autofill = inject(AutofillMonitor);
+  private passwordStrengthService = inject(PasswordStrengthService);
 
   @ViewChild('passwordInput') passwordInput!: ElementRef;
 
@@ -90,20 +89,37 @@ export class PasswordFieldComponent
   readonly preFill = input<string>();
   readonly isNew = input(false);
   readonly label = input<string>();
+  /** The mail address of the account, if known, which a new password must not be built from. */
+  readonly mailAddress = input<string>();
 
   password = '';
   passwordFormControl = new UntypedFormControl();
-  matcher = new FormErrorStateMatcher();
-  strength = 0;
-  strengthLevels: typeof Strength = Strength;
+  strength?: PasswordStrength;
+  readonly strengthBarId = `password-strength-${nextStrengthBarId++}`;
+  private readonly mailAddress$ = toObservable(this.mailAddress);
+  /** The latest rating, which may still be for an earlier value. */
+  private lastRating?: PasswordStrengthResult;
   hidePw = true;
   showPwButton = false;
   autofilled = false;
   lastInput = '';
 
+  ngOnInit(): void {
+    if (this.checkStrength()) {
+      this.passwordFormControl.setValidators([
+        Validators.required,
+        Validators.minLength(MIN_PASSWORD_LENGTH),
+        () => this.validateStrength(),
+      ]);
+      this.passwordFormControl.updateValueAndValidity();
+    }
+  }
+
   ngAfterViewInit(): void {
+    if (this.checkStrength()) {
+      this.rateWhileTyping();
+    }
     this.setFormControl(this.passwordFormControl);
-    this.passwordFormControl.clearValidators();
     this._autofill.monitor(this.passwordInput).subscribe((p) => {
       this.autofilled = p.isAutofilled;
       if (this.showPwButton) {
@@ -129,39 +145,106 @@ export class PasswordFieldComponent
     this.lastInput = this.password;
   }
 
-  activateValidators() {
-    if (this.checkStrength()) {
-      this.passwordFormControl.setValidators([
-        Validators.required,
-        Validators.minLength(8),
-        this.validatePasswordStrength(),
-      ]);
-      this.passwordFormControl.updateValueAndValidity();
-    }
-  }
-
+  /**
+   * The password, or an empty string while a new password is not acceptable yet. Counts as a
+   * submit attempt, which shows why a password is not acceptable.
+   */
   getPassword(): string {
-    return this.strength >= Strength.OKAY || !this.checkStrength()
+    if (!this.checkStrength()) {
+      return this.password;
+    }
+    this.passwordFormControl.markAsTouched();
+    if (this.passwordFormControl.valid) {
+      return this.password;
+    }
+    // A rating of an earlier value does not hold up submitting: the backend checks the password
+    // anyway.
+    return this.password.length >= MIN_PASSWORD_LENGTH && !this.isRated()
       ? this.password
       : '';
   }
 
-  validatePasswordStrength(): ValidatorFn {
-    return (formControl) => {
-      this.strength = this.getPasswordStrength(formControl.value);
-      return this.strength >= Strength.OKAY
-        ? null
-        : { validatePasswordStrength: { value: formControl.value } };
-    };
+  strengthPercent(): number {
+    return this.displayedProgress() * 100;
   }
 
-  getPasswordStrength(password: string): number {
-    let strength = 0;
-    for (const pattern of PATTERNS) {
-      if (pattern.test(password)) {
-        strength++;
-      }
+  /** How far the password is from the requirement, for the bar's colour and label. */
+  strengthLevel(): 'very-weak' | 'weak' | 'sufficient' {
+    if (this.strength?.acceptable) {
+      return 'sufficient';
     }
-    return strength;
+    return this.displayedProgress() >= WEAK_PROGRESS ? 'weak' : 'very-weak';
+  }
+
+  private displayedProgress(): number {
+    if (!this.strength) {
+      return 0;
+    }
+    if (this.strength.acceptable) {
+      return 1;
+    }
+    const steps = Math.floor(this.strength.relativeStrength * STRENGTH_STEPS);
+    return Math.min(steps, STRENGTH_STEPS - 1) / STRENGTH_STEPS;
+  }
+
+  /**
+   * Rates the password again whenever it or the mail address changes. Shows the last known rating
+   * until the one for the current request arrives, so the bar does not flash empty while typing.
+   */
+  private rateWhileTyping() {
+    const passwords = this.passwordFormControl.valueChanges.pipe(
+      map((password: string | null) => password ?? ''),
+      distinctUntilChanged()
+    );
+    passwords.pipe(takeUntil(this.destroyed$)).subscribe((password) => {
+      if (password.length < MIN_RATED_PASSWORD_LENGTH) {
+        this.strength = undefined;
+        this.lastRating = undefined;
+      }
+    });
+    const mailAddresses = this.mailAddress$.pipe(
+      map((mailAddress) => mailAddress || undefined),
+      distinctUntilChanged()
+    );
+    const requests = combineLatest([passwords, mailAddresses]).pipe(
+      map(([password, mailAddress]) => ({ password, mailAddress }))
+    );
+    this.passwordStrengthService
+      .watch(requests)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((result) => {
+        if (result.strength) {
+          this.strength = result.strength;
+        }
+        this.lastRating = result;
+        this.passwordFormControl.updateValueAndValidity({ emitEvent: false });
+      });
+  }
+
+  /** Whether the latest rating is for the current password and mail address. */
+  private isRated(): boolean {
+    return (
+      !!this.lastRating &&
+      isSameRequest(this.lastRating, {
+        password: this.passwordFormControl.value ?? '',
+        mailAddress: this.mailAddress(),
+      })
+    );
+  }
+
+  /**
+   * Applies the latest rating, until the one for the current value replaces it, so its error does
+   * not vanish while the next rating is on its way. Without a rating, e.g. if the backend cannot
+   * be reached, the password is accepted here and the backend decides when it is set.
+   */
+  private validateStrength(): ValidationErrors | null {
+    const password: string = this.passwordFormControl.value ?? '';
+    const rating = this.lastRating;
+    if (!rating || password.length < MIN_PASSWORD_LENGTH) {
+      return null;
+    }
+    return rating.strength && !rating.strength.acceptable
+      ? { passwordTooWeak: true }
+      : null;
   }
 }

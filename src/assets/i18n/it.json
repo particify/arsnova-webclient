@@ -578,10 +578,13 @@
     "show-password": "Mostra password",
     "hide-password": "Nascondi la password",
     "password-required": "Password richiesta",
-    "password-too-short": "Si prega di utilizzare almeno 8 caratteri",
-    "password-too-weak": "Utilizza una password forte",
-    "password-okay": "Password sufficiente",
-    "password-strong": "Password forte",
+    "password-too-short": "Si prega di utilizzare almeno 10 caratteri",
+    "password-too-weak": "Questa password è troppo facile da indovinare.",
+    "add-more-characters": "Aggiungi altri caratteri.",
+    "strength": "Robustezza della password",
+    "strength-sufficient": "Sufficiente",
+    "strength-very-weak": "Molto debole",
+    "strength-weak": "Debole",
     "unsuccessful": "Controlla la tua password."
   },
   "register": {
