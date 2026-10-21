@@ -8,6 +8,7 @@ fragment QuestionnaireSummary on Questionnaire {
     id
     position
   }
+  leaderboardEnabled
   contentCount
 }
 

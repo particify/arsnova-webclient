@@ -19,7 +19,7 @@ import {
 } from '@app/standalone/nav-bar/nav-bar.component';
 import { STORAGE_KEYS } from '@app/core/services/util/global-storage.service';
 import { map, switchMap, take, takeUntil, throttleTime } from 'rxjs/operators';
-import { distinctUntilChanged, fromEvent, of, Subject } from 'rxjs';
+import { fromEvent, Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
 import {
@@ -60,7 +60,6 @@ import {
 import {
   Content,
   ContentType,
-  QuestionnaireByIdGql,
   QuestionnairesByRoomIdGql,
   QuestionnaireSummaryFragment,
   QuestionnaireType,
@@ -160,24 +159,8 @@ export class ControlBarComponent
 
   readonly activeQuestionnaire = model(this.questionnaires()[0] ?? undefined);
 
-  private readonly questionnaireById = inject(QuestionnaireByIdGql);
-
-  /** The summary has no settings, so the leaderboard control follows the watched details. */
-  private readonly leaderboardEnabled = toSignal(
-    toObservable(this.activeQuestionnaire).pipe(
-      map((questionnaire) => questionnaire?.id),
-      distinctUntilChanged(),
-      switchMap((id) =>
-        id
-          ? this.questionnaireById
-              .watch({ variables: { id } })
-              .valueChanges.pipe(
-                map((r) => !!r.data?.questionnaireById?.leaderboardEnabled)
-              )
-          : of(false)
-      )
-    ),
-    { initialValue: false }
+  private readonly leaderboardEnabled = computed(
+    () => !!this.activeQuestionnaire()?.leaderboardEnabled
   );
 
   private readonly contentResultsVisible = computed(() =>

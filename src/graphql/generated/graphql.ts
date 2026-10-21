@@ -945,6 +945,7 @@ export type QuestionnaireSummaryFragment = {
   type: Types.QuestionnaireType;
   published: boolean;
   publishingMode: Types.QuestionnairePublishingMode;
+  leaderboardEnabled: boolean | null;
   contentCount: number | null;
   publishedUpToContent: {
     __typename: 'Content';
@@ -1380,6 +1381,7 @@ export type QuestionnairesByRoomIdQuery = {
     type: Types.QuestionnaireType;
     published: boolean;
     publishingMode: Types.QuestionnairePublishingMode;
+    leaderboardEnabled: boolean | null;
     contentCount: number | null;
     publishedUpToContent: {
       __typename: 'Content';
@@ -1401,6 +1403,7 @@ export type PublishedQuestionnairesByRoomIdQuery = {
     type: Types.QuestionnaireType;
     published: boolean;
     publishingMode: Types.QuestionnairePublishingMode;
+    leaderboardEnabled: boolean | null;
     contentCount: number | null;
     publishedUpToContent: {
       __typename: 'Content';
@@ -7179,6 +7182,7 @@ export const QuestionnaireSummaryFragmentDoc = gql`
       id
       position
     }
+    leaderboardEnabled
     contentCount
   }
 `;
