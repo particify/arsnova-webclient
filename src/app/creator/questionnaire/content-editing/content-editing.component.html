@@ -224,7 +224,7 @@
       <app-settings-slide-toggle
         [label]="'creator.content.select-multiple-options'"
         [isChecked]="multiple()"
-        [disabled]="isPreview()"
+        [disabled]="(content() && answered()) || isPreview()"
         (toggleEvent)="multiple.set($event)"
       ></app-settings-slide-toggle>
     }

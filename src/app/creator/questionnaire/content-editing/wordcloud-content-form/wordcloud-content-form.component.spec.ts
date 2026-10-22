@@ -18,7 +18,7 @@ describe('WordcloudContentFormComponent', () => {
   let notificationService: jasmine.SpyObj<NotificationService>;
   let pageService: jasmine.SpyObj<QuestionnairePageService>;
 
-  function setUp(contentId?: string, maxAnswers?: number) {
+  function setUp(contentId?: string, maxAnswers?: number, answered = false) {
     createContent = jasmine.createSpyObj(
       'CreateQuestionnaireWordcloudContentGql',
       ['mutate']
@@ -70,7 +70,12 @@ describe('WordcloudContentFormComponent', () => {
       fixture.componentRef.setInput('contentId', contentId);
     }
     fixture.componentRef.setInput('duration', 60);
+    fixture.componentRef.setInput('answered', answered);
     fixture.detectChanges();
+  }
+
+  function keywordCountInput(): HTMLInputElement {
+    return fixture.nativeElement.querySelector('input');
   }
 
   it('suggests three keywords for a new content', () => {
@@ -83,6 +88,27 @@ describe('WordcloudContentFormComponent', () => {
     setUp('c-1', 5);
 
     expect(component.maxAnswers()).toBe(5);
+  });
+
+  it('keeps the keyword count of an unanswered content editable', async () => {
+    setUp('c-1', 5);
+    await fixture.whenStable();
+
+    expect(keywordCountInput().disabled).toBeFalse();
+  });
+
+  it('locks the keyword count once the content has answers', async () => {
+    setUp('c-1', 5, true);
+    await fixture.whenStable();
+
+    expect(keywordCountInput().disabled).toBeTrue();
+  });
+
+  it('leaves a new content unlocked whatever it is told about answers', async () => {
+    setUp(undefined, undefined, true);
+    await fixture.whenStable();
+
+    expect(keywordCountInput().disabled).toBeFalse();
   });
 
   it('accepts between one and ten keywords', () => {

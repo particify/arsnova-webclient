@@ -23,6 +23,8 @@ import {
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { RouterModule } from '@angular/router';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { Subject } from 'rxjs';
 import { ChoiceContentFormComponent } from './choice-content-form/choice-content-form.component';
 import { ContentEditingComponent } from './content-editing.component';
@@ -55,22 +57,24 @@ describe('ContentEditingComponent', () => {
   describe('after creating a content', () => {
     let cachedContent$: Subject<unknown>;
 
-    function setUp(content?: Content) {
+    function setUp(content?: Content, renderSettings = false) {
       cachedContent$ = new Subject();
       // Only the form outlet and the body input matter to the reset under test.
-      TestBed.overrideComponent(ContentEditingComponent, {
-        set: {
-          template: `
-            <textarea #questionInput></textarea>
-            @let _formatComponent = formatComponent()?.component;
-            @if (_formatComponent) {
-              <ng-container
-                *ngComponentOutlet="_formatComponent; inputs: componentInputs()"
-              />
-            }
-          `,
-        },
-      });
+      if (!renderSettings) {
+        TestBed.overrideComponent(ContentEditingComponent, {
+          set: {
+            template: `
+              <textarea #questionInput></textarea>
+              @let _formatComponent = formatComponent()?.component;
+              @if (_formatComponent) {
+                <ng-container
+                  *ngComponentOutlet="_formatComponent; inputs: componentInputs()"
+                />
+              }
+            `,
+          },
+        });
+      }
       for (const form of [
         ChoiceContentFormComponent,
         WordcloudContentFormComponent,
@@ -96,7 +100,11 @@ describe('ContentEditingComponent', () => {
       ]);
 
       configureTestModule(
-        [getTranslocoModule(), ContentEditingComponent],
+        [
+          getTranslocoModule(),
+          RouterModule.forRoot([]),
+          ContentEditingComponent,
+        ],
         [
           { provide: ContentService, useValue: contentService },
           { provide: ContentGroupService, useValue: contentGroupService },
@@ -264,6 +272,63 @@ describe('ContentEditingComponent', () => {
           By.directive(ChoiceContentFormComponent)
         ).componentInstance as ChoiceContentFormComponent;
         expect(form.answered()).toBeTrue();
+      });
+
+      it('locks a wordcloud content with answers', () => {
+        setUp({
+          id: 'content-1',
+          body: 'Question',
+          hasAnswers: true,
+          formatData: {
+            __typename: 'WordcloudContentFormatData',
+            format: ContentType.Wordcloud,
+            maxAnswers: 3,
+          },
+        } as unknown as Content);
+
+        const form = fixture.debugElement.query(
+          By.directive(WordcloudContentFormComponent)
+        ).componentInstance as WordcloudContentFormComponent;
+        expect(form.locked()).toBeTrue();
+      });
+
+      describe('multiple selection toggle', () => {
+        function multipleToggles(hasAnswers: boolean) {
+          setUp(
+            {
+              id: 'content-1',
+              body: 'Question',
+              hasAnswers,
+              formatData: {
+                __typename: 'ChoiceContentFormatData',
+                format: ContentType.Choice,
+                multiple: false,
+                options: [],
+              },
+            } as unknown as Content,
+            true
+          );
+          return fixture.debugElement
+            .queryAll(By.directive(SettingsSlideToggleComponent))
+            .map((t) => t.componentInstance as SettingsSlideToggleComponent)
+            .filter(
+              (t) => t.label === 'creator.content.select-multiple-options'
+            );
+        }
+
+        it('keeps it editable while the content has no answers', () => {
+          const toggles = multipleToggles(false);
+
+          expect(toggles.length).toBeGreaterThan(0);
+          expect(toggles.every((t) => !t.disabled)).toBeTrue();
+        });
+
+        it('locks it once the content has answers', () => {
+          const toggles = multipleToggles(true);
+
+          expect(toggles.length).toBeGreaterThan(0);
+          expect(toggles.every((t) => t.disabled)).toBeTrue();
+        });
       });
 
       it('keeps a new round editable after rounds without answers', () => {

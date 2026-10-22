@@ -15,7 +15,8 @@
       (answersChange)="onAnswersChange($event)"
       [correctAnswers]="hasCorrectAnswer()"
       [multiple]="multiple()"
-      [allowDeletion]="!contentId() || !answered()"
+      [allowDeletion]="!locked()"
+      [correctAnswersLocked]="locked()"
     ></app-answer-option-list>
   </div>
 }
