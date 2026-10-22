@@ -51,9 +51,9 @@ import {
   toSignal,
 } from '@angular/core/rxjs-interop';
 import {
-  ContentAnswerResult,
+  ContentAnswerResultFragment,
   AnswerResultState,
-  Content,
+  ContentDetailsFragment,
   Questionnaire,
   QuestionnaireByIdGql,
   QuestionnaireContentAnswerResultsByQuestionnaireIdGql,
@@ -241,7 +241,7 @@ export class QuestionnairePageComponent {
     const results =
       this.answerResultsResult()?.data
         ?.questionnaireContentAnswerResultsByQuestionnaireId ?? [];
-    return results.filter((r): r is ContentAnswerResult => !!r);
+    return results.filter((r): r is ContentAnswerResultFragment => !!r);
   });
 
   readonly loadingAnswerResults = computed(() => !this.answerResultsResult());
@@ -250,7 +250,11 @@ export class QuestionnairePageComponent {
     const edges =
       this.contentsResult()?.data
         ?.questionnairePublishedContentsByQuestionnaireId?.edges;
-    return edges?.map((e) => e?.node).filter((n): n is Content => !!n) ?? [];
+    return (
+      edges
+        ?.map((e) => e?.node)
+        .filter((n): n is ContentDetailsFragment => !!n) ?? []
+    );
   });
 
   readonly loadingContents = computed(() => !this.contentsResult());
@@ -370,7 +374,7 @@ export class QuestionnairePageComponent {
   }
 
   constructor() {
-    let prevAnswerResults: ContentAnswerResult[] = [];
+    let prevAnswerResults: ContentAnswerResultFragment[] = [];
     effect(() => {
       // Entering needs the contents: their query may answer after the results.
       if (
@@ -492,8 +496,8 @@ export class QuestionnairePageComponent {
   }
 
   evaluateAnswerResultsState(
-    prevResults: ContentAnswerResult[],
-    currentResults: ContentAnswerResult[]
+    prevResults: ContentAnswerResultFragment[],
+    currentResults: ContentAnswerResultFragment[]
   ) {
     const answeredIndex = this.findNewlyAnsweredContentIndex(
       prevResults,
@@ -525,8 +529,8 @@ export class QuestionnairePageComponent {
   }
 
   private findNewlyAnsweredContentIndex(
-    prevResults: ContentAnswerResult[],
-    currentResults: ContentAnswerResult[]
+    prevResults: ContentAnswerResultFragment[],
+    currentResults: ContentAnswerResultFragment[]
   ): number {
     const wasUnanswered = new Set(
       prevResults
@@ -542,7 +546,7 @@ export class QuestionnairePageComponent {
   }
 
   private findNextUnansweredContentIndex(
-    results: ContentAnswerResult[],
+    results: ContentAnswerResultFragment[],
     after: number
   ): number {
     const unanswered = new Set(
@@ -683,7 +687,7 @@ export class QuestionnairePageComponent {
     }
   }
 
-  private isInfoContent(content: Content): boolean {
+  private isInfoContent(content: ContentDetailsFragment): boolean {
     return [ContentType.Slide, ContentType.Flashcard].includes(
       content.formatData.format
     );

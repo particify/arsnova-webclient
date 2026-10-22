@@ -45,7 +45,6 @@ import { RoomSettingsService } from '@app/core/services/http/room-settings.servi
 import {
   ActiveQnaPostUpdatedGql,
   CorrectState,
-  Exact,
   ModerationState,
   Post,
   PostEdge,
@@ -160,7 +159,7 @@ export class AbstractCommentsPageComponent {
 
   protected postCountsRef?: QueryRef<
     QnaPostCountsByQnaIdQuery,
-    Exact<QnaPostCountsByQnaIdQueryVariables>
+    QnaPostCountsByQnaIdQueryVariables
   >;
 
   readonly postCountsResult = toSignal(

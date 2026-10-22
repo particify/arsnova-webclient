@@ -46,9 +46,13 @@ describe('ContentScaleParticipantComponent', () => {
       of({
         data: {
           createQuestionnaireScaleAnswer: {
+            __typename: 'Answer',
             id: 'answer-1',
             result: AnswerResultState.Neutral,
             hidden: false,
+            createdAt: null,
+            durationMs: null,
+            formatData: null,
           },
         },
       })

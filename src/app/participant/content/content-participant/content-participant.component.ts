@@ -39,7 +39,7 @@ import {
   Answer,
   ContentAnswerResult,
   AnswerResultState,
-  Content,
+  ContentDetailsFragment,
   ContentType,
   CreateQuestionnaireAbstentionGql,
   Questionnaire,
@@ -171,7 +171,7 @@ export class ContentParticipantComponent {
   );
   shortId = input.required<string>();
   questionnaire = input.required<Questionnaire>();
-  content = input.required<Content>();
+  content = input.required<ContentDetailsFragment>();
   roomId = input.required<string>();
   showCard = input(true);
   correctOptionsPublished = input(false);

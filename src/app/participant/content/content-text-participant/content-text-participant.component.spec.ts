@@ -36,9 +36,13 @@ describe('ContentTextParticipantComponent', () => {
       of({
         data: {
           createQuestionnaireTextAnswer: {
+            __typename: 'Answer',
             id: 'answer-1',
             result: AnswerResultState.Neutral,
             hidden: false,
+            createdAt: null,
+            durationMs: null,
+            formatData: null,
           },
         },
       })
