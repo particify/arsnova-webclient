@@ -80,6 +80,9 @@ export class ChoiceContentFormComponent implements ContentForm<ChoiceContentForm
     })
   );
   answered = input(false);
+
+  /** Answers are scored against the options, so only their labels may change. */
+  readonly locked = computed(() => !!this.contentId() && this.answered());
   contentId = input<string>();
   hasCorrectAnswer = input(false);
   multiple = input(false);

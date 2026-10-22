@@ -73,6 +73,8 @@ export class AnswerOptionListComponent
   @Input() multiple = false;
   @Input() allowDeletion = false;
   @Input() disabled = false;
+  /** Keeps the correct answers as they are while the labels stay editable. */
+  @Input() correctAnswersLocked = false;
   @Input() sortable = false;
   @Input() minimumAnswerCount = 2;
   @Input() lengthLimit = 500;

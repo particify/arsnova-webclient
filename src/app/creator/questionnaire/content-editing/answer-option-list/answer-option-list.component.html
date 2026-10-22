@@ -38,7 +38,7 @@
           @if (correctAnswers) {
             <mat-checkbox
               id="answer-{{ i }}"
-              [disabled]="disabled"
+              [disabled]="disabled || correctAnswersLocked"
               color="primary"
               (ngModelChange)="switchValue(i)"
               [(ngModel)]="answer.correct"

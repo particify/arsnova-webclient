@@ -211,6 +211,12 @@ export class ContentEditingComponent {
         language: this.language(),
       };
     }
+    if (format === ContentType.Wordcloud) {
+      return {
+        ...base,
+        answered: this.answered(),
+      };
+    }
     if (format === ContentType.ShortAnswer || format === ContentType.Sort) {
       return {
         ...base,
