@@ -22,9 +22,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@analogjs/storybook-angular@npm:2.8.1":
-  version: 2.8.1
-  resolution: "@analogjs/storybook-angular@npm:2.8.1"
+"@analogjs/storybook-angular@npm:2.9.0":
+  version: 2.9.0
+  resolution: "@analogjs/storybook-angular@npm:2.9.0"
   dependencies:
     "@storybook/builder-vite": "npm:^10.0.0"
   peerDependencies:
@@ -32,13 +32,13 @@ __metadata:
     "@storybook/angular": ^10.0.0
     storybook: ^10.0.0
     vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
-  checksum: 10c0/6c6988fb0f9e687be619fc8be1479e331e2cf2cb12dae8712b356eb567983c68ced40e0731f4162dd2e9f80a9f6a72ceb19d07f0ba36bc55b61af77f692ad96a
+  checksum: 10c0/4134564c2430e2960331a9b4e5a6f2d9aebc750a7dd5ff7b9eb9eb11b0338411dcf2e7c8b2c5a86db513a0c3e99d8666a8b5df0b1ff0bea461d8d7d0d3b43b50
   languageName: node
   linkType: hard
 
-"@analogjs/vite-plugin-angular@npm:2.8.1":
-  version: 2.8.1
-  resolution: "@analogjs/vite-plugin-angular@npm:2.8.1"
+"@analogjs/vite-plugin-angular@npm:2.9.0":
+  version: 2.9.0
+  resolution: "@analogjs/vite-plugin-angular@npm:2.9.0"
   dependencies:
     magic-string: "npm:^0.30.21"
     obug: "npm:^2.1.1"
@@ -55,7 +55,7 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/354270f02560d85c5933ba30f2b03b66f68d0a0313cc3a03d9b54e8d71033d0f95f68c9c43186c0895b265dfc974f8aad7920751661d88ca0c7d1e5f54cf7013
+  checksum: 10c0/9dae325b4df862e885358d3a0cd3746ab9160cfb2ec8e2b986a028c843e38d84814f558dcb981218c53909ea9760503b5fbba925cc8236cebd333513f268d3ee
   languageName: node
   linkType: hard
 
@@ -5697,8 +5697,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "arsnova-webclient@workspace:."
   dependencies:
-    "@analogjs/storybook-angular": "npm:2.8.1"
-    "@analogjs/vite-plugin-angular": "npm:2.8.1"
+    "@analogjs/storybook-angular": "npm:2.9.0"
+    "@analogjs/vite-plugin-angular": "npm:2.9.0"
     "@angular-devkit/architect": "npm:0.2202.3"
     "@angular-devkit/core": "npm:22.2.3"
     "@angular-eslint/builder": "npm:22.6.0"
