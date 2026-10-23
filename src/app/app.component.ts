@@ -41,6 +41,7 @@ import { GlobalHintsContainerComponent } from './standalone/global-hints/global-
 import { GlobalHintsService } from './standalone/global-hints/global-hints.service';
 import { GlobalHintType } from './standalone/global-hints/global-hint';
 import { DialogService } from './core/services/util/dialog.service';
+import { HotkeyOverviewService } from '@app/core/services/util/hotkey-overview.service';
 import { ExtensionPointComponent } from '@projects/extension-point/src/public-api';
 import { UpdateUserLanguageGql } from '@gql/generated/graphql';
 
@@ -76,6 +77,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private uiService = inject(UiService);
   private globalHintsService = inject(GlobalHintsService);
   private dialogService = inject(DialogService);
+  private hotkeyOverviewService = inject(HotkeyOverviewService);
   private readonly updateUserLanguage = inject(UpdateUserLanguageGql);
 
   constructor() {
@@ -105,6 +107,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.languageService.init();
+    this.hotkeyOverviewService.init();
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {

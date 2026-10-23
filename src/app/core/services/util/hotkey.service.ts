@@ -1,9 +1,6 @@
 import { Injectable, inject, DOCUMENT } from '@angular/core';
-import { MatDialogRef, MatDialogState } from '@angular/material/dialog';
 import { EventManager } from '@angular/platform-browser';
 import { environment } from '@environments/environment';
-import { HotkeysComponent } from '@app/core/components/_dialogs/hotkeys/hotkeys.component';
-import { DialogService } from './dialog.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { HotkeyActivated } from '@app/core/models/events/hotkey-activated';
 import {
@@ -65,21 +62,19 @@ const excludedElementTypes = new Map<string, (el: Element) => boolean>([
 })
 export class HotkeyService {
   private eventManager = inject(EventManager);
-  private dialogService = inject(DialogService);
   private eventService = inject(EventService);
   private globalStorageService = inject(GlobalStorageService);
   private document = inject<HTMLDocument>(DOCUMENT);
 
   hotkeyRegistrations: Map<symbol, Hotkey> = new Map();
 
-  private dialogRef?: MatDialogRef<HotkeysComponent>;
+  private helpOverview?: { close(): void };
   private counter: number;
 
   constructor() {
     const globalStorageService = this.globalStorageService;
 
     this.registerHandler();
-    this.registerDialogHotkey();
     this.counter = globalStorageService.getItem(STORAGE_KEYS.HOTKEY_COUNT) ?? 0;
   }
 
@@ -115,27 +110,12 @@ export class HotkeyService {
     this.hotkeyRegistrations.set(registrationRef, hotkey);
   }
 
-  private registerDialogHotkey() {
-    this.registerHotkey({
-      key: HELP_KEY,
-      action: () => this.showDialog(),
-      actionTitle: 'hotkeys.display-overview',
-    });
+  /** Registers the open hotkey overview so that using any other hotkey closes it. */
+  setHelpOverview(overview: { close(): void }) {
+    this.helpOverview = overview;
   }
 
-  private showDialog() {
-    if (this.dialogRef?.getState() === MatDialogState.OPEN) {
-      return;
-    }
-    // Remove focus to avoid screenreaders to announce the active element immediately after closing the dialog.
-    (this.document.activeElement as HTMLElement).blur();
-    this.dialogRef = this.dialogService.openDialog(HotkeysComponent, {
-      data: this.getHotkeyInfos(),
-      width: '500px',
-    });
-  }
-
-  private getHotkeyInfos(): HotkeyInfo[] {
+  getHotkeyInfos(): HotkeyInfo[] {
     const sortedHotkeys = this.sortHotkeys(
       Array.from(this.hotkeyRegistrations.values())
     );
@@ -183,7 +163,7 @@ export class HotkeyService {
         }
         return;
       }
-      if (this.dialogRef && event.key !== HELP_KEY) {
+      if (this.helpOverview && event.key !== HELP_KEY) {
         this.closeHelpDialog(event, hotkey);
       }
       if (!environment.production) {
@@ -208,10 +188,10 @@ export class HotkeyService {
   }
 
   private closeHelpDialog(event: KeyboardEvent, hotkey: Hotkey) {
-    this.dialogRef?.close();
-    // Explicitly reset dialogRef because we cannot rely on MatDialogState here.
+    this.helpOverview?.close();
+    // Explicitly reset the overview because we cannot rely on MatDialogState here.
     // The dialog is closed before this handler is called when pressing Escape.
-    this.dialogRef = undefined;
+    this.helpOverview = undefined;
     if (event.key === 'Escape') {
       if (!environment.production) {
         console.log('Registered hotkey detected but ignored.', hotkey, event);
