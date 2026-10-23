@@ -21,7 +21,6 @@ import {
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { Router, RouterLink } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
-import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ApiConfig } from '@app/core/models/api-config';
 import { FlexModule } from '@angular/flex-layout';
@@ -77,8 +76,10 @@ export class RegisterComponent extends FormComponent implements OnInit {
   // Route data input below
   apiConfig = input<ApiConfig>() as InputSignal<ApiConfig>;
 
-  usernameFormControl = new UntypedFormControl();
-  matcher = new FormErrorStateMatcher();
+  usernameFormControl = new UntypedFormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
   deviceWidth = innerWidth;
   acceptTos = false;
   linkOfTos = computed(() => this.apiConfig().ui.links?.tos?.url);
@@ -89,21 +90,13 @@ export class RegisterComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.setFormControl(this.usernameFormControl);
-    this.usernameFormControl.clearValidators();
     this.cooldownService.continueActiveResendCooldown();
   }
 
-  activateValidators() {
-    this.usernameFormControl.setValidators([
-      Validators.required,
-      Validators.email,
-    ]);
-    this.usernameFormControl.updateValueAndValidity();
-  }
-
-  register(username: string): void {
+  register(): void {
     const password = this.passwordEntry().getPassword();
     if (this.validateForm()) {
+      const mailAddress = this.usernameFormControl.value.trim();
       this.disableForm();
       this.authenticationService
         .requireAuthentication()
@@ -114,7 +107,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
               throw new Error('Guest account expected.');
             }
             return this.claimUnverifiedUserGql.mutate({
-              variables: { mailAddress: username, password },
+              variables: { mailAddress, password },
             });
           })
         )
@@ -151,12 +144,10 @@ export class RegisterComponent extends FormComponent implements OnInit {
 
   validateForm(): boolean {
     const password = this.passwordEntry().getPassword();
-    const usernameError =
-      this.usernameFormControl.hasError('required') ||
-      this.usernameFormControl.hasError('email');
-    if (!usernameError && password && this.acceptTos) {
+    if (this.usernameFormControl.valid && password && this.acceptTos) {
       return true;
     }
+    this.usernameFormControl.markAsTouched();
     if (!password) {
       const msg = this.translationService.translate('password.unsuccessful');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);

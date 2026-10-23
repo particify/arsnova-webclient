@@ -17,11 +17,8 @@
           id="email-input"
           matInput
           type="email"
-          #userName
           [appAutofocus]
           [formControl]="usernameFormControl"
-          [errorStateMatcher]="matcher"
-          (blur)="activateValidators()"
         />
         @if (
           usernameFormControl.hasError('email') &&
@@ -66,7 +63,7 @@
         [nameParams]="{ seconds: resendCooldownSeconds() }"
         [fullWidth]="true"
         [disabled]="!!resendCooldownSeconds()"
-        (clicked)="register(userName.value)"
+        (clicked)="register()"
       ></app-loading-button>
       <div fxLayout="row" fxLayoutAlign="center center" class="link-container">
         <span class="smaller-text">

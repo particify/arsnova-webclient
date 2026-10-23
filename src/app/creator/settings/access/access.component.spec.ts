@@ -17,14 +17,21 @@ import { of } from 'rxjs';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatFormFieldHarness } from '@angular/material/form-field/testing';
+import { MatInputHarness } from '@angular/material/input/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestModule } from '@testing/test.setup';
 import {
   GrantRoomRoleByInvitationDocument,
+  GrantRoomRoleByInvitationGql,
   GrantRoomRoleByInvitationMutation,
   GrantRoomRoleDocument,
+  GrantRoomRoleGql,
   GrantRoomRoleMutation,
+  RoomManagingMembersByRoomIdGql,
   RoomRole,
   UserByDisplayIdDocument,
+  UserByDisplayIdGql,
   UserByDisplayIdQuery,
 } from '@gql/generated/graphql';
 
@@ -326,5 +333,126 @@ xdescribe('AccessComponent', () => {
       jasmine.any(String),
       AdvancedSnackBarTypes.FAILED
     );
+  });
+});
+
+describe('AccessComponent mail address validation', () => {
+  let fixture: ComponentFixture<AccessComponent>;
+  let loader: HarnessLoader;
+  let grantRoomRole: jasmine.Spy;
+  let grantRoomRoleByInvitation: jasmine.Spy;
+
+  async function createComponent(loginIdIsEmail: boolean) {
+    const authenticationService = jasmine.createSpyObj(
+      'AuthenticationService',
+      ['getCurrentAuthentication', 'isLoginIdEmailAddress']
+    );
+    authenticationService.getCurrentAuthentication.and.returnValue(
+      of(new AuthenticatedUser('1111', true, 'a@b.cd'))
+    );
+    authenticationService.isLoginIdEmailAddress.and.returnValue(
+      of(loginIdIsEmail)
+    );
+    grantRoomRole = jasmine
+      .createSpy('mutate')
+      .and.returnValue(of({ data: {} }));
+    grantRoomRoleByInvitation = jasmine
+      .createSpy('mutate')
+      .and.returnValue(of({ data: {} }));
+    const userByDisplayId = jasmine.createSpyObj('UserByDisplayIdGql', [
+      'fetch',
+    ]);
+    userByDisplayId.fetch.and.returnValue(
+      of({
+        data: {
+          userByDisplayId: loginIdIsEmail
+            ? null
+            : { id: '2222', displayId: 'username', verified: true },
+        },
+      })
+    );
+
+    await configureTestModule(
+      [BrowserAnimationsModule, getTranslocoModule(), AccessComponent],
+      [
+        { provide: AuthenticationService, useValue: authenticationService },
+        {
+          provide: DialogService,
+          useValue: jasmine.createSpyObj('DialogService', ['openDeleteDialog']),
+        },
+        {
+          provide: NotificationService,
+          useValue: jasmine.createSpyObj('NotificationService', [
+            'showAdvanced',
+          ]),
+        },
+        { provide: GrantRoomRoleGql, useValue: { mutate: grantRoomRole } },
+        {
+          provide: GrantRoomRoleByInvitationGql,
+          useValue: { mutate: grantRoomRoleByInvitation },
+        },
+        {
+          provide: RoomManagingMembersByRoomIdGql,
+          useValue: {
+            watch: () => ({
+              valueChanges: of({
+                loading: false,
+                dataState: 'complete',
+                data: { roomManagingMembersByRoomId: [] },
+              }),
+              refetch: () => undefined,
+            }),
+          },
+        },
+        { provide: UserByDisplayIdGql, useValue: userByDisplayId },
+      ]
+    ).compileComponents();
+
+    fixture = TestBed.createComponent(AccessComponent);
+    fixture.componentRef.setInput('roomId', '1234');
+    loader = TestbedHarnessEnvironment.loader(fixture);
+    fixture.detectChanges();
+  }
+
+  async function enterAndSubmit(loginId: string) {
+    await (await loader.getHarness(MatInputHarness)).setValue(loginId);
+    // Completes the lookup the input triggers after a debounce.
+    fixture.componentInstance.getUser();
+    fixture.detectChanges();
+    const button = loader.getHarness(
+      MatButtonHarness.with({ selector: ':not([hidden]).add-user-button' })
+    );
+    await (await button).click();
+  }
+
+  it('should not invite an invalid mail address', async () => {
+    await createComponent(true);
+    await enterAndSubmit('mail@example.com>');
+
+    expect(grantRoomRoleByInvitation).not.toHaveBeenCalled();
+    const field = await loader.getHarness(MatFormFieldHarness);
+    expect(await field.getTextErrors()).toEqual(['login.email-invalid']);
+  });
+
+  it('should invite a valid mail address', async () => {
+    await createComponent(true);
+    await enterAndSubmit('mail@example.com');
+
+    expect(grantRoomRoleByInvitation).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        variables: jasmine.objectContaining({
+          mailAddress: 'mail@example.com',
+        }),
+      })
+    );
+  });
+
+  it('should not validate a username as a mail address', async () => {
+    await createComponent(false);
+    await enterAndSubmit('username');
+
+    expect(grantRoomRole).toHaveBeenCalled();
+    const field = await loader.getHarness(MatFormFieldHarness);
+    expect(await field.getTextErrors()).toEqual([]);
   });
 });
