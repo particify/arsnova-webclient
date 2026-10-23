@@ -1,6 +1,5 @@
 import {
   Component,
-  computed,
   inject,
   model,
   input,
@@ -55,12 +54,8 @@ export class WordcloudContentFormComponent
   contentId = input<string>();
   duration = input<number | null>();
   abstentionsAllowed = input(true);
-  answered = input(false);
   maxAnswers = linkedSignal(() => this.formatData()?.maxAnswers ?? 3);
   submitted = output<void>();
-
-  /** The keyword count must not change once participants have answered. */
-  readonly locked = computed(() => !!this.contentId() && this.answered());
 
   formatDataValid(): boolean {
     if (this.maxAnswers() >= 1 && this.maxAnswers() <= MAX_KEYWORDS) {
