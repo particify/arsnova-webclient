@@ -579,6 +579,7 @@
     "hide-password": "Nascondi la password",
     "password-required": "Password richiesta",
     "password-too-short": "Si prega di utilizzare almeno 10 caratteri",
+    "password-invalid": "Questa password non è valida.",
     "password-too-weak": "Questa password è troppo facile da indovinare.",
     "add-more-characters": "Aggiungi altri caratteri.",
     "strength": "Robustezza della password",

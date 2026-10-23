@@ -9,6 +9,10 @@ import {
 } from '@app/core/services/http/authentication.service';
 import { UserPasswordStrengthGql } from '@gql/generated/graphql';
 import {
+  ErrorCode,
+  getOperationErrorCode,
+} from '@gql/helper/handle-operation-error';
+import {
   EMPTY,
   Observable,
   catchError,
@@ -37,9 +41,13 @@ export interface PasswordStrengthRequest {
   mailAddress?: string;
 }
 
-/** The backend's verdict on a request, or none if it could not be reached. */
+/**
+ * The backend's verdict on a request, or none if it could not be reached. A password the backend
+ * refuses to store at all is marked invalid instead.
+ */
 export interface PasswordStrengthResult extends PasswordStrengthRequest {
   strength?: PasswordStrength;
+  invalid?: boolean;
 }
 
 /** Whether two requests are rated alike, an empty mail address counting as none. */
@@ -55,6 +63,19 @@ export function isSameRequest(
 export const MIN_PASSWORD_LENGTH = 10;
 /** Rating starts a little short of the minimum, so the bar shows how close a password gets. */
 export const MIN_RATED_PASSWORD_LENGTH = MIN_PASSWORD_LENGTH - 2;
+
+const REJECTED_PASSWORD_MESSAGES: Partial<Record<ErrorCode, string>> = {
+  [ErrorCode.InvalidPassword]: 'password.password-invalid',
+  [ErrorCode.WeakPassword]: 'password.password-too-weak',
+};
+
+/** The translation key of the reason the backend refused to set a password, if it did. */
+export function getRejectedPasswordMessageKey(
+  error: unknown
+): string | undefined {
+  const code = getOperationErrorCode(error);
+  return code && REJECTED_PASSWORD_MESSAGES[code];
+}
 
 const DEBOUNCE_MS = 300;
 const INITIAL_RETRY_DELAY_MS = 1000;
@@ -84,7 +105,7 @@ export class PasswordStrengthService {
    * changes with the password as well as with the mail address, which a password must not be
    * built from. Answers for a request which has since changed are dropped. A failed request is
    * reported without a strength and retried with growing delays until it succeeds or the request
-   * changes.
+   * changes, unless the backend refuses the password as invalid.
    */
   watch(
     requests: Observable<PasswordStrengthRequest>
@@ -106,13 +127,15 @@ export class PasswordStrengthService {
   ): Observable<PasswordStrengthResult> {
     return this.check(request.password, request.mailAddress).pipe(
       map((strength) => ({ ...request, strength })),
-      catchError(() =>
-        concat(
-          of({ ...request }),
-          timer(this.getRetryDelay(attempt)).pipe(
-            switchMap(() => this.checkWithBackoff(request, attempt + 1))
-          )
-        )
+      catchError((e) =>
+        getOperationErrorCode(e) === ErrorCode.InvalidPassword
+          ? of({ ...request, invalid: true })
+          : concat(
+              of({ ...request }),
+              timer(this.getRetryDelay(attempt)).pipe(
+                switchMap(() => this.checkWithBackoff(request, attempt + 1))
+              )
+            )
       )
     );
   }

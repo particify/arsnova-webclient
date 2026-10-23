@@ -53,11 +53,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  ErrorClassification,
-  ErrorCode,
-  getOperationErrorCode,
-} from '@gql/helper/handle-operation-error';
+import { ErrorClassification } from '@gql/helper/handle-operation-error';
+import { getRejectedPasswordMessageKey } from '@app/core/services/util/password-strength.service';
 import { CooldownService } from '@app/core/services/util/cooldown.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { MatCard } from '@angular/material/card';
@@ -371,9 +368,10 @@ export class UserProfileComponent extends FormComponent {
         },
         error: (e) => {
           this.enableForm();
-          if (getOperationErrorCode(e) === ErrorCode.WeakPassword) {
+          const rejectedPasswordKey = getRejectedPasswordMessageKey(e);
+          if (rejectedPasswordKey) {
             this.notificationService.showAdvanced(
-              this.translationService.translate('password.password-too-weak'),
+              this.translationService.translate(rejectedPasswordKey),
               AdvancedSnackBarTypes.FAILED
             );
             return;

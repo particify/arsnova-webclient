@@ -25,11 +25,8 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { VerifyUserMailAddressUnauthenticatedGql } from '@gql/generated/graphql';
-import {
-  ErrorClassification,
-  ErrorCode,
-  getOperationErrorCode,
-} from '@gql/helper/handle-operation-error';
+import { ErrorClassification } from '@gql/helper/handle-operation-error';
+import { getRejectedPasswordMessageKey } from '@app/core/services/util/password-strength.service';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { first, switchMap } from 'rxjs';
 import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
@@ -113,9 +110,10 @@ export class VerifyUserInvitationComponent extends FormComponent {
         },
         error: (e) => {
           this.enableForm();
-          if (getOperationErrorCode(e) === ErrorCode.WeakPassword) {
+          const rejectedPasswordKey = getRejectedPasswordMessageKey(e);
+          if (rejectedPasswordKey) {
             this.notificationService.showAdvanced(
-              this.translationService.translate('password.password-too-weak'),
+              this.translationService.translate(rejectedPasswordKey),
               AdvancedSnackBarTypes.FAILED
             );
             return;

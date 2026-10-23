@@ -96,6 +96,7 @@
     "hide-password": "Ocultar contraseña",
     "password-required": "Contraseña requerida",
     "password-too-short": "Por favor, utiliza al menos 10 caracteres",
+    "password-invalid": "Esta contraseña no es válida.",
     "password-too-weak": "Esta contraseña es demasiado fácil de adivinar.",
     "add-more-characters": "Añade más caracteres.",
     "strength": "Seguridad de la contraseña",

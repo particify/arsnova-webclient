@@ -41,7 +41,13 @@ import {
   isSameRequest,
 } from '@app/core/services/util/password-strength.service';
 import { MatProgressBar } from '@angular/material/progress-bar';
-import { combineLatest, distinctUntilChanged, map, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  map,
+  takeUntil,
+} from 'rxjs';
 
 /**
  * The strength bar moves in steps, so small changes of the rating do not make it jitter. It is
@@ -50,6 +56,12 @@ import { combineLatest, distinctUntilChanged, map, takeUntil } from 'rxjs';
 const STRENGTH_STEPS = 5;
 /** Fill of the strength bar from which a password counts as weak rather than very weak. */
 const WEAK_PROGRESS = 0.6;
+
+/** Rating of a password the backend refuses to store at all. */
+const INVALID_STRENGTH: PasswordStrength = {
+  acceptable: false,
+  relativeStrength: 0,
+};
 
 let nextStrengthBarId = 0;
 
@@ -99,6 +111,8 @@ export class PasswordFieldComponent
   private readonly mailAddress$ = toObservable(this.mailAddress);
   /** The latest rating, which may still be for an earlier value. */
   private lastRating?: PasswordStrengthResult;
+  /** Whether the user is typing, until the field is left or a submit is attempted. */
+  protected readonly typing$ = new BehaviorSubject(false);
   hidePw = true;
   showPwButton = false;
   autofilled = false;
@@ -153,6 +167,7 @@ export class PasswordFieldComponent
     if (!this.checkStrength()) {
       return this.password;
     }
+    this.typing$.next(false);
     this.passwordFormControl.markAsTouched();
     if (this.passwordFormControl.valid) {
       return this.password;
@@ -206,14 +221,24 @@ export class PasswordFieldComponent
       map((mailAddress) => mailAddress || undefined),
       distinctUntilChanged()
     );
-    const requests = combineLatest([passwords, mailAddresses]).pipe(
-      map(([password, mailAddress]) => ({ password, mailAddress }))
+    // A passphrase being typed ends with a space now and then, which must not make it invalid.
+    const requests = combineLatest([
+      passwords,
+      this.typing$,
+      mailAddresses,
+    ]).pipe(
+      map(([password, typing, mailAddress]) => ({
+        password: typing ? password.trimEnd() : password,
+        mailAddress,
+      }))
     );
     this.passwordStrengthService
       .watch(requests)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((result) => {
-        if (result.strength) {
+        if (result.invalid) {
+          this.strength = INVALID_STRENGTH;
+        } else if (result.strength) {
           this.strength = result.strength;
         }
         this.lastRating = result;
@@ -242,6 +267,9 @@ export class PasswordFieldComponent
     const rating = this.lastRating;
     if (!rating || password.length < MIN_PASSWORD_LENGTH) {
       return null;
+    }
+    if (rating.invalid) {
+      return { passwordInvalid: true };
     }
     return rating.strength && !rating.strength.acceptable
       ? { passwordTooWeak: true }

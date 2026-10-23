@@ -38,10 +38,7 @@ import { MatButton } from '@angular/material/button';
 import { AccountCreated } from '@app/core/models/events/account-created';
 import { EventService } from '@app/core/services/util/event.service';
 import { CooldownService } from '@app/core/services/util/cooldown.service';
-import {
-  ErrorCode,
-  getOperationErrorCode,
-} from '@gql/helper/handle-operation-error';
+import { getRejectedPasswordMessageKey } from '@app/core/services/util/password-strength.service';
 
 @Component({
   selector: 'app-register',
@@ -135,9 +132,8 @@ export class RegisterComponent extends FormComponent implements OnInit {
           error: (e) => {
             this.enableForm();
             const msg = this.translationService.translate(
-              getOperationErrorCode(e) === ErrorCode.WeakPassword
-                ? 'password.password-too-weak'
-                : 'register.register-request-error'
+              getRejectedPasswordMessageKey(e) ??
+                'register.register-request-error'
             );
             this.notificationService.showAdvanced(
               msg,

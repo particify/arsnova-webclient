@@ -1,6 +1,6 @@
 import { signal } from '@angular/core';
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { ServerError } from '@apollo/client';
+import { CombinedGraphQLErrors, ServerError } from '@apollo/client';
 import { ChallengeService } from '@app/core/services/challenge.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
@@ -94,6 +94,20 @@ describe('PasswordStrengthService', () => {
         new ServerError('Response not successful: Received status code 401', {
           response: new Response(null, { status: 401 }),
           bodyText: '',
+        })
+    );
+  }
+
+  function graphQlError(code: string) {
+    return throwError(
+      () =>
+        new CombinedGraphQLErrors({
+          errors: [
+            {
+              message: 'Bad request',
+              extensions: { classification: 'BAD_REQUEST', code },
+            },
+          ],
         })
     );
   }
@@ -222,6 +236,34 @@ describe('PasswordStrengthService', () => {
     expect(results).toEqual([
       { password: PASSWORD },
       { password: PASSWORD },
+      { password: PASSWORD },
+      {
+        password: PASSWORD,
+        strength: { acceptable: true, relativeStrength: 1, hint: undefined },
+      },
+    ]);
+    subscription.unsubscribe();
+  }));
+
+  it('should not retry a password refused as invalid', fakeAsync(() => {
+    fetch.and.returnValue(graphQlError('INVALID_PASSWORD'));
+    const subscription = watch(MAIL_ADDRESS);
+    passwords.next(PASSWORD + ' ');
+    tick(300 + 60000);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(results).toEqual([
+      { password: PASSWORD + ' ', mailAddress: MAIL_ADDRESS, invalid: true },
+    ]);
+    subscription.unsubscribe();
+  }));
+
+  it('should retry after other GraphQL errors', fakeAsync(() => {
+    fetch.and.returnValues(graphQlError('WEAK_PASSWORD'), rating(true, 1));
+    const subscription = watch();
+    passwords.next(PASSWORD);
+    tick(300 + 1000);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(results).toEqual([
       { password: PASSWORD },
       {
         password: PASSWORD,

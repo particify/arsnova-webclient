@@ -322,6 +322,38 @@ describe('UserProfileComponent', () => {
       expect(component.formDisabled).toBeFalse();
     });
 
+    it('should report a password the backend cannot store as invalid', async () => {
+      await createComponent([LOCAL_PROVIDER]);
+      enterPasswords();
+      updateUserPassword.mutate.and.returnValue(
+        throwError(
+          () =>
+            new CombinedGraphQLErrors({
+              errors: [
+                {
+                  message: 'Invalid password',
+                  extensions: {
+                    classification: 'BAD_REQUEST',
+                    code: 'INVALID_PASSWORD',
+                  },
+                },
+              ],
+            })
+        )
+      );
+
+      component.updatePassword();
+
+      expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+        'password.password-invalid',
+        AdvancedSnackBarTypes.FAILED
+      );
+      expect(
+        notificationService.showOnRequestClientError
+      ).not.toHaveBeenCalled();
+      expect(component.formDisabled).toBeFalse();
+    });
+
     it('should still report a wrong current password', async () => {
       await createComponent([LOCAL_PROVIDER]);
       enterPasswords();

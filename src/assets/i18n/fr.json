@@ -92,6 +92,7 @@
   "password": {
     "password": "Mot de passe",
     "password-too-short": "Utilise au moins 10 caractères",
+    "password-invalid": "Ce mot de passe n'est pas valide.",
     "password-too-weak": "Ce mot de passe est trop facile à deviner.",
     "add-more-characters": "Ajoute d'autres caractères.",
     "strength": "Robustesse du mot de passe",

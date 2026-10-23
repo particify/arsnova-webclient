@@ -9,6 +9,7 @@ export enum ErrorClassification {
 
 /** Distinguishes errors of one classification, e.g. a too weak password from other bad requests. */
 export enum ErrorCode {
+  InvalidPassword = 'INVALID_PASSWORD',
   WeakPassword = 'WEAK_PASSWORD',
 }
 

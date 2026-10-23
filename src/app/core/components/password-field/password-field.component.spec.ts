@@ -18,6 +18,7 @@ const PASSWORD = 'correct horse battery';
 const WEAK_PASSWORD = 'P@ssw0rd12';
 const MAIL_ADDRESS = 'user@example.com';
 const OTHER_MAIL_ADDRESS = 'other@example.com';
+const INVALID_PASSWORD = ' correct horse battery';
 
 function weak(relativeStrength: number, hint?: string): PasswordStrength {
   return { acceptable: false, relativeStrength, hint };
@@ -60,12 +61,35 @@ describe('PasswordFieldComponent', () => {
     fixture.detectChanges();
   }
 
+  /** Types into the field from the keyboard. */
+  function typeIn(password: string) {
+    const input = fixture.debugElement.query(By.css('input'))
+      .nativeElement as HTMLInputElement;
+    input.value = password;
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+  }
+
+  function lastRequestedPassword(): string {
+    return watchedRequests[watchedRequests.length - 1].password;
+  }
+
   /** The backend's rating of the current value and mail address arrives. */
   function rate(strength?: PasswordStrength) {
     ratings.next({
       password: component.passwordFormControl.value,
       mailAddress: component.mailAddress(),
       strength,
+    });
+    fixture.detectChanges();
+  }
+
+  /** The backend refuses the current value as invalid. */
+  function refuse() {
+    ratings.next({
+      password: component.passwordFormControl.value,
+      mailAddress: component.mailAddress(),
+      invalid: true,
     });
     fixture.detectChanges();
   }
@@ -97,6 +121,10 @@ describe('PasswordFieldComponent', () => {
 
   function getWeakPasswordError(): string | undefined {
     return getError('password-too-weak-error');
+  }
+
+  function getInvalidPasswordError(): string | undefined {
+    return getError('password-invalid-error');
   }
 
   function isFieldInvalid(): boolean {
@@ -224,6 +252,35 @@ describe('PasswordFieldComponent', () => {
       expect(mousedown.defaultPrevented).toBeTrue();
     });
 
+    it('should rate without trailing whitespace while typing', () => {
+      typeIn('correct horse ');
+      expect(lastRequestedPassword()).toBe('correct horse');
+    });
+
+    it('should rate leading whitespace while typing', () => {
+      typeIn(' correct horse');
+      expect(lastRequestedPassword()).toBe(' correct horse');
+    });
+
+    it('should rate the full password once the field is left', () => {
+      typeIn('correct horse ');
+      leave();
+      expect(lastRequestedPassword()).toBe('correct horse ');
+      refuse();
+      expect(getInvalidPasswordError()).toBe('password.password-invalid');
+    });
+
+    it('should rate the full password on submit, without holding it up', () => {
+      typeIn('correct horse battery ');
+      ratings.next({
+        password: 'correct horse battery',
+        mailAddress: MAIL_ADDRESS,
+        strength: weak(0.2),
+      });
+      expect(component.getPassword()).toBe('correct horse battery ');
+      expect(lastRequestedPassword()).toBe('correct horse battery ');
+    });
+
     it('should hide the strength bar until a rating arrives', async () => {
       await expectBarVisible(false);
       type(WEAK_PASSWORD);
@@ -335,6 +392,34 @@ describe('PasswordFieldComponent', () => {
       rate({ acceptable: true, relativeStrength: 1 });
       expect(getWeakPasswordError()).toBeUndefined();
       expect(isFieldInvalid()).toBeFalse();
+    });
+
+    it('should show an invalid password once the field is left', async () => {
+      type(INVALID_PASSWORD);
+      leave();
+      refuse();
+      expect(getInvalidPasswordError()).toBe('password.password-invalid');
+      await expectBar(0, 'very-weak');
+      await expectBarVisible(true);
+    });
+
+    it('should show no error for an invalid password before the field is first left', () => {
+      type('correct horse ');
+      refuse();
+      expect(
+        component.passwordFormControl.hasError('passwordInvalid')
+      ).toBeTrue();
+      expect(getInvalidPasswordError()).toBeUndefined();
+      expect(isFieldInvalid()).toBeFalse();
+    });
+
+    it('should not return an invalid password', () => {
+      enterPassword(PASSWORD, { acceptable: true, relativeStrength: 1 });
+      type(INVALID_PASSWORD);
+      refuse();
+      expect(component.getPassword()).toBe('');
+      fixture.detectChanges();
+      expect(getInvalidPasswordError()).toBe('password.password-invalid');
     });
 
     it('should reject a password of 9 characters as too short', () => {

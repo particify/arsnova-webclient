@@ -35,10 +35,7 @@ import { ChallengeService } from '@app/core/services/challenge.service';
 import { ResetUserPasswordGql } from '@gql/generated/graphql';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Apollo } from 'apollo-angular';
-import {
-  ErrorCode,
-  getOperationErrorCode,
-} from '@gql/helper/handle-operation-error';
+import { getRejectedPasswordMessageKey } from '@app/core/services/util/password-strength.service';
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -142,9 +139,10 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
           },
           error: (e) => {
             this.enableForm();
-            if (getOperationErrorCode(e) === ErrorCode.WeakPassword) {
+            const rejectedPasswordKey = getRejectedPasswordMessageKey(e);
+            if (rejectedPasswordKey) {
               this.notificationService.showAdvanced(
-                this.translationService.translate('password.password-too-weak'),
+                this.translationService.translate(rejectedPasswordKey),
                 AdvancedSnackBarTypes.FAILED
               );
               return;
