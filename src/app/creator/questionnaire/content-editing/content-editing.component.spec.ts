@@ -57,7 +57,11 @@ describe('ContentEditingComponent', () => {
   describe('after creating a content', () => {
     let cachedContent$: Subject<unknown>;
 
-    function setUp(content?: Content, renderSettings = false) {
+    function setUp(
+      content?: Content,
+      renderSettings = false,
+      questionnaireType = QuestionnaireType.Mixed
+    ) {
       cachedContent$ = new Subject();
       // Only the form outlet and the body input matter to the reset under test.
       if (!renderSettings) {
@@ -124,7 +128,7 @@ describe('ContentEditingComponent', () => {
       component = fixture.componentInstance;
       fixture.componentRef.setInput('questionnaire', {
         id: 'questionnaire-1',
-        type: QuestionnaireType.Mixed,
+        type: questionnaireType,
       } as Questionnaire);
       fixture.componentRef.setInput('language', 'en');
       if (content) {
@@ -274,24 +278,6 @@ describe('ContentEditingComponent', () => {
         expect(form.answered()).toBeTrue();
       });
 
-      it('locks a wordcloud content with answers', () => {
-        setUp({
-          id: 'content-1',
-          body: 'Question',
-          hasAnswers: true,
-          formatData: {
-            __typename: 'WordcloudContentFormatData',
-            format: ContentType.Wordcloud,
-            maxAnswers: 3,
-          },
-        } as unknown as Content);
-
-        const form = fixture.debugElement.query(
-          By.directive(WordcloudContentFormComponent)
-        ).componentInstance as WordcloudContentFormComponent;
-        expect(form.locked()).toBeTrue();
-      });
-
       describe('multiple selection toggle', () => {
         function multipleToggles(hasAnswers: boolean) {
           setUp(
@@ -328,6 +314,38 @@ describe('ContentEditingComponent', () => {
 
           expect(toggles.length).toBeGreaterThan(0);
           expect(toggles.every((t) => t.disabled)).toBeTrue();
+        });
+      });
+
+      describe('weight input', () => {
+        function weightInput(hasAnswers: boolean): HTMLInputElement {
+          setUp(
+            {
+              id: 'content-1',
+              body: 'Question',
+              hasAnswers,
+              weight: 2,
+              formatData: {
+                __typename: 'ChoiceContentFormatData',
+                format: ContentType.Choice,
+                multiple: false,
+                options: [],
+              },
+            } as unknown as Content,
+            true,
+            QuestionnaireType.Quiz
+          );
+          return fixture.nativeElement.querySelector(
+            '[data-testid="content-weight-input"]'
+          );
+        }
+
+        it('keeps it editable while the content has no answers', () => {
+          expect(weightInput(false).disabled).toBeFalse();
+        });
+
+        it('locks it once the content has answers', () => {
+          expect(weightInput(true).disabled).toBeTrue();
         });
       });
 

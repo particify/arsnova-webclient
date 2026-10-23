@@ -6,7 +6,7 @@
         <mat-label>{{ 'creator.content.minimum' | transloco }}</mat-label>
         <input
           matInput
-          [disabled]="formDisabled || preview()"
+          [disabled]="formDisabled || answered() || preview()"
           type="number"
           data-testid="numeric-minimum-input"
           [(ngModel)]="minimum"
@@ -16,7 +16,7 @@
         <mat-label>{{ 'creator.content.maximum' | transloco }}</mat-label>
         <input
           matInput
-          [disabled]="formDisabled || preview()"
+          [disabled]="formDisabled || answered() || preview()"
           type="number"
           data-testid="numeric-maximum-input"
           [(ngModel)]="maximum"

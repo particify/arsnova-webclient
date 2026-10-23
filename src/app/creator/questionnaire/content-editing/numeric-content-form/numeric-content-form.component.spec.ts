@@ -251,6 +251,42 @@ describe('NumericContentFormComponent', () => {
     expect(createContent.mutate).not.toHaveBeenCalled();
   });
 
+  describe('once the content has answers', () => {
+    function rangeInputs(answered: boolean): HTMLInputElement[] {
+      fixture.componentRef.setInput('answered', answered);
+      fixture.detectChanges();
+      return ['numeric-minimum-input', 'numeric-maximum-input'].map((id) =>
+        fixture.nativeElement.querySelector(`[data-testid="${id}"]`)
+      );
+    }
+
+    it('keeps the range of an unanswered content editable', async () => {
+      setUp(formatData());
+      fixture.componentRef.setInput('contentId', 'content-1');
+      const inputs = rangeInputs(false);
+      await fixture.whenStable();
+
+      expect(inputs.every((i) => !i.disabled)).toBeTrue();
+    });
+
+    it('keeps the range of a new content editable', async () => {
+      setUp(null);
+      const inputs = rangeInputs(false);
+      await fixture.whenStable();
+
+      expect(inputs.every((i) => !i.disabled)).toBeTrue();
+    });
+
+    it('locks the range', async () => {
+      setUp(formatData());
+      fixture.componentRef.setInput('contentId', 'content-1');
+      const inputs = rangeInputs(true);
+      await fixture.whenStable();
+
+      expect(inputs.every((i) => i.disabled)).toBeTrue();
+    });
+  });
+
   it('updates the content when a content id is set', () => {
     setUp(formatData({ minNumber: 0, maxNumber: 10 }));
     fixture.componentRef.setInput('contentId', 'content-1');
