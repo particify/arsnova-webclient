@@ -95,6 +95,22 @@ export interface ContentStats {
   abstentions?: number;
 }
 
+/** The share of correct answers in percent, if the content has any to score. */
+function correctPercentage(content: Content): number | undefined {
+  if (
+    !content.hasCorrectAnswer ||
+    content.correctAnswerCount == null ||
+    !content.answerCount
+  ) {
+    return undefined;
+  }
+  return (content.correctAnswerCount / content.answerCount) * 100;
+}
+
+function sum(values: number[]): number {
+  return values.reduce((a, b) => a + b, 0);
+}
+
 @Component({
   selector: 'app-questionnaire-page',
   templateUrl: './questionnaire-page.component.html',
@@ -218,6 +234,38 @@ export class QuestionnairePageComponent {
     return edges?.map((e) => e?.node).filter((n): n is Content => !!n) ?? [];
   });
   readonly loadingContents = computed(() => this.contentsResult()?.loading);
+  /** The average share of correct answers over the scorable contents. */
+  readonly totalCorrect = computed(() => {
+    const percentages = this.contents()
+      .map(correctPercentage)
+      .filter((p): p is number => p !== undefined);
+    return percentages.length
+      ? Math.round(sum(percentages) / percentages.length)
+      : undefined;
+  });
+  /** The share of abstentions over the scorable contents. */
+  readonly totalAbstentions = computed(() => {
+    const scorable = this.contents().filter((c) => c.hasCorrectAnswer);
+    const abstentions = sum(scorable.map((c) => c.abstentionCount ?? 0));
+    const responses =
+      abstentions + sum(scorable.map((c) => c.answerCount ?? 0));
+    return responses ? Math.round((abstentions / responses) * 100) : 0;
+  });
+  readonly progressColor = computed(() => {
+    const totalCorrect = this.totalCorrect();
+    if (!totalCorrect) {
+      return '';
+    } else if (totalCorrect < STATUS_OKAY) {
+      return 'red';
+    } else if (totalCorrect < STATUS_BETTER) {
+      return 'orange';
+    } else if (totalCorrect < STATUS_GOOD) {
+      return 'yellow';
+    } else if (totalCorrect < STATUS_EXCELLENT) {
+      return 'green';
+    }
+    return 'blue';
+  });
 
   isLoading = true;
 
@@ -228,8 +276,6 @@ export class QuestionnairePageComponent {
 
   attributionsExist = false;
   QuestionnaireType = QuestionnaireType;
-  totalCorrect?: number;
-  totalAbstentions?: number;
   readonly showLeaderboard = signal(false);
   showAttributions = false;
   readonly creationMode = signal(false);
@@ -526,24 +572,6 @@ export class QuestionnairePageComponent {
     return (
       this.questionnaire()?.publishingMode === QuestionnairePublishingMode.Live
     );
-  }
-
-  getProgressColor(): string {
-    if (!this.totalCorrect) {
-      return '';
-    } else {
-      if (this.totalCorrect < STATUS_OKAY) {
-        return 'red';
-      } else if (this.totalCorrect < STATUS_BETTER) {
-        return 'orange';
-      } else if (this.totalCorrect < STATUS_GOOD) {
-        return 'yellow';
-      } else if (this.totalCorrect < STATUS_EXCELLENT) {
-        return 'green';
-      } else {
-        return 'blue';
-      }
-    }
   }
 
   toggleLeaderboard() {

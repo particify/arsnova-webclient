@@ -117,7 +117,10 @@ describe('ContentResultsComponent', () => {
   let component: ContentResultsComponent;
   let contentResultsService: ContentResultsService;
   let refetchRounds: jasmine.Spy;
-  let rounds$: BehaviorSubject<ReturnType<typeof roundsResult>>;
+  let rounds$: BehaviorSubject<{
+    dataState: 'complete';
+    data: { questionnaireRoundsByContentId: Partial<Round>[] };
+  }>;
 
   function roundsResult(roundIds: string[]) {
     return {
@@ -137,6 +140,7 @@ describe('ContentResultsComponent', () => {
     content?: Content;
     isPresentation?: boolean;
     showCorrect?: boolean;
+    rounds?: Partial<Round>[];
     settings?: UserUiSettings;
   }
 
@@ -145,7 +149,14 @@ describe('ContentResultsComponent', () => {
    * handed to the format's results component is exercised.
    */
   function setUp(options: SetUpOptions = {}) {
-    rounds$ = new BehaviorSubject(roundsResult(['round-1']));
+    rounds$ = new BehaviorSubject(
+      options.rounds
+        ? {
+            dataState: 'complete' as const,
+            data: { questionnaireRoundsByContentId: options.rounds },
+          }
+        : roundsResult(['round-1'])
+    );
     // Like the server, the reloaded rounds include the active round.
     refetchRounds = jasmine.createSpy('refetch').and.callFake(() => {
       const activeRoundId = component.content().activeRound?.id;
@@ -286,6 +297,31 @@ describe('ContentResultsComponent', () => {
     fixture.detectChanges();
 
     expect(refetchRounds).not.toHaveBeenCalled();
+  });
+
+  it('hands the selected rounds to the format in round order', () => {
+    setUp({
+      rounds: [
+        {
+          __typename: 'Round',
+          id: 'round-1',
+          roundNo: 1,
+          closed: true,
+        },
+        {
+          __typename: 'Round',
+          id: 'round-2',
+          roundNo: 2,
+          closed: false,
+        },
+      ],
+    });
+
+    component.selectedRoundIds.set(['round-2', 'round-1']);
+
+    expect(
+      (component.componentInputs() as { roundIds: string[] }).roundIds
+    ).toEqual(['round-1', 'round-2']);
   });
 
   it('lets a wordcloud ban keywords only where answers may be moderated', () => {

@@ -134,7 +134,7 @@
               </div>
             }
           </div>
-          @if (!loadingContents() && totalCorrect) {
+          @if (!loadingContents() && totalCorrect()) {
             <div
               fxLayout="row"
               fxLayoutGap="16px"
@@ -143,16 +143,16 @@
                 'creator.content.group-progress-info'
                   | transloco
                     : {
-                        percent: totalCorrect,
-                        abstentions: totalAbstentions,
+                        percent: totalCorrect(),
+                        abstentions: totalAbstentions(),
                       }
               "
             >
               <mat-progress-bar
                 mode="determinate"
-                value="{{ totalCorrect }}"
+                [value]="totalCorrect()"
                 class="custom-height progress-background"
-                [class]="'progress-' + getProgressColor()"
+                [class]="'progress-' + progressColor()"
               ></mat-progress-bar>
             </div>
           }

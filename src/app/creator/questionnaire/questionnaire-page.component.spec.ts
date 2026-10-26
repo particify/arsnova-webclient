@@ -446,10 +446,10 @@ describe('QuestionnairePageComponent (creator)', () => {
       }),
       QuestionnaireContentsByQuestionnaireId: () => ({
         questionnaireContentsByQuestionnaireId: {
-          __typename: 'QuestionnaireContentConnection',
+          __typename: 'ContentConnection',
           edges: [
             {
-              __typename: 'QuestionnaireContentEdge',
+              __typename: 'ContentEdge',
               node: {
                 __typename: 'Content',
                 id: 'c-1',
@@ -713,5 +713,88 @@ describe('QuestionnairePageComponent (creator)', () => {
       ];
     const exportMenu = await exportItem.getSubmenu();
     expect(await exportMenu?.getItems()).toEqual([]);
+  });
+
+  describe('quiz progress', () => {
+    const scoredContents = [
+      {
+        id: 'c-1',
+        hasCorrectAnswer: true,
+        answerCount: 4,
+        correctAnswerCount: 3,
+        abstentionCount: 1,
+      },
+      {
+        id: 'c-2',
+        hasCorrectAnswer: true,
+        answerCount: 5,
+        correctAnswerCount: 2,
+        abstentionCount: 0,
+      },
+      {
+        id: 'c-3',
+        hasCorrectAnswer: false,
+        answerCount: 10,
+        correctAnswerCount: null,
+        abstentionCount: 5,
+      },
+    ] as Content[];
+
+    it('averages the correct answers of the contents with a correct answer', () => {
+      setUp();
+
+      emitContents(scoredContents);
+
+      // (75 % + 40 %) / 2, and 1 abstention of 10 responses
+      expect(component.totalCorrect()).toBe(58);
+      expect(component.totalAbstentions()).toBe(10);
+      expect(component.progressColor()).toBe('orange');
+    });
+
+    it('follows the counts of the contents', () => {
+      setUp();
+      emitContents(scoredContents);
+
+      emitContents([
+        { ...scoredContents[0], correctAnswerCount: 4 },
+        { ...scoredContents[1], correctAnswerCount: 5 },
+      ]);
+
+      expect(component.totalCorrect()).toBe(100);
+      expect(component.progressColor()).toBe('blue');
+    });
+
+    it('has no progress before a content with a correct answer is answered', () => {
+      setUp();
+
+      emitContents([
+        { ...scoredContents[0], answerCount: 0, correctAnswerCount: 0 },
+        scoredContents[2],
+      ]);
+
+      expect(component.totalCorrect()).toBeUndefined();
+    });
+
+    it('shows the progress bar on the page', () => {
+      setUp(true, childRoute(':contentId', { contentId: 'c-1' }), true);
+
+      emitContents(scoredContents);
+      fixture.detectChanges();
+
+      expect(query('mat-progress-bar')?.className).toContain('progress-orange');
+    });
+
+    it('hides the progress bar while no answer is correct', () => {
+      setUp(true, childRoute(':contentId', { contentId: 'c-1' }), true);
+
+      emitContents([
+        { ...scoredContents[0], correctAnswerCount: 0 },
+        { ...scoredContents[1], correctAnswerCount: 0 },
+      ]);
+      fixture.detectChanges();
+
+      expect(component.totalCorrect()).toBe(0);
+      expect(query('mat-progress-bar')).toBeNull();
+    });
   });
 });
