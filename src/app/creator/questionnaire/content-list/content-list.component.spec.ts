@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { Type } from '@angular/core';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,7 +10,10 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import {
   Content,
   ContentType,
@@ -569,6 +573,21 @@ describe('ContentListComponent', () => {
       expect(notificationService.showAdvanced).toHaveBeenCalled();
     });
 
+    it('reports a content that failed to start and tells the page nothing', () => {
+      setUp(live());
+      const started = jasmine.createSpy('startedContentChanged');
+      component.startedContentChanged.subscribe(started);
+      mutation(StartQuestionnaireContentGql).and.returnValue(failedOperation());
+
+      component.startContent('c-1');
+
+      expect(started).not.toHaveBeenCalled();
+      expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+        jasmine.any(String),
+        AdvancedSnackBarTypes.FAILED
+      );
+    });
+
     it('stops the running content of the questionnaire', () => {
       setUp(live({ id: 'round-1', closed: false, answerable: true }));
       mutation(StopQuestionnaireContentGql).and.returnValue(
@@ -693,6 +712,29 @@ describe('ContentListComponent', () => {
       component.startNewRound('c-1');
 
       expect(started).not.toHaveBeenCalled();
+    });
+
+    it('reports a failed new round and leaves the dialog to stay open', () => {
+      setUp();
+      mutation(StartQuestionnaireContentRoundGql).and.returnValue(
+        failedOperation()
+      );
+      dialogService.openStartNewRoundDialog.and.returnValue({
+        afterClosed: () => of(undefined),
+      } as never);
+
+      component.startNewRound('c-1');
+
+      const confirmAction =
+        dialogService.openStartNewRoundDialog.calls.mostRecent()
+          .args[0] as () => Observable<unknown>;
+      const failed = jasmine.createSpy('failed');
+      confirmAction().subscribe({ error: failed });
+      expect(failed).toHaveBeenCalled();
+      expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+        jasmine.any(String),
+        AdvancedSnackBarTypes.FAILED
+      );
     });
 
     it('allows changing answers and rounds freely outside live mode', () => {

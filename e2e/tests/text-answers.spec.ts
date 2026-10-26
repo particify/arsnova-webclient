@@ -5,6 +5,7 @@ import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
 import { ContentCreationPage } from '@e2e/fixtures/creator/content-creation';
 import { ContentGroupOverviewPage } from '@e2e/fixtures/creator/content-group-overview';
 import { ContentGroupPage as ParticipantContentGroupPage } from '@e2e/fixtures/participant/content-group';
+import { QuestionnaireContentListPage } from '@e2e/fixtures/creator/questionnaire-content-list';
 
 test.describe('text answers', () => {
   let creatorPage: Page;
@@ -85,13 +86,7 @@ test.describe('text answers', () => {
     await creatorPage
       .getByRole('button', { name: 'Delete', exact: true })
       .click();
-    const contentItem = creatorPage.getByTestId('content-item').first();
-    // The content actions only show while the content is hovered.
-    await contentItem.hover();
-    await contentItem
-      .getByRole('button')
-      .filter({ hasText: 'visibility_off' })
-      .click();
+    await new QuestionnaireContentListPage(creatorPage).publishTextAnswers(0);
 
     await expect(answerItem(participant.page, 'First answer')).toBeVisible();
     await expect(answerItem(participant.page, 'Second answer')).toBeHidden();

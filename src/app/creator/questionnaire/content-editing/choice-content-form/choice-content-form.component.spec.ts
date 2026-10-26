@@ -1,9 +1,13 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContentService } from '@app/core/services/http/content.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { DisplayAnswer } from '@app/creator/questionnaire/content-editing/_models/display-answer';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import {
@@ -182,5 +186,22 @@ describe('ChoiceContentFormComponent', () => {
         expect(await checkbox.isDisabled()).toBeFalse();
       }
     });
+  });
+
+  it('reports a failed update and hands nothing to the page', () => {
+    setUp(true, [1]);
+    updateChoiceContent.mutate.and.returnValue(failedOperation() as never);
+
+    component.submit('questionnaire-1', 'body');
+
+    expect(
+      TestBed.inject(QuestionnairePageService).updateEditedContent
+    ).not.toHaveBeenCalled();
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 });

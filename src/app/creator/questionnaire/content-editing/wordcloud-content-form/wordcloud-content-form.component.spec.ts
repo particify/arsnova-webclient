@@ -1,5 +1,9 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import {
   CreateQuestionnaireWordcloudContentGql,
@@ -144,5 +148,33 @@ describe('WordcloudContentFormComponent', () => {
     expect(pageService.updateEditedContent).toHaveBeenCalledWith({
       id: 'c-1',
     } as never);
+  });
+
+  it('reports a failed creation and reports nothing as submitted', () => {
+    setUp();
+    createContent.mutate.and.returnValue(failedOperation() as never);
+    const submitted = jasmine.createSpy('submitted');
+    component.submitted.subscribe(submitted);
+
+    component.submit('q-1', 'Body');
+
+    expect(submitted).not.toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
+  });
+
+  it('reports a failed update and hands nothing to the page', () => {
+    setUp('c-1', 5);
+    updateContent.mutate.and.returnValue(failedOperation() as never);
+
+    component.submit('q-1', 'Body');
+
+    expect(pageService.updateEditedContent).not.toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 });

@@ -96,6 +96,9 @@
                           matTooltip="{{
                             'creator.content.dont-publish-answers' | transloco
                           }}"
+                          [attr.aria-label]="
+                            'creator.content.dont-publish-answers' | transloco
+                          "
                           (click)="toggleTextAnswersPublished(content)"
                           appTrackInteraction="Content publish text answers toggled"
                           appTrackName="off"
@@ -114,6 +117,9 @@
                           matTooltip="{{
                             'creator.content.publish-answers' | transloco
                           }}"
+                          [attr.aria-label]="
+                            'creator.content.publish-answers' | transloco
+                          "
                           (click)="toggleTextAnswersPublished(content)"
                           appTrackInteraction="Content publish text answers toggled"
                           appTrackName="on"

@@ -1,8 +1,12 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import {
   ContentType,
@@ -85,6 +89,23 @@ describe('TextContentFormComponent', () => {
     });
   });
 
+  it('reports a failed creation and reports nothing as submitted', () => {
+    setUp(null);
+    createContent.mutate.and.returnValue(failedOperation() as never);
+    const submitted = jasmine.createSpy('submitted');
+    component.submitted.subscribe(submitted);
+
+    component.submit('questionnaire-1', 'The question');
+
+    expect(submitted).not.toHaveBeenCalled();
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
+  });
+
   it('updates the text content when a content id is set', () => {
     setUp(formatData());
     fixture.componentRef.setInput('contentId', 'content-1');
@@ -102,5 +123,22 @@ describe('TextContentFormComponent', () => {
       duration: null,
       abstentionsAllowed: true,
     });
+  });
+
+  it('reports a failed update', () => {
+    setUp(formatData());
+    fixture.componentRef.setInput('contentId', 'content-1');
+    fixture.componentRef.setInput('duration', null);
+    fixture.detectChanges();
+    updateContent.mutate.and.returnValue(failedOperation() as never);
+
+    component.submit('questionnaire-1', 'The question');
+
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 });

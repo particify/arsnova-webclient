@@ -1,9 +1,13 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { NgClass, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
 import { ContentTextParticipantComponent } from '@app/participant/content/content-text-participant/content-text-participant.component';
@@ -261,6 +265,23 @@ describe('ContentParticipantComponent', () => {
         (r) => r.result
       )
     ).toEqual([AnswerResultState.Abstained, AnswerResultState.Unanswered]);
+  });
+
+  it('reports a failed abstention and keeps the content unanswered', () => {
+    setUp();
+    createAbstention.mutate.and.returnValue(failedOperation() as never);
+
+    component.submitAbstention();
+
+    expect(component.answer()).toBeFalsy();
+    expect(component.abstained()).toBeFalse();
+    expect(cache.updateQuery).not.toHaveBeenCalled();
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('does not abstain without an active round', () => {

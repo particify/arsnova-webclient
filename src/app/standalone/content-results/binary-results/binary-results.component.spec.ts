@@ -413,4 +413,36 @@ describe('BinaryResultsComponent', () => {
     expect(chart()?.data().datasets[0].values).toEqual([7, 3]);
     expect(console.error).toHaveBeenCalled();
   });
+
+  it('starts the live updates once a closed round is reopened', () => {
+    setUp({
+      rounds: [{ id: 'round-1', roundNo: 1, closed: true }] as Round[],
+    });
+    expect(subscribeStatsUpdated).not.toHaveBeenCalled();
+
+    // Starting the content again reopens its round under the same id.
+    fixture.componentRef.setInput('rounds', [
+      { id: 'round-1', roundNo: 1, closed: false },
+    ] as Round[]);
+    fixture.detectChanges();
+
+    expect(subscribeStatsUpdated).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-1' },
+    });
+  });
+
+  it('keeps listening to a round closed while it is shown', () => {
+    setUp({
+      rounds: [{ id: 'round-1', roundNo: 1, closed: false }] as Round[],
+    });
+
+    fixture.componentRef.setInput('rounds', [
+      { id: 'round-1', roundNo: 1, closed: true },
+    ] as Round[]);
+    fixture.detectChanges();
+    emitUpdate(roundStats([8, 3]));
+
+    expect(subscribeStatsUpdated).toHaveBeenCalledTimes(1);
+    expect(chart()?.data().datasets[0].values).toEqual([8, 3]);
+  });
 });

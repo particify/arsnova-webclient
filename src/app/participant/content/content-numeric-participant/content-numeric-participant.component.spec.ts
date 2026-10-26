@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
@@ -127,6 +128,19 @@ describe('ContentNumericParticipantComponent', () => {
     component.selectedNumber.set(42);
     component.submitAnswer();
     expect(emitted).toEqual(['answer-1']);
+  });
+
+  it('reports a failed answer and emits nothing', () => {
+    createAnswer.mutate.and.returnValue(failedOperation() as never);
+    const emitted: string[] = [];
+    component.answerCreated.subscribe((answer) => emitted.push(answer.id));
+    component.selectedNumber.set(42);
+    component.submitAnswer();
+    expect(emitted).toEqual([]);
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('does nothing while there is no active round', () => {

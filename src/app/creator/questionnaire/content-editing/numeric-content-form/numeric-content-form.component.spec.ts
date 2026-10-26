@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
@@ -220,6 +221,21 @@ describe('NumericContentFormComponent', () => {
     });
   });
 
+  it('reports a failed creation and reports nothing as submitted', () => {
+    setUp(null);
+    createContent.mutate.and.returnValue(failedOperation() as never);
+    const submitted = jasmine.createSpy('submitted');
+    component.submitted.subscribe(submitted);
+
+    component.submit('questionnaire-1', 'The question');
+
+    expect(submitted).not.toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
+  });
+
   it('sends the correct number and tolerance when one is asked for', () => {
     setUp(null);
     fixture.componentRef.setInput('hasCorrectAnswer', true);
@@ -312,5 +328,22 @@ describe('NumericContentFormComponent', () => {
       weight: undefined,
       abstentionsAllowed: true,
     });
+  });
+
+  it('reports a failed update', () => {
+    setUp(formatData({ minNumber: 0, maxNumber: 10 }));
+    fixture.componentRef.setInput('contentId', 'content-1');
+    fixture.componentRef.setInput('duration', null);
+    fixture.detectChanges();
+    updateContent.mutate.and.returnValue(failedOperation() as never);
+
+    component.submit('questionnaire-1', 'How many?');
+
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 });

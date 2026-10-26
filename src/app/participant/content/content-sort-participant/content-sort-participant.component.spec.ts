@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
@@ -5,7 +6,10 @@ import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
 import {
   AnswerResultState,
@@ -180,6 +184,21 @@ describe('ContentSortParticipantComponent', () => {
     component.answerCreated.subscribe((answer) => emitted.push(answer.id));
     component.submitAnswer();
     expect(emitted).toEqual(['answer-1']);
+  });
+
+  it('reports a failed answer and emits nothing', () => {
+    setUp();
+    createAnswer.mutate.and.returnValue(failedOperation() as never);
+    const emitted: string[] = [];
+    component.answerCreated.subscribe((answer) => emitted.push(answer.id));
+    component.submitAnswer();
+    expect(emitted).toEqual([]);
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('restores a given answer in the order it was given', () => {

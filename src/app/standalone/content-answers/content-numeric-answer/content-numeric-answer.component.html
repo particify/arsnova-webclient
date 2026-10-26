@@ -14,7 +14,6 @@
         [(ngModel)]="selectedNumber"
         matInput
         type="number"
-        data-testid="numeric-answer-input"
         [min]="minNumber()"
         [max]="maxNumber()"
         name="answer"
@@ -24,6 +23,9 @@
           matSuffix
           class="icon-indicator"
           [ngClass]="correct() ? 'correct' : 'wrong'"
+          [attr.data-testid]="
+            correct() ? 'numeric-answer-correct' : 'numeric-answer-wrong'
+          "
         >
           {{ correct() ? 'check' : 'close' }}</mat-icon
         >

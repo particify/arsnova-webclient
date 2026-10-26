@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
@@ -127,6 +128,19 @@ describe('ContentShortAnswerParticipantComponent', () => {
     component.answer.set('Kotlin');
     component.submitAnswer();
     expect(emitted).toEqual(['answer-1']);
+  });
+
+  it('reports a failed answer and emits nothing', () => {
+    createAnswer.mutate.and.returnValue(failedOperation() as never);
+    const emitted: string[] = [];
+    component.answerCreated.subscribe((answer) => emitted.push(answer.id));
+    component.answer.set('Kotlin');
+    component.submitAnswer();
+    expect(emitted).toEqual([]);
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('seeds the answer from an already given answer', () => {

@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { signal, Type } from '@angular/core';
 import { InMemoryCache } from '@apollo/client';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -7,7 +8,10 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
@@ -130,6 +134,12 @@ describe('ContentsPageComponent', () => {
             'setItem',
           ]),
         },
+        {
+          provide: NotificationService,
+          useValue: jasmine.createSpyObj('NotificationService', [
+            'showAdvanced',
+          ]),
+        },
         mutationSpy(PublishQuestionnaireUpToContentGql),
         mutationSpy(StartQuestionnaireContentGql),
         mutationSpy(StopQuestionnaireContentGql),
@@ -153,6 +163,20 @@ describe('ContentsPageComponent', () => {
     expect(variables(StartQuestionnaireContentGql)).toEqual({
       contentId: 'c-1',
     });
+  });
+
+  it('reports a content that failed to start', () => {
+    setUp();
+    gql.get(StartQuestionnaireContentGql)!.and.returnValue(failedOperation());
+
+    component.startContent();
+
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   describe('the started round', () => {

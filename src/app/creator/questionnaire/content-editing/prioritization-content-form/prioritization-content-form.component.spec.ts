@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
@@ -274,6 +275,22 @@ describe('PrioritizationContentFormComponent', () => {
     });
   });
 
+  it('reports a failed creation and reports nothing as submitted', () => {
+    setUp(null);
+    setItems(['A', 'B']);
+    createContent.mutate.and.returnValue(failedOperation() as never);
+    const submitted = jasmine.createSpy('submitted');
+    component.submitted.subscribe(submitted);
+
+    component.submit('questionnaire-1', 'The question');
+
+    expect(submitted).not.toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
+  });
+
   it('updates the content when a content id is set', () => {
     setUp(formatData(['A', 'B', 'C']));
     fixture.componentRef.setInput('contentId', 'content-1');
@@ -290,6 +307,23 @@ describe('PrioritizationContentFormComponent', () => {
       duration: null,
       abstentionsAllowed: true,
     });
+  });
+
+  it('reports a failed update', () => {
+    setUp(formatData(['A', 'B', 'C']));
+    fixture.componentRef.setInput('contentId', 'content-1');
+    fixture.componentRef.setInput('duration', null);
+    fixture.detectChanges();
+    updateContent.mutate.and.returnValue(failedOperation() as never);
+
+    component.submit('questionnaire-1', 'Weigh these');
+
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('submits the items the creator added and kept', () => {

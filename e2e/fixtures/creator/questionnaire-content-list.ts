@@ -44,6 +44,14 @@ export class QuestionnaireContentListPage {
     await this.page.getByRole('button', { name: 'Start', exact: true }).click();
   }
 
+  async publishTextAnswers(i: number) {
+    // The content actions only show while the content is hovered.
+    await this.contentItem(i).hover();
+    await this.contentItem(i)
+      .getByRole('button', { name: 'Publish answers' })
+      .click();
+  }
+
   finishedBadge(i: number): Locator {
     return this.contentItem(i).getByText('Finished').first();
   }

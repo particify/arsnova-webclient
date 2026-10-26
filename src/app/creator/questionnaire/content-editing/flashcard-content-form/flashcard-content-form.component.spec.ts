@@ -1,7 +1,11 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import {
@@ -93,5 +97,49 @@ describe('FlashcardContentFormComponent', () => {
     setUp(null);
     component.answer.set('The answer');
     expect(component.formatDataValid()).toBe(true);
+  });
+
+  it('reports a failed creation and reports nothing as submitted', () => {
+    setUp(formatData('The answer'));
+    const createContent = TestBed.inject(
+      CreateQuestionnaireFlashcardContentGql
+    ) as jasmine.SpyObj<CreateQuestionnaireFlashcardContentGql>;
+    createContent.mutate.and.returnValue(failedOperation() as never);
+    const submitted = jasmine.createSpy('submitted');
+    component.submitted.subscribe(submitted);
+
+    component.submit('questionnaire-1', 'The question');
+
+    expect(submitted).not.toHaveBeenCalled();
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
+  });
+
+  it('reports a failed update and hands nothing to the page', () => {
+    setUp(formatData('The answer'));
+    fixture.componentRef.setInput('contentId', 'content-1');
+    const updateContent = TestBed.inject(
+      UpdateQuestionnaireFlashcardContentGql
+    ) as jasmine.SpyObj<UpdateQuestionnaireFlashcardContentGql>;
+    updateContent.mutate.and.returnValue(failedOperation() as never);
+    const updateEditedContent = spyOn(
+      TestBed.inject(QuestionnairePageService),
+      'updateEditedContent'
+    );
+
+    component.submit('questionnaire-1', 'The question');
+
+    expect(updateContent.mutate).toHaveBeenCalled();
+    expect(updateEditedContent).not.toHaveBeenCalled();
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 });

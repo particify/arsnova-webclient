@@ -46,16 +46,15 @@ describe('FlashcardResultsComponent', () => {
     expect(renderedText.rawText).toBe('The answer');
   });
 
-  it('accepts the roundIds and resultsVisible inputs sent by the results component outlet', () => {
+  it('shows the back side with the inputs the results outlet passes', () => {
     setUp(formatData('The answer'));
-    expect(() => {
-      fixture.componentRef.setInput('roundIds', ['round-1']);
-      fixture.componentRef.setInput('resultsVisible', true);
-    }).not.toThrow();
+
+    fixture.componentRef.setInput('roundIds', ['round-1']);
+    fixture.componentRef.setInput('resultsVisible', true);
     fixture.detectChanges();
-    const renderedText = fixture.debugElement.query(
-      By.directive(RenderedTextComponent)
-    ).componentInstance as RenderedTextComponent;
-    expect(renderedText.rawText).toBe('The answer');
+
+    expect(
+      (fixture.nativeElement as HTMLElement).textContent?.trim()
+    ).toContain('The answer');
   });
 });

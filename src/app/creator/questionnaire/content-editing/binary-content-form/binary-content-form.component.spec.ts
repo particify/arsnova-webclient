@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
@@ -212,6 +213,21 @@ describe('BinaryContentFormComponent', () => {
     });
   });
 
+  it('reports a failed creation and reports nothing as submitted', () => {
+    setUp(null);
+    createContent.mutate.and.returnValue(failedOperation() as never);
+    const submitted = jasmine.createSpy('submitted');
+    component.submitted.subscribe(submitted);
+
+    component.submit('questionnaire-1', 'The question');
+
+    expect(submitted).not.toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
+  });
+
   it('sends the pick when a correct answer is wanted', () => {
     setUp(null);
     wantCorrectAnswer();
@@ -252,5 +268,22 @@ describe('BinaryContentFormComponent', () => {
       weight: undefined,
       abstentionsAllowed: true,
     });
+  });
+
+  it('reports a failed update', () => {
+    setUp(formatData(true));
+    fixture.componentRef.setInput('contentId', 'content-1');
+    fixture.componentRef.setInput('duration', null);
+    wantCorrectAnswer();
+    updateContent.mutate.and.returnValue(failedOperation() as never);
+
+    component.submit('questionnaire-1', 'Is it true?');
+
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 });
