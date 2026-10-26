@@ -10,7 +10,7 @@
     </mat-form-field>
     <mat-form-field fxFlex appearance="outline" class="smaller no-field-hint">
       <mat-label>{{ 'admin.admin-area.filter' | transloco }}</mat-label>
-      <mat-select [(value)]="currentFilter">
+      <mat-select [value]="currentFilter()">
         @for (option of filterOptions; track option) {
           <mat-option [value]="option" (click)="filterTags(option)">{{
             'admin.admin-area.filter-' + option | transloco
@@ -23,19 +23,19 @@
       (selectedLangChange)="loadTags($safeNavigationMigration($event?.code))"
     ></app-template-language-selection>
   </div>
-  @if (isLoading) {
+  @if (isLoading()) {
     <app-loading-indicator></app-loading-indicator>
   }
-  @if (!isLoading && this.filteredTags.length === 0) {
+  @if (!isLoading() && filteredTags().length === 0) {
     <div fxLayout="row" fxLayoutAlign="center">
       <p class="hint">
         {{ 'admin.admin-area.no-tags-found' | transloco }}
       </p>
     </div>
   }
-  @if (!isLoading) {
+  @if (!isLoading()) {
     <mat-action-list fxFill>
-      @for (tag of filteredTags; track tag) {
+      @for (tag of filteredTags(); track tag.id) {
         <mat-list-item disableRipple class="bottom-border list-item">
           <div fxLayout="row" fxLayoutAlign="space-between center">
             {{ tag.name }}

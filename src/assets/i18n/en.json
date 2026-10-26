@@ -592,6 +592,7 @@
     "publish-template": "Publish template",
     "publish-template-info": "Share your template with others under a free license.",
     "license": "License",
+    "license-inherited": "The license is taken from the template the contents were copied from.",
     "attribution": "Attribution",
     "optional": "optional",
     "please-fill-name": "Please enter a name.",
@@ -626,7 +627,8 @@
     "save": "Save",
     "changes-saved": "Changes have been saved.",
     "delete-template": "Delete",
-    "template-deleted": "Template has been deleted."
+    "template-deleted": "Template has been deleted.",
+    "template-not-found": "This template does not exist (anymore)."
   },
   "violation-report": {
     "report-template": "Report template",

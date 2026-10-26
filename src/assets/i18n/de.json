@@ -592,6 +592,7 @@
     "publish-template": "Vorlage veröffentlichen",
     "publish-template-info": "Teile deine Vorlage mit anderen unter einer freien Lizenz.",
     "license": "Lizenz",
+    "license-inherited": "Die Lizenz stammt von der Vorlage, aus der die Inhalte kopiert wurden.",
     "attribution": "Namensnennung",
     "optional": "optional",
     "please-fill-name": "Bitte gib einen Namen ein.",
@@ -626,7 +627,8 @@
     "save": "Speichern",
     "changes-saved": "Die Änderungen wurden gespeichert.",
     "delete-template": "Löschen",
-    "template-deleted": "Die Vorlage wurde gelöscht."
+    "template-deleted": "Die Vorlage wurde gelöscht.",
+    "template-not-found": "Diese Vorlage existiert nicht (mehr)."
   },
   "violation-report": {
     "report-template": "Vorlage melden",

@@ -593,6 +593,7 @@
     "description": "Description",
     "please-fill-attribution": "Merci d'indiquer une attribution.",
     "license": "Licence",
+    "license-inherited": "La licence provient du modèle à partir duquel les contenus ont été copiés.",
     "attribution": "Attribution",
     "license-description-cc0-1-0": "Permet à d'autres de diffuser, de réutiliser et d'adapter à partir de ce modèle sans condition.",
     "optional": "optionnel",
@@ -626,6 +627,7 @@
     "save": "Sauvegarder",
     "delete-template": "Supprimer",
     "template-deleted": "Le modèle a été supprimé.",
+    "template-not-found": "Ce modèle n'existe pas (ou plus).",
     "changes-saved": "Les modifications ont été enregistrées."
   },
   "share": {

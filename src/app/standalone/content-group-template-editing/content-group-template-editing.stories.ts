@@ -2,22 +2,48 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { ContentGroupTemplateEditingComponent } from './content-group-template-editing.component';
 
-import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
+import {
+  TemplateLicensesGql,
+  TemplateTagsByLanguageGql,
+} from '@gql/generated/graphql';
 import { of } from 'rxjs';
 
 class MockService {}
 
-class MockTemplateService {
-  getTemplateTags() {
-    return of([
-      { id: 'tagId1', name: 'tag 1', verified: true },
-      { id: 'tagId2', name: 'tag 2', verified: true },
-      { id: 'tagId3', name: 'tag 3', verified: true },
-    ]);
-  }
-}
+const templateLicensesGqlMock = {
+  fetch: () =>
+    of({
+      data: {
+        templateLicenses: [
+          {
+            id: 'CC0-1.0',
+            name: 'CC0 1.0',
+            url: 'https://creativecommons.org/publicdomain/zero/1.0/',
+          },
+          {
+            id: 'CC-BY-4.0',
+            name: 'CC BY 4.0',
+            url: 'https://creativecommons.org/licenses/by/4.0/',
+          },
+        ],
+      },
+    }),
+};
+
+const templateTagsByLanguageGqlMock = {
+  fetch: () =>
+    of({
+      data: {
+        templateTagsByLanguage: [
+          { id: 'tagId1', name: 'tag 1', verified: true },
+          { id: 'tagId2', name: 'tag 2', verified: true },
+          { id: 'tagId3', name: 'tag 3', verified: true },
+        ],
+      },
+    }),
+};
 
 export default {
   component: ContentGroupTemplateEditingComponent,
@@ -28,8 +54,12 @@ export default {
       imports: [ContentGroupTemplateEditingComponent],
       providers: [
         {
-          provide: BaseTemplateService,
-          useClass: MockTemplateService,
+          provide: TemplateLicensesGql,
+          useValue: templateLicensesGqlMock,
+        },
+        {
+          provide: TemplateTagsByLanguageGql,
+          useValue: templateTagsByLanguageGqlMock,
         },
         {
           provide: RoutingService,

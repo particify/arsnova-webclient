@@ -1,32 +1,21 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
-import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { CoreModule } from '@app/core/core.module';
-import { LICENSES } from '@app/core/models/licenses';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
-import { Room } from '@app/core/models/room';
-//import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
+import { QuestionnaireInfoComponent } from '@app/standalone/questionnaire-info/questionnaire-info.component';
+import { TemplateDetailsFragment } from '@gql/generated/graphql';
 
 @Component({
-  imports: [CoreModule, TemplateLicenseComponent], // ContentGroupInfoComponent],
+  imports: [CoreModule, TemplateLicenseComponent, QuestionnaireInfoComponent],
   selector: 'app-content-group-template',
   templateUrl: './content-group-template.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-group-template.component.scss'],
 })
 export class ContentGroupTemplateComponent {
-  @Input({ required: true }) template!: ContentGroupTemplate;
-  @Input() room?: Room;
-  @Output() previewClicked = new EventEmitter<string>();
-  LICENSES = LICENSES;
+  readonly template = input.required<TemplateDetailsFragment>();
+  readonly previewClicked = output<string>();
 
   preview() {
-    this.previewClicked.emit(this.template.id);
+    this.previewClicked.emit(this.template().id);
   }
 }

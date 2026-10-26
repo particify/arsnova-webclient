@@ -1,16 +1,16 @@
 import {
-  AfterViewInit,
   Component,
-  ViewChild,
+  afterNextRender,
   inject,
-  ChangeDetectionStrategy,
+  signal,
+  viewChild,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Content } from '@app/core/models/content';
 import { ContentPreviewComponent } from '@app/standalone/content-preview/content-preview.component';
 import { CoreModule } from '@app/core/core.module';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
+import { ContentDetailsFragment } from '@gql/generated/graphql';
 
 @Component({
   selector: 'app-content-template-preview',
@@ -21,32 +21,31 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     CdkStepperModule,
   ],
   templateUrl: './content-template-preview.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-template-preview.component.scss'],
 })
-export class ContentTemplatePreviewComponent implements AfterViewInit {
+export class ContentTemplatePreviewComponent {
   private dialogRef =
     inject<MatDialogRef<ContentTemplatePreviewComponent>>(MatDialogRef);
   data = inject<{
-    contents: Content[];
+    contents: ContentDetailsFragment[];
     index: number;
-    lang: string;
+    lang?: string;
   }>(MAT_DIALOG_DATA);
 
-  @ViewChild(StepperComponent) stepper!: StepperComponent;
+  readonly stepper = viewChild(StepperComponent);
+  readonly index = signal(this.data.index);
 
-  ngAfterViewInit(): void {
-    // Timeout is used for waiting until stepper component is available
-    setTimeout(() => {
-      this.stepper.init(this.data.index, this.data.contents.length);
-    }, 0);
+  constructor() {
+    afterNextRender(() => {
+      this.stepper()?.init(this.index(), this.data.contents.length);
+    });
   }
 
   nextContent(): void {
-    this.stepper.next();
+    this.stepper()?.next();
   }
 
   previousContent(): void {
-    this.stepper.previous();
+    this.stepper()?.previous();
   }
 }

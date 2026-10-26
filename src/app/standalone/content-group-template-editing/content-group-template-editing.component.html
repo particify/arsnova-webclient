@@ -6,7 +6,6 @@
       #nameInput
       matInput
       maxlength="50"
-      [(ngModel)]="name"
       autocomplete="off"
       formControlName="name"
     />
@@ -22,7 +21,6 @@
       id="descriptionInput"
       #descriptionInput
       matInput
-      [(ngModel)]="description"
       cdkTextareaAutosize
       cdkAutosizeMinRows="3"
       cdkAutosizeMaxRows="10"
@@ -37,36 +35,33 @@
     >
   </mat-form-field>
   <app-template-language-selection
-    [defaultLang]="selectedLang"
+    [defaultLang]="selectedLang()"
     (selectedLangChange)="
       updateLanguage($safeNavigationMigration($event?.code))
     "
   ></app-template-language-selection>
   <app-settings-slide-toggle
     label="templates.publish-template"
-    [isChecked]="published"
-    (toggleEvent)="published = !published"
+    [isChecked]="published()"
+    (toggleEvent)="published.set(!published())"
   ></app-settings-slide-toggle>
-  @if (published) {
-    <mat-form-field appearance="outline" class="no-field-hint">
+  @if (published()) {
+    <mat-form-field
+      appearance="outline"
+      [class.no-field-hint]="!getInheritedLicense()"
+    >
       <mat-label>{{ 'templates.license' | transloco }}</mat-label>
-      <mat-select
-        panelClass="bigger-panel"
-        [value]="selectedLicense"
-        formControlName="licenses"
-      >
+      <mat-select panelClass="bigger-panel" formControlName="licenses">
         <mat-select-trigger>
-          {{ LICENSES.get(selectedLicense)?.name }}
+          {{ getLicenseName(selectedLicense()) }}
         </mat-select-trigger>
-        @for (license of licenseKeys; track license) {
-          <mat-option [value]="license" (click)="updateLicense(license)">
+        @for (license of licenses(); track license.id) {
+          <mat-option [value]="license.id" (click)="updateLicense(license.id)">
             <div class="license-option" fxLayout="column" fxLayoutGap="4px">
-              <span class="license-name">
-                {{ LICENSES.get(license)?.name }}</span
-              >
+              <span class="license-name"> {{ license.name }}</span>
               <span class="license-description">
                 {{
-                  'templates.license-description-' + replaceDots(license)
+                  'templates.license-description-' + replaceDots(license.id)
                     | transloco
                 }}
               </span>
@@ -74,6 +69,9 @@
           </mat-option>
         }
       </mat-select>
+      @if (getInheritedLicense()) {
+        <mat-hint>{{ 'templates.license-inherited' | transloco }}</mat-hint>
+      }
     </mat-form-field>
     <mat-form-field
       class="no-field-hint"
@@ -82,7 +80,7 @@
     >
       <mat-label>{{
         ('templates.attribution' | transloco) +
-          (selectedLicense === licenseKeys[0]
+          (isAttributionOptional()
             ? ' (' + ('templates.optional' | transloco) + ')'
             : '')
       }}</mat-label>
@@ -90,19 +88,20 @@
         id="attributionInput"
         #nameInput
         matInput
-        [(ngModel)]="attribution"
         autocomplete="off"
         formControlName="attribution"
       />
     </mat-form-field>
     <app-template-tag-selection
-      (selectedTagsChanged)="updateTags($event)"
-      [lang]="selectedLang"
-      [langChanged]="langChanged"
-      [selectedTags]="selectedTags"
+      (selectedTagsChange)="updateTags($event)"
+      [lang]="selectedLang()"
+      [selectedTags]="selectedTags()"
       [allowCreation]="true"
     ></app-template-tag-selection>
-    <mat-checkbox [checked]="aiGenerated" (change)="aiGenerated = !aiGenerated">
+    <mat-checkbox
+      [checked]="aiGenerated()"
+      (change)="aiGenerated.set(!aiGenerated())"
+    >
       {{ 'templates.is-ai-generated' | transloco }}</mat-checkbox
     >
   }

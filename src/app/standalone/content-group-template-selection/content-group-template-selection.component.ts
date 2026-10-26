@@ -1,29 +1,45 @@
 import { Location } from '@angular/common';
 import {
   Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
+  computed,
   inject,
-  ChangeDetectionStrategy,
+  input,
+  linkedSignal,
+  signal,
 } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
-import { ContentGroupTemplate } from '@app/core/models/content-group-template';
-import { Room } from '@app/core/models/room';
-import { TemplateTag } from '@app/core/models/template-tag';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
+import {
+  CurrentUserTemplatesGql,
+  Maybe,
+  PublishedTemplatesGql,
+  TemplateQueryInput,
+  TemplateDetailsFragment,
+  TemplateTagFragment,
+} from '@gql/generated/graphql';
 import { TranslocoService } from '@jsverse/transloco';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, map, of, startWith, switchMap } from 'rxjs';
+
+// Only the first page is fetched until the list gets pagination controls.
+const TEMPLATE_PAGE_SIZE = 50;
+
+interface TemplatePage {
+  edges?: Maybe<Array<Maybe<{ node: TemplateDetailsFragment }>>>;
+  pageInfo: { endCursor?: Maybe<string>; hasNextPage: boolean };
+}
+
+/** Published templates are filtered by `query`, the user's own are not. */
+interface TemplateListRequest {
+  query?: TemplateQueryInput;
+}
 
 @Component({
   selector: 'app-content-group-template-selection',
@@ -35,123 +51,132 @@ import { Subject, takeUntil } from 'rxjs';
     LoadingIndicatorComponent,
   ],
   templateUrl: './content-group-template-selection.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-group-template-selection.component.scss'],
 })
-export class ContentGroupTemplateSelectionComponent
-  extends FormComponent
-  implements OnInit, OnDestroy
-{
-  private templateService = inject(BaseTemplateService);
+export class ContentGroupTemplateSelectionComponent extends FormComponent {
+  private publishedTemplatesGql = inject(PublishedTemplatesGql);
+  private currentUserTemplatesGql = inject(CurrentUserTemplatesGql);
   private translateService = inject(TranslocoService);
-  private authService = inject(AuthenticationService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private location = inject(Location);
   private routingService = inject(RoutingService);
 
   // Route data input below
-  @Input() room?: Room;
-  @Input() tagIds?: string[];
-  @Input() lang?: string;
+  readonly shortId = input<string>();
+  readonly tagIds = input<string[]>();
+  readonly lang = input<string>();
 
-  destroyed$ = new Subject<void>();
+  // If lang is set via query param, use this one instead of active lang as default
+  readonly selectedLang = linkedSignal<string | undefined>(
+    () => this.lang() || this.translateService.getActiveLang()
+  );
+  readonly selectedTags = signal<TemplateTagFragment[]>([]);
+  readonly showPublic = signal(!this.route.snapshot.data.showMyTemplates);
+  readonly tagIdsQueryParams = linkedSignal(() => this.tagIds() ?? []);
+  /** Preselected tag IDs are resolved by the tag selection, which reports them. */
+  private readonly tagsReported = signal(false);
 
-  loadingTemplates = true;
-  templates: ContentGroupTemplate[] = [];
-  selectedLang?: string;
-  selectedTags: TemplateTag[] = [];
-  langChanged = new EventEmitter<string>();
-  showPublic = true;
-  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  creatorId!: string;
-  tagIdsQueryParams: string[] = [];
+  private readonly request = computed((): TemplateListRequest | undefined => {
+    if (!this.showPublic()) {
+      return {};
+    }
+    if (this.tagIds()?.length && !this.tagsReported()) {
+      return undefined;
+    }
+    const tags = this.selectedTags();
+    return {
+      query: {
+        language: this.selectedLang(),
+        tagIds: tags.length > 0 ? tags.map((t) => t.id) : undefined,
+      },
+    };
+  });
 
-  ngOnInit(): void {
-    // If lang is set via query param, use this one instead of active lang as default
-    this.selectedLang = this.lang || this.translateService.getActiveLang();
-    this.authService
-      .getCurrentAuthentication()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((auth) => {
-        this.creatorId = auth?.userId;
-        if (this.tagIds) {
-          this.tagIdsQueryParams = this.tagIds;
-        } else {
-          this.showPublic = !this.route.snapshot.data.showMyTemplates;
-          this.loadTemplates();
-        }
-      });
-  }
+  private readonly loadedTemplates = toSignal(
+    toObservable(this.request).pipe(
+      switchMap((request) =>
+        request
+          ? this.fetchTemplatePage(request).pipe(
+              map(
+                (page) =>
+                  page?.edges?.flatMap((e) => (e?.node ? [e.node] : [])) ?? []
+              ),
+              startWith(undefined)
+            )
+          : of(undefined)
+      )
+    )
+  );
+  readonly templates = computed(() => this.loadedTemplates() ?? []);
+  readonly loadingTemplates = computed(
+    () => this.loadedTemplates() === undefined
+  );
 
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-  }
-
-  updateTags(tags: TemplateTag[]): void {
-    this.selectedTags = tags;
+  updateTags(tags: TemplateTagFragment[]): void {
+    this.selectedTags.set(tags);
+    this.tagsReported.set(true);
+    const tagIds = tags.map((t) => t.id);
     this.router.navigate([], {
       queryParams: {
-        lang: this.selectedLang,
-        tagIds: this.selectedTags.map((t) => t.id),
+        lang: this.selectedLang(),
+        tagIds,
       },
       replaceUrl: true,
     });
-    this.tagIdsQueryParams = this.selectedTags.map((t) => t.id);
-    this.loadTemplates();
+    this.tagIdsQueryParams.set(tagIds);
   }
 
   showPreview(templateId: string): void {
-    const template = this.templates.find((t) => t.id === templateId);
     const url = this.getBaseUrl();
     url.push(templateId);
-    this.router.navigate(url, {
-      state: { data: { template: template } },
-    });
+    this.router.navigate(url);
   }
 
   private getBaseUrl() {
     const url = [];
-    if (this.room) {
+    const shortId = this.shortId();
+    if (shortId) {
       url.push(this.routingService.getRoleRoute());
-      url.push(this.room.shortId);
+      url.push(shortId);
     }
     url.push('templates');
     return url;
   }
 
+  /** Changing the language resets the tags, whose report reloads the list. */
   updateLanguage(lang?: string): void {
     if (!lang) {
       return;
     }
-    this.selectedLang = lang;
-    this.langChanged.emit(this.selectedLang);
+    this.selectedLang.set(lang);
   }
 
   switchList(event: MatTabChangeEvent): void {
-    this.showPublic = event.index === 0;
+    this.showPublic.set(event.index === 0);
     const url = this.getBaseUrl();
-    if (!this.showPublic) {
+    if (!this.showPublic()) {
       url.push('my');
     }
     this.location.replaceState(
       this.router.serializeUrl(this.router.createUrlTree(url))
     );
-    this.loadTemplates();
   }
 
-  private loadTemplates() {
-    this.templates = [];
-    this.loadingTemplates = true;
-    this.templateService
-      .getContentGroupTemplates(
-        this.selectedTags.map((t) => t.id),
-        this.selectedLang,
-        this.showPublic ? undefined : this.creatorId
-      )
-      .subscribe((templates) => {
-        this.templates = templates;
-        this.loadingTemplates = false;
-      });
+  private fetchTemplatePage(
+    request: TemplateListRequest,
+    after?: string
+  ): Observable<Maybe<TemplatePage>> {
+    const first = TEMPLATE_PAGE_SIZE;
+    return request.query
+      ? this.publishedTemplatesGql
+          .fetch({
+            variables: { query: request.query, first, after },
+            fetchPolicy: 'network-only',
+          })
+          .pipe(map((r) => r.data?.publishedTemplates ?? null))
+      : this.currentUserTemplatesGql
+          .fetch({ variables: { first, after }, fetchPolicy: 'network-only' })
+          .pipe(map((r) => r.data?.currentUserTemplates ?? null));
   }
 }

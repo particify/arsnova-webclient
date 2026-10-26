@@ -1,98 +1,107 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { ContentGroupTemplateSelectionComponent } from './content-group-template-selection.component';
-import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
-import { GroupType } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import {
+  CurrentUserTemplatesGql,
+  PublishedTemplatesGql,
+  QuestionnaireType,
+  TemplateDetailsFragment,
+  TemplateTagsByLanguageGql,
+} from '@gql/generated/graphql';
 
 class MockService {}
 
-class MockTemplateService {
-  getTemplateTags() {
-    return of([
-      { id: 'tagId1', name: 'tag 1', verified: true },
-      { id: 'tagId2', name: 'tag 2', verified: true },
-      { id: 'tagId3', name: 'tag 3', verified: true },
-      { id: 'tagId4', name: 'tag 4', verified: true },
-      { id: 'tagId5', name: 'tag 5', verified: true },
-    ]);
-  }
+const tags = [
+  { id: 'tagId1', name: 'tag 1', verified: true },
+  { id: 'tagId2', name: 'tag 2', verified: true },
+  { id: 'tagId3', name: 'tag 3', verified: true },
+  { id: 'tagId4', name: 'tag 4', verified: true },
+  { id: 'tagId5', name: 'tag 5', verified: true },
+];
 
-  getContentGroupTemplates() {
-    return of([
-      new ContentGroupTemplate(
-        'Template name',
-        'This is a description.',
-        'en',
-        true,
-        [
-          { id: 'tagId1', name: 'tag 1', verified: true },
-          { id: 'tagId2', name: 'tag 2', verified: true },
-          { id: 'tagId3', name: 'tag 3', verified: true },
-        ],
-        'CC-BY-4.0',
-        false,
-        'Attribution',
-        ['templateId1', 'templateId2', 'templateId3', 'templateId4']
-      ),
-      new ContentGroupTemplate(
-        'Another template name',
-        'This is another description.',
-        'en',
-        true,
-        [
-          { id: 'tagId1', name: 'tag 3', verified: true },
-          { id: 'tagId2', name: 'tag 4', verified: true },
-          { id: 'tagId3', name: 'tag 5', verified: true },
-        ],
-        'CC0-1.0',
-        false,
-        undefined,
-        ['templateId1', 'templateId2', 'templateId3', 'templateId4']
-      ),
-      new ContentGroupTemplate(
-        'Template name',
-        'This is a description.',
-        'en',
-        true,
-        [
-          { id: 'tagId1', name: 'tag 1', verified: true },
-          { id: 'tagId2', name: 'tag 3', verified: true },
-          { id: 'tagId3', name: 'tag 5', verified: true },
-        ],
-        'CC-BY-SA-4.0',
-        true,
-        'Attribution',
-        ['templateId1', 'templateId2', 'templateId4']
-      ),
-    ]);
-  }
+function template(
+  id: string,
+  changes: Partial<TemplateDetailsFragment>
+): TemplateDetailsFragment {
+  return {
+    id,
+    aiGenerated: false,
+    attribution: 'Attribution',
+    contentCount: 4,
+    createdByCurrentUser: false,
+    description: 'This is a description.',
+    language: 'en',
+    license: {
+      id: 'CC-BY-4.0',
+      name: 'CC BY 4.0',
+      url: 'https://creativecommons.org/licenses/by/4.0/',
+    },
+    name: 'Template name',
+    published: true,
+    questionnaireId: id,
+    questionnaireType: QuestionnaireType.Mixed,
+    tags: tags.slice(0, 3),
+    ...changes,
+  };
 }
 
-class MockAuthenticationService {
-  getCurrentAuthentication() {
-    return of(new AuthenticatedUser('userId', true, 'displayId'));
-  }
+const templates = [
+  template('templateId1', {}),
+  template('templateId2', {
+    name: 'Another template name',
+    description: 'This is another description.',
+    attribution: null,
+    license: {
+      id: 'CC0-1.0',
+      name: 'CC0 1.0',
+      url: 'https://creativecommons.org/publicdomain/zero/1.0/',
+    },
+    tags: tags.slice(2),
+    questionnaireType: QuestionnaireType.Quiz,
+  }),
+  template('templateId3', {
+    aiGenerated: true,
+    contentCount: 3,
+    questionnaireType: QuestionnaireType.Survey,
+  }),
+];
+
+function connection(nodes: TemplateDetailsFragment[]) {
+  return {
+    edges: nodes.map((node) => ({ node, cursor: node.id })),
+    pageInfo: { hasNextPage: false, hasPreviousPage: false },
+  };
 }
+
+const publishedTemplatesGqlMock = {
+  fetch: () => of({ data: { publishedTemplates: connection(templates) } }),
+};
+
+const currentUserTemplatesGqlMock = {
+  fetch: () =>
+    of({ data: { currentUserTemplates: connection(templates.slice(0, 1)) } }),
+};
+
+const templateTagsByLanguageGqlMock = {
+  fetch: () => of({ data: { templateTagsByLanguage: tags } }),
+};
 
 class MockContentGroupService {
-  private typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
-    [GroupType.MIXED, 'dashboard'],
-    [GroupType.QUIZ, 'sports_esports'],
-    [GroupType.SURVEY, 'tune'],
-    [GroupType.FLASHCARDS, 'school'],
+  private typeIcons = new Map<QuestionnaireType, string>([
+    [QuestionnaireType.Mixed, 'dashboard'],
+    [QuestionnaireType.Quiz, 'sports_esports'],
+    [QuestionnaireType.Survey, 'tune'],
+    [QuestionnaireType.Flashcards, 'school'],
   ]);
-  getTypeIcons() {
+  getQuestionnaireTypeIcons() {
     return this.typeIcons;
   }
 }
@@ -111,12 +120,16 @@ export default {
       ],
       providers: [
         {
-          provide: BaseTemplateService,
-          useClass: MockTemplateService,
+          provide: PublishedTemplatesGql,
+          useValue: publishedTemplatesGqlMock,
         },
         {
-          provide: AuthenticationService,
-          useClass: MockAuthenticationService,
+          provide: CurrentUserTemplatesGql,
+          useValue: currentUserTemplatesGqlMock,
+        },
+        {
+          provide: TemplateTagsByLanguageGql,
+          useValue: templateTagsByLanguageGqlMock,
         },
         {
           provide: RoomMembershipService,

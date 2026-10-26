@@ -690,7 +690,7 @@ export class QuestionnairePageComponent {
       width: '600px',
       data: {
         name: this.questionnaire()?.name,
-        contentGroupId: this.questionnaireId(),
+        questionnaireId: this.questionnaireId(),
       },
     });
   }

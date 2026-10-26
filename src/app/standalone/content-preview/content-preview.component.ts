@@ -4,8 +4,10 @@ import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { AnswerOption, toAnswerOption } from '@app/core/models/answer-option';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { CoreModule } from '@app/core/core.module';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
+import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 import { ContentFormatData, ContentType } from '@gql/generated/graphql';
@@ -39,6 +41,7 @@ function binaryCorrectOptionIndexes(
 })
 export class ContentPreviewComponent {
   private readonly translateService = inject(TranslocoService);
+  private readonly likertScaleService = inject(LikertScaleService);
 
   contentFormatData = input.required<ContentFormatData>();
   body = input.required<string>();
@@ -66,7 +69,7 @@ export class ContentPreviewComponent {
     [ContentType.Choice]: ContentChoiceAnswerComponent,
     [ContentType.Binary]: ContentChoiceAnswerComponent,
     [ContentType.Flashcard]: undefined,
-    [ContentType.Numeric]: ContentChoiceAnswerComponent,
+    [ContentType.Numeric]: ContentNumericAnswerComponent,
     [ContentType.Prioritization]: ContentPrioritizationAnswerComponent,
     [ContentType.Scale]: ContentChoiceAnswerComponent,
     [ContentType.ShortAnswer]: ContentTextAnswerComponent,
@@ -103,6 +106,13 @@ export class ContentPreviewComponent {
           multipleAnswersAllowed: !!formatData.multiple,
         };
 
+      case 'NumericContentFormatData':
+        return {
+          minNumber: formatData.minNumber,
+          maxNumber: formatData.maxNumber,
+          disabled: true,
+        };
+
       case 'PrioritizationContentFormatData':
         return {
           answerOptions: formatData.options,
@@ -110,17 +120,28 @@ export class ContentPreviewComponent {
           disabled: true,
         };
 
-      case 'ShortAnswerContentFormatData':
-        return {
-          disabled: true,
-          minRows: 1,
-          lengthLimit: 80,
-        };
+      case 'ScaleContentFormatData':
+        return this.scaleInputs(formatData.template, formatData.neutralOption);
 
       case 'SortContentFormatData':
         return {
           answerOptions: formatData.options,
           disabled: true,
+        };
+
+      default:
+        return this.freeTextInputs(formatData);
+    }
+  });
+
+  /** Formats answered by typing, which the preview shows empty. */
+  private freeTextInputs(formatData: ContentFormatData) {
+    switch (formatData.__typename) {
+      case 'ShortAnswerContentFormatData':
+        return {
+          disabled: true,
+          minRows: 1,
+          lengthLimit: 80,
         };
 
       case 'TextContentFormatData':
@@ -136,5 +157,16 @@ export class ContentPreviewComponent {
       default:
         return {};
     }
-  });
+  }
+
+  private scaleInputs(template: string, neutralOption: boolean) {
+    const options = this.likertScaleService.getOptions(template, neutralOption);
+    return {
+      answerOptions: options.labels.map(
+        (label) => new SelectableAnswer(new AnswerOption(label), false)
+      ),
+      translateOptions: options.translate,
+      language: this.language(),
+    };
+  }
 }

@@ -1,8 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="start center">
-  @if (isLoadingContentGroup) {
-    <app-loading-indicator></app-loading-indicator>
-  }
-  @if (!isLoadingContentGroup) {
+  @if (template(); as template) {
     <div fxLayout="column" fxLayoutGap="16px">
       <app-back-button
         [text]="'templates.back-to-templates' | transloco"
@@ -21,7 +18,7 @@
             <mat-menu #moreMenu="matMenu">
               <button
                 mat-menu-item
-                [cdkCopyToClipboard]="url"
+                [cdkCopyToClipboard]="url()"
                 (cdkCopyToClipboardCopied)="showNotificationAfterCopiedUrl()"
               >
                 <mat-icon>link</mat-icon>
@@ -29,11 +26,11 @@
               </button>
               <div
                 [matTooltip]="'templates.login-to-report-template' | transloco"
-                [matTooltipDisabled]="!isGuest"
+                [matTooltipDisabled]="!isGuest()"
               >
-                @if (!isCreator) {
+                @if (!template.createdByCurrentUser) {
                   <button
-                    [disabled]="isGuest"
+                    [disabled]="isGuest()"
                     mat-menu-item
                     (click)="reportTemplate()"
                   >
@@ -42,13 +39,13 @@
                   </button>
                 }
               </div>
-              @if (isCreator) {
+              @if (template.createdByCurrentUser) {
                 <button mat-menu-item (click)="editTemplate()">
                   <mat-icon>edit</mat-icon>
                   <span>{{ 'templates.edit-template' | transloco }}</span>
                 </button>
               }
-              @if (isCreator) {
+              @if (template.createdByCurrentUser) {
                 <button mat-menu-item (click)="deleteTemplate()">
                   <mat-icon color="warn">delete</mat-icon>
                   <span>{{ 'templates.delete-template' | transloco }}</span>
@@ -58,18 +55,19 @@
             <app-add-template-button
               [templateId]="template.id"
               [templateName]="template.name"
-              [room]="room"
+              [roomId]="roomId()"
+              [shortId]="shortId()"
             ></app-add-template-button>
           </div>
         </div>
         <p class="template-description">{{ template.description }}</p>
         <div fxLayout="column" fxLayoutGap="1em">
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-            <!-- <app-content-group-info
-              [groupType]="template.groupType"
-              [contentCount]="template.templateIds.length"
+            <app-questionnaire-info
+              [questionnaireType]="template.questionnaireType"
+              [contentCount]="template.contentCount"
               [countColor]="true"
-            ></app-content-group-info> -->
+            ></app-questionnaire-info>
             @if (template.published && template.license) {
               <app-template-license
                 [ownerName]="template.attribution"
@@ -82,7 +80,7 @@
           @if (template.published) {
             <div fxLayout="row" fxLayoutAlign="start center">
               <mat-chip-set>
-                @for (tag of template.tags; track tag) {
+                @for (tag of template.tags; track tag.id) {
                   <mat-chip>
                     {{ tag.name }}
                   </mat-chip>
@@ -90,12 +88,11 @@
               </mat-chip-set>
             </div>
           }
-          @if (isLoadingContents) {
+          @if (isLoadingContents()) {
             <app-loading-indicator></app-loading-indicator>
-          }
-          @if (!isLoadingContents) {
+          } @else {
             <mat-action-list>
-              @for (content of contents; track content) {
+              @for (content of contents(); track content.id) {
                 <mat-list-item
                   class="bottom-border"
                   (click)="openPreview(content)"
@@ -108,7 +105,7 @@
                   >
                     <div fxLayoutAlign="center">
                       <mat-icon class="format-icon">{{
-                        getIcon(content.format)
+                        getIcon(content.formatData.format)
                       }}</mat-icon>
                     </div>
                     <p class="ellipsis">{{ content.body }}</p>
@@ -120,5 +117,7 @@
         </div>
       </mat-card>
     </div>
+  } @else {
+    <app-loading-indicator></app-loading-indicator>
   }
 </div>
