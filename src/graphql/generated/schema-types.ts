@@ -375,6 +375,12 @@ export type CreateQnaInput = {
   topic?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CreateQuestionnaireFromTemplateInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  roomId: Scalars['UUID']['input'];
+  templateId: Scalars['UUID']['input'];
+};
+
 export type CreateQuestionnaireInput = {
   name: Scalars['String']['input'];
   roomId: Scalars['UUID']['input'];
@@ -448,6 +454,18 @@ export type CreateTagInput = {
   qnaId: Scalars['UUID']['input'];
 };
 
+export type CreateTemplateFromQuestionnaireInput = {
+  aiGenerated?: InputMaybe<Scalars['Boolean']['input']>;
+  attribution?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  language: Scalars['String']['input'];
+  licenseId?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  published?: InputMaybe<Scalars['Boolean']['input']>;
+  questionnaireId: Scalars['UUID']['input'];
+  tagNames?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type CreateTextAnswerInput = {
   body: Scalars['String']['input'];
   roundId: Scalars['UUID']['input'];
@@ -485,10 +503,9 @@ export type FlashcardContentFormatData = {
   format: ContentType;
 };
 
-export type JoinRoomInput = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  shortId?: InputMaybe<Scalars['ID']['input']>;
-};
+export type JoinRoomInput =
+  | { id: Scalars['ID']['input']; shortId?: never }
+  | { id?: never; shortId: Scalars['ID']['input'] };
 
 export type LeaderboardCurrentResult = {
   __typename?: 'LeaderboardCurrentResult';
@@ -525,8 +542,12 @@ export type Mutation = {
   acceptQnaPost: Post;
   adminCreateUser: AdminUser;
   adminDeleteRoomById: Scalars['UUID']['output'];
+  adminDeleteTemplate: Scalars['UUID']['output'];
+  adminDeleteTemplateTag: Scalars['UUID']['output'];
   adminDeleteUserById: Scalars['UUID']['output'];
   adminTransferRoom: AdminRoom;
+  adminUpdateTemplateTagName: TemplateTag;
+  adminUpdateTemplateTagVerified: TemplateTag;
   adminVerifyUserById: AdminUser;
   banQuestionnaireShortAnswerContentKeyword?: Maybe<Content>;
   banQuestionnaireWordcloudContentKeyword?: Maybe<Content>;
@@ -543,6 +564,7 @@ export type Mutation = {
   createQuestionnaireChoiceAnswer?: Maybe<Answer>;
   createQuestionnaireChoiceContent?: Maybe<Content>;
   createQuestionnaireFlashcardContent?: Maybe<Content>;
+  createQuestionnaireFromTemplate: Questionnaire;
   createQuestionnaireNumericAnswer?: Maybe<Answer>;
   createQuestionnaireNumericContent?: Maybe<Content>;
   createQuestionnairePrioritizationAnswer?: Maybe<Answer>;
@@ -559,6 +581,7 @@ export type Mutation = {
   createQuestionnaireWordcloudAnswer?: Maybe<Answer>;
   createQuestionnaireWordcloudContent?: Maybe<Content>;
   createRoom: Room;
+  createTemplateFromQuestionnaire: Template;
   deleteAnnouncement: Scalars['ID']['output'];
   deleteQnaPost: Scalars['ID']['output'];
   deleteQnaPostsByQnaId: Scalars['Int']['output'];
@@ -568,6 +591,7 @@ export type Mutation = {
   deleteQuestionnaireAnswersByContentId?: Maybe<Scalars['Boolean']['output']>;
   deleteQuestionnaireContent?: Maybe<Scalars['ID']['output']>;
   deleteRoom: Scalars['UUID']['output'];
+  deleteTemplate: Scalars['UUID']['output'];
   deleteUser?: Maybe<Scalars['UUID']['output']>;
   duplicateDemoRoom: Room;
   duplicateQuestionnaire: Questionnaire;
@@ -622,6 +646,8 @@ export type Mutation = {
   updateRoomFocusMode: Room;
   updateRoomLanguage: Room;
   updateRoomName: Room;
+  updateTemplate: Template;
+  updateTemplateFromSource: Template;
   updateUserDetails?: Maybe<User>;
   updateUserLanguage?: Maybe<User>;
   updateUserMailAddress?: Maybe<User>;
@@ -644,6 +670,14 @@ export type MutationAdminDeleteRoomByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type MutationAdminDeleteTemplateArgs = {
+  id: Scalars['UUID']['input'];
+};
+
+export type MutationAdminDeleteTemplateTagArgs = {
+  id: Scalars['UUID']['input'];
+};
+
 export type MutationAdminDeleteUserByIdArgs = {
   id: Scalars['ID']['input'];
 };
@@ -651,6 +685,16 @@ export type MutationAdminDeleteUserByIdArgs = {
 export type MutationAdminTransferRoomArgs = {
   roomId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
+};
+
+export type MutationAdminUpdateTemplateTagNameArgs = {
+  id: Scalars['UUID']['input'];
+  name: Scalars['String']['input'];
+};
+
+export type MutationAdminUpdateTemplateTagVerifiedArgs = {
+  id: Scalars['UUID']['input'];
+  verified: Scalars['Boolean']['input'];
 };
 
 export type MutationAdminVerifyUserByIdArgs = {
@@ -721,6 +765,10 @@ export type MutationCreateQuestionnaireFlashcardContentArgs = {
   input: CreateFlashcardContentInput;
 };
 
+export type MutationCreateQuestionnaireFromTemplateArgs = {
+  input: CreateQuestionnaireFromTemplateInput;
+};
+
 export type MutationCreateQuestionnaireNumericAnswerArgs = {
   input: CreateNumericAnswerInput;
 };
@@ -785,6 +833,10 @@ export type MutationCreateRoomArgs = {
   input: CreateRoomInput;
 };
 
+export type MutationCreateTemplateFromQuestionnaireArgs = {
+  input: CreateTemplateFromQuestionnaireInput;
+};
+
 export type MutationDeleteAnnouncementArgs = {
   id: Scalars['ID']['input'];
 };
@@ -820,6 +872,10 @@ export type MutationDeleteQuestionnaireContentArgs = {
 
 export type MutationDeleteRoomArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteTemplateArgs = {
+  id: Scalars['UUID']['input'];
 };
 
 export type MutationDuplicateQuestionnaireArgs = {
@@ -1046,6 +1102,14 @@ export type MutationUpdateRoomNameArgs = {
   name: Scalars['String']['input'];
 };
 
+export type MutationUpdateTemplateArgs = {
+  input: UpdateTemplateInput;
+};
+
+export type MutationUpdateTemplateFromSourceArgs = {
+  id: Scalars['UUID']['input'];
+};
+
 export type MutationUpdateUserDetailsArgs = {
   input: UpdateUserDetailsInput;
 };
@@ -1235,7 +1299,9 @@ export type Query = {
   announcementsForCurrentUser?: Maybe<AnnouncementConnection>;
   announcementsMetaForCurrentUser?: Maybe<AnnouncementsMeta>;
   currentUser?: Maybe<User>;
+  currentUserTemplates?: Maybe<TemplateConnection>;
   publishedQuestionnairesByRoomId?: Maybe<Array<Questionnaire>>;
+  publishedTemplates?: Maybe<TemplateConnection>;
   qnaPostCountsByQnaId?: Maybe<PostCountSummary>;
   qnaPostsByQnaId?: Maybe<PostConnection>;
   qnasByRoomId?: Maybe<QnaConnection>;
@@ -1269,6 +1335,10 @@ export type Query = {
   roomUserAliasByRoomId: RoomUserAlias;
   rooms?: Maybe<RoomConnection>;
   roomsByUserId?: Maybe<RoomMembershipConnection>;
+  templateById?: Maybe<Template>;
+  templateContentAttributionsByQuestionnaireId: Array<TemplateContentAttribution>;
+  templateLicenses: Array<TemplateLicense>;
+  templateTagsByLanguage: Array<TemplateTag>;
   userByDisplayId?: Maybe<User>;
 };
 
@@ -1338,8 +1408,23 @@ export type QueryAnnouncementsForCurrentUserArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type QueryCurrentUserTemplatesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type QueryPublishedQuestionnairesByRoomIdArgs = {
   roomId: Scalars['UUID']['input'];
+};
+
+export type QueryPublishedTemplatesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  query?: InputMaybe<TemplateQueryInput>;
 };
 
 export type QueryQnaPostCountsByQnaIdArgs = {
@@ -1488,6 +1573,19 @@ export type QueryRoomsByUserIdArgs = {
   userId: Scalars['UUID']['input'];
 };
 
+export type QueryTemplateByIdArgs = {
+  id: Scalars['UUID']['input'];
+};
+
+export type QueryTemplateContentAttributionsByQuestionnaireIdArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type QueryTemplateTagsByLanguageArgs = {
+  language: Scalars['String']['input'];
+  verified?: Scalars['Boolean']['input'];
+};
+
 export type QueryUserByDisplayIdArgs = {
   displayId: Scalars['ID']['input'];
 };
@@ -1503,6 +1601,7 @@ export type Questionnaire = {
   published: Scalars['Boolean']['output'];
   publishedUpToContent?: Maybe<Content>;
   publishingMode: QuestionnairePublishingMode;
+  sourceTemplateId?: Maybe<Scalars['ID']['output']>;
   statisticsPublished?: Maybe<Scalars['Boolean']['output']>;
   type: QuestionnaireType;
 };
@@ -1849,6 +1948,75 @@ export type Tag = {
   name: Scalars['String']['output'];
 };
 
+export type Template = {
+  __typename?: 'Template';
+  aiGenerated: Scalars['Boolean']['output'];
+  attribution?: Maybe<Scalars['String']['output']>;
+  contentCount: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  createdByCurrentUser: Scalars['Boolean']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  language: Scalars['String']['output'];
+  license?: Maybe<TemplateLicense>;
+  name: Scalars['String']['output'];
+  published: Scalars['Boolean']['output'];
+  questionnaireId: Scalars['ID']['output'];
+  questionnaireType: QuestionnaireType;
+  sourceQuestionnaireId?: Maybe<Scalars['ID']['output']>;
+  tags: Array<TemplateTag>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type TemplateConnection = {
+  __typename?: 'TemplateConnection';
+  edges?: Maybe<Array<Maybe<TemplateEdge>>>;
+  pageInfo: PageInfo;
+};
+
+export type TemplateContentAttribution = {
+  __typename?: 'TemplateContentAttribution';
+  attribution?: Maybe<Scalars['String']['output']>;
+  contentId: Scalars['ID']['output'];
+  license?: Maybe<TemplateLicense>;
+  templateId: Scalars['ID']['output'];
+  upstreamAttributions: Array<TemplateUpstreamAttribution>;
+};
+
+export type TemplateEdge = {
+  __typename?: 'TemplateEdge';
+  cursor: Scalars['String']['output'];
+  node: Template;
+};
+
+export type TemplateLicense = {
+  __typename?: 'TemplateLicense';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  url?: Maybe<Scalars['String']['output']>;
+};
+
+export type TemplateQueryInput = {
+  language?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  tagIds?: InputMaybe<Array<Scalars['UUID']['input']>>;
+};
+
+export type TemplateTag = {
+  __typename?: 'TemplateTag';
+  id: Scalars['ID']['output'];
+  language: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  verified: Scalars['Boolean']['output'];
+};
+
+export type TemplateUpstreamAttribution = {
+  __typename?: 'TemplateUpstreamAttribution';
+  attribution?: Maybe<Scalars['String']['output']>;
+  license?: Maybe<TemplateLicense>;
+  templateId: Scalars['ID']['output'];
+};
+
 export type TextAnswerFormatData = {
   __typename?: 'TextAnswerFormatData';
   body: Scalars['String']['output'];
@@ -1953,6 +2121,18 @@ export type UpdateSortContentInput = {
   id: Scalars['UUID']['input'];
   options: Array<Scalars['String']['input']>;
   weight?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateTemplateInput = {
+  aiGenerated?: InputMaybe<Scalars['Boolean']['input']>;
+  attribution?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['UUID']['input'];
+  language?: InputMaybe<Scalars['String']['input']>;
+  licenseId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  published?: InputMaybe<Scalars['Boolean']['input']>;
+  tagNames?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type UpdateTextContentInput = {

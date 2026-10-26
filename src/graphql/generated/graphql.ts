@@ -1708,6 +1708,40 @@ export type CreateQuestionnaireMutation = {
   };
 };
 
+export type CreateQuestionnaireFromTemplateMutationVariables = Exact<{
+  input: Types.CreateQuestionnaireFromTemplateInput;
+}>;
+
+export type CreateQuestionnaireFromTemplateMutation = {
+  createQuestionnaireFromTemplate: {
+    __typename: 'Questionnaire';
+    id: string;
+    name: string;
+    type: Types.QuestionnaireType;
+    published: boolean;
+    publishingMode: Types.QuestionnairePublishingMode;
+    statisticsPublished: boolean | null;
+    correctOptionsPublished: boolean | null;
+    leaderboardEnabled: boolean | null;
+    contentCount: number | null;
+    publishedUpToContent: {
+      __typename: 'Content';
+      id: string;
+      position: number | null;
+    } | null;
+    activeRound: {
+      __typename: 'Round';
+      id: string;
+      contentId: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime: string | null;
+      answerable: boolean;
+    } | null;
+  };
+};
+
 export type ToggleQuestionnairePublishedMutationVariables = Exact<{
   id: string;
   published: boolean;
@@ -6923,6 +6957,333 @@ export type SetRoomUserAliasMutation = {
   };
 };
 
+export type TemplateLicenseFragment = {
+  __typename: 'TemplateLicense';
+  id: string;
+  name: string;
+  url: string | null;
+};
+
+export type TemplateTagFragment = {
+  __typename: 'TemplateTag';
+  id: string;
+  name: string;
+  verified: boolean;
+};
+
+export type TemplateDetailsFragment = {
+  __typename: 'Template';
+  id: string;
+  aiGenerated: boolean;
+  attribution: string | null;
+  contentCount: number;
+  createdByCurrentUser: boolean;
+  description: string | null;
+  language: string;
+  name: string;
+  published: boolean;
+  questionnaireId: string;
+  questionnaireType: Types.QuestionnaireType;
+  license: {
+    __typename: 'TemplateLicense';
+    id: string;
+    name: string;
+    url: string | null;
+  } | null;
+  tags: Array<{
+    __typename: 'TemplateTag';
+    id: string;
+    name: string;
+    verified: boolean;
+  }>;
+};
+
+export type PublishedTemplatesQueryVariables = Exact<{
+  query?: Types.TemplateQueryInput | null;
+  first: number;
+  after?: string | null;
+}>;
+
+export type PublishedTemplatesQuery = {
+  publishedTemplates: {
+    __typename: 'TemplateConnection';
+    edges: Array<{
+      __typename: 'TemplateEdge';
+      cursor: string;
+      node: {
+        __typename: 'Template';
+        id: string;
+        aiGenerated: boolean;
+        attribution: string | null;
+        contentCount: number;
+        createdByCurrentUser: boolean;
+        description: string | null;
+        language: string;
+        name: string;
+        published: boolean;
+        questionnaireId: string;
+        questionnaireType: Types.QuestionnaireType;
+        license: {
+          __typename: 'TemplateLicense';
+          id: string;
+          name: string;
+          url: string | null;
+        } | null;
+        tags: Array<{
+          __typename: 'TemplateTag';
+          id: string;
+          name: string;
+          verified: boolean;
+        }>;
+      };
+    } | null> | null;
+    pageInfo: {
+      __typename: 'PageInfo';
+      endCursor: string | null;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor: string | null;
+    };
+  } | null;
+};
+
+export type CurrentUserTemplatesQueryVariables = Exact<{
+  first: number;
+  after?: string | null;
+}>;
+
+export type CurrentUserTemplatesQuery = {
+  currentUserTemplates: {
+    __typename: 'TemplateConnection';
+    edges: Array<{
+      __typename: 'TemplateEdge';
+      cursor: string;
+      node: {
+        __typename: 'Template';
+        id: string;
+        aiGenerated: boolean;
+        attribution: string | null;
+        contentCount: number;
+        createdByCurrentUser: boolean;
+        description: string | null;
+        language: string;
+        name: string;
+        published: boolean;
+        questionnaireId: string;
+        questionnaireType: Types.QuestionnaireType;
+        license: {
+          __typename: 'TemplateLicense';
+          id: string;
+          name: string;
+          url: string | null;
+        } | null;
+        tags: Array<{
+          __typename: 'TemplateTag';
+          id: string;
+          name: string;
+          verified: boolean;
+        }>;
+      };
+    } | null> | null;
+    pageInfo: {
+      __typename: 'PageInfo';
+      endCursor: string | null;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor: string | null;
+    };
+  } | null;
+};
+
+export type TemplateByIdQueryVariables = Exact<{
+  id: string;
+}>;
+
+export type TemplateByIdQuery = {
+  templateById: {
+    __typename: 'Template';
+    id: string;
+    aiGenerated: boolean;
+    attribution: string | null;
+    contentCount: number;
+    createdByCurrentUser: boolean;
+    description: string | null;
+    language: string;
+    name: string;
+    published: boolean;
+    questionnaireId: string;
+    questionnaireType: Types.QuestionnaireType;
+    license: {
+      __typename: 'TemplateLicense';
+      id: string;
+      name: string;
+      url: string | null;
+    } | null;
+    tags: Array<{
+      __typename: 'TemplateTag';
+      id: string;
+      name: string;
+      verified: boolean;
+    }>;
+  } | null;
+};
+
+export type TemplateContentAttributionsByQuestionnaireIdQueryVariables = Exact<{
+  questionnaireId: string;
+}>;
+
+export type TemplateContentAttributionsByQuestionnaireIdQuery = {
+  templateContentAttributionsByQuestionnaireId: Array<{
+    __typename: 'TemplateContentAttribution';
+    attribution: string | null;
+    contentId: string;
+    templateId: string;
+    license: {
+      __typename: 'TemplateLicense';
+      id: string;
+      name: string;
+      url: string | null;
+    } | null;
+  }>;
+};
+
+export type TemplateLicensesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type TemplateLicensesQuery = {
+  templateLicenses: Array<{
+    __typename: 'TemplateLicense';
+    id: string;
+    name: string;
+    url: string | null;
+  }>;
+};
+
+export type TemplateTagsByLanguageQueryVariables = Exact<{
+  language: string;
+  verified?: boolean;
+}>;
+
+export type TemplateTagsByLanguageQuery = {
+  templateTagsByLanguage: Array<{
+    __typename: 'TemplateTag';
+    id: string;
+    name: string;
+    verified: boolean;
+  }>;
+};
+
+export type AdminDeleteTemplateMutationVariables = Exact<{
+  id: string;
+}>;
+
+export type AdminDeleteTemplateMutation = { adminDeleteTemplate: string };
+
+export type AdminDeleteTemplateTagMutationVariables = Exact<{
+  id: string;
+}>;
+
+export type AdminDeleteTemplateTagMutation = { adminDeleteTemplateTag: string };
+
+export type AdminUpdateTemplateTagNameMutationVariables = Exact<{
+  id: string;
+  name: string;
+}>;
+
+export type AdminUpdateTemplateTagNameMutation = {
+  adminUpdateTemplateTagName: {
+    __typename: 'TemplateTag';
+    id: string;
+    name: string;
+    verified: boolean;
+  };
+};
+
+export type AdminUpdateTemplateTagVerifiedMutationVariables = Exact<{
+  id: string;
+  verified: boolean;
+}>;
+
+export type AdminUpdateTemplateTagVerifiedMutation = {
+  adminUpdateTemplateTagVerified: {
+    __typename: 'TemplateTag';
+    id: string;
+    name: string;
+    verified: boolean;
+  };
+};
+
+export type CreateTemplateFromQuestionnaireMutationVariables = Exact<{
+  input: Types.CreateTemplateFromQuestionnaireInput;
+}>;
+
+export type CreateTemplateFromQuestionnaireMutation = {
+  createTemplateFromQuestionnaire: {
+    __typename: 'Template';
+    id: string;
+    aiGenerated: boolean;
+    attribution: string | null;
+    contentCount: number;
+    createdByCurrentUser: boolean;
+    description: string | null;
+    language: string;
+    name: string;
+    published: boolean;
+    questionnaireId: string;
+    questionnaireType: Types.QuestionnaireType;
+    license: {
+      __typename: 'TemplateLicense';
+      id: string;
+      name: string;
+      url: string | null;
+    } | null;
+    tags: Array<{
+      __typename: 'TemplateTag';
+      id: string;
+      name: string;
+      verified: boolean;
+    }>;
+  };
+};
+
+export type DeleteTemplateMutationVariables = Exact<{
+  id: string;
+}>;
+
+export type DeleteTemplateMutation = { deleteTemplate: string };
+
+export type UpdateTemplateMutationVariables = Exact<{
+  input: Types.UpdateTemplateInput;
+}>;
+
+export type UpdateTemplateMutation = {
+  updateTemplate: {
+    __typename: 'Template';
+    id: string;
+    aiGenerated: boolean;
+    attribution: string | null;
+    contentCount: number;
+    createdByCurrentUser: boolean;
+    description: string | null;
+    language: string;
+    name: string;
+    published: boolean;
+    questionnaireId: string;
+    questionnaireType: Types.QuestionnaireType;
+    license: {
+      __typename: 'TemplateLicense';
+      id: string;
+      name: string;
+      url: string | null;
+    } | null;
+    tags: Array<{
+      __typename: 'TemplateTag';
+      id: string;
+      name: string;
+      verified: boolean;
+    }>;
+  };
+};
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CurrentUserQuery = {
@@ -7495,6 +7856,43 @@ export const RoomMemberFragmentDoc = gql`
     }
     role
   }
+`;
+export const TemplateLicenseFragmentDoc = gql`
+  fragment TemplateLicense on TemplateLicense {
+    id
+    name
+    url
+  }
+`;
+export const TemplateTagFragmentDoc = gql`
+  fragment TemplateTag on TemplateTag {
+    id
+    name
+    verified
+  }
+`;
+export const TemplateDetailsFragmentDoc = gql`
+  fragment TemplateDetails on Template {
+    id
+    aiGenerated
+    attribution
+    contentCount
+    createdByCurrentUser
+    description
+    language
+    license {
+      ...TemplateLicense
+    }
+    name
+    published
+    questionnaireId
+    questionnaireType
+    tags {
+      ...TemplateTag
+    }
+  }
+  ${TemplateLicenseFragmentDoc}
+  ${TemplateTagFragmentDoc}
 `;
 export const AdminUserByIdDocument = gql`
   query AdminUserById($id: ID!) {
@@ -8970,6 +9368,30 @@ export class CreateQuestionnaireGql extends Apollo.Mutation<
   CreateQuestionnaireMutationVariables
 > {
   document = CreateQuestionnaireDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireFromTemplateDocument = gql`
+  mutation CreateQuestionnaireFromTemplate(
+    $input: CreateQuestionnaireFromTemplateInput!
+  ) {
+    createQuestionnaireFromTemplate(input: $input) {
+      ...QuestionnaireDetails
+    }
+  }
+  ${QuestionnaireDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireFromTemplateGql extends Apollo.Mutation<
+  CreateQuestionnaireFromTemplateMutation,
+  CreateQuestionnaireFromTemplateMutationVariables
+> {
+  document = CreateQuestionnaireFromTemplateDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -11515,6 +11937,318 @@ export class SetRoomUserAliasGql extends Apollo.Mutation<
   SetRoomUserAliasMutationVariables
 > {
   document = SetRoomUserAliasDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const PublishedTemplatesDocument = gql`
+  query PublishedTemplates(
+    $query: TemplateQueryInput
+    $first: Int!
+    $after: String
+  ) {
+    publishedTemplates(query: $query, first: $first, after: $after) {
+      edges {
+        node {
+          ...TemplateDetails
+        }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+  ${TemplateDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PublishedTemplatesGql extends Apollo.Query<
+  PublishedTemplatesQuery,
+  PublishedTemplatesQueryVariables
+> {
+  document = PublishedTemplatesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CurrentUserTemplatesDocument = gql`
+  query CurrentUserTemplates($first: Int!, $after: String) {
+    currentUserTemplates(first: $first, after: $after) {
+      edges {
+        node {
+          ...TemplateDetails
+        }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+  ${TemplateDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CurrentUserTemplatesGql extends Apollo.Query<
+  CurrentUserTemplatesQuery,
+  CurrentUserTemplatesQueryVariables
+> {
+  document = CurrentUserTemplatesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const TemplateByIdDocument = gql`
+  query TemplateById($id: UUID!) {
+    templateById(id: $id) {
+      ...TemplateDetails
+    }
+  }
+  ${TemplateDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TemplateByIdGql extends Apollo.Query<
+  TemplateByIdQuery,
+  TemplateByIdQueryVariables
+> {
+  document = TemplateByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const TemplateContentAttributionsByQuestionnaireIdDocument = gql`
+  query TemplateContentAttributionsByQuestionnaireId($questionnaireId: UUID!) {
+    templateContentAttributionsByQuestionnaireId(
+      questionnaireId: $questionnaireId
+    ) {
+      attribution
+      contentId
+      license {
+        ...TemplateLicense
+      }
+      templateId
+    }
+  }
+  ${TemplateLicenseFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TemplateContentAttributionsByQuestionnaireIdGql extends Apollo.Query<
+  TemplateContentAttributionsByQuestionnaireIdQuery,
+  TemplateContentAttributionsByQuestionnaireIdQueryVariables
+> {
+  document = TemplateContentAttributionsByQuestionnaireIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const TemplateLicensesDocument = gql`
+  query TemplateLicenses {
+    templateLicenses {
+      ...TemplateLicense
+    }
+  }
+  ${TemplateLicenseFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TemplateLicensesGql extends Apollo.Query<
+  TemplateLicensesQuery,
+  TemplateLicensesQueryVariables
+> {
+  document = TemplateLicensesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const TemplateTagsByLanguageDocument = gql`
+  query TemplateTagsByLanguage($language: String!, $verified: Boolean! = true) {
+    templateTagsByLanguage(language: $language, verified: $verified) {
+      ...TemplateTag
+    }
+  }
+  ${TemplateTagFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TemplateTagsByLanguageGql extends Apollo.Query<
+  TemplateTagsByLanguageQuery,
+  TemplateTagsByLanguageQueryVariables
+> {
+  document = TemplateTagsByLanguageDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminDeleteTemplateDocument = gql`
+  mutation AdminDeleteTemplate($id: UUID!) {
+    adminDeleteTemplate(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminDeleteTemplateGql extends Apollo.Mutation<
+  AdminDeleteTemplateMutation,
+  AdminDeleteTemplateMutationVariables
+> {
+  document = AdminDeleteTemplateDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminDeleteTemplateTagDocument = gql`
+  mutation AdminDeleteTemplateTag($id: UUID!) {
+    adminDeleteTemplateTag(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminDeleteTemplateTagGql extends Apollo.Mutation<
+  AdminDeleteTemplateTagMutation,
+  AdminDeleteTemplateTagMutationVariables
+> {
+  document = AdminDeleteTemplateTagDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminUpdateTemplateTagNameDocument = gql`
+  mutation AdminUpdateTemplateTagName($id: UUID!, $name: String!) {
+    adminUpdateTemplateTagName(id: $id, name: $name) {
+      ...TemplateTag
+    }
+  }
+  ${TemplateTagFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminUpdateTemplateTagNameGql extends Apollo.Mutation<
+  AdminUpdateTemplateTagNameMutation,
+  AdminUpdateTemplateTagNameMutationVariables
+> {
+  document = AdminUpdateTemplateTagNameDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminUpdateTemplateTagVerifiedDocument = gql`
+  mutation AdminUpdateTemplateTagVerified($id: UUID!, $verified: Boolean!) {
+    adminUpdateTemplateTagVerified(id: $id, verified: $verified) {
+      ...TemplateTag
+    }
+  }
+  ${TemplateTagFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminUpdateTemplateTagVerifiedGql extends Apollo.Mutation<
+  AdminUpdateTemplateTagVerifiedMutation,
+  AdminUpdateTemplateTagVerifiedMutationVariables
+> {
+  document = AdminUpdateTemplateTagVerifiedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateTemplateFromQuestionnaireDocument = gql`
+  mutation CreateTemplateFromQuestionnaire(
+    $input: CreateTemplateFromQuestionnaireInput!
+  ) {
+    createTemplateFromQuestionnaire(input: $input) {
+      ...TemplateDetails
+    }
+  }
+  ${TemplateDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateTemplateFromQuestionnaireGql extends Apollo.Mutation<
+  CreateTemplateFromQuestionnaireMutation,
+  CreateTemplateFromQuestionnaireMutationVariables
+> {
+  document = CreateTemplateFromQuestionnaireDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteTemplateDocument = gql`
+  mutation DeleteTemplate($id: UUID!) {
+    deleteTemplate(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteTemplateGql extends Apollo.Mutation<
+  DeleteTemplateMutation,
+  DeleteTemplateMutationVariables
+> {
+  document = DeleteTemplateDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateTemplateDocument = gql`
+  mutation UpdateTemplate($input: UpdateTemplateInput!) {
+    updateTemplate(input: $input) {
+      ...TemplateDetails
+    }
+  }
+  ${TemplateDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateTemplateGql extends Apollo.Mutation<
+  UpdateTemplateMutation,
+  UpdateTemplateMutationVariables
+> {
+  document = UpdateTemplateDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
