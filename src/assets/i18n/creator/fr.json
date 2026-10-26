@@ -160,6 +160,7 @@
     "do-not-rotate-words": "Ne fais pas pivoter les mots",
     "format-prioritization-description": "Laisse les participant·es attribuer des points parmi plusieurs éléments pour les prioriser.",
     "attribution-info-slide": "Diapo d'information sur l'attribution",
+    "attribution-upstream": "basé sur un modèle de {{attribution}}",
     "format-prioritization": "Priorisation",
     "format-wordcloud-description": "Les participant·es peuvent répondre à l'aide de mots-clés qui apparaitront sous la forme d'un nuage de mots. Plus un mot est saisi, plus il prendra de la place dans le nuage.",
     "range": "Échelle",

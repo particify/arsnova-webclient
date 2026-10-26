@@ -84,6 +84,13 @@ query TemplateContentAttributionsByQuestionnaireId($questionnaireId: UUID!) {
       ...TemplateLicense
     }
     templateId
+    upstreamAttributions {
+      attribution
+      license {
+        ...TemplateLicense
+      }
+      templateId
+    }
   }
 }
 

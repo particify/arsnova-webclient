@@ -187,6 +187,7 @@
     "banned-keywords-reset": "Banned keywords have been reset.",
     "start-new-round": "Start new round",
     "attribution-info-slide": "Attribution info slide",
+    "attribution-upstream": "based on a template by {{attribution}}",
     "attributions": "Attributions",
     "attributions-subheader": "The following contents are based on templates published under Creative Commons licences.",
     "content": "Content",

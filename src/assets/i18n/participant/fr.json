@@ -59,6 +59,7 @@
     "continue-answering": "Continuer",
     "there-are-locked-contents": "Il y a encore {{count}} contenus disponibles, qui ne sont pas encore libérés.",
     "attribution-info": "Ce contenu est basé sur un modèle réalisé par {{attribution}} sous license {{license}}.",
+    "attribution-info-upstream": "Ce modèle est basé sur un modèle réalisé par {{attribution}} sous licence {{license}}.",
     "answers-reset": "Les réponses ont été réinitialisées.",
     "you-are-at-position-congrats": "Vous êtes en {{ position }} position !",
     "you-are-at-position": "Vous êtes en {{ position }} position.",

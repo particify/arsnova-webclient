@@ -7144,6 +7144,17 @@ export type TemplateContentAttributionsByQuestionnaireIdQuery = {
       name: string;
       url: string | null;
     } | null;
+    upstreamAttributions: Array<{
+      __typename: 'TemplateUpstreamAttribution';
+      attribution: string | null;
+      templateId: string;
+      license: {
+        __typename: 'TemplateLicense';
+        id: string;
+        name: string;
+        url: string | null;
+      } | null;
+    }>;
   }>;
 };
 
@@ -12045,6 +12056,13 @@ export const TemplateContentAttributionsByQuestionnaireIdDocument = gql`
         ...TemplateLicense
       }
       templateId
+      upstreamAttributions {
+        attribution
+        license {
+          ...TemplateLicense
+        }
+        templateId
+      }
     }
   }
   ${TemplateLicenseFragmentDoc}

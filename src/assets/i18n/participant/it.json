@@ -16,6 +16,7 @@
     "new-round-started": "È stato avviato un nuovo turno.",
     "answers-reset": "Le risposte sono state azzerate.",
     "attribution-info": "Questo contenuto si basa su un modello di {{attribution}} che è concesso in licenza da {{license}}.",
+    "attribution-info-upstream": "Quel modello si basa su un modello di {{attribution}} che è concesso in licenza da {{license}}.",
     "you-are-at-position-congrats": "Sei nel sito {{ position }}!",
     "you-are-at-position": "Sei nel sito {{ position }}.",
     "contents": "Contenuto",

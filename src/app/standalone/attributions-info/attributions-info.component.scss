@@ -1,0 +1,7 @@
+@use '../../../variables' as *;
+
+// Rows grow with their lines, which would put the last credit right on the
+// divider.
+.mat-mdc-list-item.with-upstream {
+  padding-bottom: $spacing-1;
+}
