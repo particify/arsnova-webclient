@@ -17,6 +17,7 @@ import { DelimitedTextFormat } from '@app/core/models/delimited-text-format';
 import { QuestionnaireCsvService } from '@app/core/services/http/questionnaire-csv.service';
 import { ExportOptions } from '@app/creator/questionnaire/_dialogs/export/export.component';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
+import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/_dialogs/create-content-group-template/create-content-group-template.component';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -44,6 +45,7 @@ import {
   QuestionnairePublishingMode,
   ResetQuestionnaireResultsDocument,
   ResetQuestionnaireResultsGql,
+  TemplateContentAttributionsByQuestionnaireIdGql,
   ToggleQuestionnairePublishedGql,
   CreatorContentDetailsFragment,
 } from '@gql/generated/graphql';
@@ -71,6 +73,7 @@ describe('QuestionnairePageComponent (creator)', () => {
   let route: { firstChild: unknown };
   let contents$: BehaviorSubject<unknown>;
   let breakpoint$: BehaviorSubject<{ matches: boolean }>;
+  let attributions$: BehaviorSubject<unknown>;
   let dialogService: jasmine.SpyObj<DialogService>;
   let globalStorageService: jasmine.SpyObj<GlobalStorageService>;
   let pageService: QuestionnairePageService;
@@ -80,6 +83,29 @@ describe('QuestionnairePageComponent (creator)', () => {
   const contents = ['c-1', 'c-2'].map(
     (id) => ({ id }) as CreatorContentDetailsFragment
   );
+
+  function attributionsResult(
+    contentIds: string[],
+    license: { id: string; name: string } | null = {
+      id: 'CC-BY-4.0',
+      name: 'CC BY 4.0',
+    }
+  ) {
+    return {
+      dataState: 'complete',
+      data: {
+        templateContentAttributionsByQuestionnaireId: contentIds.map(
+          (contentId) => ({
+            contentId,
+            templateId: 't-1',
+            attribution: null,
+            license,
+            upstreamAttributions: [],
+          })
+        ),
+      },
+    };
+  }
 
   function childRoute(path: string, params: Record<string, string> = {}) {
     return { snapshot: { routeConfig: { path }, params } };
@@ -120,6 +146,9 @@ describe('QuestionnairePageComponent (creator)', () => {
     contents$ = new BehaviorSubject<unknown>({ loading: true });
     const contentsGql = jasmine.createSpyObj('ContentsGql', ['watch']);
     contentsGql.watch.and.returnValue({ valueChanges: contents$ });
+    attributions$ = new BehaviorSubject<unknown>(attributionsResult([]));
+    const attributionsGql = jasmine.createSpyObj('AttributionsGql', ['watch']);
+    attributionsGql.watch.and.returnValue({ valueChanges: attributions$ });
     const questionnaireById = jasmine.createSpyObj('QuestionnaireByIdGql', [
       'watch',
     ]);
@@ -185,6 +214,10 @@ describe('QuestionnairePageComponent (creator)', () => {
           useValue: creatorContentUpdated,
         },
         { provide: QuestionnaireContentUpdatedGql, useValue: contentUpdated },
+        {
+          provide: TemplateContentAttributionsByQuestionnaireIdGql,
+          useValue: attributionsGql,
+        },
         provideNoopAnimations(),
         spyProvider(ContentGroupService, ['updateGroupInMemoryStorage']),
         spyProvider(LocalFileService, [
@@ -231,6 +264,32 @@ describe('QuestionnairePageComponent (creator)', () => {
     route.firstChild = child;
     router.events.next(new NavigationEnd(1, '/', '/'));
   }
+
+  it('offers the attributions once a content stems from a template', () => {
+    setUp();
+    emitContents(contents);
+    expect(component.attributionsExist()).toBeFalse();
+
+    attributions$.next(attributionsResult(['c-2']));
+
+    expect(component.attributionsExist()).toBeTrue();
+  });
+
+  it('offers no attributions for contents copied without a licence', () => {
+    setUp();
+    emitContents(contents);
+    attributions$.next(attributionsResult(['c-1', 'c-2'], null));
+
+    expect(component.attributionsExist()).toBeFalse();
+  });
+
+  it('offers no attributions once their contents are deleted', () => {
+    setUp();
+    attributions$.next(attributionsResult(['c-3']));
+    emitContents(contents);
+
+    expect(component.attributionsExist()).toBeFalse();
+  });
 
   it('shows the first content on desktop', () => {
     setUp();
@@ -642,6 +701,19 @@ describe('QuestionnairePageComponent (creator)', () => {
     expect(
       TestBed.inject(NotificationService).showAdvanced
     ).not.toHaveBeenCalled();
+  });
+
+  it('hands the questionnaire to the template dialog by its ID', () => {
+    setUp();
+
+    component.createTemplate();
+
+    expect(dialogService.openDialog).toHaveBeenCalledOnceWith(
+      CreateContentGroupTemplateComponent,
+      jasmine.objectContaining({
+        data: jasmine.objectContaining({ questionnaireId: 'q-1' }),
+      })
+    );
   });
 
   it('remembers the questionnaire by its ID', () => {

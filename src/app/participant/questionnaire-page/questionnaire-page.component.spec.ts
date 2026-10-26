@@ -27,10 +27,12 @@ import {
   QuestionnaireType,
   QuestionnaireUpdatedGql,
   RoomUserAliasByRoomIdGql,
+  TemplateContentAttributionsByQuestionnaireIdGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   BehaviorSubject,
   NEVER,
@@ -388,6 +390,48 @@ describe('QuestionnairePageComponent (live sync)', () => {
         },
       }),
     });
+    const attributionsGql = jasmine.createSpyObj('AttributionsGql', ['watch']);
+    attributionsGql.watch.and.returnValue({
+      valueChanges: of({
+        dataState: 'complete',
+        data: {
+          templateContentAttributionsByQuestionnaireId: [
+            {
+              contentId: 'c-0',
+              templateId: 't-1',
+              attribution: null,
+              license: { id: 'CC-BY-4.0', name: 'CC BY 4.0' },
+              upstreamAttributions: [],
+            },
+            {
+              contentId: 'c-1',
+              templateId: 't-1',
+              attribution: 'Ada Lovelace',
+              license: { id: 'CC0-1.0', name: 'CC0 1.0' },
+              upstreamAttributions: [],
+            },
+            {
+              contentId: 'c-3',
+              templateId: 't-2',
+              attribution: 'Ada Lovelace',
+              license: { id: 'CC-BY-4.0', name: 'CC BY 4.0' },
+              upstreamAttributions: [
+                {
+                  templateId: 't-1',
+                  attribution: 'Grace Hopper',
+                  license: { id: 'CC-BY-4.0', name: 'CC BY 4.0' },
+                },
+                {
+                  templateId: 't-0',
+                  attribution: 'Alan Turing',
+                  license: { id: 'CC0-1.0', name: 'CC0 1.0' },
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    });
     snackBarAction$ = new Subject();
     notificationService = jasmine.createSpyObj('NotificationService', ['show']);
     notificationService.show.and.returnValue({
@@ -419,6 +463,10 @@ describe('QuestionnairePageComponent (live sync)', () => {
         { provide: AuthenticationService, useValue: authenticationService },
         { provide: NotificationService, useValue: notificationService },
         { provide: RoomUserAliasByRoomIdGql, useValue: aliasGql },
+        {
+          provide: TemplateContentAttributionsByQuestionnaireIdGql,
+          useValue: attributionsGql,
+        },
         spyProvider(AnnounceService, ['announce']),
         spyProvider(ContentCarouselService, ['isLastContentAnswered']),
       ]
@@ -684,6 +732,42 @@ describe('QuestionnairePageComponent (live sync)', () => {
     snackBarAction$.next();
 
     expect(component.goToContent).toHaveBeenCalledWith(1);
+  });
+
+  describe('template attribution', () => {
+    it('credits the template author of a content under CC BY', () => {
+      setUp(questionnaire());
+      expect(component.attributionFor('c-0')).toBe(
+        'participant.content.attribution-info'
+      );
+    });
+
+    it('credits the authors further up the chain of templates, nearest first', () => {
+      setUp(questionnaire());
+      const translate = spyOn(
+        TestBed.inject(TranslocoService),
+        'translate'
+      ).and.callThrough();
+
+      expect(component.attributionFor('c-3')).toBe(
+        'participant.content.attribution-info participant.content.attribution-info-upstream'
+      );
+      expect(translate).toHaveBeenCalledWith(
+        'participant.content.attribution-info-upstream',
+        { attribution: 'Grace Hopper', license: 'CC BY 4.0' }
+      );
+      // A CC0 template upstream needs no credit either.
+      expect(translate).not.toHaveBeenCalledWith(
+        'participant.content.attribution-info-upstream',
+        jasmine.objectContaining({ attribution: 'Alan Turing' })
+      );
+    });
+
+    it('needs no credit for CC0 or a content of the series itself', () => {
+      setUp(questionnaire());
+      expect(component.attributionFor('c-1')).toBeUndefined();
+      expect(component.attributionFor('c-2')).toBeUndefined();
+    });
   });
 
   describe('room user alias', () => {

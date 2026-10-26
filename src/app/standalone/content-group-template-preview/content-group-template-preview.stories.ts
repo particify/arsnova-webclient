@@ -13,8 +13,11 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import {
   ContentType,
+  CreateQuestionnaireFromTemplateGql,
+  DeleteTemplateGql,
   QuestionnairePublishedContentsByQuestionnaireIdGql,
   QuestionnaireType,
+  RoomMembershipsGql,
   TemplateByIdGql,
 } from '@gql/generated/graphql';
 
@@ -151,6 +154,10 @@ export default {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
+        // Storybook provides no Apollo client.
+        { provide: CreateQuestionnaireFromTemplateGql, useClass: MockService },
+        { provide: DeleteTemplateGql, useClass: MockService },
+        { provide: RoomMembershipsGql, useClass: MockService },
       ],
     }),
   ],

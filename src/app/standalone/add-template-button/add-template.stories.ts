@@ -4,7 +4,10 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
-import { CreateQuestionnaireFromTemplateGql } from '@gql/generated/graphql';
+import {
+  CreateQuestionnaireFromTemplateGql,
+  RoomMembershipsGql,
+} from '@gql/generated/graphql';
 
 class MockService {}
 
@@ -28,6 +31,11 @@ export default {
           provide: RoomMembershipService,
           useClass: MockService,
         },
+        // Storybook provides no Apollo client.
+        {
+          provide: RoomMembershipsGql,
+          useClass: MockService,
+        },
       ],
     }),
   ],
@@ -35,4 +43,6 @@ export default {
 
 type Story = StoryObj<AddTemplateButtonComponent>;
 
-export const AddTemplateButton: Story = {};
+export const AddTemplateButton: Story = {
+  args: { templateId: 'templateId1', templateName: 'Template name' },
+};

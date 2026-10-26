@@ -1,8 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
-import { ContentFormatData, ContentType } from '@gql/generated/graphql';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { BROWSER_LANG } from '@app/core/services/util/language.service';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
+import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
+import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
+import {
+  ContentFormatData,
+  ContentType,
+  ScaleContentTemplate,
+} from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { TranslocoService } from '@jsverse/transloco';
+import { of } from 'rxjs';
 import {
   getTranslocoModule,
   getTranslocoModuleWithTranslations,
@@ -16,10 +27,10 @@ describe('ContentPreviewComponent', () => {
     TestBed.overrideComponent(ContentPreviewComponent, {
       set: { template: '' },
     });
-    configureTestModule([
-      getTranslocoModule(),
-      ContentPreviewComponent,
-    ]).compileComponents();
+    configureTestModule(
+      [getTranslocoModule(), ContentPreviewComponent],
+      [{ provide: LikertScaleService, useValue: new LikertScaleService() }]
+    ).compileComponents();
     fixture = TestBed.createComponent(ContentPreviewComponent);
     fixture.componentRef.setInput('body', 'body');
     fixture.componentRef.setInput('contentFormatData', {
@@ -46,10 +57,10 @@ describe('ContentPreviewComponent', () => {
       TestBed.overrideComponent(ContentPreviewComponent, {
         set: { template: '' },
       });
-      configureTestModule([
-        translocoModule,
-        ContentPreviewComponent,
-      ]).compileComponents();
+      configureTestModule(
+        [translocoModule, ContentPreviewComponent],
+        [{ provide: LikertScaleService, useValue: new LikertScaleService() }]
+      ).compileComponents();
       fixture = TestBed.createComponent(ContentPreviewComponent);
       fixture.componentRef.setInput('body', 'body');
       fixture.componentRef.setInput('contentFormatData', {
@@ -95,6 +106,83 @@ describe('ContentPreviewComponent', () => {
       expect(labels()).toEqual(['Yes', 'No']);
       TestBed.inject(TranslocoService).setActiveLang('de');
       expect(labels()).toEqual(['Ja', 'Nein']);
+    });
+  });
+
+  describe('rendered answer form', () => {
+    function render(contentFormatData: ContentFormatData) {
+      const formattingService = jasmine.createSpyObj('FormattingService', [
+        'postString',
+      ]);
+      formattingService.postString.and.returnValue(of({ html: '' }));
+      configureTestModule(
+        [getTranslocoModule(), ContentPreviewComponent],
+        [
+          { provide: LikertScaleService, useValue: new LikertScaleService() },
+          { provide: FormattingService, useValue: formattingService },
+          { provide: BROWSER_LANG, useValue: 'en' },
+        ]
+      ).compileComponents();
+      fixture = TestBed.createComponent(ContentPreviewComponent);
+      fixture.componentRef.setInput('body', 'body');
+      fixture.componentRef.setInput('language', 'de');
+      fixture.componentRef.setInput('contentFormatData', contentFormatData);
+      fixture.detectChanges();
+    }
+
+    function answerForm<T>(type: new (...args: never[]) => T): T {
+      return fixture.debugElement.query(By.directive(type)).componentInstance;
+    }
+
+    it('offers the symbols of a static Likert scale untranslated', () => {
+      render({
+        __typename: 'ScaleContentFormatData',
+        format: ContentType.Scale,
+        template: ScaleContentTemplate.Emoji,
+        neutralOption: false,
+      });
+      const form = answerForm(ContentChoiceAnswerComponent);
+      expect(
+        form.answerOptions().map((option) => option.answerOption.label)
+      ).toEqual(['😀', '🙂', '🙁', '😟']);
+      expect(form.answerOptions().some((option) => option.checked)).toBe(false);
+      expect(form.translateOptions()).toBe(false);
+    });
+
+    it('offers the keys of a worded Likert scale for translation', () => {
+      render({
+        __typename: 'ScaleContentFormatData',
+        format: ContentType.Scale,
+        template: ScaleContentTemplate.Agreement,
+        neutralOption: true,
+      });
+      const form = answerForm(ContentChoiceAnswerComponent);
+      expect(
+        form.answerOptions().map((option) => option.answerOption.label)
+      ).toEqual([
+        'option-template.agreement-positive-2',
+        'option-template.agreement-positive-1',
+        'option-template.agreement-neutral',
+        'option-template.agreement-negative-1',
+        'option-template.agreement-negative-2',
+      ]);
+      expect(form.translateOptions()).toBe(true);
+      expect(form.language()).toBe('de');
+    });
+
+    it('shows the numeric answer field with its range, disabled', () => {
+      render({
+        __typename: 'NumericContentFormatData',
+        format: ContentType.Numeric,
+        minNumber: -5,
+        maxNumber: 10,
+        correctNumber: 3,
+        tolerance: 1,
+      });
+      const form = answerForm(ContentNumericAnswerComponent);
+      expect(form.minNumber()).toBe(-5);
+      expect(form.maxNumber()).toBe(10);
+      expect(form.disabled()).toBe(true);
     });
   });
 });
