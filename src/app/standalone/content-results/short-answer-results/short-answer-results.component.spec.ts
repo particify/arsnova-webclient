@@ -1,10 +1,14 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer-grid-list.component';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
@@ -300,6 +304,23 @@ describe('ShortAnswerResultsComponent', () => {
     component.banAnswer('Scala');
 
     expect(notificationService.showAdvanced).not.toHaveBeenCalled();
+  });
+
+  it('reports a failed ban and leaves the dialog to stay open', () => {
+    setUp({ dialogResult: false });
+    banKeyword.mutate.and.returnValue(failedOperation() as never);
+
+    component.banAnswer('Scala');
+
+    const confirmAction = dialogService.openDeleteDialog.calls.mostRecent()
+      .args[4] as () => Observable<unknown>;
+    const failed = jasmine.createSpy('failed');
+    confirmAction().subscribe({ error: failed });
+    expect(failed).toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('bans the answer whose button was clicked', () => {

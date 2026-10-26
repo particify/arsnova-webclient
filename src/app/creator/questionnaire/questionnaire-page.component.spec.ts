@@ -23,9 +23,11 @@ import { ContentResultsService } from '@app/standalone/content-results/content-r
 import {
   Content,
   CreatorQuestionnaireContentUpdatedDocument,
+  CreatorQuestionnaireContentUpdatedGql,
   DeleteQuestionnaireGql,
   QuestionnaireByIdGql,
   QuestionnaireChoiceRoundStatsByRoundIdDocument,
+  QuestionnaireContentUpdatedGql,
   QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnaireRoundsByContentIdDocument,
@@ -60,6 +62,8 @@ describe('QuestionnairePageComponent (creator)', () => {
   let dialogService: jasmine.SpyObj<DialogService>;
   let globalStorageService: jasmine.SpyObj<GlobalStorageService>;
   let pageService: QuestionnairePageService;
+  let creatorContentUpdated: jasmine.SpyObj<CreatorQuestionnaireContentUpdatedGql>;
+  let contentUpdated: jasmine.SpyObj<QuestionnaireContentUpdatedGql>;
 
   const contents = ['c-1', 'c-2'].map((id) => ({ id }) as Content);
 
@@ -136,6 +140,15 @@ describe('QuestionnairePageComponent (creator)', () => {
       'removeItem',
     ]);
     pageService = new QuestionnairePageService();
+    creatorContentUpdated = jasmine.createSpyObj(
+      'CreatorQuestionnaireContentUpdatedGql',
+      ['subscribe']
+    );
+    creatorContentUpdated.subscribe.and.returnValue(NEVER);
+    contentUpdated = jasmine.createSpyObj('QuestionnaireContentUpdatedGql', [
+      'subscribe',
+    ]);
+    contentUpdated.subscribe.and.returnValue(NEVER);
 
     configureTestModule(
       [getTranslocoModule(), QuestionnairePageComponent],
@@ -153,6 +166,11 @@ describe('QuestionnairePageComponent (creator)', () => {
           useValue: contentsGql,
         },
         { provide: QuestionnaireByIdGql, useValue: questionnaireById },
+        {
+          provide: CreatorQuestionnaireContentUpdatedGql,
+          useValue: creatorContentUpdated,
+        },
+        { provide: QuestionnaireContentUpdatedGql, useValue: contentUpdated },
         provideNoopAnimations(),
         spyProvider(ContentGroupService, ['updateGroupInMemoryStorage']),
         spyProvider(LocalFileService, ['generateFilename']),
@@ -614,6 +632,15 @@ describe('QuestionnairePageComponent (creator)', () => {
     );
   });
 
+  it('follows the answer counts through the creator-only content updates', () => {
+    setUp();
+
+    expect(creatorContentUpdated.subscribe).toHaveBeenCalledOnceWith({
+      variables: { questionnaireId: 'q-1' },
+    });
+    expect(contentUpdated.subscribe).not.toHaveBeenCalled();
+  });
+
   function query(selector: string): HTMLElement | null {
     return fixture.nativeElement.querySelector(selector);
   }
@@ -795,6 +822,30 @@ describe('QuestionnairePageComponent (creator)', () => {
 
       expect(component.totalCorrect()).toBe(0);
       expect(query('mat-progress-bar')).toBeNull();
+    });
+  });
+
+  it('hands the questionnaire to the results export extension', async () => {
+    setUp(true, null, true, { published: true });
+    emitContents(contents);
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+
+    const menu = await loader.getHarness(
+      MatMenuHarness.with({ selector: '[data-testid="group-more-menu"]' })
+    );
+    await menu.open();
+    const items = await menu.getItems();
+    const texts = await Promise.all(items.map((item) => item.getText()));
+    await items[
+      texts.findIndex((t) => t.includes('creator.content.export-content-group'))
+    ].click();
+
+    const extensionPoint = document.querySelector(
+      'lib-extension-point[extensionid="series-results-export"]'
+    ) as (Element & { extensionData?: unknown }) | null;
+    expect(extensionPoint?.extensionData).toEqual({
+      questionnaire: jasmine.objectContaining({ id: 'q-1', name: 'Quiz' }),
+      shortId: '12345678',
     });
   });
 });

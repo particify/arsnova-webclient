@@ -1,4 +1,6 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
+
+const SORT_ITEM_LABEL = /^Position \d+ of \d+: /;
 
 export class ContentGroupPage {
   private readonly joinQuizNameInput: Locator;
@@ -31,11 +33,16 @@ export class ContentGroupPage {
     await this.page.getByRole('button', { name: seriesName }).click();
     await this.page.waitForURL(/\/questionnaire\/[^/]+/);
     if (index > 1) {
-      await this.page
-        .locator('.step-btn')
-        .nth(index - 1)
-        .click();
+      await this.goToStep(index);
     }
+  }
+
+  getStepButton(step: number): Locator {
+    return this.page.getByTestId('step-button').nth(step - 1);
+  }
+
+  async goToStep(step: number) {
+    await this.getStepButton(step).click();
   }
 
   async joinQuiz(nickname?: string) {
@@ -76,10 +83,12 @@ export class ContentGroupPage {
     await this.abstainButton.click();
   }
 
-  async answerPrioritizationContent(assignedPoints?: number[]) {
+  async answerPrioritizationContent(assignedPoints?: Record<string, number>) {
     if (assignedPoints) {
-      for (const [index, points] of assignedPoints.entries()) {
-        await this.page.locator('input').nth(index).fill(points.toString());
+      for (const [item, points] of Object.entries(assignedPoints)) {
+        await this.page
+          .getByRole('spinbutton', { name: item, exact: true })
+          .fill(points.toString());
       }
       await this.submitButton.click();
       return;
@@ -138,5 +147,44 @@ export class ContentGroupPage {
 
   async switchToResultsTab() {
     await this.contentResultsTab.click();
+  }
+
+  async answerNumericContent(value: number) {
+    await this.page
+      .getByRole('spinbutton', { name: 'Your answer' })
+      .fill(String(value));
+    await this.submitButton.click();
+  }
+
+  getNumericVerdict(correct: boolean): Locator {
+    return this.page.getByTestId(
+      correct ? 'numeric-answer-correct' : 'numeric-answer-wrong'
+    );
+  }
+
+  /**
+   * Brings the sort items into the given order with the keyboard. The order the
+   * participant starts from is a shuffle of the shuffled storage order, so it
+   * is read from the page rather than assumed.
+   */
+  async arrangeSortItems(order: string[]) {
+    const items = this.page.getByLabel(SORT_ITEM_LABEL);
+    const labels = async () =>
+      (
+        await items.evaluateAll((elements) =>
+          elements.map((element) => element.getAttribute('aria-label') ?? '')
+        )
+      ).map((label) => label.replace(SORT_ITEM_LABEL, '').replace(/\.$/, ''));
+    // The list re-renders and refocuses after every move, so the next move is
+    // always derived from the order shown now.
+    await expect(async () => {
+      const shown = await labels();
+      const target = shown.findIndex((label, i) => label !== order[i]);
+      if (target >= 0) {
+        await items.nth(shown.indexOf(order[target])).focus();
+        await this.page.keyboard.press('ArrowUp');
+      }
+      expect(await labels()).toEqual(order);
+    }).toPass({ timeout: 20000 });
   }
 }

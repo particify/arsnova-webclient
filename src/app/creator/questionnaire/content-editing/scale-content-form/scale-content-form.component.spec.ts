@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { MatSelect } from '@angular/material/select';
@@ -6,7 +7,10 @@ import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
@@ -229,6 +233,22 @@ describe('ScaleContentFormComponent', () => {
     });
   });
 
+  it('reports a failed creation and reports nothing as submitted', () => {
+    setUp(null);
+    fixture.detectChanges();
+    createContent.mutate.and.returnValue(failedOperation() as never);
+    const submitted = jasmine.createSpy('submitted');
+    component.submitted.subscribe(submitted);
+
+    component.submit('questionnaire-1', 'The question');
+
+    expect(submitted).not.toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
+  });
+
   it('creates a content without the neutral option', () => {
     setUp(null);
     fixture.componentRef.setInput('neutralOption', false);
@@ -261,6 +281,23 @@ describe('ScaleContentFormComponent', () => {
       duration: null,
       abstentionsAllowed: true,
     });
+  });
+
+  it('reports a failed update', () => {
+    setUp(formatData({ template: ScaleContentTemplate.Pace }));
+    fixture.componentRef.setInput('contentId', 'content-1');
+    fixture.componentRef.setInput('duration', null);
+    fixture.detectChanges();
+    updateContent.mutate.and.returnValue(failedOperation() as never);
+
+    component.submit('questionnaire-1', 'How was the pace?');
+
+    expect(
+      TestBed.inject(NotificationService).showAdvanced
+    ).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('shows the picked template through a trigger of its own', async () => {

@@ -175,12 +175,12 @@ export class ContentCreationPage {
     }
     if (correct !== undefined) {
       await this.page
-        .getByTestId('numeric-correct-number-input')
+        .getByRole('spinbutton', { name: 'Correct answer' })
         .fill(correct.toString());
     }
     if (tolerance !== undefined) {
       await this.page
-        .getByTestId('numeric-tolerance-input')
+        .getByRole('spinbutton', { name: 'Tolerance' })
         .fill(tolerance.toString());
     }
     await this.submitContent();

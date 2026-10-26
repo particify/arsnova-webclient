@@ -21,6 +21,7 @@ import {
   QuestionnaireByIdGql,
   QuestionnaireContentAnswerResultsByQuestionnaireIdGql,
   QuestionnaireContentUpdatedGql,
+  CreatorQuestionnaireContentUpdatedGql,
   QuestionnairePublishedContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
   QuestionnaireType,
@@ -76,6 +77,9 @@ describe('QuestionnairePageComponent', () => {
     };
   }
 
+  let contentUpdated: jasmine.SpyObj<QuestionnaireContentUpdatedGql>;
+  let creatorContentUpdated: jasmine.SpyObj<CreatorQuestionnaireContentUpdatedGql>;
+
   function setUp(focusModeEnabled = true) {
     // The page's child components are irrelevant to the focus logic here.
     TestBed.overrideComponent(QuestionnairePageComponent, {
@@ -117,6 +121,10 @@ describe('QuestionnairePageComponent', () => {
       of({ userId: 'user-1' })
     );
 
+    contentUpdated = subscriptionGql('QuestionnaireContentUpdatedGql');
+    creatorContentUpdated = subscriptionGql(
+      'CreatorQuestionnaireContentUpdatedGql'
+    );
     configureTestModule(
       [getTranslocoModule(), QuestionnairePageComponent],
       [
@@ -136,7 +144,11 @@ describe('QuestionnairePageComponent', () => {
         },
         {
           provide: QuestionnaireContentUpdatedGql,
-          useValue: subscriptionGql('QuestionnaireContentUpdatedGql'),
+          useValue: contentUpdated,
+        },
+        {
+          provide: CreatorQuestionnaireContentUpdatedGql,
+          useValue: creatorContentUpdated,
         },
         { provide: AuthenticationService, useValue: authenticationService },
         spyProvider(AnnounceService, ['announce']),
@@ -235,6 +247,15 @@ describe('QuestionnairePageComponent', () => {
     fixture.detectChanges();
 
     expect(component.started).toBeFalse();
+  });
+
+  it('follows the answer counts through the content updates for everyone', () => {
+    setUp();
+
+    expect(contentUpdated.subscribe).toHaveBeenCalledOnceWith({
+      variables: { questionnaireId: 'q-1' },
+    });
+    expect(creatorContentUpdated.subscribe).not.toHaveBeenCalled();
   });
 });
 

@@ -271,4 +271,28 @@ describe('PrioritizationResultsComponent', () => {
 
     expect(barList()?.dataLabelMode()).toBe('percent');
   });
+
+  it('starts the live updates once a closed round is reopened', () => {
+    setUp(roundStats([30, 20, 10]), undefined, [round(true)]);
+    expect(subscribeStatsUpdated).not.toHaveBeenCalled();
+
+    // Starting the content again reopens its round under the same id.
+    fixture.componentRef.setInput('rounds', [round(false)]);
+    fixture.detectChanges();
+
+    expect(subscribeStatsUpdated).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-1' },
+    });
+  });
+
+  it('keeps listening to a round closed while it is shown', () => {
+    setUp(roundStats([30, 20, 10]), undefined, [round(false)]);
+
+    fixture.componentRef.setInput('rounds', [round(true)]);
+    fixture.detectChanges();
+    emitUpdate(roundStats([30, 90, 10]));
+
+    expect(subscribeStatsUpdated).toHaveBeenCalledTimes(1);
+    expect(bars()[0]).toEqual(['B', 90]);
+  });
 });

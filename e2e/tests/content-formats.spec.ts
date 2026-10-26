@@ -71,22 +71,11 @@ test.describe('content formats', () => {
   });
 
   test.describe('numeric', () => {
-    function verdict(
-      participant: ParticipantContentGroupPage,
-      icon: 'check' | 'close'
-    ) {
-      return participant.page
-        .locator('app-content-numeric-answer mat-icon')
-        .filter({ hasText: icon });
-    }
-
     async function answerNumber(
       participant: ParticipantContentGroupPage,
       value: number
     ) {
-      const page = participant.page;
-      await page.getByTestId('numeric-answer-input').fill(String(value));
-      await participant.getSubmitButton().click();
+      await participant.answerNumericContent(value);
       await expect(participant.getHintAfterAnswering()).toBeVisible();
     }
 
@@ -108,7 +97,7 @@ test.describe('content formats', () => {
       await publish();
       const participant = await join(browser, baseURL);
       await answerNumber(participant, 41);
-      await expect(verdict(participant, 'check')).toBeVisible();
+      await expect(participant.getNumericVerdict(true)).toBeVisible();
       await expect(
         participant.page.getByText('The correct answer is')
       ).toBeVisible();
@@ -122,7 +111,7 @@ test.describe('content formats', () => {
       await publish();
       const participant = await join(browser, baseURL);
       await answerNumber(participant, 30);
-      await expect(verdict(participant, 'close')).toBeVisible();
+      await expect(participant.getNumericVerdict(false)).toBeVisible();
     });
 
     test('the solution is withheld until correct answers are published', async ({
@@ -135,7 +124,7 @@ test.describe('content formats', () => {
       await expect(
         participant.page.getByText('The correct answer is')
       ).toBeHidden();
-      await expect(verdict(participant, 'check')).toBeHidden();
+      await expect(participant.getNumericVerdict(true)).toBeHidden();
     });
   });
 
@@ -225,30 +214,6 @@ test.describe('content formats', () => {
   test.describe('sort', () => {
     const correctOrder = ['Mercury', 'Venus', 'Earth', 'Mars'];
 
-    /**
-     * Brings the items into the given order with the keyboard. The order the
-     * participant starts from is a shuffle of the shuffled storage order, so it
-     * is read from the page rather than assumed.
-     */
-    async function arrange(page: Page, order: string[]) {
-      const items = page.locator('app-content-sort-answer [cdkdrag]');
-      const labels = async () =>
-        (await items.allInnerTexts()).map((text) =>
-          text.replace('drag_handle', '').trim()
-        );
-      // The list re-renders and refocuses after every move, so the next move is
-      // always derived from the order shown now.
-      await expect(async () => {
-        const shown = await labels();
-        const target = shown.findIndex((label, i) => label !== order[i]);
-        if (target >= 0) {
-          await items.nth(shown.indexOf(order[target])).focus();
-          await page.keyboard.press('ArrowUp');
-        }
-        expect(await labels()).toEqual(order);
-      }).toPass({ timeout: 20000 });
-    }
-
     test.beforeEach(async ({ page, baseURL }) => {
       await createSeries(page, baseURL, 'Quiz');
       await contentCreation.createSortContent('My sort content', correctOrder);
@@ -260,7 +225,7 @@ test.describe('content formats', () => {
     }) => {
       await publish();
       const participant = await join(browser, baseURL);
-      await arrange(participant.page, correctOrder);
+      await participant.arrangeSortItems(correctOrder);
       await participant.getSubmitButton().click();
       await expect(participant.getHintAfterAnswering()).toBeVisible();
       await expect(
@@ -272,7 +237,7 @@ test.describe('content formats', () => {
     test('another order is wrong', async ({ browser, baseURL }) => {
       await publish();
       const participant = await join(browser, baseURL);
-      await arrange(participant.page, [...correctOrder].reverse());
+      await participant.arrangeSortItems([...correctOrder].reverse());
       await participant.getSubmitButton().click();
       await expect(
         participant.page.getByTestId('sort-answer-wrong')
@@ -285,7 +250,7 @@ test.describe('content formats', () => {
     }) => {
       await publish({ correctAnswers: false });
       const participant = await join(browser, baseURL);
-      await arrange(participant.page, correctOrder);
+      await participant.arrangeSortItems(correctOrder);
       await participant.getSubmitButton().click();
       await expect(participant.getHintAfterAnswering()).toBeVisible();
       await expect(
@@ -326,7 +291,11 @@ test.describe('content formats', () => {
       baseURL,
     }) => {
       const participant = await join(browser, baseURL);
-      await participant.answerPrioritizationContent([20, 30, 50]);
+      await participant.answerPrioritizationContent({
+        'More exercises': 20,
+        'Shorter lectures': 30,
+        'Recorded sessions': 50,
+      });
       await expect(participant.getHintAfterAnswering()).toBeVisible();
       await creatorPage
         .getByRole('button', { name: /My prioritization content/ })
@@ -340,7 +309,11 @@ test.describe('content formats', () => {
 
     test('points must add up to the budget', async ({ browser, baseURL }) => {
       const participant = await join(browser, baseURL);
-      await participant.answerPrioritizationContent([20, 30, 10]);
+      await participant.answerPrioritizationContent({
+        'More exercises': 20,
+        'Shorter lectures': 30,
+        'Recorded sessions': 10,
+      });
       await expect(participant.getHintAfterAnswering()).toBeHidden();
       await expect(participant.getSubmitButton()).toBeEnabled();
     });

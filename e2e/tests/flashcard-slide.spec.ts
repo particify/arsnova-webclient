@@ -45,10 +45,8 @@ test.describe('flashcards and slides', () => {
   }) => {
     participantContext = await browser.newContext();
     const page = await participantContext.newPage();
-    await new ParticipantContentGroupPage(page, baseURL).goto(
-      shortId,
-      'My series'
-    );
+    const participant = new ParticipantContentGroupPage(page, baseURL);
+    await participant.goto(shortId, 'My series');
     // A series without questions opens with its list of contents.
     await expect(
       page.getByText('Jump to any content or return to the room overview.')
@@ -60,7 +58,7 @@ test.describe('flashcards and slides', () => {
     await expect(page.getByText('My flashcard back')).toBeHidden();
     await page.getByRole('button', { name: 'Show answer' }).click();
     await expect(page.getByText('My flashcard back')).toBeVisible();
-    await page.locator('.step-btn').nth(1).click();
+    await participant.goToStep(2);
     await expect(page.getByText('My slide content')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Submit' })).toBeHidden();
   });

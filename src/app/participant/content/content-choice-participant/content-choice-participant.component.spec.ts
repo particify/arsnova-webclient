@@ -1,5 +1,9 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { By } from '@angular/platform-browser';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
@@ -99,6 +103,21 @@ describe('ContentChoiceParticipantComponent', () => {
           input: { roundId: 'round-1', selectedChoiceIndexes: [1] },
         },
       });
+    });
+
+    it('reports a failed answer and emits nothing', () => {
+      createAnswer.mutate.and.returnValue(failedOperation() as never);
+      const created = jasmine.createSpy('answerCreated');
+      fixture.componentInstance.answerCreated.subscribe(created);
+      fixture.componentInstance.answerOptions()[1].checked = true;
+
+      fixture.componentInstance.submitAnswer();
+
+      expect(created).not.toHaveBeenCalled();
+      expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+        jasmine.any(String),
+        AdvancedSnackBarTypes.FAILED
+      );
     });
   });
 

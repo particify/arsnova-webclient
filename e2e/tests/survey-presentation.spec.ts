@@ -210,7 +210,12 @@ test.describe('Presentation of a survey', () => {
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My survey');
-    await participant.answerPrioritizationContent([10, 20, 50, 20]);
+    await participant.answerPrioritizationContent({
+      a: 10,
+      b: 20,
+      c: 50,
+      d: 20,
+    });
     await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.deleteContentAnswers();
     await expect(page.getByText('0 answers').first()).toBeVisible();

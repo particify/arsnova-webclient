@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
@@ -209,6 +210,20 @@ describe('ContentPrioritizationParticipantComponent', () => {
     assign([ASSIGNABLE_POINTS, 0, 0]);
     component.submitAnswer();
     expect(created).toEqual(['answer-1']);
+  });
+
+  it('reports a failed answer and emits nothing', () => {
+    setUp();
+    createAnswer.mutate.and.returnValue(failedOperation() as never);
+    const emitted: string[] = [];
+    component.answerCreated.subscribe((answer) => emitted.push(answer.id));
+    assign([ASSIGNABLE_POINTS, 0, 0]);
+    component.submitAnswer();
+    expect(emitted).toEqual([]);
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('submits nothing while no round is running', () => {

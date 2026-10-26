@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
@@ -161,6 +162,21 @@ describe('ContentBinaryParticipantComponent', () => {
     fixture.detectChanges();
     component.submitAnswer();
     expect(emitted).toEqual(['answer-1']);
+  });
+
+  it('reports a failed answer and emits nothing', () => {
+    setUp();
+    createAnswer.mutate.and.returnValue(failedOperation() as never);
+    const emitted: string[] = [];
+    component.answerCreated.subscribe((answer) => emitted.push(answer.id));
+    choiceAnswer().updateSelection(0);
+    fixture.detectChanges();
+    component.submitAnswer();
+    expect(emitted).toEqual([]);
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('does nothing while there is no active round', () => {

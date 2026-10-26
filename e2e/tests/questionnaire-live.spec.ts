@@ -7,6 +7,8 @@ import { ContentGroupOverviewPage } from '@e2e/fixtures/creator/content-group-ov
 import { QuestionnaireContentListPage } from '@e2e/fixtures/creator/questionnaire-content-list';
 import { ContentGroupPage as ParticipantContentGroupPage } from '@e2e/fixtures/participant/content-group';
 import { QuestionnairePage } from '@e2e/fixtures/participant/questionnaire-page';
+import { HeldGraphqlWs } from '@e2e/api/held-graphql-ws';
+import { PageProblems } from '@e2e/fixtures/shared/page-problems';
 
 test.describe('questionnaire live mode with a real backend', () => {
   let creatorPage: Page;
@@ -105,6 +107,40 @@ test.describe('questionnaire live mode with a real backend', () => {
         participant.getHintAfterContentStoppedWithoutAnswering()
       ).toBeVisible();
       await expect(participant.getSubmitButton()).toBeHidden();
+    });
+
+    test('an answer sent after the round was stopped is rejected', async ({
+      browser,
+      baseURL,
+    }) => {
+      await contentGroupOverview.startContent('My first choice content', 0);
+      participantContext = await browser.newContext();
+      const page = await participantContext.newPage();
+      const pushes = new HeldGraphqlWs(page);
+      await pushes.install();
+      await new ParticipantContentGroupPage(page, baseURL).goto(
+        shortId,
+        'My quiz'
+      );
+      participant = new QuestionnairePage(page, baseURL);
+      await expect(participant.getSubmitButton()).toBeVisible();
+      const problems = await PageProblems.record(page);
+
+      // The stop has not reached the participant yet when they submit.
+      pushes.hold();
+      await contentGroupOverview.stopContent(0);
+      await participant.answerContent(['b']);
+
+      // The backend rejects an answer to a closed round as a bad request.
+      await expect
+        .poll(() => problems.snackbarTexts())
+        .toEqual([expect.stringContaining('Your request is invalid.')]);
+      await expect(participant.getHintAfterAnswering()).toBeHidden();
+      pushes.release();
+      await expect(
+        participant.getHintAfterContentStoppedWithoutAnswering()
+      ).toBeVisible();
+      await expect(creatorPage.getByText('0 answers').first()).toBeVisible();
     });
 
     test('starting the next content moves the participant along', async ({

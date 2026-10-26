@@ -1,10 +1,14 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { BehaviorSubject, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import {
   ContentType,
   QuestionnaireAnswerByRoundIdGql,
@@ -13,6 +17,7 @@ import {
   TextContentFormatData,
   ToggleQuestionnaireTextAnswerHiddenGql,
 } from '@gql/generated/graphql';
+import { TextAnswerItem } from './text-answer-list/text-answer-item';
 import { TextAnswerListComponent } from './text-answer-list/text-answer-list.component';
 import { TextResultsComponent } from './text-results.component';
 
@@ -295,5 +300,37 @@ describe('TextResultsComponent', () => {
       fetchPolicy: 'cache-and-network',
     });
     expect(bodies()).toEqual(['First', 'Second']);
+  });
+
+  it('reports a failed hiding and leaves the dialog to stay open', () => {
+    setUp();
+    const toggleHidden = TestBed.inject(
+      ToggleQuestionnaireTextAnswerHiddenGql
+    ) as jasmine.SpyObj<ToggleQuestionnaireTextAnswerHiddenGql>;
+    toggleHidden.mutate.and.returnValue(failedOperation() as never);
+    const dialogService = TestBed.inject(
+      DialogService
+    ) as jasmine.SpyObj<DialogService>;
+    dialogService.openDeleteDialog.and.returnValue({
+      afterClosed: () => of(undefined),
+    } as never);
+    const notificationService = TestBed.inject(
+      NotificationService
+    ) as jasmine.SpyObj<NotificationService>;
+
+    fixture.componentInstance.hideAnswer({
+      id: 'answer-1',
+      body: 'First',
+    } as TextAnswerItem);
+
+    const confirmAction = dialogService.openDeleteDialog.calls.mostRecent()
+      .args[4] as () => Observable<unknown>;
+    const failed = jasmine.createSpy('failed');
+    confirmAction().subscribe({ error: failed });
+    expect(failed).toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 });

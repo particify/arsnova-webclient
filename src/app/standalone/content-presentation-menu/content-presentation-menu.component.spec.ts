@@ -1,3 +1,4 @@
+import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -8,7 +9,10 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import {
   Content,
@@ -295,6 +299,26 @@ describe('ContentPresentationMenuComponent', () => {
     component.startNewRound();
     dialogResult$.next('creator.dialog.start');
     expect(notificationService.showAdvanced).toHaveBeenCalled();
+  });
+
+  it('reports a failed new round and leaves the dialog to stay open', () => {
+    setUp(content(true));
+    startRound.mutate.and.returnValue(failedOperation() as never);
+    const notificationService = TestBed.inject(
+      NotificationService
+    ) as jasmine.SpyObj<NotificationService>;
+
+    component.startNewRound();
+
+    const confirmAction =
+      dialogService.openStartNewRoundDialog.calls.mostRecent().args[0];
+    const failed = jasmine.createSpy('failed');
+    confirmAction().subscribe({ error: failed });
+    expect(failed).toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledOnceWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   [

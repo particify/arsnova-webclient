@@ -77,7 +77,7 @@ export class QuestionnairePage {
   }
 
   getStepButtons(): Locator {
-    return this.page.locator('.step-btn');
+    return this.page.getByTestId('step-button');
   }
 
   getStepButton(step: number): Locator {
