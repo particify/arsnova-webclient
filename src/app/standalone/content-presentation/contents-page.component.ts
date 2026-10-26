@@ -38,7 +38,7 @@ import {
 import {
   ContentType,
   PublishQuestionnaireUpToContentGql,
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnaireByIdGql,
   QuestionnaireContentUpdatedGql,
   QuestionnairePublishingMode,
@@ -69,7 +69,11 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import {
   answeringEndDate,
@@ -165,7 +169,7 @@ export class ContentsPageComponent {
       switchMap((id) =>
         this.questionnaireById.watch({ variables: { id } }).valueChanges.pipe(
           map((r) => r.data?.questionnaireById),
-          filter((n): n is Questionnaire => !!n)
+          filter((n): n is QuestionnaireDetailsFragment => !!n)
         )
       )
     )
@@ -300,6 +304,7 @@ export class ContentsPageComponent {
     });
     this.eventService
       .on<boolean>('ControlBarVisible')
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((isVisible) => {
         this.hideControlBar.set(!isVisible);
       });
@@ -326,7 +331,7 @@ export class ContentsPageComponent {
    * starts with asking to publish it. The watched questionnaire picks up the
    * result.
    */
-  private offerPublishing(questionnaire: Questionnaire) {
+  private offerPublishing(questionnaire: QuestionnaireDetailsFragment) {
     this.dialogService
       .openPublishGroupDialog(questionnaire.id, questionnaire.publishingMode)
       .afterClosed()

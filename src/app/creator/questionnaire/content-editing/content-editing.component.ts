@@ -48,9 +48,9 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { CoreModule } from '@app/core/core.module';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import {
-  Content,
+  CreatorContentDetailsFragment,
   ContentType,
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnaireContentByIdGql,
   QuestionnaireType,
 } from '@gql/generated/graphql';
@@ -221,9 +221,9 @@ export class ContentEditingComponent {
     return base;
   });
 
-  readonly questionnaire = input.required<Questionnaire>();
+  readonly questionnaire = input.required<QuestionnaireDetailsFragment>();
 
-  readonly content = input<Content>();
+  readonly content = input<CreatorContentDetailsFragment>();
   readonly multiple = linkedSignal(() => {
     const formatData = this.content()?.formatData;
     return formatData?.__typename === 'ChoiceContentFormatData'

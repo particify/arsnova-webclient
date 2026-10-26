@@ -54,7 +54,7 @@ import {
   ContentAnswerResultFragment,
   AnswerResultState,
   ContentDetailsFragment,
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnaireByIdGql,
   QuestionnaireContentAnswerResultsByQuestionnaireIdGql,
   QuestionnaireContentUpdatedGql,
@@ -73,7 +73,9 @@ function setDefaultTrue(value: boolean | undefined): boolean {
   return value ?? true;
 }
 
-function publishedContentsKey(questionnaire: Questionnaire): string {
+function publishedContentsKey(
+  questionnaire: QuestionnaireDetailsFragment
+): string {
   return [
     questionnaire.published,
     questionnaire.publishingMode,
@@ -151,7 +153,7 @@ export class QuestionnairePageComponent {
           .watch({ variables: { id } })
           .valueChanges.pipe(
             map((r) => r.data?.questionnaireById),
-            filter((q): q is Questionnaire => !!q),
+            filter((q): q is QuestionnaireDetailsFragment => !!q),
             catchError((error) => {
               console.error('Questionnaire query failed', error);
               return EMPTY;
@@ -173,7 +175,7 @@ export class QuestionnairePageComponent {
 
   private readonly contentsResult = toSignal(
     toObservable(this.questionnaire).pipe(
-      filter((q): q is Questionnaire => !!q),
+      filter((q): q is QuestionnaireDetailsFragment => !!q),
       distinctUntilChanged(
         (a, b) => publishedContentsKey(a) === publishedContentsKey(b)
       ),
@@ -198,7 +200,7 @@ export class QuestionnairePageComponent {
   // the questionnaire is published.
   private readonly contentUpdates = toSignal(
     toObservable(this.questionnaire).pipe(
-      filter((q): q is Questionnaire => !!q),
+      filter((q): q is QuestionnaireDetailsFragment => !!q),
       map((q) => (q.published ? q.id : undefined)),
       distinctUntilChanged(),
       switchMap((questionnaireId) =>
@@ -216,7 +218,7 @@ export class QuestionnairePageComponent {
 
   private readonly answerResultsResult = toSignal(
     toObservable(this.questionnaire).pipe(
-      filter((q): q is Questionnaire => !!q),
+      filter((q): q is QuestionnaireDetailsFragment => !!q),
       distinctUntilChanged(
         (a, b) => publishedContentsKey(a) === publishedContentsKey(b)
       ),

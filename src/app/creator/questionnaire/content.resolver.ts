@@ -6,17 +6,20 @@ import {
   Router,
 } from '@angular/router';
 import { roomPath } from '@app/core/resolver/questionnaire.resolver';
-import { Content, QuestionnaireContentByIdGql } from '@gql/generated/graphql';
+import {
+  CreatorContentDetailsFragment,
+  QuestionnaireContentByIdGql,
+} from '@gql/generated/graphql';
 import { catchError, map, of } from 'rxjs';
 
 /**
- * A resolver that returns the current content (Content).
+ * A resolver that returns the current content (CreatorContentDetailsFragment).
  *
  * A content that cannot be read or no longer exists leads back to the room
  * instead of failing the navigation. It always asks the server, as release
  * and permissions may have changed since the content was last cached.
  */
-export const contentResolver: ResolveFn<Content> = (
+export const contentResolver: ResolveFn<CreatorContentDetailsFragment> = (
   route: ActivatedRouteSnapshot
 ) => {
   const router = inject(Router);
@@ -32,7 +35,8 @@ export const contentResolver: ResolveFn<Content> = (
     .pipe(
       map(
         (r) =>
-          (r.data?.questionnaireContentById as Content | undefined) ?? toRoom()
+          (r.data?.questionnaireContentById as
+            CreatorContentDetailsFragment | undefined) ?? toRoom()
       ),
       catchError(() => of(toRoom()))
     );

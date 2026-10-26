@@ -45,7 +45,7 @@ import {
   ContentAnswerResult,
   AnswerResultState,
   ContentDetailsFragment,
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnaireType,
   ContentType,
   QuestionnaireAnswerResultsByQuestionnaireIdGql,
@@ -111,7 +111,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     QuestionnaireLeaderboardUpdatedGql
   );
 
-  questionnaire = input.required<Questionnaire>();
+  questionnaire = input.required<QuestionnaireDetailsFragment>();
   contents = input.required<ContentDetailsFragment[]>();
   answerResults = input.required<ContentAnswerResult[]>();
   roomId = input.required<string>();

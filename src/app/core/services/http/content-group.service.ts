@@ -5,7 +5,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import {
-  Content,
+  ContentDetailsFragment,
   ContentType,
   QuestionnaireType,
 } from '@gql/generated/graphql';
@@ -162,7 +162,7 @@ export class ContentGroupService {
   }
 
   isContentCompatibleWithQuestionnaireType(
-    content: Content,
+    content: ContentDetailsFragment,
     questionnaireType: QuestionnaireType
   ): boolean {
     if (

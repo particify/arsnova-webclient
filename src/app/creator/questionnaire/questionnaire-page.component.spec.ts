@@ -36,6 +36,7 @@ import {
   ResetQuestionnaireResultsDocument,
   ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
+  CreatorContentDetailsFragment,
 } from '@gql/generated/graphql';
 import { ApolloClient, ApolloLink, gql, InMemoryCache } from '@apollo/client';
 import { Apollo } from 'apollo-angular';
@@ -59,13 +60,16 @@ describe('QuestionnairePageComponent (creator)', () => {
   let router: { events: Subject<unknown>; navigate: jasmine.Spy };
   let route: { firstChild: unknown };
   let contents$: BehaviorSubject<unknown>;
+  let breakpoint$: BehaviorSubject<{ matches: boolean }>;
   let dialogService: jasmine.SpyObj<DialogService>;
   let globalStorageService: jasmine.SpyObj<GlobalStorageService>;
   let pageService: QuestionnairePageService;
   let creatorContentUpdated: jasmine.SpyObj<CreatorQuestionnaireContentUpdatedGql>;
   let contentUpdated: jasmine.SpyObj<QuestionnaireContentUpdatedGql>;
 
-  const contents = ['c-1', 'c-2'].map((id) => ({ id }) as Content);
+  const contents = ['c-1', 'c-2'].map(
+    (id) => ({ id }) as CreatorContentDetailsFragment
+  );
 
   function childRoute(path: string, params: Record<string, string> = {}) {
     return { snapshot: { routeConfig: { path }, params } };
@@ -119,9 +123,8 @@ describe('QuestionnairePageComponent (creator)', () => {
     const breakpointObserver = jasmine.createSpyObj('BreakpointObserver', [
       'observe',
     ]);
-    breakpointObserver.observe.and.returnValue(
-      new BehaviorSubject({ matches: isDesktop })
-    );
+    breakpoint$ = new BehaviorSubject({ matches: isDesktop });
+    breakpointObserver.observe.and.returnValue(breakpoint$);
     const authenticationService = jasmine.createSpyObj(
       'AuthenticationService',
       ['getCurrentAuthentication']
@@ -847,5 +850,14 @@ describe('QuestionnairePageComponent (creator)', () => {
       questionnaire: jasmine.objectContaining({ id: 'q-1', name: 'Quiz' }),
       shortId: '12345678',
     });
+  });
+
+  it('stops observing the breakpoint once destroyed', () => {
+    setUp();
+    expect(breakpoint$.observed).toBeTrue();
+
+    fixture.destroy();
+
+    expect(breakpoint$.observed).toBeFalse();
   });
 });

@@ -20,7 +20,8 @@ import { onlyCompleteData, QueryRef } from 'apollo-angular';
 import { refetchOn } from '@gql/helper/refetch-on';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import {
-  Content,
+  ContentDetailsFragment,
+  CreatorContentDetailsFragment,
   ContentType,
   QuestionnaireRoundsByContentIdGql,
   QuestionnaireRoundsByContentIdQuery,
@@ -44,20 +45,9 @@ import { ContentResultsService } from './content-results.service';
 import { RESULT_REGISTRY } from './result-registry';
 import { VisualizationType } from './visualization/visualization-type';
 
-/** The fields read here, which participants' and creators' selections both provide. */
-export type ContentResultsContent = Pick<
-  Content,
-  | 'abstentionCount'
-  | 'activeRound'
-  | 'answerCount'
-  | 'body'
-  | 'bodyRendered'
-  | 'correctAnswerCount'
-  | 'formatData'
-  | 'hasCorrectAnswer'
-  | 'id'
-  | 'position'
->;
+/** Only the contents a creator reads count the correct answers. */
+type ResultsContent = ContentDetailsFragment &
+  Partial<Pick<CreatorContentDetailsFragment, 'correctAnswerCount'>>;
 
 @Component({
   selector: 'app-content-results',
@@ -83,7 +73,7 @@ export class ContentResultsComponent {
     QuestionnaireRoundsByContentIdGql
   );
 
-  content = input.required<ContentResultsContent>();
+  content = input.required<ResultsContent>();
   active = input(false, { transform: booleanAttribute });
   directShow = input(false, { transform: booleanAttribute });
   showCorrect = input(false, { transform: booleanAttribute });

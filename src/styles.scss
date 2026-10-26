@@ -976,7 +976,7 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
 // A bar list's row owns the space between its label and its bar, so the label's
 // paragraph must add none of its own — the component's stylesheet cannot reach
 // it for the reason above.
-.bar-list .bar-label .rendered-text > p {
+app-bar-list .bar-label .rendered-text > p {
   margin: 0;
 }
 

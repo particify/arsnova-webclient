@@ -1,8 +1,6 @@
 import {
   Component,
-  EventEmitter,
   Input,
-  Output,
   inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
@@ -38,7 +36,6 @@ export class ContentWaitingComponent extends FormComponent {
   @Input() isLocked = false;
   @Input() timerActive = false;
   @Input() aliasRequired = false;
-  @Output() aliasSet = new EventEmitter<void>();
 
   enteredAlias = '';
 
@@ -73,10 +70,7 @@ export class ContentWaitingComponent extends FormComponent {
         },
       })
       .pipe(this.mutations.reportErrors())
-      .subscribe({
-        next: () => this.aliasSet.emit(),
-        error: () => this.enableForm(),
-      });
+      .subscribe({ error: () => this.enableForm() });
   }
 
   /** Requests another proposal for an alias which is not persisted yet. */

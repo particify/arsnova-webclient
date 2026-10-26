@@ -14,7 +14,7 @@ import {
   fromEvent,
 } from 'rxjs';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
-import { Content } from '@gql/generated/graphql';
+import { ContentDetailsFragment } from '@gql/generated/graphql';
 
 const SCALE_FACTOR = 1080;
 const MIN_SCALE = 1;
@@ -56,11 +56,11 @@ export class PresentationService {
   private commentZoomChanged = new Subject<number>();
   private contentGroupUpdated = new Subject<ContentGroup>();
   private roundStateChanged = new Subject<RoundState>();
-  private countdownChanged = new Subject<Content>();
+  private countdownChanged = new Subject<ContentDetailsFragment>();
   private wordcloudVisualizationCHanged = new Subject<boolean>();
   private leaderboardDisplayed = new Subject<boolean>();
 
-  private currentContent?: Content;
+  private currentContent?: ContentDetailsFragment;
 
   getScale(factor = 1) {
     const ratioScale = innerHeight / innerWidth / ASPECT_RATIO;
@@ -211,7 +211,7 @@ export class PresentationService {
     this.feedbackStarted$.next(started);
   }
 
-  getCountdownChanged(): Observable<Content> {
+  getCountdownChanged(): Observable<ContentDetailsFragment> {
     return this.countdownChanged;
   }
 

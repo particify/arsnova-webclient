@@ -25,7 +25,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
 import {
-  Content,
+  ContentDetailsFragment,
   ContentType,
   DeleteQuestionnaireAnswersByContentIdGql,
   QuestionnaireByIdDocument,
@@ -72,7 +72,7 @@ export class ContentPresentationMenuComponent {
 
   @ViewChild('moreMenu') moreMenu!: MatMenu;
 
-  content = input.required<Content>();
+  content = input.required<ContentDetailsFragment>();
   questionnaireId = input.required<string>();
   shortId = input.required<string>();
   editingEnabled = input(true);

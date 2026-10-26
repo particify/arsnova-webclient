@@ -1,23 +1,23 @@
-import { Content } from '@gql/generated/graphql';
+import { CreatorContentDetailsFragment } from '@gql/generated/graphql';
 import { Subject } from 'rxjs';
 
 export class QuestionnairePageService {
-  private editedContent$ = new Subject<Content>();
-  private createdContent$ = new Subject<Content>();
+  private editedContent$ = new Subject<CreatorContentDetailsFragment>();
+  private createdContent$ = new Subject<CreatorContentDetailsFragment>();
 
-  updateEditedContent(content: Content) {
+  updateEditedContent(content: CreatorContentDetailsFragment) {
     this.editedContent$.next(content);
   }
 
-  getEditedContent(): Subject<Content> {
+  getEditedContent(): Subject<CreatorContentDetailsFragment> {
     return this.editedContent$;
   }
 
-  updateCreatedContent(content: Content) {
+  updateCreatedContent(content: CreatorContentDetailsFragment) {
     this.createdContent$.next(content);
   }
 
-  getCreatedContent(): Subject<Content> {
+  getCreatedContent(): Subject<CreatorContentDetailsFragment> {
     return this.createdContent$;
   }
 }

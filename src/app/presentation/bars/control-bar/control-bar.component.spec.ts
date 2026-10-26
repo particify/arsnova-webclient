@@ -29,24 +29,32 @@ import {
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { NEVER, of } from 'rxjs';
+import { BehaviorSubject, NEVER, map, of } from 'rxjs';
 import { ControlBarComponent } from './control-bar.component';
 
 describe('ControlBarComponent', () => {
   let fixture: ComponentFixture<ControlBarComponent>;
   let hotkeyService: jasmine.SpyObj<HotkeyService>;
   let contentResultsService: ContentResultsService;
+  // The listed questionnaires, as the cache hands them out after each change.
+  let questionnaires$: BehaviorSubject<QuestionnaireSummaryFragment[]>;
 
   const quiz = {
     id: 'q-1',
     name: 'Quiz',
     type: QuestionnaireType.Quiz,
+    leaderboardEnabled: true,
   } as QuestionnaireSummaryFragment;
 
   function questionnairesQuery(field: string) {
     const gql = jasmine.createSpyObj(field, ['watch']);
     gql.watch.and.returnValue({
-      valueChanges: of({ loading: false, data: { [field]: [quiz] } }),
+      valueChanges: questionnaires$.pipe(
+        map((questionnaires) => ({
+          loading: false,
+          data: { [field]: questionnaires },
+        }))
+      ),
       refetch: () => Promise.resolve({}),
     });
     return gql;
@@ -81,6 +89,7 @@ describe('ControlBarComponent', () => {
     for (const method of Object.keys(presentationService)) {
       presentationService[method].and.returnValue(NEVER);
     }
+    questionnaires$ = new BehaviorSubject([quiz]);
 
     configureTestModule(
       [
@@ -177,4 +186,40 @@ describe('ControlBarComponent', () => {
     expect(item('correct')?.highlighted).toBeFalse();
     fixture.destroy();
   }));
+
+  describe('leaderboard control', () => {
+    function offersLeaderboard(): boolean {
+      return fixture.componentInstance.groupItems.some(
+        (item) => item.name === 'leaderboard'
+      );
+    }
+
+    function listQuestionnaires(leaderboardEnabled: boolean) {
+      questionnaires$.next([{ ...quiz, leaderboardEnabled }]);
+      fixture.detectChanges();
+    }
+
+    it('offers the leaderboard of a questionnaire that has it enabled', fakeAsync(() => {
+      fixture.detectChanges();
+      flush();
+      // The active questionnaire is only picked once the list has loaded.
+      fixture.detectChanges();
+
+      expect(offersLeaderboard()).toBeTrue();
+      fixture.destroy();
+    }));
+
+    it('follows the leaderboard being switched off and on again', fakeAsync(() => {
+      fixture.detectChanges();
+      flush();
+      fixture.detectChanges();
+
+      listQuestionnaires(false);
+      expect(offersLeaderboard()).toBeFalse();
+
+      listQuestionnaires(true);
+      expect(offersLeaderboard()).toBeTrue();
+      fixture.destroy();
+    }));
+  });
 });

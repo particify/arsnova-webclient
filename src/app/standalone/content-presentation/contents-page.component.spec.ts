@@ -4,6 +4,7 @@ import { InMemoryCache } from '@apollo/client';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -470,5 +471,17 @@ describe('ContentsPageComponent (last visited questionnaire)', () => {
     present('q-2');
 
     expect(storage.get(STORAGE_KEYS.LAST_GROUP)).toBe('q-2');
+  });
+
+  it('stops following the control bar visibility once destroyed', () => {
+    const eventService = TestBed.inject(EventService);
+    present('q-1');
+    eventService.broadcast('ControlBarVisible', false);
+    expect(fixture.componentInstance.hideControlBar()).toBeTrue();
+
+    fixture.destroy();
+    eventService.broadcast('ControlBarVisible', true);
+
+    expect(fixture.componentInstance.hideControlBar()).toBeTrue();
   });
 });

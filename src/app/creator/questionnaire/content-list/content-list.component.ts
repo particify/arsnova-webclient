@@ -49,7 +49,7 @@ import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import {
-  Content,
+  CreatorContentDetailsFragment,
   ContentFormatData,
   ContentType,
   CopyQuestionnaireContentToQuestionnaireGql,
@@ -58,7 +58,7 @@ import {
   DuplicateQuestionnaireContentGql,
   MoveQuestionnaireContentToQuestionnaireGql,
   PublishQuestionnaireUpToContentGql,
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnaireByIdDocument,
   QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnairePublishingMode,
@@ -124,7 +124,7 @@ import {
     CountdownTimerComponent,
   ],
 })
-export class ContentListComponent extends DragDropBaseComponent<Content> {
+export class ContentListComponent extends DragDropBaseComponent<CreatorContentDetailsFragment> {
   private readonly contentService = inject(ContentService);
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
@@ -178,8 +178,8 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
 
   publishingDivider = viewChild<ElementRef>('publishingDivider');
   roomId = input.required<string>();
-  questionnaire = input.required<Questionnaire>();
-  contents = input.required<Content[]>();
+  questionnaire = input.required<QuestionnaireDetailsFragment>();
+  contents = input.required<CreatorContentDetailsFragment[]>();
   isModerator = input(false);
   attributionsExist = input(false);
   selectedContentId = input<string | undefined>();
@@ -289,7 +289,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     return remaining[Math.min(Math.max(index, 0), remaining.length - 1)]?.id;
   }
 
-  deleteAnswers(content: Content) {
+  deleteAnswers(content: CreatorContentDetailsFragment) {
     this.dialogService.openDeleteDialog(
       'content-answers',
       'creator.dialog.really-delete-answers',
@@ -340,7 +340,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     return this.contentPublishService.isLive(this.questionnaire());
   }
 
-  supportsRounds(content: Content): boolean {
+  supportsRounds(content: CreatorContentDetailsFragment): boolean {
     return !!RESULT_REGISTRY[content.formatData.format].supportsRounds;
   }
 
@@ -354,7 +354,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     this.isRoundOver(this.questionnaire().activeRound)
   );
 
-  isLiveRow(content: Content): boolean {
+  isLiveRow(content: CreatorContentDetailsFragment): boolean {
     return (
       this.isLiveMode() &&
       this.questionnaire().activeRound?.id === content.activeRound?.id &&
@@ -362,14 +362,14 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     );
   }
 
-  canModifyAnswersOrRounds(content: Content): boolean {
+  canModifyAnswersOrRounds(content: CreatorContentDetailsFragment): boolean {
     if (!this.isLiveMode()) {
       return true;
     }
     return !!content.activeRound && this.isRoundOver(content.activeRound);
   }
 
-  isRoundOver(round: Content['activeRound']): boolean {
+  isRoundOver(round: CreatorContentDetailsFragment['activeRound']): boolean {
     if (round && roundKey(round) === this.expiredRoundKey()) {
       return this.isLiveMode();
     }
@@ -463,7 +463,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
       });
   }
 
-  dropPublishingDivider(event: CdkDragDrop<Content[]>) {
+  dropPublishingDivider(event: CdkDragDrop<CreatorContentDetailsFragment[]>) {
     this.publishingChangeActive = false;
     this.publishingChangePosition = undefined;
     const newPublishingIndex = event.currentIndex - 1;
@@ -528,7 +528,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   }
 
   isCompatibleWithQuestionnaireType(
-    content: Content,
+    content: CreatorContentDetailsFragment,
     groupType: QuestionnaireType
   ): boolean {
     return this.contentGroupService.isContentCompatibleWithQuestionnaireType(
@@ -541,7 +541,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     return formatData.__typename === 'TextContentFormatData';
   }
 
-  toggleTextAnswersPublished(content: Content) {
+  toggleTextAnswersPublished(content: CreatorContentDetailsFragment) {
     if (!this.isText(content.formatData)) {
       return;
     }

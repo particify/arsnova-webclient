@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
-  Questionnaire,
   QuestionnairePublishingMode,
+  QuestionnaireSummaryFragment,
 } from '@gql/generated/graphql';
 
 @Injectable({ providedIn: 'root' })
@@ -26,7 +26,7 @@ export class ContentPublishService {
     }
   }
 
-  isLive(questionnaire: Questionnaire): boolean {
+  isLive(questionnaire: QuestionnaireSummaryFragment): boolean {
     return questionnaire.publishingMode === QuestionnairePublishingMode.Live;
   }
 }

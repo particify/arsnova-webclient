@@ -66,10 +66,10 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatCard } from '@angular/material/card';
 import { BackButtonComponent } from '@app/standalone/back-button/back-button.component';
 import {
-  Content,
+  CreatorContentDetailsFragment,
   CreatorQuestionnaireContentUpdatedGql,
   DeleteQuestionnaireGql,
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
@@ -96,7 +96,9 @@ export interface ContentStats {
 }
 
 /** The share of correct answers in percent, if the content has any to score. */
-function correctPercentage(content: Content): number | undefined {
+function correctPercentage(
+  content: CreatorContentDetailsFragment
+): number | undefined {
   if (
     !content.hasCorrectAnswer ||
     content.correctAnswerCount == null ||
@@ -185,7 +187,7 @@ export class QuestionnairePageComponent {
       switchMap((id) =>
         this.questionnaireById.watch({ variables: { id } }).valueChanges.pipe(
           map((r) => r.data?.questionnaireById),
-          filter((n): n is Questionnaire => !!n)
+          filter((n): n is QuestionnaireDetailsFragment => !!n)
         )
       )
     )
@@ -231,7 +233,11 @@ export class QuestionnairePageComponent {
     const edges =
       this.contentsResult()?.data?.questionnaireContentsByQuestionnaireId
         ?.edges;
-    return edges?.map((e) => e?.node).filter((n): n is Content => !!n) ?? [];
+    return (
+      edges
+        ?.map((e) => e?.node)
+        .filter((n): n is CreatorContentDetailsFragment => !!n) ?? []
+    );
   });
   readonly loadingContents = computed(() => this.contentsResult()?.loading);
   /** The average share of correct answers over the scorable contents. */
@@ -322,6 +328,7 @@ export class QuestionnairePageComponent {
     });
     this.breakpointObserver
       .observe(['(min-width: 1000px)'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((changes) => {
         const temp = this.isDesktop();
         this.isDesktop.set(changes.matches);
@@ -390,7 +397,9 @@ export class QuestionnairePageComponent {
   }
 
   /** The content a live questionnaire is running, if it is one of the list. */
-  private startedContentId(questionnaire: Questionnaire): string | undefined {
+  private startedContentId(
+    questionnaire: QuestionnaireDetailsFragment
+  ): string | undefined {
     const round = questionnaire.activeRound;
     if (
       questionnaire.publishingMode !== QuestionnairePublishingMode.Live ||

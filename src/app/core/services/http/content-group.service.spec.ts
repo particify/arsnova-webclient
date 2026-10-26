@@ -2,12 +2,15 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { configureTestModule } from '@testing/test.setup';
 import {
-  Content,
   ContentType,
   QuestionnaireType,
+  ContentDetailsFragment,
 } from '@gql/generated/graphql';
 
-function content(format: ContentType, hasCorrectAnswer: boolean): Content {
+function content(
+  format: ContentType,
+  hasCorrectAnswer: boolean
+): ContentDetailsFragment {
   return {
     __typename: 'Content',
     id: 'content-1',
@@ -25,10 +28,9 @@ function content(format: ContentType, hasCorrectAnswer: boolean): Content {
     hasCorrectAnswer,
     weight: null,
     answerCount: 0,
-    hasAnswers: false,
     abstentionCount: 0,
-    correctAnswerCount: null,
     position: 0,
+    activeRound: null,
   };
 }
 
