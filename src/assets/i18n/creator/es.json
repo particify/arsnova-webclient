@@ -183,6 +183,7 @@
     "numeric-tolerance-negative": "La tolerancia no puede ser negativa.",
     "select-correct-number-in-defined-range": "La respuesta correcta debe encontrarse dentro del intervalo definido.",
     "import-failed": "El formato del archivo no es válido.",
+    "import-file-too-large": "El archivo es demasiado grande para importarlo. Puede tener como máximo {{size}}.",
     "publish-correct-answers-info": "Los participantes pueden ver las respuestas correctas después de haber contestado.",
     "group-progress-info": "Por término medio, {{percent}}% de las respuestas son correctas. {{abstentions}}% se han abstenido.",
     "enable-leaderboard-info": "Los participantes toman parte en el concurso utilizando un seudónimo y pueden compararse en una tabla de clasificación.",
@@ -430,7 +431,12 @@
     "how-to-publish-group": "¿Cómo le gustaría publicar la serie de preguntas?",
     "want-publish-group": "¿Le gustaría publicar la serie de preguntas?",
     "csv-import-errors": "Se ha importado {{importedLines}} del contenido de {{totalLines}}.",
-    "csv-import-errors-line-info": "Se han omitido las siguientes líneas debido a datos no válidos: {{errorLines}}",
+    "csv-import-error-incompatible-format": "Entradas omitidas porque el formato de contenido no está disponible en esta serie de preguntas: {{entries}}.",
+    "csv-import-error-invalid-format-data": "Entradas omitidas por datos no válidos para el formato de contenido: {{entries}}.",
+    "csv-import-error-malformed-record": "Entradas omitidas porque no se pudieron leer: {{entries}}.",
+    "csv-import-error-missing-body": "Entradas omitidas por falta de texto: {{entries}}.",
+    "csv-import-error-unknown-format": "Entradas omitidas por un formato de contenido desconocido: {{entries}}.",
+    "csv-import-unknown-columns": "Columnas ignoradas por ser desconocidas: {{columns}}.",
     "csv-import-errors-header": "Importación incompleta"
   },
   "utils": {

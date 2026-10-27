@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { fromEvent, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { EMPTY, fromEvent, Observable } from 'rxjs';
+import { catchError, filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class LocalFileService {
@@ -11,8 +11,11 @@ export class LocalFileService {
     link.click();
   }
 
+  /** Saves the emitted file; its producer reports a failure itself. */
   download(data: Observable<Blob>, filename: string) {
-    data.subscribe((blob) => this.save(blob, filename));
+    data
+      .pipe(catchError(() => EMPTY))
+      .subscribe((blob) => this.save(blob, filename));
   }
 
   upload(accept?: string[]): Observable<Blob | null> {

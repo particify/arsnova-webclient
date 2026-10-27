@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { Download, expect, Locator, Page } from '@playwright/test';
 import { waitForOperation } from '@e2e/fixtures/shared/graphql';
 
 export class ContentGroupOverviewPage {
@@ -227,6 +227,32 @@ export class ContentGroupOverviewPage {
     await Promise.all([
       waitForOperation(this.page, 'ResetQuestionnaireResults'),
       this.page.getByRole('button', { name: 'Delete' }).click(),
+    ]);
+  }
+
+  /** Exports the contents with the dialog's defaults, CSV in UTF-8. */
+  async exportContents(): Promise<Download> {
+    await this.openGroupMoreMenu();
+    await this.page.getByRole('menuitem', { name: 'Export' }).click();
+    await this.page.getByRole('menuitem', { name: 'Export series' }).click();
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      this.page.getByRole('button', { name: 'Export', exact: true }).click(),
+    ]);
+    return download;
+  }
+
+  async importContents(file: string) {
+    await this.openGroupMoreMenu();
+    const [fileChooser] = await Promise.all([
+      this.page.waitForEvent('filechooser'),
+      this.page.getByRole('menuitem', { name: 'Import contents' }).click(),
+    ]);
+    await Promise.all([
+      this.page.waitForResponse(
+        (res) => res.url().includes('/contents-import') && res.ok()
+      ),
+      fileChooser.setFiles(file),
     ]);
   }
 

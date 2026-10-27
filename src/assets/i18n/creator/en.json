@@ -171,6 +171,7 @@
     "group-settings": "Settings",
     "import-successful": "Your contents has been imported.",
     "import-failed": "Import failed due to invalid file format.",
+    "import-file-too-large": "The file is too large to import. It may be at most {{size}}.",
     "max-keywords": "Keywords per answer",
     "max-keywords-out-of-range": "Keyword limit must be between {{min}} and {{max}}.",
     "no-contents-yet": "There are no contents.",
@@ -431,7 +432,12 @@
     "start": "Start",
     "csv-import-errors-header": "Import incomplete",
     "csv-import-errors": "{{importedLines}} out of {{totalLines}} contents have been imported.",
-    "csv-import-errors-line-info": "The following lines were skipped because of invalid data: {{errorLines}}"
+    "csv-import-error-incompatible-format": "Entries skipped because the content format is not available in this question series: {{entries}}.",
+    "csv-import-error-invalid-format-data": "Entries skipped because of invalid data for the content format: {{entries}}.",
+    "csv-import-error-malformed-record": "Entries skipped because they could not be read: {{entries}}.",
+    "csv-import-error-missing-body": "Entries skipped because of missing text: {{entries}}.",
+    "csv-import-error-unknown-format": "Entries skipped because of an unknown content format: {{entries}}.",
+    "csv-import-unknown-columns": "Columns ignored because they are unknown: {{columns}}."
   },
   "utils": {
     "formatting-image-hint": "Please note that images with a large file size can affect loading times."
