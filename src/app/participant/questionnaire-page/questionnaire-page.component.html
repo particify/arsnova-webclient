@@ -41,7 +41,7 @@
                     [correctOptionsPublished]="
                       !!_questionnaire.correctOptionsPublished
                     "
-                    [attribution]="getAttribution()"
+                    [attribution]="attributionFor(_content.id)"
                     [alias]="alias()"
                     [showCard]="showCard()"
                     [answerResult]="answerResults()[index]?.result"

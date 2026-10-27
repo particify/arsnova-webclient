@@ -6,17 +6,18 @@
     <app-stepper
       [listLength]="data.contents.length"
       [showSteps]="false"
-      (newIndex)="data.index = $event"
+      (newIndex)="index.set($event)"
       [fixedWitdth]="false"
     >
-      @for (content of data.contents; track content; let i = $index) {
+      @for (content of data.contents; track content.id) {
         <cdk-step>
-          <!-- <app-content-preview
-            [contentFormatData]="content().formatData"
+          <app-content-preview
+            [contentFormatData]="content.formatData"
+            [body]="content.body"
             [renderAnswersDynamically]="false"
             [showTitle]="false"
             [language]="data.lang"
-          ></app-content-preview> -->
+          ></app-content-preview>
         </cdk-step>
       }
     </app-stepper>
@@ -41,7 +42,7 @@
   <button
     mat-icon-button
     [matTooltip]="'templates.previous-content' | transloco"
-    [disabled]="data.index === 0"
+    [disabled]="index() === 0"
     (click)="previousContent()"
   >
     <mat-icon>chevron_left</mat-icon>
@@ -52,7 +53,7 @@
   <button
     mat-icon-button
     [matTooltip]="'templates.next-content' | transloco"
-    [disabled]="data.index === data.contents.length - 1"
+    [disabled]="index() === data.contents.length - 1"
     (click)="nextContent()"
   >
     <mat-icon>chevron_right</mat-icon>

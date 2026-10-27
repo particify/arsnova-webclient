@@ -1,7 +1,7 @@
 <mat-form-field fxFill appearance="outline" class="no-field-hint">
   <mat-label>{{ 'templates.tags' | transloco }}</mat-label>
-  <mat-chip-grid #chipGrid [disabled]="formDisabled">
-    @for (tag of selectedTags; track tag) {
+  <mat-chip-grid #chipGrid [disabled]="disabled()">
+    @for (tag of selectedTags(); track tag.name) {
       <mat-chip-row (removed)="remove(tag)">
         {{ tag.name }}
         <button
@@ -16,7 +16,7 @@
       matInput
       #tagInput
       [placeholder]="
-        selectedTags.length === 0 && !allowCreation
+        selectedTags().length === 0 && !allowCreation()
           ? ('templates.select-tags' | transloco)
           : ''
       "
@@ -35,13 +35,15 @@
       [autoSelectActiveOption]="false"
       (optionSelected)="selected($event)"
     >
-      @for (tag of filteredTags; track tag) {
+      @for (tag of filteredTags(); track tag.id) {
         <mat-option [value]="tag.name" [disabled]="isTagSelected(tag)">
           {{ tag.name }}
         </mat-option>
       }
       @if (
-        filteredTags.length === 0 && tagInput.value.length > 0 && allowCreation
+        filteredTags().length === 0 &&
+        tagInput.value.length > 0 &&
+        allowCreation()
       ) {
         <mat-option [disabled]="tagFormControl.invalid">
           <mat-icon>add</mat-icon>

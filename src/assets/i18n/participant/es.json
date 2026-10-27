@@ -61,6 +61,7 @@
     "new-round-started": "Una nueva ronda ha sido iniciada.",
     "answers-reset": "Se han restablecido las respuestas.",
     "attribution-info": "Este contenido está basado en una plantilla de {{attribution}} que está licenciada bajo {{license}}.",
+    "attribution-info-upstream": "Esa plantilla está basada en una plantilla de {{attribution}} que está licenciada bajo {{license}}.",
     "leaderboard-duration": "Tiempo",
     "leaderboard-points": "Puntos",
     "you-are-at-position-congrats": "¡Estás en {{ position }} lugar!",

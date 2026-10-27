@@ -164,6 +164,7 @@
     "correct-answer": "Respuesta correcta",
     "numeric-minimum-has-to-be-lower-than-maximum": "El mínimo debe ser menor que el máximo.",
     "attribution-info-slide": "Diapositiva informativa de atribución",
+    "attribution-upstream": "basado en una plantilla de {{attribution}}",
     "use-as-template": "Utilizar como plantilla",
     "create-template-not-possible": "Inicie sesión para crear plantillas.",
     "format-numeric": "Encontrar el número",

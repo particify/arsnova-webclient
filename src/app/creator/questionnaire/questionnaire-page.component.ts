@@ -44,13 +44,14 @@ import {
 } from '@app/core/services/util/notification.service';
 import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/_dialogs/create-content-group-template/create-content-group-template.component';
 import { ExportOptions } from '@app/creator/questionnaire/_dialogs/export/export.component';
+import { isLicensedAttribution } from '@app/standalone/attributions-info/attributions-info.component';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { QuestionnaireSettingsComponent } from '@app/standalone/questionnaire-settings/questionnaire-settings.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import { evictRounds } from '@gql/helper/evict-round-stats';
-import { Apollo } from 'apollo-angular';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
 import {
   switchMap,
   map,
@@ -90,6 +91,7 @@ import {
   QuestionnaireType,
   QuestionnaireUpdatedGql,
   ResetQuestionnaireResultsGql,
+  TemplateContentAttributionsByQuestionnaireIdGql,
   ToggleQuestionnairePublishedGql,
 } from '@gql/generated/graphql';
 import { QuestionnaireInfoComponent } from '@app/standalone/questionnaire-info/questionnaire-info.component';
@@ -213,6 +215,9 @@ export class QuestionnairePageComponent {
   private readonly questionnaireUpdated = inject(QuestionnaireUpdatedGql);
   private readonly apollo = inject(Apollo);
   private readonly csvService = inject(QuestionnaireCsvService);
+  private readonly attributionsByQuestionnaireId = inject(
+    TemplateContentAttributionsByQuestionnaireIdGql
+  );
 
   readonly userRole = input.required<UserRole>();
   readonly roomId = input.required<string>();
@@ -318,7 +323,26 @@ export class QuestionnairePageComponent {
     { initialValue: true }
   );
 
-  attributionsExist = false;
+  private readonly attributions = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((questionnaireId) =>
+        this.attributionsByQuestionnaireId
+          .watch({ variables: { questionnaireId } })
+          .valueChanges.pipe(
+            onlyCompleteData(),
+            map((r) => r.data.templateContentAttributionsByQuestionnaireId),
+            catchError(() => EMPTY)
+          )
+      )
+    ),
+    { initialValue: [] }
+  );
+  readonly attributionsExist = computed(() => {
+    const contentIds = new Set(this.contents().map((c) => c.id));
+    return this.attributions().some(
+      (a) => contentIds.has(a.contentId) && isLicensedAttribution(a)
+    );
+  });
   QuestionnaireType = QuestionnaireType;
   readonly showLeaderboard = signal(false);
   showAttributions = false;
@@ -690,7 +714,7 @@ export class QuestionnairePageComponent {
       width: '600px',
       data: {
         name: this.questionnaire()?.name,
-        contentGroupId: this.questionnaireId(),
+        questionnaireId: this.questionnaireId(),
       },
     });
   }

@@ -8,16 +8,16 @@
     >
       <mat-tab-group
         (selectedTabChange)="switchList($event)"
-        [selectedIndex]="showPublic ? 0 : 1"
+        [selectedIndex]="showPublic() ? 0 : 1"
         [disablePagination]="true"
       >
         <mat-tab [label]="'templates.public-templates' | transloco"> </mat-tab>
         <mat-tab [label]="'templates.my-templates' | transloco"> </mat-tab>
       </mat-tab-group>
-      @if (showPublic) {
+      @if (showPublic()) {
         <app-template-language-selection
           fxFlex.xs="100"
-          [defaultLang]="selectedLang"
+          [defaultLang]="selectedLang()"
           [smaller]="true"
           (selectedLangChange)="
             updateLanguage($safeNavigationMigration($event?.code))
@@ -27,29 +27,27 @@
     </div>
 
     <div class="selection-container" fxLayout="column" fxLayoutGap="1em">
-      @if (showPublic && selectedLang) {
+      @if (showPublic() && selectedLang(); as lang) {
         <app-template-tag-selection
-          (selectedTagsChanged)="updateTags($event)"
-          [lang]="selectedLang"
-          [langChanged]="langChanged"
-          [selectedTags]="selectedTags"
-          [selectedTagIds]="tagIdsQueryParams"
+          (selectedTagsChange)="updateTags($event)"
+          [lang]="lang"
+          [selectedTags]="selectedTags()"
+          [selectedTagIds]="tagIdsQueryParams()"
         ></app-template-tag-selection>
       }
       <div fxLayout="column" fxLayoutGap="1em">
-        @if (loadingTemplates) {
+        @if (loadingTemplates()) {
           <app-loading-indicator></app-loading-indicator>
         }
-        @if (!loadingTemplates && templates.length === 0) {
+        @if (!loadingTemplates() && templates().length === 0) {
           <div fxLayoutAlign="center">
             <p class="hint">{{ 'templates.no-templates-found' | transloco }}</p>
           </div>
         }
         <div fxLayout="column" fxLayoutGap="10px">
-          @for (template of templates; track template) {
+          @for (template of templates(); track template.id) {
             <app-content-group-template
               [template]="template"
-              [room]="room"
               (previewClicked)="showPreview($event)"
             ></app-content-group-template>
           }

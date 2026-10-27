@@ -131,6 +131,7 @@
     "banned-keywords-reset": "Le parole chiave vietate sono state ripristinate.",
     "start-new-round": "Inizia un nuovo round",
     "attribution-info-slide": "Diapositiva informativa di attribuzione",
+    "attribution-upstream": "basato su un modello di {{attribution}}",
     "attributions": "Attribuzioni",
     "attributions-subheader": "I contenuti seguenti si basano su modelli pubblicati con licenze Creative Commons.",
     "content": "Contenuto",

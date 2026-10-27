@@ -4,7 +4,6 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { TemplateService } from '@app/admin/template-management/template.service';
 import {
   ViolationReport,
   ViolationReportDecision,
@@ -24,6 +23,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { MatCard } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { AdminDeleteTemplateGql } from '@gql/generated/graphql';
 
 @Component({
   selector: 'app-report-management',
@@ -46,7 +46,7 @@ export class ReportManagementComponent implements OnInit {
   private violationReportService = inject(ViolationReportService);
   private dialogService = inject(DialogService);
   private translateService = inject(TranslocoService);
-  private templateService = inject(TemplateService);
+  private adminDeleteTemplate = inject(AdminDeleteTemplateGql);
   private notificationService = inject(NotificationService);
 
   isLoading = true;
@@ -117,7 +117,9 @@ export class ReportManagementComponent implements OnInit {
           AdvancedSnackBarTypes.WARNING
         );
         if (shouldRemove && report.targetType === 'ContentGroupTemplate') {
-          this.templateService.deleteTemplate(report.targetId).subscribe();
+          this.adminDeleteTemplate
+            .mutate({ variables: { id: report.targetId } })
+            .subscribe();
         }
       }
     });

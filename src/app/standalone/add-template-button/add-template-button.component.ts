@@ -1,13 +1,7 @@
-import {
-  Component,
-  Input,
-  inject,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
-import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
@@ -16,18 +10,30 @@ import {
 import { RoomSelectionComponent } from '@app/standalone/_dialogs/room-selection/room-selection.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { Room, RoomMembershipsGql, RoomRole } from '@gql/generated/graphql';
+import {
+  CreateQuestionnaireFromTemplateGql,
+  QuestionnairesByRoomIdDocument,
+  Room,
+  RoomMembershipsGql,
+  RoomRole,
+} from '@gql/generated/graphql';
 import { TranslocoService } from '@jsverse/transloco';
 import { filter, map, takeUntil } from 'rxjs';
+
+interface TargetRoom {
+  id: string;
+  shortId: string;
+}
 
 @Component({
   selector: 'app-add-template-button',
   imports: [CoreModule, LoadingButtonComponent],
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './add-template-button.component.html',
 })
 export class AddTemplateButtonComponent extends FormComponent {
-  private templateService = inject(BaseTemplateService);
+  private createQuestionnaireFromTemplate = inject(
+    CreateQuestionnaireFromTemplateGql
+  );
   private translateService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
   private dialog = inject(MatDialog);
@@ -35,15 +41,16 @@ export class AddTemplateButtonComponent extends FormComponent {
   private dialogService = inject(DialogService);
   private roomMembershipsGql = inject(RoomMembershipsGql);
 
-  @Input({ required: true }) templateId!: string;
-  @Input({ required: true }) templateName!: string;
-  @Input() room?: Room;
-  routeAfterSuccess: string[] = [];
+  readonly templateId = input.required<string>();
+  readonly templateName = input.required<string>();
+  readonly roomId = input<string>();
+  readonly shortId = input<string>();
 
   useTemplate(): void {
-    if (this.room) {
-      this.setRoute(this.room.shortId);
-      this.createTemplate(this.room.id);
+    const roomId = this.roomId();
+    const shortId = this.shortId();
+    if (roomId && shortId) {
+      this.createQuestionnaire({ id: roomId, shortId });
     } else {
       this.disableForm();
       this.roomMembershipsGql
@@ -67,14 +74,13 @@ export class AddTemplateButtonComponent extends FormComponent {
               this.openRoomSelectionDialog(r);
             } else {
               const dialogRef = this.dialogService.openRoomCreateDialog(
-                this.templateName,
+                this.templateName(),
                 undefined,
                 false
               );
-              dialogRef.afterClosed().subscribe((room) => {
+              dialogRef.afterClosed().subscribe((room?: TargetRoom) => {
                 if (room) {
-                  this.setRoute(room.shortId);
-                  this.createTemplate(room.id, false);
+                  this.createQuestionnaire(room, false);
                 }
               });
             }
@@ -83,10 +89,15 @@ export class AddTemplateButtonComponent extends FormComponent {
     }
   }
 
-  private createTemplate(roomId: string, showNotification = true): void {
+  private createQuestionnaire(room: TargetRoom, showNotification = true): void {
     this.disableForm();
-    this.templateService
-      .createCopyFromContentGroupTemplate(this.templateId, roomId)
+    this.createQuestionnaireFromTemplate
+      .mutate({
+        variables: {
+          input: { roomId: room.id, templateId: this.templateId() },
+        },
+        refetchQueries: [QuestionnairesByRoomIdDocument],
+      })
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: () => {
@@ -100,18 +111,12 @@ export class AddTemplateButtonComponent extends FormComponent {
             );
           }
           this.enableForm();
-          if (this.routeAfterSuccess) {
-            this.router.navigate(this.routeAfterSuccess);
-          }
+          this.router.navigate(['edit', room.shortId]);
         },
         error: () => {
           this.enableForm();
         },
       });
-  }
-
-  private setRoute(shortId: string): void {
-    this.routeAfterSuccess = ['edit', shortId];
   }
 
   private openRoomSelectionDialog(rooms: Room[]): void {
@@ -123,8 +128,7 @@ export class AddTemplateButtonComponent extends FormComponent {
     });
     dialogRef.afterClosed().subscribe((room?: Room) => {
       if (room) {
-        this.setRoute(room.shortId);
-        this.createTemplate(room.id);
+        this.createQuestionnaire(room);
       }
     });
   }

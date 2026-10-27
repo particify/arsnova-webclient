@@ -1,0 +1,145 @@
+fragment TemplateLicense on TemplateLicense {
+  id
+  name
+  url
+}
+
+fragment TemplateTag on TemplateTag {
+  id
+  name
+  verified
+}
+
+fragment TemplateDetails on Template {
+  id
+  aiGenerated
+  attribution
+  contentCount
+  createdByCurrentUser
+  description
+  language
+  license {
+    ...TemplateLicense
+  }
+  name
+  published
+  questionnaireId
+  questionnaireType
+  tags {
+    ...TemplateTag
+  }
+}
+
+query PublishedTemplates(
+  $query: TemplateQueryInput
+  $first: Int!
+  $after: String
+) {
+  publishedTemplates(query: $query, first: $first, after: $after) {
+    edges {
+      node {
+        ...TemplateDetails
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+query CurrentUserTemplates($first: Int!, $after: String) {
+  currentUserTemplates(first: $first, after: $after) {
+    edges {
+      node {
+        ...TemplateDetails
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+query TemplateById($id: UUID!) {
+  templateById(id: $id) {
+    ...TemplateDetails
+  }
+}
+
+query TemplateContentAttributionsByQuestionnaireId($questionnaireId: UUID!) {
+  templateContentAttributionsByQuestionnaireId(
+    questionnaireId: $questionnaireId
+  ) {
+    attribution
+    contentId
+    license {
+      ...TemplateLicense
+    }
+    templateId
+    upstreamAttributions {
+      attribution
+      license {
+        ...TemplateLicense
+      }
+      templateId
+    }
+  }
+}
+
+query TemplateLicenses {
+  templateLicenses {
+    ...TemplateLicense
+  }
+}
+
+query TemplateTagsByLanguage($language: String!, $verified: Boolean! = true) {
+  templateTagsByLanguage(language: $language, verified: $verified) {
+    ...TemplateTag
+  }
+}
+
+mutation AdminDeleteTemplate($id: UUID!) {
+  adminDeleteTemplate(id: $id)
+}
+
+mutation AdminDeleteTemplateTag($id: UUID!) {
+  adminDeleteTemplateTag(id: $id)
+}
+
+mutation AdminUpdateTemplateTagName($id: UUID!, $name: String!) {
+  adminUpdateTemplateTagName(id: $id, name: $name) {
+    ...TemplateTag
+  }
+}
+
+mutation AdminUpdateTemplateTagVerified($id: UUID!, $verified: Boolean!) {
+  adminUpdateTemplateTagVerified(id: $id, verified: $verified) {
+    ...TemplateTag
+  }
+}
+
+mutation CreateTemplateFromQuestionnaire(
+  $input: CreateTemplateFromQuestionnaireInput!
+) {
+  createTemplateFromQuestionnaire(input: $input) {
+    ...TemplateDetails
+  }
+}
+
+mutation DeleteTemplate($id: UUID!) {
+  deleteTemplate(id: $id)
+}
+
+mutation UpdateTemplate($input: UpdateTemplateInput!) {
+  updateTemplate(input: $input) {
+    ...TemplateDetails
+  }
+}

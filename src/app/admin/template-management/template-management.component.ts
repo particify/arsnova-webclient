@@ -1,13 +1,15 @@
 import {
   Component,
+  DestroyRef,
   OnInit,
+  computed,
   inject,
-  ChangeDetectionStrategy,
+  signal,
+  untracked,
 } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
-import { TemplateService } from '@app/admin/template-management/template.service';
-import { TemplateTag } from '@app/core/models/template-tag';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
@@ -15,7 +17,14 @@ import {
 } from '@app/core/services/util/notification.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { forkJoin } from 'rxjs';
+import { Observable, forkJoin, map, of, switchMap } from 'rxjs';
+import {
+  AdminDeleteTemplateTagGql,
+  AdminUpdateTemplateTagNameGql,
+  AdminUpdateTemplateTagVerifiedGql,
+  TemplateTagFragment,
+  TemplateTagsByLanguageGql,
+} from '@gql/generated/graphql';
 import { FlexModule } from '@angular/flex-layout';
 import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -40,7 +49,6 @@ enum FILTER {
   selector: 'app-template-management',
   templateUrl: './template-management.component.html',
   styleUrls: ['./template-management.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     AdminPageHeaderComponent,
@@ -66,71 +74,129 @@ export class TemplateManagementComponent
   extends FormComponent
   implements OnInit
 {
-  private templateService = inject(TemplateService);
+  private templateTagsByLanguage = inject(TemplateTagsByLanguageGql);
+  private adminDeleteTemplateTag = inject(AdminDeleteTemplateTagGql);
+  private adminUpdateTemplateTagName = inject(AdminUpdateTemplateTagNameGql);
+  private adminUpdateTemplateTagVerified = inject(
+    AdminUpdateTemplateTagVerifiedGql
+  );
   private notificationService = inject(NotificationService);
   private translateService = inject(TranslocoService);
   private dialogService = inject(DialogService);
+  private destroyRef = inject(DestroyRef);
 
-  isLoading = true;
-  tags: TemplateTag[] = [];
-  filteredTags: TemplateTag[] = [];
-  currentFilter = FILTER.ALL;
+  readonly isLoading = signal(true);
+  readonly tags = signal<TemplateTagFragment[]>([]);
+  readonly currentFilter = signal(FILTER.ALL);
   FILTER = FILTER;
   filterOptions = Object.values(FILTER);
   searchFormControl = new FormControl('');
+  private readonly search = toSignal(this.searchFormControl.valueChanges, {
+    initialValue: '',
+  });
+
+  /** Changes only when tags are loaded or deleted, not when one is updated. */
+  private readonly tagIds = computed(() => this.tags().map((t) => t.id), {
+    equal: (a, b) => a.length === b.length && a.every((id, i) => id === b[i]),
+  });
+
+  /**
+   * An updated tag stays where it is listed, even if it no longer matches,
+   * until the filter, the search or the set of tags changes. The tags are
+   * matched when the list is read, which the view does before any of them
+   * can be updated from it.
+   */
+  private readonly listedTagIds = computed(() => {
+    this.tagIds();
+    const filter = this.currentFilter();
+    const search = this.search()?.toLowerCase();
+    const tags = untracked(this.tags);
+    return new Set(
+      tags
+        .filter(
+          (t) =>
+            (filter === FILTER.ALL ||
+              t.verified === (filter === FILTER.VERIFIED)) &&
+            (!search || t.name.toLowerCase().includes(search))
+        )
+        .map((t) => t.id)
+    );
+  });
+
+  readonly filteredTags = computed(() => {
+    const listed = this.listedTagIds();
+    return this.tags().filter((t) => listed.has(t.id));
+  });
 
   ngOnInit(): void {
     this.loadTags(this.translateService.getActiveLang());
-    this.searchFormControl.valueChanges.subscribe((input) => {
-      this.searchTags(input || '');
-    });
   }
 
   loadTags(lang?: string): void {
     if (!lang) {
       return;
     }
-    this.isLoading = true;
+    this.isLoading.set(true);
     forkJoin([
-      this.templateService.getTemplateTags(lang, false),
-      this.templateService.getTemplateTags(lang, true),
+      this.fetchTags(lang, false),
+      this.fetchTags(lang, true),
     ]).subscribe((tags) => {
-      this.tags = tags.flat();
-      this.filterTags(this.currentFilter);
-      this.isLoading = false;
+      this.tags.set([...new Map(tags.flat().map((t) => [t.id, t])).values()]);
+      this.isLoading.set(false);
     });
   }
 
-  toggleVerified(tag: TemplateTag): void {
-    const changes = { verified: !tag.verified };
-    this.templateService
-      .patchTemplateTag(tag.id, changes)
-      .subscribe((updatedTag) => {
-        tag.verified = updatedTag.verified;
-        const msg = this.translateService.translate(
-          tag.verified
-            ? 'admin.admin-area.tag-has-been-verified'
-            : 'admin.admin-area.tag-verification-has-been-removed'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-      });
+  private fetchTags(
+    language: string,
+    verified: boolean
+  ): Observable<TemplateTagFragment[]> {
+    return this.templateTagsByLanguage
+      .fetch({
+        variables: { language, verified },
+        fetchPolicy: 'network-only',
+      })
+      .pipe(map((r) => r.data?.templateTagsByLanguage ?? []));
   }
 
-  delete(tag: TemplateTag): void {
+  private replaceTag(tag: TemplateTagFragment): void {
+    this.tags.update((tags) => tags.map((t) => (t.id === tag.id ? tag : t)));
+  }
+
+  private updateVerified(
+    id: string,
+    verified: boolean
+  ): Observable<TemplateTagFragment | undefined> {
+    return this.adminUpdateTemplateTagVerified
+      .mutate({ variables: { id, verified } })
+      .pipe(map((r) => r.data?.adminUpdateTemplateTagVerified));
+  }
+
+  toggleVerified(tag: TemplateTagFragment): void {
+    this.updateVerified(tag.id, !tag.verified).subscribe((updatedTag) => {
+      if (!updatedTag) {
+        return;
+      }
+      this.replaceTag(updatedTag);
+      const msg = this.translateService.translate(
+        updatedTag.verified
+          ? 'admin.admin-area.tag-has-been-verified'
+          : 'admin.admin-area.tag-verification-has-been-removed'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+    });
+  }
+
+  delete(tag: TemplateTagFragment): void {
     const dialogRef = this.dialogService.openDeleteDialog(
       'delete-tag',
       'admin.dialog.really-delete-tag',
       tag.name,
       undefined,
-      () => this.templateService.deleteTemplateTag(tag.id)
+      () => this.adminDeleteTemplateTag.mutate({ variables: { id: tag.id } })
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.tags = this.tags.filter((t) => t.id !== tag.id);
-        this.filterTags(this.currentFilter);
+        this.tags.update((tags) => tags.filter((t) => t.id !== tag.id));
         const msg = this.translateService.translate(
           'admin.admin-area.tag-deleted'
         );
@@ -142,7 +208,7 @@ export class TemplateManagementComponent
     });
   }
 
-  edit(tag: TemplateTag): void {
+  edit(tag: TemplateTagFragment): void {
     const dialogRef = this.dialogService.openDialog(InputDialogComponent, {
       data: {
         inputName: 'tag',
@@ -150,13 +216,15 @@ export class TemplateManagementComponent
         input: tag.name,
       },
     });
-    dialogRef.componentInstance.clicked$.subscribe((name) => {
-      const changes = { name: name, verified: true };
-      this.templateService
-        .patchTemplateTag(tag.id, changes)
-        .subscribe((updatedTag) => {
+    dialogRef.componentInstance.clicked$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((name) => {
+        this.renameAndVerify(tag, name).subscribe((updatedTag) => {
           this.formService.enableForm();
           dialogRef.close();
+          if (!updatedTag) {
+            return;
+          }
           const msg = this.translateService.translate(
             tag.verified
               ? 'admin.admin-area.changes-have-been-saved'
@@ -166,30 +234,31 @@ export class TemplateManagementComponent
             msg,
             AdvancedSnackBarTypes.SUCCESS
           );
-          tag.name = updatedTag.name;
-          tag.verified = updatedTag.verified;
+          this.replaceTag(updatedTag);
         });
-    });
+      });
+  }
+
+  private renameAndVerify(
+    tag: TemplateTagFragment,
+    name: string
+  ): Observable<TemplateTagFragment | undefined> {
+    const renamed$ =
+      name === tag.name
+        ? of(tag)
+        : this.adminUpdateTemplateTagName
+            .mutate({ variables: { id: tag.id, name } })
+            .pipe(map((r) => r.data?.adminUpdateTemplateTagName));
+    return renamed$.pipe(
+      switchMap((renamed) =>
+        renamed && !renamed.verified
+          ? this.updateVerified(renamed.id, true)
+          : of(renamed)
+      )
+    );
   }
 
   filterTags(filter: FILTER): void {
-    this.currentFilter = filter;
-    if (filter === FILTER.ALL) {
-      this.filteredTags = this.tags;
-    } else {
-      this.filteredTags = this.tags.filter(
-        (t) => t.verified === (filter === FILTER.VERIFIED)
-      );
-    }
-  }
-
-  searchTags(input: string): void {
-    if (input) {
-      this.filteredTags = this.filteredTags.filter((t) =>
-        t.name.toLowerCase().includes(input.toLowerCase())
-      );
-    } else {
-      this.filterTags(this.currentFilter);
-    }
+    this.currentFilter.set(filter);
   }
 }

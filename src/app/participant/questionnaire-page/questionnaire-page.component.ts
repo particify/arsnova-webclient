@@ -35,8 +35,6 @@ import {
 } from 'rxjs';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
-import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
-import { LICENSES } from '@app/core/models/licenses';
 import { SeriesOverviewComponent } from '@app/participant/series-overview/series-overview.component';
 import { ContentParticipantComponent } from '@app/participant/content/content-participant/content-participant.component';
 import { CdkStep } from '@angular/cdk/stepper';
@@ -62,6 +60,8 @@ import {
   QuestionnairePublishingMode,
   QuestionnaireUpdatedGql,
   RoomUserAliasByRoomIdGql,
+  TemplateContentAttributionsByQuestionnaireIdGql,
+  TemplateLicenseFragment,
   UserUiSettings,
   QuestionnaireType,
   ContentType,
@@ -128,6 +128,9 @@ export class QuestionnairePageComponent {
     QuestionnaireContentUpdatedGql
   );
   private readonly notificationService = inject(NotificationService);
+  private readonly attributionsByQuestionnaireId = inject(
+    TemplateContentAttributionsByQuestionnaireIdGql
+  );
   private readonly roomUserAliasByRoomId = inject(RoomUserAliasByRoomIdGql);
 
   stepper = viewChild(StepperComponent);
@@ -261,6 +264,21 @@ export class QuestionnairePageComponent {
 
   readonly loadingContents = computed(() => !this.contentsResult());
 
+  private readonly attributions = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((questionnaireId) =>
+        this.attributionsByQuestionnaireId
+          .watch({ variables: { questionnaireId } })
+          .valueChanges.pipe(
+            onlyCompleteData(),
+            map((r) => r.data.templateContentAttributionsByQuestionnaireId),
+            catchError(() => EMPTY)
+          )
+      )
+    ),
+    { initialValue: [] }
+  );
+
   readonly contentIndexes = computed(() =>
     Array.from(Array(this.questionnaire()?.contentCount ?? 0).keys())
   );
@@ -334,8 +352,6 @@ export class QuestionnairePageComponent {
     this.contents().every((c) => this.isInfoContent(c))
   );
   hasAnsweredLastContent = false;
-
-  attributions: ContentLicenseAttribution[] = [];
 
   private readonly aliasRoomId = computed(() =>
     this.questionnaire()?.leaderboardEnabled ? this.roomId() : undefined
@@ -733,26 +749,45 @@ export class QuestionnairePageComponent {
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
-  getAttribution(): string | undefined {
-    if (!this.attributions) {
+  /**
+   * The licence notice of a content copied from a template, followed by the
+   * credits further up its chain of templates, nearest first. CC0 needs none.
+   */
+  attributionFor(contentId: string): string | undefined {
+    const attribution = this.attributions().find(
+      (a) => a.contentId === contentId
+    );
+    if (!attribution) {
       return;
     }
-    const attribution = this.attributions.find(
-      (a) =>
-        this.currentStep !== undefined &&
-        a.contentId === this.contents()[this.currentStep].id
-    );
-    if (!attribution || attribution.license === 'CC0-1.0') {
+    const notices = [
+      this.licenseNotice('participant.content.attribution-info', attribution),
+      ...attribution.upstreamAttributions.map((upstream) =>
+        this.licenseNotice(
+          'participant.content.attribution-info-upstream',
+          upstream
+        )
+      ),
+    ].filter((notice): notice is string => !!notice);
+    return notices.length ? notices.join(' ') : undefined;
+  }
+
+  private licenseNotice(
+    key: string,
+    credit: {
+      attribution?: string | null;
+      license?: TemplateLicenseFragment | null;
+    }
+  ): string | undefined {
+    const license = credit.license;
+    if (!license || license.id === 'CC0-1.0') {
       return;
     }
-    return this.translateService.translate(
-      'participant.content.attribution-info',
-      {
-        attribution:
-          attribution.attribution ||
-          this.translateService.translate('general.anonymous'),
-        license: LICENSES.get(attribution.license)?.name,
-      }
-    );
+    return this.translateService.translate(key, {
+      attribution:
+        credit.attribution ||
+        this.translateService.translate('general.anonymous'),
+      license: license.name,
+    });
   }
 }

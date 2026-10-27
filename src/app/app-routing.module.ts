@@ -25,8 +25,6 @@ import { completeLoginGuard } from '@app/core/guards/complete-login.guard';
 import { provideTranslocoScope } from '@jsverse/transloco';
 import { DialogService } from './core/services/util/dialog.service';
 import { FocusModeService } from './creator/_services/focus-mode.service';
-import { TemplateService as CreatorTemplateService } from './creator/_services/template.service';
-import { TemplateService as AdminTemplateService } from '@app/admin/template-management/template.service';
 import { ContentCarouselService } from './core/services/util/content-carousel.service';
 import { VerifyUserComponent } from '@app/standalone/verify-user/verify-user.component';
 import { VerifyUserInvitationComponent } from '@app/standalone/verify-user-invitation/verify-user-invitation.component';
@@ -177,11 +175,7 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    providers: [
-      provideTranslocoScope('admin'),
-      AdminTemplateService,
-      DialogService,
-    ],
+    providers: [provideTranslocoScope('admin'), DialogService],
     loadChildren: () =>
       import('./admin/admin-routing.module').then((m) => m.AdminRoutingModule),
     title: 'admin',
@@ -192,7 +186,6 @@ const routes: Routes = [
       provideTranslocoScope('creator'),
       DialogService,
       FocusModeService,
-      CreatorTemplateService,
     ],
     loadChildren: () =>
       import('./creator/creator-routing.module').then(

@@ -1,22 +1,19 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { ContentGroupTemplateComponent } from './content-group-template.component';
-import { ContentGroupTemplate } from '@app/core/models/content-group-template';
-import { BaseTemplateService } from '@app/core/services/http/base-template.service';
-import { RoomMembershipService } from '@app/core/services/room-membership.service';
-import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { GroupType } from '@app/core/models/content-group';
-
-class MockService {}
+import {
+  QuestionnaireType,
+  TemplateDetailsFragment,
+} from '@gql/generated/graphql';
 
 class MockContentGroupService {
-  private typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
-    [GroupType.MIXED, 'dashboard'],
-    [GroupType.QUIZ, 'sports_esports'],
-    [GroupType.SURVEY, 'tune'],
-    [GroupType.FLASHCARDS, 'school'],
+  private typeIcons = new Map<QuestionnaireType, string>([
+    [QuestionnaireType.Mixed, 'dashboard'],
+    [QuestionnaireType.Quiz, 'sports_esports'],
+    [QuestionnaireType.Survey, 'tune'],
+    [QuestionnaireType.Flashcards, 'school'],
   ]);
-  getTypeIcons() {
+  getQuestionnaireTypeIcons() {
     return this.typeIcons;
   }
 }
@@ -29,18 +26,6 @@ export default {
     moduleMetadata({
       imports: [ContentGroupTemplateComponent],
       providers: [
-        {
-          provide: BaseTemplateService,
-          useClass: MockService,
-        },
-        {
-          provide: RoomMembershipService,
-          useClass: MockService,
-        },
-        {
-          provide: RoutingService,
-          useClass: MockService,
-        },
         {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
@@ -58,126 +43,97 @@ const tags = [
   { id: 'tagId3', name: 'tag 3', verified: true },
 ];
 
-const privateTemplate = new ContentGroupTemplate(
-  'Template name',
-  'This is a description.',
-  'en',
-  false,
-  tags,
-  'CC-1.0',
-  false,
-  undefined,
-  ['templateId1', 'templateId2', 'templateId3', 'templateId4']
-);
-privateTemplate.groupType = GroupType.MIXED;
+const CC_BY = {
+  id: 'CC-BY-4.0',
+  name: 'CC BY 4.0',
+  url: 'https://creativecommons.org/licenses/by/4.0/',
+};
+
+function template(
+  changes: Partial<TemplateDetailsFragment>
+): TemplateDetailsFragment {
+  return {
+    id: 'templateId',
+    aiGenerated: false,
+    attribution: 'Attribution',
+    contentCount: 4,
+    createdByCurrentUser: false,
+    description: 'This is a description.',
+    language: 'en',
+    license: CC_BY,
+    name: 'Template name',
+    published: true,
+    questionnaireId: 'templateId',
+    questionnaireType: QuestionnaireType.Mixed,
+    tags,
+    ...changes,
+  };
+}
 
 export const ContentGroupTemplatePrivate: Story = {
   args: {
-    template: privateTemplate,
+    template: template({ published: false, license: null, attribution: null }),
   },
 };
-
-const templateWithAttribution = new ContentGroupTemplate(
-  'Template name',
-  'This is a description.',
-  'en',
-  true,
-  tags,
-  'CC-BY-4.0',
-  false,
-  'Attribution',
-  ['templateId1', 'templateId2', 'templateId3', 'templateId4']
-);
-templateWithAttribution.groupType = GroupType.MIXED;
 
 export const ContentGroupTemplateWithAttribution: Story = {
   args: {
-    template: templateWithAttribution,
+    template: template({}),
   },
 };
-
-const templateWithoutAttribution = new ContentGroupTemplate(
-  'Template name',
-  'This is a description.',
-  'en',
-  true,
-  tags,
-  'CC0-1.0',
-  false,
-  undefined,
-  ['templateId1', 'templateId2', 'templateId3', 'templateId4']
-);
-templateWithoutAttribution.groupType = GroupType.MIXED;
 
 export const ContentGroupTemplateWithoutAttribution: Story = {
   args: {
-    template: templateWithoutAttribution,
+    template: template({
+      attribution: null,
+      license: {
+        id: 'CC0-1.0',
+        name: 'CC0 1.0',
+        url: 'https://creativecommons.org/publicdomain/zero/1.0/',
+      },
+    }),
   },
 };
-
-const templateWithAttributionAiGenerated = new ContentGroupTemplate(
-  'Template name',
-  'This is a description.',
-  'en',
-  true,
-  tags,
-  'CC-BY-4.0',
-  true,
-  'Attribution',
-  ['templateId1', 'templateId2', 'templateId3', 'templateId4']
-);
-templateWithAttributionAiGenerated.groupType = GroupType.SURVEY;
 
 export const ContentGroupTemplateWithAttributionAiGenerated: Story = {
   args: {
-    template: templateWithAttributionAiGenerated,
+    template: template({
+      aiGenerated: true,
+      questionnaireType: QuestionnaireType.Survey,
+    }),
   },
 };
-
-const templateWithOneContent = new ContentGroupTemplate(
-  'Template name',
-  'This is a description.',
-  'en',
-  true,
-  tags,
-  'CC-BY-4.0',
-  false,
-  'Attribution',
-  ['templateId1']
-);
-templateWithOneContent.groupType = GroupType.QUIZ;
 
 export const ContentGroupTemplateWithOneTemplate: Story = {
   args: {
-    template: templateWithOneContent,
+    template: template({
+      contentCount: 1,
+      questionnaireType: QuestionnaireType.Quiz,
+    }),
   },
 };
 
-const longTags = [
-  { id: 'tagId1', name: 'This is a longer tag', verified: true },
-  {
-    id: 'tagId2',
-    name: 'This tag is even longer than the first one',
-    verified: true,
-  },
-  { id: 'tagId3', name: 'This is long as well', verified: true },
-];
-
-const templateWithManyLongTags = new ContentGroupTemplate(
-  'Template name',
-  'This is a description.',
-  'en',
-  true,
-  longTags,
-  'CC-BY-4.0',
-  false,
-  'Attribution',
-  ['templateId1', 'templateId2', 'templateId3', 'templateId4']
-);
-templateWithManyLongTags.groupType = GroupType.QUIZ;
-
 export const ContentGroupTemplateWithManyLongTags: Story = {
   args: {
-    template: templateWithManyLongTags,
+    template: template({
+      questionnaireType: QuestionnaireType.Quiz,
+      tags: [
+        {
+          id: 'tagId1',
+          name: 'This is a longer tag',
+          verified: true,
+        },
+        {
+          id: 'tagId2',
+          name: 'This tag is even longer than the first one',
+          verified: true,
+        },
+        {
+          id: 'tagId3',
+          name: 'This is long as well',
+          verified: true,
+        },
+      ],
+    }),
   },
 };

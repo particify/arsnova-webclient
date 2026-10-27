@@ -1,19 +1,36 @@
-<!-- <h2>{{ 'creator.content.attributions' | transloco }}</h2>
+<h2>{{ 'creator.content.attributions' | transloco }}</h2>
 <p class="subheader">
   {{ 'creator.content.attributions-subheader' | transloco }}
 </p>
 <mat-list>
-  @for (attribution of attributions.value(); track attribution) {
-    <mat-list-item class="bottom-border">
-      <span>{{ 'creator.content.content' | transloco }}</span>
-      <span>
-        {{ getContentIndex(attribution.contentId) + 1 + ':' }}
+  @for (item of items(); track item.contentId) {
+    <mat-list-item
+      class="bottom-border"
+      [class.with-upstream]="item.upstream.length > 0"
+    >
+      <span matListItemTitle>
+        <span>{{ 'creator.content.content' | transloco }}</span>
+        <span>{{ ' ' + item.contentNumber + ': ' }}</span>
+        <span>{{ item.attribution || ('general.anonymous' | transloco) }}</span>
+        @if (item.licenseName) {
+          <span>{{ ', ' + item.licenseName }}</span>
+        }
       </span>
-      <span>{{
-        (attribution.attribution || ('general.anonymous' | transloco)) +
-          ', ' +
-          LICENSES.get(attribution.license)?.name
-      }}</span>
+      @for (credit of item.upstream; track $index) {
+        <span matListItemLine class="upstream-attribution">
+          <span>{{
+            'creator.content.attribution-upstream'
+              | transloco
+                : {
+                    attribution:
+                      credit.attribution || ('general.anonymous' | transloco),
+                  }
+          }}</span>
+          @if (credit.licenseName) {
+            <span>{{ ', ' + credit.licenseName }}</span>
+          }
+        </span>
+      }
     </mat-list-item>
   }
-</mat-list> -->
+</mat-list>

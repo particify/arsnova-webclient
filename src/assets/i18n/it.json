@@ -502,6 +502,7 @@
     "publish-template": "Pubblica il modello",
     "publish-template-info": "Condividi il tuo modello con altri utenti con una licenza gratuita.",
     "license": "Licenza",
+    "license-inherited": "La licenza deriva dal modello da cui sono stati copiati i contenuti.",
     "please-fill-description": "Inserisci una descrizione.",
     "please-fill-attribution": "Inserisci un'attribuzione.",
     "please-fill-tags": "Seleziona almeno un tag.",
@@ -527,7 +528,8 @@
     "save": "Salva",
     "changes-saved": "Le modifiche sono state salvate.",
     "delete-template": "Elimina",
-    "template-deleted": "Il modello è stato eliminato."
+    "template-deleted": "Il modello è stato eliminato.",
+    "template-not-found": "Questo modello non esiste (più)."
   },
   "violation-report": {
     "send": "Invia",

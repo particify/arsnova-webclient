@@ -187,6 +187,7 @@
     "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt.",
     "start-new-round": "Neue Runde starten",
     "attribution-info-slide": "Info-Folie zur Namensnennung",
+    "attribution-upstream": "basiert auf einer Vorlage von {{attribution}}",
     "attributions": "Namensnennungen",
     "attributions-subheader": "Die folgenden Inhalte basieren auf Vorlagen, welche unter Creative-Commons-Lizenzen veröffentlicht wurden.",
     "content": "Inhalt",

@@ -3,35 +3,35 @@
   fxLayoutAlign="space-between"
   tabindex="0"
   class="template-card primary-shadow-hover primary-shadow-focus"
-  [ngClass]="{ 'less-bottom-space': template.published }"
+  [ngClass]="{ 'less-bottom-space': template().published }"
   role="button"
   (click)="preview()"
 >
   <div>
-    <span class="template-name">{{ template.name }}</span>
+    <span class="template-name">{{ template().name }}</span>
     <p class="ellipsis template-description">
-      {{ template.description }}
+      {{ template().description }}
     </p>
   </div>
   <div fxLayout="column" fxLayoutGap="0.5em">
     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-      <!-- <app-content-group-info
-        [groupType]="template.groupType"
-        [contentCount]="template.templateIds.length"
+      <app-questionnaire-info
+        [questionnaireType]="template().questionnaireType"
+        [contentCount]="template().contentCount"
         [countColor]="true"
-      ></app-content-group-info>-->
-      @if (template.published && template.license) {
+      ></app-questionnaire-info>
+      @if (template().published && template().license; as license) {
         <app-template-license
-          [ownerName]="template.attribution"
-          [license]="template.license"
-          [aiGenerated]="template.aiGenerated"
+          [ownerName]="template().attribution"
+          [license]="license"
+          [aiGenerated]="template().aiGenerated"
         ></app-template-license>
       }
     </div>
-    @if (template.published) {
+    @if (template().published) {
       <div fxLayout="row" fxLayoutAlign="start center">
         <mat-chip-set class="chip-container no-flex-flow">
-          @for (tag of template.tags; track tag) {
+          @for (tag of template().tags; track tag.id) {
             <mat-chip>
               {{ tag.name }}
             </mat-chip>

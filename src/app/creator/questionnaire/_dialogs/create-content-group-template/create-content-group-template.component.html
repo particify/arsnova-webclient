@@ -3,9 +3,16 @@
   <p class="info">
     {{ 'creator.templates.content-group-template-creation-info' | transloco }}
   </p>
-  <app-content-group-template-editing
-    [name]="data.name"
-  ></app-content-group-template-editing>
+  @if (isLoading()) {
+    <app-loading-indicator></app-loading-indicator>
+  } @else if (loadFailed()) {
+    <p>{{ 'errors.something-went-wrong' | transloco }}</p>
+  } @else {
+    <app-content-group-template-editing
+      [name]="data.name"
+      [inheritedLicense]="inheritedLicense()"
+    ></app-content-group-template-editing>
+  }
 </mat-dialog-content>
 <mat-dialog-actions fxLayoutAlign="end">
   <button mat-button (click)="closeDialog()">
@@ -13,6 +20,7 @@
   </button>
   <app-loading-button
     [isDialog]="true"
+    [disabled]="isLoading() || loadFailed()"
     (clicked)="publish()"
     name="templates.create"
   ></app-loading-button>

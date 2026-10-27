@@ -614,6 +614,7 @@
     "publish-template": "Publicar plantilla",
     "publish-template-info": "Comparta su plantilla con otros usuarios con una licencia gratuita.",
     "license": "Licencia",
+    "license-inherited": "La licencia proviene de la plantilla de la que se copiaron los contenidos.",
     "please-fill-name": "Introduzca un nombre.",
     "please-fill-description": "Introduzca una descripción.",
     "please-fill-tags": "Seleccione al menos una etiqueta.",
@@ -629,7 +630,8 @@
     "save": "Guardar",
     "changes-saved": "Se han guardado los cambios.",
     "delete-template": "Eliminar",
-    "template-deleted": "Se ha eliminado la plantilla."
+    "template-deleted": "Se ha eliminado la plantilla.",
+    "template-not-found": "Esta plantilla no existe (o ya no existe)."
   },
   "violation-report": {
     "reason-advertising": "Publicidad no solicitada",

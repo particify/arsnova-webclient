@@ -303,6 +303,14 @@ mutation CreateQuestionnaire($input: CreateQuestionnaireInput!) {
   }
 }
 
+mutation CreateQuestionnaireFromTemplate(
+  $input: CreateQuestionnaireFromTemplateInput!
+) {
+  createQuestionnaireFromTemplate(input: $input) {
+    ...QuestionnaireDetails
+  }
+}
+
 mutation ToggleQuestionnairePublished($id: UUID!, $published: Boolean!) {
   toggleQuestionnairePublished(id: $id, published: $published) {
     ...QuestionnaireDetails
