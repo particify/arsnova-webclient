@@ -67,7 +67,7 @@ export class DialogService {
         this.trackingService.addEvent(
           EventCategory.UI_DIALOG,
           this.isCancelAction(result) ? 'Dialog cancelled' : 'Dialog confirmed',
-          (ref.componentInstance as any).dialogId
+          (ref.componentInstance as { dialogId?: string }).dialogId
         )
       );
     return ref;

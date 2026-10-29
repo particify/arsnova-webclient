@@ -1,0 +1,31 @@
+@use '../../../variables' as *;
+
+// An outlined row inside a room overview card.
+@mixin item($clickable: true) {
+  // Lifts the global mat-card cap, which is narrower than a wide overview column.
+  max-width: 100%;
+  width: 100%;
+  padding: $spacing-2;
+
+  &:not(:hover, :focus, :focus-within) {
+    border-color: var(--border);
+  }
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: var(--grey);
+
+    @if $clickable {
+      cursor: pointer;
+    }
+  }
+}
+
+@mixin item-title {
+  font-size: $s-font-size;
+
+  @include gt-xl {
+    font-size: $m-font-size;
+  }
+}

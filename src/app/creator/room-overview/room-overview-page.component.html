@@ -186,6 +186,10 @@
             [showControls]="true"
           >
           </app-live-feedback-card>
+          <app-announcements-card
+            [roomId]="roomId()"
+            [canManage]="!isModerator()"
+          ></app-announcements-card>
         </div>
       </div>
     </div>

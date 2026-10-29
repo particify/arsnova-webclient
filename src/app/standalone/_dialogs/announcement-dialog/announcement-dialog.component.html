@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>
+  {{
+    (data.announcement
+      ? 'creator.announcement.edit-announcement'
+      : 'creator.announcement.create-announcement'
+    ) | transloco
+  }}
+</h2>
+<mat-dialog-content>
+  <app-announcement-form
+    class="form"
+    [roomId]="data.roomId"
+    [announcement]="data.announcement"
+    (saved)="close($event)"
+  ></app-announcement-form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">
+    {{ 'creator.announcement.cancel' | transloco }}
+  </button>
+  <app-loading-button
+    [isDialog]="true"
+    [name]="
+      data.announcement
+        ? 'creator.announcement.save'
+        : 'creator.announcement.publish'
+    "
+    (clicked)="save()"
+  ></app-loading-button>
+</mat-dialog-actions>

@@ -21,6 +21,7 @@ import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CommentsCardComponent } from '@app/standalone/feature-card/comments-card/comments-card.component';
 import { LiveFeedbackCardComponent } from '@app/standalone/feature-card/live-feedback-card/live-feedback-card.component';
+import { AnnouncementsCardComponent } from '@app/standalone/feature-card/announcements-card/announcements-card.component';
 import { FeatureCardComponent } from '@app/standalone/feature-card/feature-card.component';
 import { MatButton } from '@angular/material/button';
 import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
@@ -57,6 +58,7 @@ import { refetchOn } from '@gql/helper/refetch-on';
     LoadingIndicatorComponent,
     CommentsCardComponent,
     LiveFeedbackCardComponent,
+    AnnouncementsCardComponent,
     FeatureCardComponent,
     MatButton,
     HotkeyDirective,
