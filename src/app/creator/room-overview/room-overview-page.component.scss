@@ -1,5 +1,4 @@
 @use '../../../variables' as *;
-@use '../../common/styles/room-overview';
 
 .group-types-container {
   display: grid;
@@ -62,6 +61,49 @@
   height: $m-font-size;
 }
 
+.overview-container,
+.overview-columns,
+.main-column,
+.side-column {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
 .overview-container {
-  width: $card-width;
+  width: 100%;
+}
+
+@include lt-md {
+  .overview-container,
+  .overview-columns,
+  .main-column,
+  .side-column {
+    gap: $spacing-1;
+  }
+}
+
+@include gt-lg {
+  .overview-container,
+  .overview-columns,
+  .main-column,
+  .side-column {
+    gap: $spacing-4;
+  }
+
+  .overview-columns {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+
+  .main-column {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .side-column {
+    flex: 0 0 calc(100% / 3);
+    max-width: 560px;
+    min-width: 420px;
+  }
 }

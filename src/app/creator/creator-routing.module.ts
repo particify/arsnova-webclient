@@ -43,6 +43,7 @@ const routes: Routes = [
     title: 'room',
     data: {
       parentRoute: ParentRoute.USER,
+      wideLayout: true,
     },
   },
   {

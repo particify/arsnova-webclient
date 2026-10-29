@@ -1,6 +1,8 @@
 @use '../../../variables' as *;
 
 #content-group {
+  // Lifts the global mat-card cap, which is narrower than a wide overview column.
+  max-width: 100%;
   width: 100%;
   padding: $spacing-2;
 

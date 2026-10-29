@@ -1,10 +1,14 @@
+import { AsyncPipe } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
@@ -33,10 +37,19 @@ describe('RoomOverviewPageComponent (creator)', () => {
   let dialogService: jasmine.SpyObj<DialogService>;
   let globalStorageService: jasmine.SpyObj<GlobalStorageService>;
 
-  function setUp(userRole = UserRole.OWNER, expandDescription = false) {
-    // Covers the questionnaire handling; the feature cards have their own specs.
+  function setUp(
+    userRole = UserRole.OWNER,
+    expandDescription = false,
+    renderLayout = false
+  ) {
+    // The feature cards have their own specs, so they are never rendered here.
     TestBed.overrideComponent(RoomOverviewPageComponent, {
-      set: { template: '', imports: [] },
+      set: renderLayout
+        ? {
+            imports: [AsyncPipe, A11yIntroPipe, TranslocoPipe],
+            schemas: [NO_ERRORS_SCHEMA],
+          }
+        : { template: '', imports: [] },
     });
     refetch = jasmine.createSpy('refetch').and.resolveTo({});
     questionnairesByRoomId = jasmine.createSpyObj('QuestionnairesByRoomIdGql', [
@@ -212,6 +225,21 @@ describe('RoomOverviewPageComponent (creator)', () => {
     setUp(UserRole.MODERATOR);
 
     expect(component.isModerator()).toBeTrue();
+  });
+
+  it('puts Q&A and question series in the main column, live feedback beside them', () => {
+    setUp(UserRole.OWNER, false, true);
+
+    const element: HTMLElement = fixture.nativeElement;
+    const columnOf = (selector: string) =>
+      element.querySelector(selector)?.parentElement?.className;
+    expect(columnOf('app-comments-card')).toBe('main-column');
+    expect(columnOf('app-feature-card')).toBe('main-column');
+    expect(columnOf('app-live-feedback-card')).toBe('side-column');
+    const mainColumn = element.querySelector('.main-column');
+    expect(
+      [...(mainColumn?.children ?? [])].map((c) => c.tagName.toLowerCase())
+    ).toEqual(['app-comments-card', 'app-feature-card']);
   });
 
   it('expands the description only once when requested', () => {
