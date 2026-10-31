@@ -21,7 +21,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { Router } from '@angular/router';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { PasswordFieldComponent } from '@app/core/components/password-field/password-field.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { first, switchMap } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
@@ -59,7 +59,7 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
     FlexModule,
     MatCard,
     FormsModule,
-    PasswordEntryComponent,
+    PasswordFieldComponent,
     MatFormField,
     MatLabel,
     MatInput,
@@ -79,7 +79,7 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
   private readonly authenticationService = inject(AuthenticationService);
   private readonly apollo = inject(Apollo);
 
-  passwordEntry = viewChild.required(PasswordEntryComponent);
+  passwordField = viewChild.required(PasswordFieldComponent);
 
   // Route data input below
   email = input.required<string>();
@@ -94,7 +94,7 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
   }
 
   setNewPassword(code: string) {
-    const password = this.passwordEntry().getPassword();
+    const password = this.passwordField().getPassword();
     if (this.email() !== '' && code !== '' && password) {
       this.disableForm();
       this.challengeService

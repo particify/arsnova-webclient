@@ -55,9 +55,9 @@ const PATTERNS: RegExp[] = [
 ];
 
 @Component({
-  selector: 'app-password-entry',
-  templateUrl: './password-entry.component.html',
-  styleUrls: ['./password-entry.component.scss'],
+  selector: 'app-password-field',
+  templateUrl: './password-field.component.html',
+  styleUrls: ['./password-field.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFormField,
@@ -77,7 +77,7 @@ const PATTERNS: RegExp[] = [
     TranslocoPipe,
   ],
 })
-export class PasswordEntryComponent
+export class PasswordFieldComponent
   extends FormComponent
   implements AfterViewInit
 {

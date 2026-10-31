@@ -20,7 +20,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { Router, RouterLink } from '@angular/router';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { PasswordFieldComponent } from '@app/core/components/password-field/password-field.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ApiConfig } from '@app/core/models/api-config';
 import { FlexModule } from '@angular/flex-layout';
@@ -55,7 +55,7 @@ import { CooldownService } from '@app/core/services/util/cooldown.service';
     AutofocusDirective,
     ReactiveFormsModule,
     MatError,
-    PasswordEntryComponent,
+    PasswordFieldComponent,
     MatCheckbox,
     LoadingButtonComponent,
     RouterLink,
@@ -69,7 +69,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
   private readonly claimUnverifiedUserGql = inject(ClaimUnverifiedUserGql);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
-  private readonly passwordEntry = viewChild.required(PasswordEntryComponent);
+  private readonly passwordField = viewChild.required(PasswordFieldComponent);
   private readonly eventService = inject(EventService);
   private readonly cooldownService = inject(CooldownService);
 
@@ -94,7 +94,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
   }
 
   register(): void {
-    const password = this.passwordEntry().getPassword();
+    const password = this.passwordField().getPassword();
     if (this.validateForm()) {
       const mailAddress = this.usernameFormControl.value.trim();
       this.disableForm();
@@ -143,7 +143,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
   }
 
   validateForm(): boolean {
-    const password = this.passwordEntry().getPassword();
+    const password = this.passwordField().getPassword();
     if (this.usernameFormControl.valid && password && this.acceptTos) {
       return true;
     }

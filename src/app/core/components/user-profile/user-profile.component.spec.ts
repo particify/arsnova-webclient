@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { PasswordFieldComponent } from '@app/core/components/password-field/password-field.component';
 import { UserProfileComponent } from '@app/core/components/user-profile/user-profile.component';
 import {
   ApiConfig,
@@ -162,8 +162,8 @@ describe('UserProfileComponent', () => {
     return getPanelTitles().includes(titleKey);
   }
 
-  function getPasswordEntries(): DebugElement[] {
-    return fixture.debugElement.queryAll(By.directive(PasswordEntryComponent));
+  function getPasswordFields(): DebugElement[] {
+    return fixture.debugElement.queryAll(By.directive(PasswordFieldComponent));
   }
 
   beforeEach(() => {
@@ -202,7 +202,7 @@ describe('UserProfileComponent', () => {
 
     it('should replace the password fields with a hint in set password mode', async () => {
       await createComponent([LOCAL_PROVIDER], { localPasswordSet: false });
-      expect(getPasswordEntries()).toHaveSize(0);
+      expect(getPasswordFields()).toHaveSize(0);
       expect(fixture.nativeElement.querySelector('app-hint')).toBeTruthy();
     });
 
@@ -255,10 +255,10 @@ describe('UserProfileComponent', () => {
   describe('submitting the password panel', () => {
     it('should change the password of an account which has one', async () => {
       await createComponent([LOCAL_PROVIDER]);
-      // The mail panel contributes a password entry of its own, ahead of the two below.
-      const [currentPassword, newPassword] = getPasswordEntries()
+      // The mail panel contributes a password field of its own, ahead of the two below.
+      const [currentPassword, newPassword] = getPasswordFields()
         .slice(-2)
-        .map((entry) => entry.componentInstance as PasswordEntryComponent);
+        .map((entry) => entry.componentInstance as PasswordFieldComponent);
       currentPassword.password = 'old password';
       newPassword.password = NEW_PASSWORD;
       newPassword.passwordFormControl.setValue(NEW_PASSWORD);

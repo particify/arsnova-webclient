@@ -44,7 +44,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AccountDeleted } from '@app/core/models/events/account-deleted';
 import { EventService } from '@app/core/services/util/event.service';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { PasswordFieldComponent } from '@app/core/components/password-field/password-field.component';
 import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
 import { GlobalHintType } from '@app/standalone/global-hints/global-hint';
 import {
@@ -82,7 +82,7 @@ import { ApiConfig } from '@app/core/models/api-config';
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,
-    PasswordEntryComponent,
+    PasswordFieldComponent,
     MatCard,
     MatFormField,
     FormsModule,
@@ -110,14 +110,14 @@ export class UserProfileComponent extends FormComponent {
   private globalHintsService = inject(GlobalHintsService);
   private cooldownService = inject(CooldownService);
 
-  private passwordForMailUpdate = viewChild.required<PasswordEntryComponent>(
+  private passwordForMailUpdate = viewChild.required<PasswordFieldComponent>(
     'passwordForMailUpdate'
   );
   // Not `required`: the field is absent while the account has no local password yet.
-  private currentPasswordForUpdate = viewChild<PasswordEntryComponent>(
+  private currentPasswordForUpdate = viewChild<PasswordFieldComponent>(
     'currentPasswordForUpdate'
   );
-  private newPasswordForUpdate = viewChild.required<PasswordEntryComponent>(
+  private newPasswordForUpdate = viewChild.required<PasswordFieldComponent>(
     'newPasswordForUpdate'
   );
   private newMailAddress = viewChild.required<ElementRef>('newMailAddress');

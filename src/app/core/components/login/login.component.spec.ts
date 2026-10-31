@@ -152,7 +152,7 @@ describe('LoginComponent', () => {
   function enterCredentials(loginId: string, password: string) {
     component.username = loginId;
     component.loginIdFormControl.setValue(loginId);
-    component.passwordEntry.password = password;
+    component.passwordField.password = password;
   }
 
   function getSubmitButtons(): Promise<MatButtonHarness[]> {

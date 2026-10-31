@@ -14,7 +14,7 @@ import { MatCard } from '@angular/material/card';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import { FormHeaderComponent } from '@app/core/components/form-header/form-header.component';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { PasswordFieldComponent } from '@app/core/components/password-field/password-field.component';
 import { ApiConfig } from '@app/core/models/api-config';
 import { ChallengeService } from '@app/core/services/challenge.service';
 import {
@@ -41,7 +41,7 @@ const EXPIRES_FALLBACK_OFFSET = 3600;
     LoadingButtonComponent,
     MatCard,
     MatCheckbox,
-    PasswordEntryComponent,
+    PasswordFieldComponent,
     TranslocoPipe,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -53,7 +53,7 @@ export class VerifyUserInvitationComponent extends FormComponent {
   private readonly router = inject(Router);
   private readonly translationService = inject(TranslocoService);
   private readonly verifyGql = inject(VerifyUserMailAddressUnauthenticatedGql);
-  private readonly passwordEntry = viewChild.required(PasswordEntryComponent);
+  private readonly passwordField = viewChild.required(PasswordFieldComponent);
   private readonly globalHintsService = inject(GlobalHintsService);
   readonly apiConfig = input.required<ApiConfig>();
   readonly userId = input.required<string>();
@@ -84,7 +84,7 @@ export class VerifyUserInvitationComponent extends FormComponent {
             variables: {
               verificationCode: this.code(),
               userId: this.userId(),
-              password: this.passwordEntry().getPassword(),
+              password: this.passwordField().getPassword(),
             },
             context: {
               headers: new HttpHeaders({ Authorization: `Bearer ${t}` }),
@@ -120,7 +120,7 @@ export class VerifyUserInvitationComponent extends FormComponent {
   }
 
   private validateForm(): boolean {
-    if (!this.passwordEntry().getPassword()) {
+    if (!this.passwordField().getPassword()) {
       this.notificationService.showAdvanced(
         this.translationService.translate('password.unsuccessful'),
         AdvancedSnackBarTypes.WARNING
