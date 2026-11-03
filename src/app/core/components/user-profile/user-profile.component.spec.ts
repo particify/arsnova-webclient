@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { PasswordFieldComponent } from '@app/core/components/password-field/password-field.component';
 import { UserProfileComponent } from '@app/core/components/user-profile/user-profile.component';
 import {
   ApiConfig,
@@ -13,7 +13,11 @@ import {
   AuthenticationProviderType,
 } from '@app/core/models/api-config';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
+import { PasswordStrengthService } from '@app/core/services/util/password-strength.service';
 import {
   CurrentUserWithSettingsGql,
   DeleteUserGql,
@@ -24,7 +28,8 @@ import {
 } from '@gql/generated/graphql';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
-import { of } from 'rxjs';
+import { CombinedGraphQLErrors } from '@apollo/client';
+import { NEVER, of, throwError } from 'rxjs';
 
 /**
  * Id of an additional username/password provider, e.g. an LDAP registration. The backend keys
@@ -80,6 +85,11 @@ describe('UserProfileComponent', () => {
   const updateUserPassword = jasmine.createSpyObj('UpdateUserPasswordGql', [
     'mutate',
   ]);
+  const passwordStrengthService = jasmine.createSpyObj(
+    'PasswordStrengthService',
+    ['watch']
+  );
+  passwordStrengthService.watch.and.returnValue(NEVER);
   const requestUserPasswordSetup = jasmine.createSpyObj(
     'RequestUserPasswordSetupGql',
     ['mutate']
@@ -137,6 +147,7 @@ describe('UserProfileComponent', () => {
         { provide: Location, useValue: location },
         { provide: NotificationService, useValue: notificationService },
         { provide: DialogService, useValue: dialogService },
+        { provide: PasswordStrengthService, useValue: passwordStrengthService },
       ]
     ).compileComponents();
 
@@ -162,13 +173,14 @@ describe('UserProfileComponent', () => {
     return getPanelTitles().includes(titleKey);
   }
 
-  function getPasswordEntries(): DebugElement[] {
-    return fixture.debugElement.queryAll(By.directive(PasswordEntryComponent));
+  function getPasswordFields(): DebugElement[] {
+    return fixture.debugElement.queryAll(By.directive(PasswordFieldComponent));
   }
 
   beforeEach(() => {
     router.navigate.calls.reset();
     notificationService.showAdvanced.calls.reset();
+    notificationService.showOnRequestClientError.calls.reset();
     updateUserPassword.mutate.calls.reset();
     updateUserPassword.mutate.and.returnValue(
       of({ data: { updateUserPassword: { id: 'user-id' } } })
@@ -202,7 +214,7 @@ describe('UserProfileComponent', () => {
 
     it('should replace the password fields with a hint in set password mode', async () => {
       await createComponent([LOCAL_PROVIDER], { localPasswordSet: false });
-      expect(getPasswordEntries()).toHaveSize(0);
+      expect(getPasswordFields()).toHaveSize(0);
       expect(fixture.nativeElement.querySelector('app-hint')).toBeTruthy();
     });
 
@@ -253,16 +265,19 @@ describe('UserProfileComponent', () => {
   });
 
   describe('submitting the password panel', () => {
-    it('should change the password of an account which has one', async () => {
-      await createComponent([LOCAL_PROVIDER]);
-      // The mail panel contributes a password entry of its own, ahead of the two below.
-      const [currentPassword, newPassword] = getPasswordEntries()
+    function enterPasswords() {
+      // The mail panel contributes a password field of its own, ahead of the two below.
+      const [currentPassword, newPassword] = getPasswordFields()
         .slice(-2)
-        .map((entry) => entry.componentInstance as PasswordEntryComponent);
+        .map((entry) => entry.componentInstance as PasswordFieldComponent);
       currentPassword.password = 'old password';
       newPassword.password = NEW_PASSWORD;
       newPassword.passwordFormControl.setValue(NEW_PASSWORD);
-      newPassword.activateValidators();
+    }
+
+    it('should change the password of an account which has one', async () => {
+      await createComponent([LOCAL_PROVIDER]);
+      enterPasswords();
 
       component.updatePassword();
 
@@ -273,6 +288,96 @@ describe('UserProfileComponent', () => {
         },
       });
       expect(requestUserPasswordSetup.mutate).not.toHaveBeenCalled();
+    });
+
+    it('should report a password the backend rejects as too weak', async () => {
+      await createComponent([LOCAL_PROVIDER]);
+      enterPasswords();
+      updateUserPassword.mutate.and.returnValue(
+        throwError(
+          () =>
+            new CombinedGraphQLErrors({
+              errors: [
+                {
+                  message: 'Password too weak',
+                  extensions: {
+                    classification: 'BAD_REQUEST',
+                    code: 'WEAK_PASSWORD',
+                  },
+                },
+              ],
+            })
+        )
+      );
+
+      component.updatePassword();
+
+      expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+        'password.password-too-weak',
+        AdvancedSnackBarTypes.FAILED
+      );
+      expect(
+        notificationService.showOnRequestClientError
+      ).not.toHaveBeenCalled();
+      expect(component.formDisabled).toBeFalse();
+    });
+
+    it('should report a password the backend cannot store as invalid', async () => {
+      await createComponent([LOCAL_PROVIDER]);
+      enterPasswords();
+      updateUserPassword.mutate.and.returnValue(
+        throwError(
+          () =>
+            new CombinedGraphQLErrors({
+              errors: [
+                {
+                  message: 'Invalid password',
+                  extensions: {
+                    classification: 'BAD_REQUEST',
+                    code: 'INVALID_PASSWORD',
+                  },
+                },
+              ],
+            })
+        )
+      );
+
+      component.updatePassword();
+
+      expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+        'password.password-invalid',
+        AdvancedSnackBarTypes.FAILED
+      );
+      expect(
+        notificationService.showOnRequestClientError
+      ).not.toHaveBeenCalled();
+      expect(component.formDisabled).toBeFalse();
+    });
+
+    it('should still report a wrong current password', async () => {
+      await createComponent([LOCAL_PROVIDER]);
+      enterPasswords();
+      updateUserPassword.mutate.and.returnValue(
+        throwError(
+          () =>
+            new CombinedGraphQLErrors({
+              errors: [
+                {
+                  message: 'Bad Request',
+                  extensions: { classification: 'BAD_REQUEST' },
+                },
+              ],
+            })
+        )
+      );
+
+      component.updatePassword();
+
+      expect(notificationService.showOnRequestClientError).toHaveBeenCalled();
+      expect(notificationService.showAdvanced).not.toHaveBeenCalledWith(
+        'password.password-too-weak',
+        AdvancedSnackBarTypes.FAILED
+      );
     });
 
     it('should request a password setup mail for an account without a password', async () => {

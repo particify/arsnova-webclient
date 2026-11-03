@@ -14,7 +14,7 @@ import { MatCard } from '@angular/material/card';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import { FormHeaderComponent } from '@app/core/components/form-header/form-header.component';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { PasswordFieldComponent } from '@app/core/components/password-field/password-field.component';
 import { ApiConfig } from '@app/core/models/api-config';
 import { ChallengeService } from '@app/core/services/challenge.service';
 import {
@@ -26,6 +26,7 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { VerifyUserMailAddressUnauthenticatedGql } from '@gql/generated/graphql';
 import { ErrorClassification } from '@gql/helper/handle-operation-error';
+import { getRejectedPasswordMessageKey } from '@app/core/services/util/password-strength.service';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { first, switchMap } from 'rxjs';
 import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
@@ -41,7 +42,7 @@ const EXPIRES_FALLBACK_OFFSET = 3600;
     LoadingButtonComponent,
     MatCard,
     MatCheckbox,
-    PasswordEntryComponent,
+    PasswordFieldComponent,
     TranslocoPipe,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -53,7 +54,7 @@ export class VerifyUserInvitationComponent extends FormComponent {
   private readonly router = inject(Router);
   private readonly translationService = inject(TranslocoService);
   private readonly verifyGql = inject(VerifyUserMailAddressUnauthenticatedGql);
-  private readonly passwordEntry = viewChild.required(PasswordEntryComponent);
+  private readonly passwordField = viewChild.required(PasswordFieldComponent);
   private readonly globalHintsService = inject(GlobalHintsService);
   readonly apiConfig = input.required<ApiConfig>();
   readonly userId = input.required<string>();
@@ -71,7 +72,8 @@ export class VerifyUserInvitationComponent extends FormComponent {
   );
 
   verify(): void {
-    if (!this.validateForm()) {
+    const password = this.passwordField().getPassword();
+    if (!this.validateForm(password)) {
       return;
     }
     this.disableForm();
@@ -84,7 +86,7 @@ export class VerifyUserInvitationComponent extends FormComponent {
             variables: {
               verificationCode: this.code(),
               userId: this.userId(),
-              password: this.passwordEntry().getPassword(),
+              password,
             },
             context: {
               headers: new HttpHeaders({ Authorization: `Bearer ${t}` }),
@@ -107,6 +109,15 @@ export class VerifyUserInvitationComponent extends FormComponent {
           }
         },
         error: (e) => {
+          this.enableForm();
+          const rejectedPasswordKey = getRejectedPasswordMessageKey(e);
+          if (rejectedPasswordKey) {
+            this.notificationService.showAdvanced(
+              this.translationService.translate(rejectedPasswordKey),
+              AdvancedSnackBarTypes.FAILED
+            );
+            return;
+          }
           this.notificationService.showOnRequestClientError(e, {
             [ErrorClassification.BadRequest]: {
               message: this.translationService.translate(
@@ -119,8 +130,8 @@ export class VerifyUserInvitationComponent extends FormComponent {
       });
   }
 
-  private validateForm(): boolean {
-    if (!this.passwordEntry().getPassword()) {
+  private validateForm(password: string): boolean {
+    if (!password) {
       this.notificationService.showAdvanced(
         this.translationService.translate('password.unsuccessful'),
         AdvancedSnackBarTypes.WARNING

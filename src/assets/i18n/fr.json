@@ -91,15 +91,19 @@
   },
   "password": {
     "password": "Mot de passe",
-    "password-too-short": "Utilise au moins 8 caractères",
-    "password-too-weak": "Utilise un mot de passe fort",
+    "password-too-short": "Utilise au moins 10 caractères",
+    "password-invalid": "Ce mot de passe n'est pas valide.",
+    "password-too-weak": "Ce mot de passe est trop facile à deviner.",
+    "add-more-characters": "Ajoute d'autres caractères.",
+    "strength": "Robustesse du mot de passe",
+    "strength-sufficient": "Suffisante",
+    "strength-very-weak": "Très faible",
+    "strength-weak": "Faible",
     "unsuccessful": "Vérifie ton mot de passe.",
     "hide-password": "Cacher le mot de passe",
     "new-password": "Nouveau mot de passe",
     "password-required": "Mot de passe requis",
-    "show-password": "Afficher le mot de passe",
-    "password-okay": "Mot de passe suffisant",
-    "password-strong": "Mot de passe fort"
+    "show-password": "Afficher le mot de passe"
   },
   "login": {
     "a11y-sso-login": "Tu seras redirigé vers {{provider}} pour te connecter.",

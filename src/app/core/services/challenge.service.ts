@@ -7,6 +7,14 @@ import { from, map, Observable, of, switchMap, tap } from 'rxjs';
 
 export const CHALLENGE_URL = '/api/challenge';
 
+/**
+ * A reusable token can be sent with any number of requests until it expires, instead of serving
+ * authentication.
+ */
+export interface ChallengeTokenOptions {
+  reusable?: boolean;
+}
+
 interface TokenResponse {
   token: string;
 }
@@ -16,7 +24,9 @@ export class ChallengeService {
   private http = inject(HttpClient);
   private eventService = inject(EventService);
 
-  authenticateByChallenge(): Observable<string | undefined> {
+  authenticateByChallenge(
+    options: ChallengeTokenOptions = {}
+  ): Observable<string | undefined> {
     return this.fetchChallenge().pipe(
       switchMap((challenge) =>
         this.solveChallenge(challenge).pipe(
@@ -24,7 +34,9 @@ export class ChallengeService {
         )
       ),
       switchMap(({ challenge, solution }) =>
-        solution ? this.verifySolution(challenge, solution) : of(undefined)
+        solution
+          ? this.verifySolution(challenge, solution, options)
+          : of(undefined)
       ),
       map((r) => r?.token)
     );
@@ -53,11 +65,13 @@ export class ChallengeService {
 
   private verifySolution(
     challenge: Challenge,
-    solution: Solution
+    solution: Solution,
+    options: ChallengeTokenOptions
   ): Observable<TokenResponse> {
     const payload = this.createPayload(challenge, solution);
     return this.http.post<TokenResponse>(CHALLENGE_URL, {
       solution: payload,
+      ...(options.reusable && { reusable: true }),
     });
   }
 

@@ -90,12 +90,12 @@
                         [formControl]="newMailAddressFormControl"
                       />
                     </mat-form-field>
-                    <app-password-entry
+                    <app-password-field
                       #passwordForMailUpdate
                       fxFill
                       [isNew]="false"
                       [label]="'user-profile.your-password' | transloco"
-                    ></app-password-entry>
+                    ></app-password-field>
                   </div>
                   <div fxFill fxLayout="row" fxLayoutAlign="end">
                     <button
@@ -145,18 +145,18 @@
                 >
                   <div fxFill fxLayout="column" fxLayoutGap="20px">
                     @if (localPasswordSet()) {
-                      <app-password-entry
+                      <app-password-field
                         #currentPasswordForUpdate
                         fxFill
                         [isNew]="false"
                         [label]="'user-profile.current-password' | transloco"
-                      ></app-password-entry>
-                      <app-password-entry
+                      ></app-password-field>
+                      <app-password-field
                         #newPasswordForUpdate
                         fxFill
                         [checkStrength]="true"
                         [isNew]="true"
-                      ></app-password-entry>
+                      ></app-password-field>
                     } @else {
                       <app-hint
                         [text]="'user-profile.set-password-hint'"

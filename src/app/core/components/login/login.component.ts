@@ -36,10 +36,7 @@ import {
   ClientAuthenticationResult,
 } from '@app/core/models/client-authentication-result';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import {
-  PasswordEntryComponent,
-  PasswordEntryComponent as PasswordEntryComponent_1,
-} from '@app/core/components/password-entry/password-entry.component';
+import { PasswordFieldComponent } from '@app/core/components/password-field/password-field.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
@@ -78,7 +75,7 @@ function setDefaultTrue(value: boolean | undefined): boolean {
     MatInput,
     ReactiveFormsModule,
     MatError,
-    PasswordEntryComponent_1,
+    PasswordFieldComponent,
     RouterLink,
     LoadingButtonComponent,
     LoadingIndicatorComponent,
@@ -99,7 +96,7 @@ export class LoginComponent
   private route = inject(ActivatedRoute);
   private routingService = inject(RoutingService);
 
-  @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
+  @ViewChild(PasswordFieldComponent) passwordField!: PasswordFieldComponent;
 
   // Route data input below
   @Input({ transform: booleanAttribute }) isStandalone!: boolean;
@@ -218,7 +215,7 @@ export class LoginComponent
   }
 
   loginWithUsernamePassword(providerId = 'user-db'): void {
-    const password = this.passwordEntry.getPassword();
+    const password = this.passwordField.getPassword();
     if (this.loginIdFormControl.valid && password) {
       this.disableForm();
       this.authenticationService

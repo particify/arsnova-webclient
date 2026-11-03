@@ -3,6 +3,7 @@ import { RegisterComponent } from './register.component';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
+import { PasswordStrengthService } from '@app/core/services/util/password-strength.service';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -12,7 +13,7 @@ import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MatFormFieldHarness } from '@angular/material/form-field/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
-import { of } from 'rxjs';
+import { NEVER, of } from 'rxjs';
 import { ClaimUnverifiedUserGql } from '@gql/generated/graphql';
 
 describe('RegisterComponent', () => {
@@ -31,6 +32,11 @@ describe('RegisterComponent', () => {
     authenticationService.requireAuthentication.and.returnValue(
       of({ verified: false })
     );
+    const passwordStrengthService = jasmine.createSpyObj(
+      'PasswordStrengthService',
+      ['watch']
+    );
+    passwordStrengthService.watch.and.returnValue(NEVER);
 
     await configureTestModule(
       [BrowserAnimationsModule, getTranslocoModule(), RegisterComponent],
@@ -46,6 +52,7 @@ describe('RegisterComponent', () => {
             'showAdvanced',
           ]),
         },
+        { provide: PasswordStrengthService, useValue: passwordStrengthService },
         {
           provide: Router,
           useValue: jasmine.createSpyObj('Router', ['navigate']),

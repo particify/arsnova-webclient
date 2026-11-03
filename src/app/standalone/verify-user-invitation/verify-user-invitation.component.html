@@ -20,10 +20,10 @@
       >
         <span>{{ 'user-activation.accept-invitation-info' | transloco }}</span>
         <div fxLayout="column" fxLayoutGap="10px">
-          <app-password-entry
+          <app-password-field
             [checkStrength]="true"
             [isNew]="true"
-          ></app-password-entry>
+          ></app-password-field>
           <mat-checkbox
             [(ngModel)]="tosAccepted"
             [disabled]="formDisabled"

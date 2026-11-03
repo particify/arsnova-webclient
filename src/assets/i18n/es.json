@@ -95,10 +95,14 @@
     "show-password": "Mostrar contraseña",
     "hide-password": "Ocultar contraseña",
     "password-required": "Contraseña requerida",
-    "password-too-short": "Por favor, utiliza al menos 8 caracteres",
-    "password-too-weak": "Por favor, utiliza una contraseña segura",
-    "password-okay": "Contraseña suficiente",
-    "password-strong": "Contraseña segura",
+    "password-too-short": "Por favor, utiliza al menos 10 caracteres",
+    "password-invalid": "Esta contraseña no es válida.",
+    "password-too-weak": "Esta contraseña es demasiado fácil de adivinar.",
+    "add-more-characters": "Añade más caracteres.",
+    "strength": "Seguridad de la contraseña",
+    "strength-sufficient": "Suficiente",
+    "strength-very-weak": "Muy débil",
+    "strength-weak": "Débil",
     "unsuccessful": "Por favor, verifica tu contraseña."
   },
   "login": {
