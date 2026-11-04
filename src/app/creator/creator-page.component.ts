@@ -5,6 +5,7 @@ import {
   inject,
   input,
   ChangeDetectionStrategy,
+  signal,
 } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -51,6 +52,7 @@ export class CreatorPageComponent implements OnInit {
   @Input({ required: true }) viewRole!: UserRole;
 
   roomSettings?: RoomSettings;
+  readonly wideLayout = signal(false);
 
   constructor() {
     const translateService = this.translateService;
@@ -65,5 +67,9 @@ export class CreatorPageComponent implements OnInit {
     this.roomSettingsService.getByRoomId(this.room.id).subscribe((settings) => {
       this.roomSettings = settings;
     });
+  }
+
+  updateLayout(outlet: RouterOutlet): void {
+    this.wideLayout.set(!!outlet.activatedRouteData['wideLayout']);
   }
 }

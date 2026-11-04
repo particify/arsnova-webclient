@@ -6,6 +6,10 @@ $drawer-width: 73px;
   width: calc(100% - $spacing-2 * 2);
   max-width: $card-width;
   padding: $spacing-2;
+
+  &.wide-layout {
+    max-width: $wide-layout-width;
+  }
 }
 
 .room-container {
