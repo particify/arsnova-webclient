@@ -21,6 +21,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { VisualizationType } from '@app/standalone/content-results/visualization/visualization-type';
 import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer-grid-list.component';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 @Component({
   selector: 'app-wordcloud-results',
@@ -48,6 +49,7 @@ export class WordcloudResultsComponent {
   private readonly dialogService = inject(DialogService);
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
+  private readonly presentationService = inject(PresentationService);
   private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
@@ -57,6 +59,10 @@ export class WordcloudResultsComponent {
   readonly rotateWords = input(false);
   readonly visualizationType = input(VisualizationType.WORDCLOUD);
   readonly allowAnswerModeration = input(false);
+  readonly isPresentation = input(false);
+  readonly scale = computed(() =>
+    this.isPresentation() ? this.presentationService.scale() : 1
+  );
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
       switchMap((roundId) => {

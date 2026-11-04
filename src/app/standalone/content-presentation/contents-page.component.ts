@@ -26,6 +26,7 @@ import {
   catchError,
   EMPTY,
   filter,
+  fromEvent,
   ignoreElements,
   map,
   switchMap,
@@ -238,14 +239,25 @@ export class ContentsPageComponent {
 
   protected readonly scale = this.presentationService.scale;
 
+  private readonly windowWidth = toSignal(
+    fromEvent(window, 'resize').pipe(map(() => innerWidth)),
+    { initialValue: innerWidth }
+  );
+  private readonly fontSize = parseFloat(
+    getComputedStyle(document.body).fontSize
+  );
+
   protected readonly containerStyle = computed(() => {
     const scale = this.scale();
     if (!scale) return;
+    // Not a scale transform: Safari renders composited content such as chart canvases at its
+    // unscaled size and stretches it, which blurs the whole card.
+    // Zoom also applies to the container's own offset, hence the division.
+    const top = this.windowWidth() * 0.04 - this.fontSize * scale;
     return {
       width: `${CARD_WIDTH}px`,
-      transform: `scale(${scale})`,
-      left: `calc(50vw - calc(${CARD_WIDTH / 2}px * ${scale}))`,
-      top: `calc(4vw - calc(1em * ${scale}))`,
+      zoom: scale,
+      top: `${top / scale}px`,
     };
   });
 

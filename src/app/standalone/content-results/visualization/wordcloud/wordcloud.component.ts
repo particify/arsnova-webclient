@@ -34,6 +34,7 @@ const ZOOM_EFFECT = 'zoom-effect';
     `,
   ],
   imports: [TranslocoPipe],
+  host: { '[style]': 'presentationStyle()' },
 })
 export class WordcloudComponent {
   data = input.required<VisualizationData>();
@@ -45,6 +46,8 @@ export class WordcloudComponent {
     }))
   );
   readonly rotateWords = input(false);
+  /** The zoom applied to the presentation, which the wordcloud undoes. */
+  readonly presentationScale = input(1);
   readonly elementRef = viewChild<ElementRef<SVGGraphicsElement>>('wordcloud');
   readonly renderedWords = signal<Wordcloud.Word[]>([]);
   readonly width = RENDER_WIDTH;
@@ -54,6 +57,27 @@ export class WordcloudComponent {
   readonly scaleOffsetY = signal(0);
   readonly wordColorIndexes = signal<string[]>([]);
   private readonly fontFamily = getComputedStyle(document.body).fontFamily;
+
+  /**
+   * Safari multiplies the CSS px transforms inside the SVG by an ancestor's zoom, which moves the
+   * words out of view, so the wordcloud is scaled by transform instead.
+   */
+  readonly presentationStyle = computed(() => {
+    const scale = this.presentationScale();
+    if (scale === 1) {
+      return {};
+    }
+    // The transform takes no layout space, so the margin reserves the scaled height.
+    const addedHeight = (scale - 1) / scale / RATIO;
+    return {
+      display: 'block',
+      zoom: 1 / scale,
+      width: `calc(100% / ${scale})`,
+      transform: `scale(${scale})`,
+      'transform-origin': '0 0',
+      'margin-bottom': `calc(100% * ${addedHeight})`,
+    };
+  });
 
   constructor() {
     effect(() => {

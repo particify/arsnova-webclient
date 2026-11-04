@@ -4,6 +4,7 @@ import {
   QuestionnaireWordcloudRoundStatsByRoundIdGql,
 } from '@gql/generated/graphql';
 import { of } from 'rxjs';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 import { VisualizationType } from '@app/standalone/content-results/visualization/visualization-type';
 import { WordcloudResultsComponent } from './wordcloud-results.component';
 
@@ -24,6 +25,12 @@ const roundStatsMock = {
 
 const banKeywordMock = { mutate: () => of({ data: {} }) };
 
+class MockPresentationService {
+  scale() {
+    return 1;
+  }
+}
+
 export default {
   component: WordcloudResultsComponent,
   title: 'WordcloudResults',
@@ -32,6 +39,7 @@ export default {
     moduleMetadata({
       imports: [WordcloudResultsComponent],
       providers: [
+        { provide: PresentationService, useClass: MockPresentationService },
         {
           provide: QuestionnaireWordcloudRoundStatsByRoundIdGql,
           useValue: roundStatsMock,
