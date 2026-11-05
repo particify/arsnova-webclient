@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { VisualizationType } from '@app/standalone/content-results/visualization/visualization-type';
 import {
@@ -96,6 +97,7 @@ describe('WordcloudResultsComponent', () => {
         },
         { provide: DialogService, useValue: dialogService },
         { provide: NotificationService, useValue: notificationService },
+        { provide: PresentationService, useValue: { scale: () => 1 } },
         { provide: ThemeService, useValue: themeService },
       ]
     ).compileComponents();

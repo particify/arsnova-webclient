@@ -225,6 +225,7 @@ export class ContentResultsComponent {
     }),
     [ContentType.Wordcloud]: () => ({
       contentId: this.content().id,
+      isPresentation: this.isPresentation(),
       rotateWords: !!this.settings().rotateWordcloudItems,
       visualizationType: this.activeWordcloudVisualiation(),
       allowAnswerModeration: this.allowAnswerModeration(),
