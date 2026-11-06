@@ -362,14 +362,11 @@
     "timestamp": "Horodatage",
     "delete-token": "Supprimer le jeton",
     "token-deleted": "Le jeton a été supprimé.",
-    "announcements": "Annonces",
-    "announcements-info": "Grâce aux annonces, vous pouvez informer les participant·es à propos des dates et des nouveautés.",
     "focus-mode-info": "Mène la présentation en direct pour vous et pour les participant·es. Vos actions en mode présentation sont synchronisées avec ce que voient les participant·es.",
     "hotkey-general": "Paramètres de la salle",
     "hotkey-comments": "Paramètres des Questions/Réponses",
     "focus-mode": "Mode suivi en direct",
     "hotkey-access": "Gestion des droits d'accès",
-    "hotkey-announcements": "Gestion des annonces",
     "unverified": "non vérifié",
     "remove-access-rights": "Supprimer les droits d'accès"
   },
@@ -525,7 +522,6 @@
   "announcement": {
     "cancel": "Annuler",
     "options": "Options",
-    "created": "Votre annonce a été créée.",
     "deleted": "L'annonce a été supprimée.",
     "edit": "Éditer",
     "delete": "Supprimer",

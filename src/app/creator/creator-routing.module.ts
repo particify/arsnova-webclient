@@ -52,6 +52,10 @@ const routes: Routes = [
     title: 'settings',
   },
   {
+    path: 'settings/announcements',
+    redirectTo: '',
+  },
+  {
     path: 'settings/:settingsName',
     component: SettingsPageComponent,
     title: 'settings',

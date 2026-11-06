@@ -1,0 +1,74 @@
+<form fxLayout="column" fxLayoutGap="1em">
+  <mat-form-field class="input-block no-field-hint" appearance="outline">
+    <mat-label>{{ 'creator.announcement.title' | transloco }}</mat-label>
+    <input
+      #titleInput
+      [disabled]="formDisabled"
+      [(ngModel)]="title"
+      matInput
+      name="title"
+    />
+  </mat-form-field>
+  <div class="relative">
+    <mat-tab-group
+      [dynamicHeight]="true"
+      animationDuration="0"
+      (selectedTabChange)="tabChanged($event)"
+    >
+      <mat-tab label="{{ 'creator.announcement.body' | transloco }}">
+        @if (!renderPreview) {
+          <app-formatting-toolbar
+            class="tab-group-formatting-bar-mobile"
+            [inputElement]="bodyInput"
+            [disabled]="formDisabled"
+            (valueChanged)="body = $event"
+          ></app-formatting-toolbar>
+        }
+        <mat-form-field
+          id="body-input"
+          class="input-block no-field-hint"
+          appearance="outline"
+        >
+          <textarea
+            #bodyInput
+            [disabled]="formDisabled"
+            [(ngModel)]="body"
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="3"
+            name="body"
+            [placeholder]="'creator.announcement.enter-body' | transloco"
+            aria-labelledby="body-description"
+            dir="auto"
+          ></textarea>
+        </mat-form-field>
+      </mat-tab>
+      <mat-tab
+        label="{{ 'creator.room.preview' | transloco }}"
+        [disabled]="!body"
+      >
+        <div>
+          <app-rendered-text
+            [rawText]="bodyInput.value"
+            [dynamic]="renderPreview"
+            [markdownFeatureset]="markdownFeatureset"
+          ></app-rendered-text>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    @if (!renderPreview) {
+      <app-formatting-toolbar
+        class="tab-group-formatting-bar"
+        [inputElement]="bodyInput"
+        [disabled]="formDisabled"
+        (valueChanged)="body = $event"
+      ></app-formatting-toolbar>
+    }
+  </div>
+</form>
+
+<div class="visually-hidden">
+  <div id="body-description">
+    {{ 'creator.settings.a11y-announcement-description' | transloco }}
+  </div>
+</div>

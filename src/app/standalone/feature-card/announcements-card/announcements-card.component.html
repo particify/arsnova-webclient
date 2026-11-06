@@ -1,0 +1,116 @@
+<mat-card class="announcements-card">
+  <div class="header">
+    <div class="heading">
+      <mat-icon class="feature-icon">campaign</mat-icon>
+      <span class="feature-header">{{
+        'announcement.announcements' | transloco
+      }}</span>
+    </div>
+    @if (canManage()) {
+      <button
+        mat-button
+        class="create-button"
+        (click)="create()"
+        appDisabledIfReadonly
+        [attr.aria-label]="'creator.announcement.a11y-create' | transloco"
+        data-testid="create-announcement"
+      >
+        <mat-icon>add</mat-icon>
+        {{ 'creator.announcement.create' | transloco }}
+      </button>
+    }
+  </div>
+  @if (isLoading()) {
+    <app-loading-indicator [size]="24"></app-loading-indicator>
+  } @else if (count() > 0) {
+    <div class="items" data-testid="announcement-items">
+      @for (announcement of shown(); track announcement.id) {
+        <mat-card
+          appearance="outlined"
+          class="item"
+          tabindex="-1"
+          [attr.data-focus-id]="announcement.id"
+          data-testid="announcement-item"
+        >
+          <div class="item-header">
+            <span class="item-title">{{ announcement.title }}</span>
+            @if (canManage()) {
+              <div class="hover-actions">
+                <button
+                  mat-icon-button
+                  (click)="edit(announcement)"
+                  appDisabledIfReadonly
+                  [attr.aria-label]="
+                    'creator.announcement.a11y-edit'
+                      | transloco: { title: announcement.title }
+                  "
+                  [matTooltip]="'creator.announcement.edit' | transloco"
+                  data-testid="edit-announcement"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  (click)="delete(announcement)"
+                  appDisabledIfReadonly
+                  [attr.aria-label]="
+                    'creator.announcement.a11y-delete'
+                      | transloco: { title: announcement.title }
+                  "
+                  [matTooltip]="'creator.announcement.delete' | transloco"
+                  data-testid="delete-announcement"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+          <div class="meta">
+            <app-date [timestamp]="announcement.createdAt"></app-date>
+            @if (announcement.updatedAt) {
+              <span class="edited"
+                >&nbsp;({{ 'announcement.edited' | transloco }})</span
+              >
+            }
+          </div>
+          <div class="item-body">
+            <app-rendered-text
+              [rawText]="announcement.body"
+              [renderedText]="announcement.bodyRendered ?? undefined"
+              [markdownFeatureset]="markdownFeatureset"
+            ></app-rendered-text>
+          </div>
+        </mat-card>
+      }
+    </div>
+    @if (hasMore()) {
+      <button
+        mat-button
+        class="list-button"
+        (click)="showMore()"
+        data-testid="show-more-announcements"
+      >
+        {{ 'creator.announcement.show-more' | transloco }}
+      </button>
+    }
+    @if (hasToggle()) {
+      <button
+        mat-button
+        class="list-button"
+        (click)="toggleExpanded()"
+        [attr.aria-expanded]="expanded()"
+        data-testid="toggle-announcements"
+      >
+        {{
+          expanded()
+            ? ('creator.announcement.show-less' | transloco)
+            : ('creator.announcement.show-all' | transloco: { count: count() })
+        }}
+      </button>
+    }
+  } @else {
+    <span class="empty-hint">{{
+      'announcement.no-announcements' | transloco
+    }}</span>
+  }
+</mat-card>

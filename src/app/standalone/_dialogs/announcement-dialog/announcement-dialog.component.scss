@@ -1,0 +1,6 @@
+@use '../../../../variables' as *;
+
+// Keeps the floating label of the title field from being clipped.
+.form {
+  padding-top: $spacing;
+}

@@ -227,7 +227,7 @@ describe('RoomOverviewPageComponent (creator)', () => {
     expect(component.isModerator()).toBeTrue();
   });
 
-  it('puts Q&A and question series in the main column, live feedback beside them', () => {
+  it('puts Q&A and question series in the main column, live feedback and announcements beside them', () => {
     setUp(UserRole.OWNER, false, true);
 
     const element: HTMLElement = fixture.nativeElement;
@@ -236,6 +236,10 @@ describe('RoomOverviewPageComponent (creator)', () => {
     expect(columnOf('app-comments-card')).toBe('main-column');
     expect(columnOf('app-feature-card')).toBe('main-column');
     expect(columnOf('app-live-feedback-card')).toBe('side-column');
+    const sideColumn = element.querySelector('.side-column');
+    expect(
+      [...(sideColumn?.children ?? [])].map((c) => c.tagName.toLowerCase())
+    ).toEqual(['app-live-feedback-card', 'app-announcements-card']);
     const mainColumn = element.querySelector('.main-column');
     expect(
       [...(mainColumn?.children ?? [])].map((c) => c.tagName.toLowerCase())

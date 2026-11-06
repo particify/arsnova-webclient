@@ -1,33 +1,13 @@
-@use '../../../variables' as *;
+@use '../../common/styles/overview-item';
 
 #content-group {
-  // Lifts the global mat-card cap, which is narrower than a wide overview column.
-  max-width: 100%;
-  width: 100%;
-  padding: $spacing-2;
+  @include overview-item.item;
 
-  &:not(:hover, :focus, :focus-within) {
-    border-color: var(--border);
-
-    .publishing-btn {
-      display: none;
-    }
-  }
-
-  &:hover,
-  &:focus,
-  &:focus-within {
-    border-color: var(--grey);
-    cursor: pointer;
+  &:not(:hover, :focus, :focus-within) .publishing-btn {
+    display: none;
   }
 }
 
 .group-name {
-  font-size: $s-font-size;
-}
-
-@include gt-xl {
-  .group-name {
-    font-size: $m-font-size;
-  }
+  @include overview-item.item-title;
 }

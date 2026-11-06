@@ -1,0 +1,120 @@
+@use '../../../../variables' as *;
+@use '../../../common/styles/overview-item';
+
+.announcements-card {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  max-width: 100%;
+}
+
+.header {
+  align-items: flex-start;
+  display: flex;
+  gap: $spacing;
+  justify-content: space-between;
+}
+
+// Overlaps the card padding, so the button adds no height to the header.
+.create-button {
+  margin: -$spacing 0 (-$spacing-2);
+}
+
+.heading {
+  align-items: center;
+  display: flex;
+  gap: $spacing;
+}
+
+.feature-header {
+  font-size: $s-font-size;
+  font-weight: $font-weight-bold;
+}
+
+.feature-icon {
+  width: $m-font-size;
+  height: $m-font-size;
+  font-size: $m-font-size;
+}
+
+@include gt-xl {
+  .feature-header {
+    font-size: $m-font-size;
+  }
+
+  .feature-icon {
+    width: $l-font-size;
+    height: $l-font-size;
+    font-size: $l-font-size;
+  }
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing;
+}
+
+.item {
+  @include overview-item.item($clickable: false);
+
+  display: flex;
+  flex-direction: column;
+  gap: $spacing * 0.5;
+  overflow-wrap: anywhere;
+}
+
+.item-header {
+  align-items: flex-start;
+  display: flex;
+  gap: $spacing;
+  justify-content: space-between;
+}
+
+.item-title {
+  @include overview-item.item-title;
+}
+
+// Kept focusable while hidden, so keyboard users can reach them.
+.hover-actions {
+  display: flex;
+  flex-shrink: 0;
+  margin: -$spacing 0;
+  opacity: 0;
+}
+
+.item:hover,
+.item:focus-within {
+  .hover-actions {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .hover-actions {
+    opacity: 1;
+  }
+}
+
+.meta {
+  color: var(--on-surface-light);
+}
+
+// Matches the size of the date it follows.
+.edited {
+  font-size: $s-font-size;
+}
+
+.item-body {
+  font-size: $s-font-size;
+  line-height: 1.5;
+}
+
+.list-button {
+  align-self: flex-start;
+}
+
+.empty-hint {
+  color: var(--on-surface-light);
+  font-size: $s-font-size;
+}
