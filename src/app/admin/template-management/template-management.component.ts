@@ -31,7 +31,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/autocomplete';
-import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { LanguageSelectionComponent } from '@app/standalone/language-selection/language-selection.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatActionList, MatListItem } from '@angular/material/list';
 import { MatIconButton } from '@angular/material/button';
@@ -59,7 +59,7 @@ enum FILTER {
     ReactiveFormsModule,
     MatSelect,
     MatOption,
-    TemplateLanguageSelectionComponent,
+    LanguageSelectionComponent,
     LoadingIndicatorComponent,
     MatActionList,
     MatListItem,

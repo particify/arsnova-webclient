@@ -12,7 +12,7 @@ import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { Observable, Subject, of } from 'rxjs';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
-import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { LanguageSelectionComponent } from '@app/standalone/language-selection/language-selection.component';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { ContentGroupTemplateEditingComponent } from './content-group-template-editing.component';
 
@@ -58,7 +58,7 @@ describe('ContentGroupTemplateEditingComponent', () => {
         remove: {
           imports: [
             SettingsSlideToggleComponent,
-            TemplateLanguageSelectionComponent,
+            LanguageSelectionComponent,
             TemplateTagSelectionComponent,
           ],
         },

@@ -34,12 +34,12 @@
       ></mat-hint
     >
   </mat-form-field>
-  <app-template-language-selection
+  <app-language-selection
     [defaultLang]="selectedLang()"
     (selectedLangChange)="
       updateLanguage($safeNavigationMigration($event?.code))
     "
-  ></app-template-language-selection>
+  ></app-language-selection>
   <app-settings-slide-toggle
     label="templates.publish-template"
     [isChecked]="published()"

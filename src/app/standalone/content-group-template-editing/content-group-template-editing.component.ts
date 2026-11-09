@@ -20,7 +20,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
-import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { LanguageSelectionComponent } from '@app/standalone/language-selection/language-selection.component';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import {
   TemplateDetailsFragment,
@@ -49,7 +49,7 @@ export interface TemplateFormValue {
 @Component({
   imports: [
     CoreModule,
-    TemplateLanguageSelectionComponent,
+    LanguageSelectionComponent,
     TemplateTagSelectionComponent,
     SettingsSlideToggleComponent,
   ],

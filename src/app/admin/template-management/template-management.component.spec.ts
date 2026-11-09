@@ -12,7 +12,7 @@ import {
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { Observable, Subject, of } from 'rxjs';
-import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { LanguageSelectionComponent } from '@app/standalone/language-selection/language-selection.component';
 import { TemplateManagementComponent } from './template-management.component';
 
 describe('TemplateManagementComponent', () => {
@@ -137,7 +137,7 @@ describe('TemplateManagementComponent', () => {
     });
     TestBed.overrideComponent(TemplateManagementComponent, {
       add: { schemas: [NO_ERRORS_SCHEMA] },
-      remove: { imports: [TemplateLanguageSelectionComponent] },
+      remove: { imports: [LanguageSelectionComponent] },
     });
     create();
   }

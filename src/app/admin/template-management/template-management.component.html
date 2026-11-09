@@ -18,10 +18,10 @@
         }
       </mat-select>
     </mat-form-field>
-    <app-template-language-selection
+    <app-language-selection
       fxFlex
       (selectedLangChange)="loadTags($safeNavigationMigration($event?.code))"
-    ></app-template-language-selection>
+    ></app-language-selection>
   </div>
   @if (isLoading()) {
     <app-loading-indicator></app-loading-indicator>
