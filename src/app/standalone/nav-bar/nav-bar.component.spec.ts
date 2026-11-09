@@ -9,9 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import {
   GlobalStorageService,
@@ -131,9 +129,7 @@ describe('NavBarComponent', () => {
         },
         { provide: RoomStatsByIdGql, useValue: roomStatsById },
         { provide: RoomSettingsService, useValue: roomSettingsService },
-        { provide: ContentGroupService, useValue: {} },
         { provide: RoomService, useValue: {} },
-        { provide: RoomStatsService, useValue: {} },
       ]
     );
     // The component provides this service itself.

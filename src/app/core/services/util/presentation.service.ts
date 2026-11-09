@@ -1,7 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
-import { ContentGroup } from '@app/core/models/content-group';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
@@ -54,7 +53,6 @@ export class PresentationService {
   private commentCategoryChanged = new Subject<string>();
   private commentPeriodChanged = new Subject<number | undefined>();
   private commentZoomChanged = new Subject<number>();
-  private contentGroupUpdated = new Subject<ContentGroup>();
   private roundStateChanged = new Subject<RoundState>();
   private countdownChanged = new Subject<ContentDetailsFragment>();
   private wordcloudVisualizationCHanged = new Subject<boolean>();
@@ -185,14 +183,6 @@ export class PresentationService {
 
   updateCommentZoom(zoom: number) {
     this.commentZoomChanged.next(zoom);
-  }
-
-  updateContentGroup(group: ContentGroup) {
-    this.contentGroupUpdated.next(group);
-  }
-
-  getContentGroupChanges(): Observable<ContentGroup> {
-    return this.contentGroupUpdated;
   }
 
   updateRoundState(state: RoundState) {

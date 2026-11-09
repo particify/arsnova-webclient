@@ -15,8 +15,6 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   Subject,
   Subscription,
@@ -110,9 +108,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   protected readonly routingService = inject(RoutingService);
   protected readonly route = inject(ActivatedRoute);
   protected readonly globalStorageService = inject(GlobalStorageService);
-  protected readonly roomStatsService = inject(RoomStatsService);
   protected readonly roomSettingsService = inject(RoomSettingsService);
-  protected readonly contentGroupService = inject(ContentGroupService);
   protected readonly roomService = inject(RoomService);
   protected readonly focusModeService = inject(FocusModeService);
   protected readonly roomStatsByIdGql = inject(RoomStatsByIdGql);

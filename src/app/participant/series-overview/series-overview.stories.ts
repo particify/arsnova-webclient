@@ -4,17 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { SeriesOverviewComponent } from '@app/participant/series-overview/series-overview.component';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
-import {
-  AnswerResultOverview,
-  AnswerResultType,
-} from '@app/core/models/answer-result';
 import {
   AnswerResultState,
   ContentAnswerResult,
@@ -152,129 +147,6 @@ const questionnaireAnswerResultsByQuestionnaireIdGqlMock = {
   }),
 };
 
-class MockContentGroupService {
-  getAnswerStats(roomId: string, groupId: string) {
-    const answerStats = new AnswerResultOverview();
-    if (roomId === 'roomId') {
-      switch (groupId) {
-        case 'mixedGroupId':
-          {
-            answerStats.achievedScore = 500;
-            answerStats.answerResults = [
-              {
-                contentId: 'content1',
-                achievedPoints: 0,
-                maxPoints: 0,
-                duration: 0,
-                state: AnswerResultType.NEUTRAL,
-              },
-              {
-                contentId: 'content2',
-                achievedPoints: 500,
-                maxPoints: 500,
-                duration: 0,
-                state: AnswerResultType.CORRECT,
-              },
-              {
-                contentId: 'content3',
-                achievedPoints: 0,
-                maxPoints: 0,
-                duration: 0,
-                state: AnswerResultType.NEUTRAL,
-              },
-              {
-                contentId: 'content4',
-                achievedPoints: 0,
-                maxPoints: 0,
-                duration: 0,
-                state: AnswerResultType.UNANSWERED,
-              },
-            ];
-            answerStats.correctAnswerCount = 1;
-            answerStats.maxScore = 500;
-            answerStats.scorableContentCount = 1;
-          }
-          break;
-        case 'quizGroupId':
-          {
-            answerStats.achievedScore = 2000;
-            answerStats.answerResults = [
-              {
-                contentId: 'content1',
-                achievedPoints: 500,
-                maxPoints: 500,
-                duration: 0,
-                state: AnswerResultType.CORRECT,
-              },
-              {
-                contentId: 'content2',
-                achievedPoints: 500,
-                maxPoints: 500,
-                duration: 0,
-                state: AnswerResultType.CORRECT,
-              },
-              {
-                contentId: 'content3',
-                achievedPoints: 500,
-                maxPoints: 500,
-                duration: 0,
-                state: AnswerResultType.CORRECT,
-              },
-              {
-                contentId: 'content4',
-                achievedPoints: 0,
-                maxPoints: 253,
-                duration: 0,
-                state: AnswerResultType.CORRECT,
-              },
-            ];
-            answerStats.correctAnswerCount = 3;
-            answerStats.maxScore = 2000;
-            answerStats.scorableContentCount = 4;
-          }
-          break;
-        case 'surveyGroupId': {
-          answerStats.achievedScore = 0;
-          answerStats.answerResults = [
-            {
-              contentId: 'content1',
-              achievedPoints: 0,
-              maxPoints: 0,
-              duration: 0,
-              state: AnswerResultType.NEUTRAL,
-            },
-            {
-              contentId: 'content2',
-              achievedPoints: 0,
-              maxPoints: 0,
-              duration: 0,
-              state: AnswerResultType.NEUTRAL,
-            },
-            {
-              contentId: 'content3',
-              achievedPoints: 0,
-              maxPoints: 0,
-              duration: 0,
-              state: AnswerResultType.UNANSWERED,
-            },
-            {
-              contentId: 'content4',
-              achievedPoints: 0,
-              maxPoints: 0,
-              duration: 0,
-              state: AnswerResultType.UNANSWERED,
-            },
-          ];
-          answerStats.correctAnswerCount = 0;
-          answerStats.maxScore = 0;
-          answerStats.scorableContentCount = 0;
-        }
-      }
-    }
-    return of(answerStats);
-  }
-}
-
 class MockFocusModeService {
   getFocusModeEnabled() {
     return of(false);
@@ -314,10 +186,6 @@ export default {
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService,
-        },
-        {
-          provide: ContentGroupService,
-          useClass: MockContentGroupService,
         },
         {
           provide: FocusModeService,

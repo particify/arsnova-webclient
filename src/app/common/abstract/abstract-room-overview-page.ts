@@ -1,7 +1,5 @@
 import { switchMap } from 'rxjs';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   ChangeDetectionStrategy,
@@ -22,8 +20,6 @@ import { Room } from '@app/core/models/room';
 })
 export class AbstractRoomOverviewPageComponent {
   protected readonly destroyRef = inject(DestroyRef);
-  protected readonly roomStatsService = inject(RoomStatsService);
-  protected readonly contentGroupService = inject(ContentGroupService);
   protected readonly eventService = inject(EventService);
   protected readonly roomByShortIdGql = inject(RoomByShortIdGql);
 

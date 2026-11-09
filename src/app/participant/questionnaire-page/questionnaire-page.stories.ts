@@ -4,109 +4,23 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { Content } from '@app/core/models/content';
-import { ContentType } from '@app/core/models/content-type.enum';
-import {
-  AnswerResultOverview,
-  AnswerResultType,
-} from '@app/core/models/answer-result';
-import { ContentService } from '@app/core/services/http/content.service';
 import {
   RoomUserAliasByRoomIdGql,
   SetRoomUserAliasGql,
 } from '@gql/generated/graphql';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
-import { ContentState } from '@app/core/models/content-state';
-import { ContentChoice } from '@app/core/models/content-choice';
-import { AnswerOption } from '@app/core/models/answer-option';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
-import { ContentScale } from '@app/core/models/content-scale';
-import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
-import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { QuestionnairePageComponent } from './questionnaire-page.component';
 
 class MockService {}
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(new AuthenticatedUser('userId', true, 'displayId'));
-  }
-}
-
-class MockContentGroupService {
-  getAnswerStats() {
-    const answerStats = new AnswerResultOverview();
-    answerStats.achievedScore = 0;
-    answerStats.answerResults = [
-      {
-        contentId: 'content1',
-        achievedPoints: 0,
-        maxPoints: 0,
-        duration: 0,
-        state: AnswerResultType.UNANSWERED,
-      },
-      {
-        contentId: 'content2',
-        achievedPoints: 0,
-        maxPoints: 500,
-        duration: 0,
-        state: AnswerResultType.UNANSWERED,
-      },
-      {
-        contentId: 'content3',
-        achievedPoints: 0,
-        maxPoints: 0,
-        duration: 0,
-        state: AnswerResultType.UNANSWERED,
-      },
-      {
-        contentId: 'content4',
-        achievedPoints: 0,
-        maxPoints: 0,
-        duration: 0,
-        state: AnswerResultType.UNANSWERED,
-      },
-    ];
-    answerStats.correctAnswerCount = 0;
-    answerStats.maxScore = 500;
-    answerStats.scorableContentCount = 1;
-    return of(answerStats);
-  }
-
-  getAttributions() {
-    return of([]);
-  }
-
-  getChangesStreamForEntity() {
-    return of({});
-  }
-
-  getById() {
-    return of(
-      new ContentGroup(
-        'roomId',
-        'My mixed series',
-        ['content1', 'content2', 'content3', 'content4', 'content5'],
-        true,
-        true,
-        true,
-        PublishingMode.ALL,
-        0,
-        GroupType.MIXED,
-        false
-      )
-    );
   }
 }
 
@@ -154,87 +68,6 @@ class MockThemeService {
   }
 }
 
-class MockContentAnswerService {
-  getAnswerResultIcon(state: AnswerResultType) {
-    switch (state) {
-      case AnswerResultType.CORRECT:
-        return 'check';
-      case AnswerResultType.WRONG:
-        return 'close';
-      case AnswerResultType.UNANSWERED:
-        return 'horizontal_rule';
-      default:
-        return 'fiber_manual_record';
-    }
-  }
-
-  getAnswersByUserIdContentIds() {
-    return of([]);
-  }
-}
-
-class MockContentService {
-  private contents: Content[] = [
-    new Content('roomId', 'subject', '**Content 1**', [], ContentType.TEXT),
-    new ContentChoice(
-      'roomId',
-      'subject',
-      'Content 2',
-      [],
-      [
-        new AnswerOption('Answer 1'),
-        new AnswerOption('Answer 2'),
-        new AnswerOption('Answer 3'),
-        new AnswerOption('Answer 4'),
-      ],
-      [1],
-      false,
-      ContentType.CHOICE
-    ),
-    new ContentScale(LikertScaleTemplate.AGREEMENT, 5),
-    new ContentWordcloud(
-      'roomId',
-      'subject',
-      'Content 4',
-      [],
-      ContentType.WORDCLOUD,
-      3
-    ),
-  ];
-
-  getContentsByIds() {
-    this.contents[0].id = 'content1';
-    this.contents[1].id = 'content2';
-    this.contents[2].id = 'content3';
-    this.contents[3].id = 'content4';
-    this.contents[0].renderedBody = '<p><b>Content 1</b></p>';
-    this.contents[1].renderedBody = '<p>Content 2</p>';
-    this.contents[2].renderedBody = '<p>Content 3</p>';
-    this.contents[3].renderedBody = '<p>Content 4</p>';
-    this.contents[0].state = new ContentState(1, undefined, true);
-    this.contents[1].state = new ContentState(1, undefined, true);
-    this.contents[2].state = new ContentState(1, undefined, true);
-    this.contents[3].state = new ContentState(1, undefined, true);
-    return of(this.contents);
-  }
-
-  getSupportedContents() {
-    this.contents[0].id = 'content1';
-    this.contents[1].id = 'content2';
-    this.contents[2].id = 'content3';
-    this.contents[3].id = 'content4';
-    this.contents[0].renderedBody = '<p><b>Content 1</b></p>';
-    this.contents[1].renderedBody = '<p>Content 2</p>';
-    this.contents[2].renderedBody = '<p>Content 3</p>';
-    this.contents[3].renderedBody = '<p>Content 4</p>';
-    this.contents[0].state = new ContentState(1, undefined, true);
-    this.contents[1].state = new ContentState(1, undefined, true);
-    this.contents[2].state = new ContentState(1, undefined, true);
-    this.contents[3].state = new ContentState(1, undefined, true);
-    return this.contents;
-  }
-}
-
 const roomUserAliasByRoomIdGqlMock = {
   watch: () => ({
     valueChanges: of({
@@ -272,10 +105,6 @@ export default {
           useClass: MockAuthenticationService,
         },
         {
-          provide: ContentGroupService,
-          useClass: MockContentGroupService,
-        },
-        {
           provide: FocusModeService,
           useClass: MockFocusModeService,
         },
@@ -294,14 +123,6 @@ export default {
         {
           provide: ContentCarouselService,
           useClass: MockContentCarouselService,
-        },
-        {
-          provide: ContentAnswerService,
-          useClass: MockContentAnswerService,
-        },
-        {
-          provide: ContentService,
-          useClass: MockContentService,
         },
         {
           provide: RoomUserAliasByRoomIdGql,

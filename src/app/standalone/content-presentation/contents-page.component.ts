@@ -49,7 +49,6 @@ import {
 } from '@gql/generated/graphql';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
-import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   HotkeyActionButtonComponent,
@@ -268,7 +267,6 @@ export class ContentsPageComponent {
     abstentions: this.content()?.abstentionCount ?? 0,
   }));
   canAnswerContent = false;
-  attributions: ContentLicenseAttribution[] = [];
   showLeaderboard = false;
   isPublishing = false;
 
@@ -388,12 +386,6 @@ export class ContentsPageComponent {
 
   updateURL(index: number) {
     if (this.currentIndex() === index && !this.content()) {
-      return;
-    }
-    if (
-      this.attributions.length > 0 &&
-      this.currentIndex() === this.stepCount() - 1
-    ) {
       return;
     }
     this.contentPresentationService.setCurrentContentIndex(index);

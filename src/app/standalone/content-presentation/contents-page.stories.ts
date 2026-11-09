@@ -8,7 +8,6 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { ContentsPageComponent } from '@app/standalone/content-presentation/contents-page.component';
@@ -20,7 +19,6 @@ import {
   QuestionnairePublishingMode,
   QuestionnaireType,
 } from '@gql/generated/graphql';
-import { ContentService } from '@app/core/services/http/content.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 
 class MockService {}
@@ -55,8 +53,6 @@ class MockRoutingService {
 
 class MockFormattingService {}
 
-class MockContentService {}
-
 const questionnaireByIdGqlMock = {
   watch: () => ({
     valueChanges: of({
@@ -73,12 +69,6 @@ const questionnaireByIdGqlMock = {
     }),
   }),
 };
-
-class MockContentAnswerService {
-  getAnswers() {
-    return of([]);
-  }
-}
 
 const questionnaireContentsByQuestionnaireIdGql = {
   watch: () => ({
@@ -189,14 +179,6 @@ export default {
         {
           provide: FormattingService,
           useClass: MockFormattingService,
-        },
-        {
-          provide: ContentService,
-          useClass: MockContentService,
-        },
-        {
-          provide: ContentAnswerService,
-          useClass: MockContentAnswerService,
         },
         {
           provide: QuestionnaireContentsByQuestionnaireIdGql,

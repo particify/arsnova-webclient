@@ -10,9 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -119,9 +117,7 @@ describe('ControlBarComponent', () => {
         { provide: RoomStatsByIdGql, useValue: roomStatsById },
         { provide: PresentationService, useValue: presentationService },
         { provide: RoomSettingsService, useValue: {} },
-        { provide: ContentGroupService, useValue: {} },
         { provide: RoomService, useValue: {} },
-        { provide: RoomStatsService, useValue: {} },
       ]
     );
     TestBed.overrideProvider(FocusModeService, { useValue: focusModeService });

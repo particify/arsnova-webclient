@@ -5,8 +5,6 @@ import { Router } from '@angular/router';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
@@ -102,8 +100,6 @@ describe('RoomOverviewPageComponent (creator)', () => {
         { provide: RoomByShortIdGql, useValue: roomByShortId },
         { provide: DialogService, useValue: dialogService },
         { provide: GlobalStorageService, useValue: globalStorageService },
-        ContentGroupService,
-        { provide: RoomStatsService, useValue: {} },
       ]
     ).compileComponents();
 

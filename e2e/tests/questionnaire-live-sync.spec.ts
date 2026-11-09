@@ -4,19 +4,13 @@ import {
   MockGraphqlApi,
   MOCK_QUESTIONNAIRE_ID,
 } from '@e2e/api/mock-graphql-api';
-import { MockApi } from '@e2e/api/mock-api';
-import { GroupType } from '@app/core/models/content-group';
 
-const TEST_ROOM_ID = '3f9cecb56dbf45ccb6304af700d474b6';
 const SHORT_ID = '12345678';
 
 test.describe('participant questionnaire live sync', () => {
-  let mockApi: MockApi;
   let mockGraphqlApi: MockGraphqlApi;
 
   test.beforeEach(async ({ page }) => {
-    mockApi = new MockApi(page);
-    mockApi.mockRoomStats(TEST_ROOM_ID, 'My questionnaire', 3, GroupType.MIXED);
     mockGraphqlApi = new MockGraphqlApi(page);
   });
 

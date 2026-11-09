@@ -4,8 +4,6 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomOverviewPageComponent } from '@app/participant/room-overview/room-overview-page.component';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { Room } from '@app/core/models/room';
@@ -55,14 +53,6 @@ export default {
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService,
-        },
-        {
-          provide: RoomStatsService,
-          useClass: MockService,
-        },
-        {
-          provide: ContentGroupService,
-          useClass: MockService,
         },
         {
           provide: FocusModeService,

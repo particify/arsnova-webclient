@@ -21,13 +21,10 @@ import { RoomMembershipService } from '@app/core/services/room-membership.servic
 import { EventService } from '@app/core/services/util/event.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { CommentService } from '@app/core/services/http/comment.service';
-import { ContentService } from '@app/core/services/http/content.service';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
   BROWSER_LANG,
   LanguageService,
 } from '@app/core/services/util/language.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { QuestionnaireCsvService } from '@app/core/services/http/questionnaire-csv.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import {
@@ -45,7 +42,6 @@ import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { CachingService } from '@app/core/services/util/caching.service';
 import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { DemoService } from '@app/core/services/demo.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -158,10 +154,7 @@ export const AppConfig: ApplicationConfig = {
     EventService,
     RoomService,
     CommentService,
-    ContentService,
-    ContentAnswerService,
     LanguageService,
-    ContentGroupService,
     QuestionnaireCsvService,
     WsCommentService,
     ApiConfigService,
@@ -178,7 +171,6 @@ export const AppConfig: ApplicationConfig = {
     CachingService,
     LocalFileService,
     LikertScaleService,
-    RoomStatsService,
     DemoService,
     WsRoomEventDispatcherService,
     HotkeyService,

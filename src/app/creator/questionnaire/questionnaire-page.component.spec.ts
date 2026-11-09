@@ -10,7 +10,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentCsvImportErrorReason } from '@app/core/models/content-csv-import-result';
 import { DelimitedTextFormat } from '@app/core/models/delimited-text-format';
@@ -219,7 +218,6 @@ describe('QuestionnairePageComponent (creator)', () => {
           useValue: attributionsGql,
         },
         provideNoopAnimations(),
-        spyProvider(ContentGroupService, ['updateGroupInMemoryStorage']),
         spyProvider(LocalFileService, [
           'download',
           'generateFilename',
