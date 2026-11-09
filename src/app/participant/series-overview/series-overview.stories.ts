@@ -7,32 +7,28 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { SeriesOverviewComponent } from '@app/participant/series-overview/series-overview.component';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { Content } from '@app/core/models/content';
-import { ContentType } from '@app/core/models/content-type.enum';
 import {
   AnswerResultOverview,
   AnswerResultType,
 } from '@app/core/models/answer-result';
-import { ContentChoice } from '@app/core/models/content-choice';
-import { AnswerOption } from '@app/core/models/answer-option';
-import { ContentScale } from '@app/core/models/content-scale';
-import { ContentWordcloud } from '@app/core/models/content-wordcloud';
-import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
-import { ContentState } from '@app/core/models/content-state';
 import {
+  AnswerResultState,
+  ContentAnswerResult,
+  ContentDetailsFragment,
+  ContentType,
   LeaderboardPage,
+  QuestionnaireAnswerResultsByQuestionnaireIdGql,
+  QuestionnaireDetailsFragment,
   QuestionnaireLeaderboardByQuestionnaireIdGql,
   QuestionnaireLeaderboardUpdatedGql,
+  QuestionnairePublishingMode,
+  QuestionnaireType,
+  ScaleContentTemplate,
 } from '@gql/generated/graphql';
 
 class MockService {}
@@ -130,6 +126,31 @@ const leaderboardByQuestionnaireIdGqlMock = {
 
 const leaderboardUpdatedGqlMock = {
   subscribe: () => NEVER,
+};
+
+const questionnaireScores: Record<
+  string,
+  { achievedScore: number; maxScore: number }
+> = {
+  mixedGroupId: { achievedScore: 500, maxScore: 500 },
+  quizGroupId: { achievedScore: 2000, maxScore: 2000 },
+  surveyGroupId: { achievedScore: 0, maxScore: 0 },
+};
+
+const questionnaireAnswerResultsByQuestionnaireIdGqlMock = {
+  watch: ({ variables }: { variables: { questionnaireId: string } }) => ({
+    valueChanges: of({
+      loading: false,
+      data: {
+        questionnaireAnswerResultsByQuestionnaireId: {
+          __typename: 'QuestionnaireAnswerResult',
+          correctAnswerCount: null,
+          scorableContentCount: null,
+          ...questionnaireScores[variables.questionnaireId],
+        },
+      },
+    }),
+  }),
 };
 
 class MockContentGroupService {
@@ -335,6 +356,10 @@ export default {
           useClass: MockContentAnswerService,
         },
         {
+          provide: QuestionnaireAnswerResultsByQuestionnaireIdGql,
+          useValue: questionnaireAnswerResultsByQuestionnaireIdGqlMock,
+        },
+        {
           provide: QuestionnaireLeaderboardByQuestionnaireIdGql,
           useValue: leaderboardByQuestionnaireIdGqlMock,
         },
@@ -366,227 +391,154 @@ export default {
 
 type Story = StoryObj<SeriesOverviewComponent>;
 
-const mixedGroup = new ContentGroup(
-  'roomId',
-  'Mixed series',
-  ['content1', 'content2', 'content3', 'content4', 'content5'],
-  true,
-  true,
-  true,
-  PublishingMode.ALL,
-  0,
-  GroupType.MIXED,
-  false
-);
-mixedGroup.id = 'mixedGroupId';
+const createQuestionnaire = (
+  id: string,
+  name: string,
+  type: QuestionnaireType
+): QuestionnaireDetailsFragment => ({
+  __typename: 'Questionnaire',
+  id,
+  name,
+  type,
+  published: true,
+  publishingMode: QuestionnairePublishingMode.All,
+  statisticsPublished: true,
+  correctOptionsPublished: type === QuestionnaireType.Quiz,
+  leaderboardEnabled: type === QuestionnaireType.Quiz,
+  contentCount: 4,
+  publishedUpToContent: null,
+  activeRound: null,
+});
 
-const mixedContents = [
-  new Content('roomId', 'subject', 'Content 1', [], ContentType.TEXT),
-  new ContentChoice(
-    'roomId',
-    'subject',
+const createContent = (
+  id: string,
+  body: string,
+  formatData: ContentDetailsFragment['formatData']
+): ContentDetailsFragment => ({
+  __typename: 'Content',
+  id,
+  body,
+  bodyRendered: `<p>${body}</p>`,
+  duration: null,
+  abstentionsAllowed: null,
+  hasCorrectAnswer: null,
+  weight: null,
+  answerCount: null,
+  abstentionCount: null,
+  position: null,
+  activeRound: null,
+  formatData,
+});
+
+const choiceFormatData = (
+  correctOptionIndexes: number[],
+  multiple = false
+): ContentDetailsFragment['formatData'] => ({
+  __typename: 'ChoiceContentFormatData',
+  format: ContentType.Choice,
+  correctOptionIndexes,
+  multiple,
+  options: [1, 2, 3, 4].map((i) => ({
+    __typename: 'AnswerOption' as const,
+    label: `Answer ${i}`,
+    labelRendered: null,
+  })),
+});
+
+const createAnswerResults = (
+  ...results: AnswerResultState[]
+): ContentAnswerResult[] =>
+  results.map((result, i) => ({
+    contentId: `content${i + 1}`,
+    durationMs: 0,
+    result,
+  }));
+
+const createMixedContents = (
+  correctOptionIndexes: number[]
+): ContentDetailsFragment[] => [
+  createContent('content1', 'Content 1', {
+    __typename: 'TextContentFormatData',
+    format: ContentType.Text,
+    answersPublished: false,
+  }),
+  createContent(
+    'content2',
     'Content 2',
-    [],
-    [
-      new AnswerOption('Answer 1'),
-      new AnswerOption('Answer 2'),
-      new AnswerOption('Answer 3'),
-      new AnswerOption('Answer 4'),
-    ],
-    [1],
-    false,
-    ContentType.CHOICE
+    choiceFormatData(correctOptionIndexes)
   ),
-  new ContentScale(LikertScaleTemplate.AGREEMENT, 5),
-  new ContentWordcloud(
-    'roomId',
-    'subject',
-    'Content 4',
-    [],
-    ContentType.WORDCLOUD,
-    3
-  ),
+  createContent('content3', 'Content 3', {
+    __typename: 'ScaleContentFormatData',
+    format: ContentType.Scale,
+    template: ScaleContentTemplate.Agreement,
+    neutralOption: true,
+  }),
+  createContent('content4', 'Content 4', {
+    __typename: 'WordcloudContentFormatData',
+    format: ContentType.Wordcloud,
+    maxAnswers: 3,
+  }),
 ];
-
-mixedContents[0].id = 'content1';
-mixedContents[1].id = 'content2';
-mixedContents[2].id = 'content3';
-mixedContents[3].id = 'content4';
-mixedContents[0].renderedBody = '<p>Content 1</p>';
-mixedContents[1].renderedBody = '<p>Content 2</p>';
-mixedContents[2].renderedBody = '<p>Content 3</p>';
-mixedContents[3].renderedBody = '<p>Content 4</p>';
-mixedContents[0].state = new ContentState(1, undefined, true);
-mixedContents[1].state = new ContentState(1, undefined, true);
-mixedContents[2].state = new ContentState(1, undefined, true);
-mixedContents[3].state = new ContentState(1, undefined, true);
 
 export const Mixed: Story = {
   args: {
-    group: mixedGroup,
-    contents: mixedContents,
+    questionnaire: createQuestionnaire(
+      'mixedGroupId',
+      'Mixed series',
+      QuestionnaireType.Mixed
+    ),
+    contents: createMixedContents([1]),
+    answerResults: createAnswerResults(
+      AnswerResultState.Neutral,
+      AnswerResultState.Correct,
+      AnswerResultState.Neutral,
+      AnswerResultState.Unanswered
+    ),
+    roomId: 'roomId',
     finished: true,
   },
 };
 
-const quizGroup = new ContentGroup(
-  'roomId',
-  'Mixed series',
-  ['content1', 'content2', 'content3', 'content4', 'content5'],
-  true,
-  true,
-  true,
-  PublishingMode.ALL,
-  0,
-  GroupType.QUIZ,
-  true
-);
-quizGroup.id = 'quizGroupId';
-
-const quizContents = [
-  new ContentChoice(
-    'roomId',
-    'subject',
-    'Content 1',
-    [],
-    [
-      new AnswerOption('Answer 1'),
-      new AnswerOption('Answer 2'),
-      new AnswerOption('Answer 3'),
-      new AnswerOption('Answer 4'),
-    ],
-    [0, 2],
-    true,
-    ContentType.CHOICE
-  ),
-  new ContentChoice(
-    'roomId',
-    'subject',
-    'Content 2',
-    [],
-    [
-      new AnswerOption('Answer 1'),
-      new AnswerOption('Answer 2'),
-      new AnswerOption('Answer 3'),
-      new AnswerOption('Answer 4'),
-    ],
-    [1],
-    false,
-    ContentType.CHOICE
-  ),
-  new ContentChoice(
-    'roomId',
-    'subject',
-    'Content 3',
-    [],
-    [
-      new AnswerOption('Answer 1'),
-      new AnswerOption('Answer 2'),
-      new AnswerOption('Answer 3'),
-      new AnswerOption('Answer 4'),
-    ],
-    [1],
-    false,
-    ContentType.CHOICE
-  ),
-  new ContentChoice(
-    'roomId',
-    'subject',
-    'Content 4',
-    [],
-    [
-      new AnswerOption('Answer 1'),
-      new AnswerOption('Answer 2'),
-      new AnswerOption('Answer 3'),
-      new AnswerOption('Answer 4'),
-    ],
-    [1],
-    false,
-    ContentType.CHOICE
-  ),
-];
-
-quizContents[0].id = 'content1';
-quizContents[1].id = 'content2';
-quizContents[2].id = 'content3';
-quizContents[3].id = 'content4';
-quizContents[0].renderedBody = '<p>Content 1</p>';
-quizContents[1].renderedBody = '<p>Content 2</p>';
-quizContents[2].renderedBody = '<p>Content 3</p>';
-quizContents[3].renderedBody = '<p>Content 4</p>';
-quizContents[0].state = new ContentState(1, undefined, true);
-quizContents[1].state = new ContentState(1, undefined, true);
-quizContents[2].state = new ContentState(1, undefined, true);
-quizContents[3].state = new ContentState(1, undefined, true);
-
 export const Quiz: Story = {
   args: {
-    group: quizGroup,
-    contents: quizContents,
+    questionnaire: createQuestionnaire(
+      'quizGroupId',
+      'Mixed series',
+      QuestionnaireType.Quiz
+    ),
+    contents: [
+      createContent('content1', 'Content 1', choiceFormatData([0, 2], true)),
+      createContent('content2', 'Content 2', choiceFormatData([1])),
+      createContent('content3', 'Content 3', choiceFormatData([1])),
+      createContent('content4', 'Content 4', choiceFormatData([1])),
+    ],
+    answerResults: createAnswerResults(
+      AnswerResultState.Correct,
+      AnswerResultState.Correct,
+      AnswerResultState.Correct,
+      AnswerResultState.Correct
+    ),
+    roomId: 'roomId',
     finished: true,
     alias: { id: '5', alias: 'Reliable Rhino', seed: 5 },
   },
 };
 
-const surveyGroup = new ContentGroup(
-  'roomId',
-  'Survey series',
-  ['content1', 'content2', 'content3', 'content4', 'content5'],
-  true,
-  true,
-  true,
-  PublishingMode.ALL,
-  0,
-  GroupType.MIXED,
-  false
-);
-surveyGroup.id = 'surveyGroupId';
-
-const surveyContents = [
-  new Content('roomId', 'subject', 'Content 1', [], ContentType.TEXT),
-  new ContentChoice(
-    'roomId',
-    'subject',
-    'Content 2',
-    [],
-    [
-      new AnswerOption('Answer 1'),
-      new AnswerOption('Answer 2'),
-      new AnswerOption('Answer 3'),
-      new AnswerOption('Answer 4'),
-    ],
-    [],
-    false,
-    ContentType.CHOICE
-  ),
-  new ContentScale(LikertScaleTemplate.AGREEMENT, 5),
-  new ContentWordcloud(
-    'roomId',
-    'subject',
-    'Content 4',
-    [],
-    ContentType.WORDCLOUD,
-    3
-  ),
-];
-
-surveyContents[0].id = 'content1';
-surveyContents[1].id = 'content2';
-surveyContents[2].id = 'content3';
-surveyContents[3].id = 'content4';
-surveyContents[0].renderedBody = '<p>Content 1</p>';
-surveyContents[1].renderedBody = '<p>Content 2</p>';
-surveyContents[2].renderedBody = '<p>Content 3</p>';
-surveyContents[3].renderedBody = '<p>Content 4</p>';
-surveyContents[0].state = new ContentState(1, undefined, true);
-surveyContents[1].state = new ContentState(1, undefined, true);
-surveyContents[2].state = new ContentState(1, undefined, true);
-surveyContents[3].state = new ContentState(1, undefined, true);
-
 export const Survey: Story = {
   args: {
-    group: surveyGroup,
-    contents: surveyContents,
+    questionnaire: createQuestionnaire(
+      'surveyGroupId',
+      'Survey series',
+      QuestionnaireType.Mixed
+    ),
+    contents: createMixedContents([]),
+    answerResults: createAnswerResults(
+      AnswerResultState.Neutral,
+      AnswerResultState.Neutral,
+      AnswerResultState.Unanswered,
+      AnswerResultState.Unanswered
+    ),
+    roomId: 'roomId',
     finished: false,
   },
 };
