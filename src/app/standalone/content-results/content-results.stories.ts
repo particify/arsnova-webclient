@@ -1,12 +1,11 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { of } from 'rxjs';
-import { ContentService } from '@app/core/services/http/content.service';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import {
   BanQuestionnaireWordcloudContentKeywordGql,
-  Content,
+  ContentDetailsFragment,
   ContentType,
   CurrentUserWithSettingsGql,
   QuestionnaireChoiceRoundStatsByRoundIdGql,
@@ -15,10 +14,6 @@ import {
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ContentResultsService } from './content-results.service';
-
-class MockContentService {
-  updateAnswerCounts() {}
-}
 
 class MockPresentationService {
   scale() {
@@ -128,10 +123,6 @@ export default {
     moduleMetadata({
       imports: [ContentResultsComponent],
       providers: [
-        {
-          provide: ContentService,
-          useClass: MockContentService,
-        },
         ContentResultsService,
         {
           provide: FormattingService,
@@ -183,34 +174,47 @@ const activeRound = {
   contentId: null,
   roundNo: 2,
   closed: true,
+  started: true,
+  answeringEndTime: null,
+  answerable: false,
 };
 
-const createChoiceContent = (multiple = false): Content => ({
-  __typename: 'Content',
+const contentDefaults = {
+  __typename: 'Content' as const,
+  duration: null,
+  abstentionsAllowed: null,
+  hasCorrectAnswer: null,
+  weight: null,
+  answerCount: null,
+  abstentionCount: null,
+  position: null,
+  activeRound,
+};
+
+const createChoiceContent = (multiple = false): ContentDetailsFragment => ({
+  ...contentDefaults,
   id: multiple ? 'mc-multiple' : 'mc-single',
   body: multiple ? 'Multiple Choice Content' : 'Single Choice Content',
   bodyRendered: '<p>Choice Content</p>',
-  activeRound,
   formatData: {
     __typename: 'ChoiceContentFormatData',
     format: ContentType.Choice,
     multiple,
     correctOptionIndexes: multiple ? [0, 2] : [1],
     options: [
-      { __typename: 'AnswerOption', label: 'Answer 1' },
-      { __typename: 'AnswerOption', label: 'Answer 2' },
-      { __typename: 'AnswerOption', label: 'Answer 3' },
-      { __typename: 'AnswerOption', label: 'Answer 4' },
+      { __typename: 'AnswerOption', label: 'Answer 1', labelRendered: null },
+      { __typename: 'AnswerOption', label: 'Answer 2', labelRendered: null },
+      { __typename: 'AnswerOption', label: 'Answer 3', labelRendered: null },
+      { __typename: 'AnswerOption', label: 'Answer 4', labelRendered: null },
     ],
   },
 });
 
-const wordcloudContent: Content = {
-  __typename: 'Content',
+const wordcloudContent: ContentDetailsFragment = {
+  ...contentDefaults,
   id: 'wordcloud-content',
   body: 'Wordcloud Content',
   bodyRendered: '<p>Wordcloud Content</p>',
-  activeRound,
   formatData: {
     __typename: 'WordcloudContentFormatData',
     format: ContentType.Wordcloud,

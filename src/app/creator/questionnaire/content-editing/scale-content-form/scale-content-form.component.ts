@@ -14,8 +14,7 @@ import {
 import { TranslocoService } from '@jsverse/transloco';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import { CoreModule } from '@app/core/core.module';
-import { AnswerOption } from '@app/core/models/answer-option';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { LIKERT_SCALE_TEMPLATES } from '@app/core/models/likert-scale-template.enum';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -94,9 +93,7 @@ export class ScaleContentFormComponent
   readonly translateLabels = computed(() => this.options().translate);
   /** Translated by the preview, into the room's language rather than the UI's. */
   readonly selectableAnswers = computed(() =>
-    this.optionLabels().map(
-      (label) => new SelectableAnswer(new AnswerOption(label), false)
-    )
+    this.optionLabels().map((label) => new SelectableOption({ label }, false))
   );
 
   templateLabel(template: ScaleContentTemplate): string {

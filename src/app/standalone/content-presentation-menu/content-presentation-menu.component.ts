@@ -13,9 +13,8 @@ import { map, Subject, switchMap, takeUntil } from 'rxjs';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import { onlyCompleteData } from 'apollo-angular';
 import { MatMenu } from '@angular/material/menu';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
-import { ContentService } from '@app/core/services/http/content.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -51,7 +50,7 @@ import { isRoundOver } from '@app/standalone/countdown-timer/answering';
   templateUrl: './content-presentation-menu.component.html',
 })
 export class ContentPresentationMenuComponent {
-  private contentService = inject(ContentService);
+  private router = inject(Router);
   private presentationService = inject(PresentationService);
   private serverTimeService = inject(ServerTimeService);
   private dialogService = inject(DialogService);
@@ -176,11 +175,14 @@ export class ContentPresentationMenuComponent {
   }
 
   editContent() {
-    this.contentService.goToEdit(
-      this.content().id,
+    this.router.navigate([
+      'edit',
       this.shortId(),
-      this.questionnaireId()
-    );
+      'questionnaire',
+      this.questionnaireId(),
+      'edit',
+      this.content().id,
+    ]);
   }
 
   canModifyAnswersOrRounds(): boolean {

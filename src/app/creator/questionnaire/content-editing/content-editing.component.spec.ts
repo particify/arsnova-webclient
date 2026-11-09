@@ -6,8 +6,6 @@ import {
   flush,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
@@ -86,23 +84,6 @@ describe('ContentEditingComponent', () => {
         TestBed.overrideComponent(form, { set: { template: '' } });
       }
 
-      const contentService = jasmine.createSpyObj('ContentService', [
-        'getTypeIcons',
-      ]);
-      contentService.getTypeIcons.and.returnValue(
-        new Map([
-          [ContentType.Choice, 'list'],
-          [ContentType.Wordcloud, 'cloud'],
-        ])
-      );
-      const contentGroupService = jasmine.createSpyObj('ContentGroupService', [
-        'getContentFormatsOfQuestionnaireType',
-      ]);
-      contentGroupService.getContentFormatsOfQuestionnaireType.and.returnValue([
-        ContentType.Choice,
-        ContentType.Wordcloud,
-      ]);
-
       configureTestModule(
         [
           getTranslocoModule(),
@@ -110,8 +91,6 @@ describe('ContentEditingComponent', () => {
           ContentEditingComponent,
         ],
         [
-          { provide: ContentService, useValue: contentService },
-          { provide: ContentGroupService, useValue: contentGroupService },
           spyProvider(AnnounceService, ['announce']),
           spyProvider(ContentPublishService, ['isLive']),
           spyProvider(FormattingService, ['containsTextAnImage']),
@@ -206,7 +185,9 @@ describe('ContentEditingComponent', () => {
 
     it('resets the body for the form of a newly selected format', fakeAsync(() => {
       setUp();
-      component.formatChanged(component.formats()[1]);
+      component.formatChanged(
+        component.formats().find((f) => f.type === ContentType.Wordcloud)!
+      );
       fixture.detectChanges();
       component.question.set('Second question');
 
@@ -366,14 +347,6 @@ describe('ContentEditingComponent', () => {
       configureTestModule(
         [getTranslocoModule(), ContentEditingComponent],
         [
-          {
-            provide: ContentService,
-            useValue: { getTypeIcons: () => new Map() },
-          },
-          {
-            provide: ContentGroupService,
-            useValue: { getContentFormatsOfQuestionnaireType: () => [] },
-          },
           spyProvider(FormattingService, ['containsTextAnImage']),
           spyProvider(NotificationService, ['showAdvanced']),
         ]

@@ -7,8 +7,6 @@ import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { CommentsPageComponent } from '@app/standalone/comments-presentation/comments-page.component';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { ContentService } from '@app/core/services/http/content.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
@@ -66,14 +64,6 @@ export default {
           useClass: MockService,
         },
         PresentationService,
-        {
-          provide: ContentService,
-          useClass: MockService,
-        },
-        {
-          provide: ContentGroupService,
-          useClass: MockService,
-        },
         {
           provide: RoomSettingsService,
           useClass: MockRoomSettingsService,

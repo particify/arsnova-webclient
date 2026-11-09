@@ -2,8 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { ContentService } from '@app/core/services/http/content.service';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
@@ -36,16 +34,6 @@ describe('ContentStepperComponent', () => {
       [
         provideNoopAnimations(),
         { provide: ContentResultsService, useValue: contentResultsService },
-        {
-          provide: ContentAnswerService,
-          useValue: jasmine.createSpyObj('ContentAnswerService', [
-            'getAnswerResultIcon',
-          ]),
-        },
-        {
-          provide: ContentService,
-          useValue: jasmine.createSpyObj('ContentService', ['getTypeIcons']),
-        },
       ]
     ).compileComponents();
 

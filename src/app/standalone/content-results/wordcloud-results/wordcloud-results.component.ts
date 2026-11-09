@@ -106,7 +106,7 @@ export class WordcloudResultsComponent {
     const roundStats = this.roundStats();
     if (roundStats) {
       return roundStats.words?.map((w, i) => ({
-        answer: w,
+        text: w,
         count: roundStats.counts ? roundStats.counts[i] : 0,
       }));
     }

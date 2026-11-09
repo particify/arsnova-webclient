@@ -149,7 +149,7 @@ describe('BinaryContentFormComponent', () => {
     expect(answerPreview()).not.toBeNull();
     const preview: ContentChoiceAnswerComponent =
       answerPreview().componentInstance;
-    expect(preview.answerOptions().map((o) => o.answerOption.label)).toEqual([
+    expect(preview.answerOptions().map((o) => o.option.label)).toEqual([
       'answer.yes',
       'answer.no',
     ]);

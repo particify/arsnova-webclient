@@ -1,8 +1,7 @@
 import { Component, computed, inject, input, Type } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
-import { AnswerOption, toAnswerOption } from '@app/core/models/answer-option';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { CoreModule } from '@app/core/core.module';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
@@ -90,7 +89,7 @@ export class ContentPreviewComponent {
       case 'BinaryContentFormatData':
         return {
           answerOptions: this.binaryLabels().map(
-            (label) => new SelectableAnswer(new AnswerOption(label), false)
+            (label) => new SelectableOption({ label }, false)
           ),
           correctOptionIndexes: binaryCorrectOptionIndexes(
             formatData.correctAnswer
@@ -100,7 +99,7 @@ export class ContentPreviewComponent {
       case 'ChoiceContentFormatData':
         return {
           answerOptions: formatData.options.map(
-            (o) => new SelectableAnswer(toAnswerOption(o), false)
+            (o) => new SelectableOption(o, false)
           ),
           correctOptionIndexes: formatData.correctOptionIndexes ?? undefined,
           multipleAnswersAllowed: !!formatData.multiple,
@@ -163,7 +162,7 @@ export class ContentPreviewComponent {
     const options = this.likertScaleService.getOptions(template, neutralOption);
     return {
       answerOptions: options.labels.map(
-        (label) => new SelectableAnswer(new AnswerOption(label), false)
+        (label) => new SelectableOption({ label }, false)
       ),
       translateOptions: options.translate,
       language: this.language(),

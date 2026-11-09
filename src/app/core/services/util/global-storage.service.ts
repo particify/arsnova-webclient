@@ -24,7 +24,6 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   ROOM_ID: Symbol(),
   SHORT_ID: Symbol(),
   DEVICE_TYPE: Symbol(),
-  CONTENT_GROUPS: Symbol(),
   LAST_GROUP: Symbol(),
   LAST_INDEX: Symbol(),
   THEME: Symbol(),
@@ -82,12 +81,6 @@ export const STORAGE_CONFIG: StorageItem[] = [
   {
     key: STORAGE_KEYS.DEVICE_TYPE,
     name: 'DEVICE_TYPE',
-    category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY,
-  },
-  {
-    key: STORAGE_KEYS.CONTENT_GROUPS,
-    name: 'CONTENT_GROUPS',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY,
   },

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { AnswerListComponent } from './answer-list.component';
-import { TextStatistic } from '@app/core/models/text-statistic';
+import { TextCount } from '@app/core/models/text-count';
 import { configureTestModule } from '@testing/test.setup';
 
 describe('AnswerListComponent', () => {
@@ -16,12 +16,12 @@ describe('AnswerListComponent', () => {
     fixture = TestBed.createComponent(AnswerListComponent);
     component = fixture.componentInstance;
     component.answers = [
-      new TextStatistic('ABC', 3),
-      new TextStatistic('GHI', 5),
-      new TextStatistic('DEF', 5),
-      new TextStatistic('JKL', 7),
-      new TextStatistic('MNO', 1),
-      new TextStatistic('PQR', 5),
+      new TextCount('ABC', 3),
+      new TextCount('GHI', 5),
+      new TextCount('DEF', 5),
+      new TextCount('JKL', 7),
+      new TextCount('MNO', 1),
+      new TextCount('PQR', 5),
     ];
     Object.assign(component, inputs);
     fixture.detectChanges();
@@ -55,7 +55,7 @@ describe('AnswerListComponent', () => {
   it('lets a moderator ban an answer', () => {
     setUp();
     const deleted: string[] = [];
-    component.deleteClicked.subscribe((a) => deleted.push(a.answer));
+    component.deleteClicked.subscribe((a) => deleted.push(a.text));
 
     row('ABC').querySelector<HTMLButtonElement>('.delete-button')!.click();
 

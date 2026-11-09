@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import {
   PublishedQuestionnairesByRoomIdGql,
@@ -85,8 +83,6 @@ describe('RoomOverviewPageComponent (participant)', () => {
         { provide: RoomByShortIdGql, useValue: roomByShortId },
         { provide: RoomSettingsService, useValue: roomSettingsService },
         { provide: FocusModeService, useValue: focusModeService },
-        { provide: ContentGroupService, useValue: {} },
-        { provide: RoomStatsService, useValue: {} },
       ]
     ).compileComponents();
 

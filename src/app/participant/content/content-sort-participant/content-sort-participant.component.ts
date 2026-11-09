@@ -13,7 +13,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { AnswerForm } from '@app/participant/content/answer-form';
 import {
   ContentSortAnswerComponent,
@@ -27,6 +26,7 @@ import {
   SortContentFormatData,
 } from '@gql/generated/graphql';
 import { mutationHelper } from '@gql/helper/mutation-helper';
+import { shuffleOptions } from '@app/core/utils/answer-options';
 
 @Component({
   selector: 'app-content-sort-participant',
@@ -38,7 +38,6 @@ import { mutationHelper } from '@gql/helper/mutation-helper';
 export class ContentSortParticipantComponent implements AnswerForm {
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
-  private readonly answerService = inject(ContentAnswerService);
   private readonly createAnswer = inject(CreateQuestionnaireSortAnswerGql);
   private readonly mutations = mutationHelper();
 
@@ -116,7 +115,7 @@ export class ContentSortParticipantComponent implements AnswerForm {
     const given = this.answerFormatData()?.selectedChoiceIndexes;
     return given
       ? given.map((index) => options[index])
-      : this.answerService.shuffleAnswerOptions([...options]);
+      : shuffleOptions([...options]);
   }
 
   /** The displayed order, expressed as positions in the stored option order. */

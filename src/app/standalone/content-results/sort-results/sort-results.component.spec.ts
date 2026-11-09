@@ -3,7 +3,6 @@ import { By } from '@angular/platform-browser';
 import { BehaviorSubject, of, Subject } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { Theme, ThemeService } from '@app/core/theme/theme.service';
@@ -113,15 +112,10 @@ describe('SortResultsComponent', () => {
           provide: FormattingService,
           useValue: { postString: () => of({ html: '' }) },
         },
-        // Reversing stands in for the shuffle, which is otherwise random.
-        {
-          provide: ContentAnswerService,
-          useValue: {
-            shuffleAnswerOptions: <T>(items: T[]) => items.reverse(),
-          },
-        },
       ]
     ).compileComponents();
+    // Always swapping with the first item turns A, B, C, D into B, C, D, A.
+    spyOn(Math, 'random').and.returnValue(0);
 
     fixture = TestBed.createComponent(SortResultsComponent);
     component = fixture.componentInstance;
@@ -181,7 +175,7 @@ describe('SortResultsComponent', () => {
 
   it('numbers the items in shuffled order until the reveal', () => {
     setUp();
-    expect(optionOrder()).toEqual(['D', 'C', 'B', 'A']);
+    expect(optionOrder()).toEqual(['B', 'C', 'D', 'A']);
     expect(
       optionList()
         .answers()
@@ -234,13 +228,13 @@ describe('SortResultsComponent', () => {
 
   it('labels a bar with the positions in the shuffled list', () => {
     setUp(roundStats([[[0, 1, 2, 3], 3]]));
-    // A is shown fourth, B third, C second, D first.
-    expect(barLabels()).toEqual(['4-3-2-1']);
+    // A is shown fourth, B first, C second, D third.
+    expect(barLabels()).toEqual(['4-1-2-3']);
   });
 
   it('relabels the bars with the correct positions on the reveal', () => {
     setUp(roundStats([[[0, 2, 1, 3], 3]]));
-    expect(barLabels()).toEqual(['4-2-3-1']);
+    expect(barLabels()).toEqual(['4-2-1-3']);
     reveal();
     expect(barLabels()).toEqual(['1-3-2-4']);
   });

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { CoreModule } from '@app/core/core.module';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { TranslocoService } from '@jsverse/transloco';
@@ -24,7 +24,7 @@ export class ContentChoiceAnswerComponent {
   private languageService = inject(LanguageService);
   private translateService = inject(TranslocoService);
 
-  readonly answerOptions = model.required<SelectableAnswer[]>();
+  readonly answerOptions = model.required<SelectableOption[]>();
   readonly correctOptionsPublished = input<boolean>(false);
   readonly correctOptionIndexes = input<number[] | undefined>();
   readonly answered = input<boolean>(true);
@@ -62,7 +62,7 @@ export class ContentChoiceAnswerComponent {
     () =>
       this.translateOptions()
         ? {
-            labels: this.answerOptions().map((o) => o.answerOption.label),
+            labels: this.answerOptions().map((o) => o.option.label),
             lang: this.languageService.ensureValidLang(this.language()),
           }
         : undefined,
@@ -104,8 +104,8 @@ export class ContentChoiceAnswerComponent {
       .slice(0, labels.length)
       .map(
         (o, i) =>
-          new SelectableAnswer(
-            { label: labels[i], renderedLabel: labels[i] },
+          new SelectableOption(
+            { label: labels[i], labelRendered: labels[i] },
             o.checked
           )
       );

@@ -1,7 +1,7 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer-grid-list.component';
-import { TextStatistic } from '@app/core/models/text-statistic';
+import { TextCount } from '@app/core/models/text-count';
 
 export default {
   component: AnswerGridListComponent,
@@ -17,12 +17,12 @@ export default {
 type Story = StoryObj<AnswerGridListComponent>;
 
 const answers = [
-  new TextStatistic('Answer 1', 5, '1'),
-  new TextStatistic('Answer 2', 4, '2'),
-  new TextStatistic('Answer 3', 2, '3'),
-  new TextStatistic('Answer 4', 1, '4'),
-  new TextStatistic('Answer 5', 1, '5'),
-  new TextStatistic('Answer 6', 1, '6'),
+  new TextCount('Answer 1', 5, '1'),
+  new TextCount('Answer 2', 4, '2'),
+  new TextCount('Answer 3', 2, '3'),
+  new TextCount('Answer 4', 1, '4'),
+  new TextCount('Answer 5', 1, '5'),
+  new TextCount('Answer 6', 1, '6'),
 ];
 
 export const AnswerGridList: Story = {

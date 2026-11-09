@@ -49,7 +49,6 @@ import {
 } from '@gql/generated/graphql';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
-import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   HotkeyActionButtonComponent,
@@ -66,7 +65,6 @@ import { ContentStepperComponent } from '@app/standalone/content-stepper/content
 import { ContentGroupLeaderboardComponent } from '@app/standalone/content-group-leaderboard/content-group-leaderboard.component';
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 import { CountComponent } from '@app/standalone/count/count.component';
-import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
@@ -263,12 +261,11 @@ export class ContentsPageComponent {
 
   initialized = false;
   /** The presented content carries its counts, which its queries keep current. */
-  readonly responseCounts = computed<AnswerResponseCounts>(() => ({
+  readonly responseCounts = computed(() => ({
     answers: this.content()?.answerCount ?? 0,
     abstentions: this.content()?.abstentionCount ?? 0,
   }));
   canAnswerContent = false;
-  attributions: ContentLicenseAttribution[] = [];
   showLeaderboard = false;
   isPublishing = false;
 
@@ -388,12 +385,6 @@ export class ContentsPageComponent {
 
   updateURL(index: number) {
     if (this.currentIndex() === index && !this.content()) {
-      return;
-    }
-    if (
-      this.attributions.length > 0 &&
-      this.currentIndex() === this.stepCount() - 1
-    ) {
       return;
     }
     this.contentPresentationService.setCurrentContentIndex(index);

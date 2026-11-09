@@ -14,7 +14,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import {
   AnswerResultState,
@@ -89,7 +89,7 @@ describe('ContentBinaryParticipantComponent', () => {
   }
 
   function labels(): string[] {
-    return component.answerOptions().map((o) => o.answerOption.label);
+    return component.answerOptions().map((o) => o.option.label);
   }
 
   function choiceAnswer(): ContentChoiceAnswerComponent {
@@ -283,8 +283,7 @@ describe('ContentBinaryParticipantComponent', () => {
     it('keeps a choice not yet sent across a language switch', () => {
       component.answerOptions.update((options) =>
         options.map(
-          (option, index) =>
-            new SelectableAnswer(option.answerOption, index === 1)
+          (option, index) => new SelectableOption(option.option, index === 1)
         )
       );
       switchTo('de');

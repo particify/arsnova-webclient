@@ -146,8 +146,8 @@ describe('WordcloudResultsComponent', () => {
     setUp();
 
     expect(component.listData()).toEqual([
-      { answer: 'Angular', count: 3 },
-      { answer: 'Kotlin', count: 1 },
+      { text: 'Angular', count: 3 },
+      { text: 'Kotlin', count: 1 },
     ]);
   });
 
@@ -237,9 +237,9 @@ describe('WordcloudResultsComponent', () => {
     emitUpdate(['Angular', 'Kotlin', 'Rust'], [4, 1, 1]);
 
     expect(component.listData()).toEqual([
-      { answer: 'Angular', count: 4 },
-      { answer: 'Kotlin', count: 1 },
-      { answer: 'Rust', count: 1 },
+      { text: 'Angular', count: 4 },
+      { text: 'Kotlin', count: 1 },
+      { text: 'Rust', count: 1 },
     ]);
   });
 
@@ -259,8 +259,8 @@ describe('WordcloudResultsComponent', () => {
     updates$.error(new Error('Subscription lost'));
 
     expect(component.listData()).toEqual([
-      { answer: 'Angular', count: 3 },
-      { answer: 'Kotlin', count: 1 },
+      { text: 'Angular', count: 3 },
+      { text: 'Kotlin', count: 1 },
     ]);
     expect(console.error).toHaveBeenCalled();
   });

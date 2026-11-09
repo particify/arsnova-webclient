@@ -15,8 +15,7 @@ import { CoreModule } from '@app/core/core.module';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentForm } from '@app/creator/questionnaire/content-editing/content-form';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
-import { AnswerOption } from '@app/core/models/answer-option';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import {
   BinaryContentFormatData,
@@ -62,7 +61,7 @@ export class BinaryContentFormComponent
 
   /** The participant form's label keys, so the preview reads the same. */
   readonly previewAnswers = ['answer.yes', 'answer.no'].map(
-    (label) => new SelectableAnswer(new AnswerOption(label), false)
+    (label) => new SelectableOption({ label }, false)
   );
 
   readonly correctAnswer = linkedSignal<

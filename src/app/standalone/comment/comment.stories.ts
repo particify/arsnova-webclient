@@ -35,7 +35,7 @@ const standardComment: Post = {
   createdAt: new Date().toDateString(),
   favorite: false,
   score: 42,
-  moderationState: ModerationState.Approved,
+  moderationState: ModerationState.Accepted,
   tags: [],
   replies: [],
 };
@@ -53,7 +53,7 @@ const favoriteComment: Post = {
   createdAt: new Date().toDateString(),
   favorite: true,
   score: 99,
-  moderationState: ModerationState.Approved,
+  moderationState: ModerationState.Accepted,
   tags: [],
   replies: [],
 };

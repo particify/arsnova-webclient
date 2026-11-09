@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
@@ -90,10 +89,6 @@ describe('SeriesOverviewComponent', () => {
     contentCarouselService.isLastContentAnswered.and.returnValue(
       !!options.lastContentAnswered
     );
-    const answerService = jasmine.createSpyObj('ContentAnswerService', [
-      'getAnswerResultIcon',
-    ]);
-    answerService.getAnswerResultIcon.and.returnValue('check');
     const leaderboardByQuestionnaireId = jasmine.createSpyObj(
       'QuestionnaireLeaderboardByQuestionnaireIdGql',
       ['watch', 'fetch']
@@ -125,7 +120,6 @@ describe('SeriesOverviewComponent', () => {
         { provide: RoutingService, useValue: routingService },
         { provide: ThemeService, useValue: themeService },
         { provide: ContentCarouselService, useValue: contentCarouselService },
-        { provide: ContentAnswerService, useValue: answerService },
         { provide: FormattingService, useValue: { postString: () => of('') } },
         {
           provide: QuestionnaireLeaderboardByQuestionnaireIdGql,

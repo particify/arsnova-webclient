@@ -171,7 +171,7 @@ describe('ScaleContentFormComponent', () => {
     const preview: ContentChoiceAnswerComponent = fixture.debugElement.query(
       By.directive(ContentChoiceAnswerComponent)
     ).componentInstance;
-    expect(preview.answerOptions().map((o) => o.answerOption.label)).toEqual(
+    expect(preview.answerOptions().map((o) => o.option.label)).toEqual(
       component.optionLabels()
     );
     expect(preview.translateOptions()).toBe(true);

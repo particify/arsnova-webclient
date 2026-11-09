@@ -5,8 +5,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatMenuHarness } from '@angular/material/menu/testing';
 import { CombinedGraphQLErrors } from '@apollo/client';
 import { Router } from '@angular/router';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
@@ -105,18 +103,6 @@ describe('ContentListComponent', () => {
         },
       }),
     } as never);
-    const contentService = jasmine.createSpyObj('ContentService', [
-      'getTypeIcons',
-      'hasFormatRounds',
-    ]);
-    contentService.getTypeIcons.and.returnValue(new Map());
-    contentService.hasFormatRounds.and.returnValue(true);
-    const contentGroupService = jasmine.createSpyObj('ContentGroupService', [
-      'isContentCompatibleWithQuestionnaireType',
-    ]);
-    contentGroupService.isContentCompatibleWithQuestionnaireType.and.returnValue(
-      true
-    );
     dialogService = jasmine.createSpyObj('DialogService', [
       'openDeleteDialog',
       'openQuestionnaireCreationDialog',
@@ -130,8 +116,6 @@ describe('ContentListComponent', () => {
     configureTestModule(
       [getTranslocoModule(), ContentListComponent],
       [
-        { provide: ContentService, useValue: contentService },
-        { provide: ContentGroupService, useValue: contentGroupService },
         { provide: DialogService, useValue: dialogService },
         { provide: NotificationService, useValue: notificationService },
         { provide: FormattingService, useValue: { postString: () => of('') } },
@@ -610,15 +594,6 @@ describe('ContentListComponent', () => {
         formatData: { format: ContentType.Wordcloud },
       })) as CreatorContentDetailsFragment[];
       setUp(live(), undefined, wordcloud);
-      // Only some formats support several rounds; starting the first one must not depend on it.
-      (
-        TestBed.inject(ContentService) as unknown as {
-          hasFormatRounds: jasmine.Spy;
-        }
-      ).hasFormatRounds.and.callFake((format: ContentType) =>
-        [ContentType.Choice, ContentType.Scale].includes(format)
-      );
-      fixture.detectChanges();
 
       const startButtons = fixture.nativeElement.querySelectorAll(
         '.start-button'

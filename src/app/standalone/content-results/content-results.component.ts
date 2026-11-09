@@ -28,7 +28,6 @@ import {
   QuestionnaireRoundsByContentIdQueryVariables,
   UserUiSettings,
 } from '@gql/generated/graphql';
-import { ContentService } from '@app/core/services/http/content.service';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -38,7 +37,6 @@ import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
-import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 import { RoundSelectorComponent } from '@app/standalone/round-selector/round-selector.component';
 import { sortedRoundIds } from '@app/standalone/round-selector/round-selection';
 import { ContentResultsService } from './content-results.service';
@@ -67,7 +65,6 @@ type ResultsContent = ContentDetailsFragment &
   ],
 })
 export class ContentResultsComponent {
-  private readonly contentService = inject(ContentService);
   private readonly contentResultsService = inject(ContentResultsService);
   private readonly questionnaireRoundsByContentId = inject(
     QuestionnaireRoundsByContentIdGql
@@ -246,7 +243,6 @@ export class ContentResultsComponent {
     this.contentResultsService.correctResultsVisible()
   );
 
-  responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
   ContentType = ContentType;
   HotkeyAction = HotkeyAction;
   allowingUnitChange = computed(() =>
@@ -312,12 +308,5 @@ export class ContentResultsComponent {
         ? VisualizationType.TABLE
         : VisualizationType.WORDCLOUD
     );
-  }
-
-  updateCounter(counts: AnswerResponseCounts) {
-    this.responseCounts = counts;
-    if (this.active()) {
-      this.contentService.updateAnswerCounts(this.responseCounts);
-    }
   }
 }

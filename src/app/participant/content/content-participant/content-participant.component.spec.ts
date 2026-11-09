@@ -2,7 +2,6 @@ import { failedOperation } from '@testing/graphql-fixtures';
 import { NgClass, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import {
   AdvancedSnackBarTypes,
@@ -165,7 +164,6 @@ describe('ContentParticipantComponent', () => {
           useValue: mutationSpy('CreateQuestionnaireWordcloudAnswerGql'),
         },
         { provide: FormattingService, useValue: { postString: () => of('') } },
-        { provide: ContentService, useValue: { updateAnswerCounts: () => {} } },
         {
           provide: CurrentUserWithSettingsGql,
           useValue: { fetch: () => of({ data: {} }) },

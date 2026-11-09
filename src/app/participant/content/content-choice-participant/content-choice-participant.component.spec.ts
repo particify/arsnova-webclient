@@ -44,9 +44,9 @@ describe('ContentChoiceParticipantComponent', () => {
     });
     fixture.detectChanges();
 
-    expect(fixture.componentInstance.answerOptions()[0].answerOption).toEqual({
+    expect(fixture.componentInstance.answerOptions()[0].option).toEqual({
       label: '**A**',
-      renderedLabel: '<p><b>A</b></p>',
+      labelRendered: '<p><b>A</b></p>',
     });
   });
 

@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
-import { ContentService } from '@app/core/services/http/content.service';
 import {
   Content,
   ContentType,
@@ -168,7 +167,6 @@ describe('ContentResultsComponent', () => {
     configureTestModule(
       [getTranslocoModule(), ContentResultsComponent],
       [
-        { provide: ContentService, useValue: { updateAnswerCounts: () => {} } },
         {
           provide: CurrentUserWithSettingsGql,
           useValue: { fetch: () => of({ data: {} }) },

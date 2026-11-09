@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AnswerOption } from '@app/core/models/answer-option';
 import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
@@ -53,9 +52,7 @@ describe('ContentChoiceAnswerComponent option labels', () => {
     const fixture = TestBed.createComponent(ContentChoiceAnswerComponent);
     fixture.componentRef.setInput(
       'answerOptions',
-      labels.map(
-        (label) => new SelectableAnswer(new AnswerOption(label), false)
-      )
+      labels.map((label) => new SelectableOption({ label }, false))
     );
     fixture.componentRef.setInput('translateOptions', translateOptions);
     fixture.componentRef.setInput('language', roomLang);
@@ -68,7 +65,7 @@ describe('ContentChoiceAnswerComponent option labels', () => {
   ): string[] {
     return fixture.componentInstance
       .displayAnswers()
-      .map((a) => a.answerOption.label);
+      .map((a) => a.option.label);
   }
 
   it('should use the UI language when the room has none', () => {
@@ -114,10 +111,9 @@ describe('ContentChoiceAnswerComponent', () => {
   let component: ContentChoiceAnswerComponent;
 
   /** Three options with the first one picked, as a given answer leaves them. */
-  function answerOptions(): SelectableAnswer[] {
+  function answerOptions(): SelectableOption[] {
     return ['Berlin', 'Bonn', 'Bern'].map(
-      (label, index) =>
-        new SelectableAnswer(new AnswerOption(label), index === 0)
+      (label, index) => new SelectableOption({ label }, index === 0)
     );
   }
 

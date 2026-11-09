@@ -8,7 +8,6 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   CurrentUserTemplatesGql,
   PublishedTemplatesGql,
@@ -19,12 +18,12 @@ import {
 
 class MockService {}
 
-const tags = [
-  { id: 'tagId1', name: 'tag 1', verified: true },
-  { id: 'tagId2', name: 'tag 2', verified: true },
-  { id: 'tagId3', name: 'tag 3', verified: true },
-  { id: 'tagId4', name: 'tag 4', verified: true },
-  { id: 'tagId5', name: 'tag 5', verified: true },
+const tags: TemplateDetailsFragment['tags'] = [
+  { __typename: 'TemplateTag', id: 'tagId1', name: 'tag 1', verified: true },
+  { __typename: 'TemplateTag', id: 'tagId2', name: 'tag 2', verified: true },
+  { __typename: 'TemplateTag', id: 'tagId3', name: 'tag 3', verified: true },
+  { __typename: 'TemplateTag', id: 'tagId4', name: 'tag 4', verified: true },
+  { __typename: 'TemplateTag', id: 'tagId5', name: 'tag 5', verified: true },
 ];
 
 function template(
@@ -32,6 +31,7 @@ function template(
   changes: Partial<TemplateDetailsFragment>
 ): TemplateDetailsFragment {
   return {
+    __typename: 'Template',
     id,
     aiGenerated: false,
     attribution: 'Attribution',
@@ -40,6 +40,7 @@ function template(
     description: 'This is a description.',
     language: 'en',
     license: {
+      __typename: 'TemplateLicense',
       id: 'CC-BY-4.0',
       name: 'CC BY 4.0',
       url: 'https://creativecommons.org/licenses/by/4.0/',
@@ -60,6 +61,7 @@ const templates = [
     description: 'This is another description.',
     attribution: null,
     license: {
+      __typename: 'TemplateLicense',
       id: 'CC0-1.0',
       name: 'CC0 1.0',
       url: 'https://creativecommons.org/publicdomain/zero/1.0/',
@@ -93,18 +95,6 @@ const currentUserTemplatesGqlMock = {
 const templateTagsByLanguageGqlMock = {
   fetch: () => of({ data: { templateTagsByLanguage: tags } }),
 };
-
-class MockContentGroupService {
-  private typeIcons = new Map<QuestionnaireType, string>([
-    [QuestionnaireType.Mixed, 'dashboard'],
-    [QuestionnaireType.Quiz, 'sports_esports'],
-    [QuestionnaireType.Survey, 'tune'],
-    [QuestionnaireType.Flashcards, 'school'],
-  ]);
-  getQuestionnaireTypeIcons() {
-    return this.typeIcons;
-  }
-}
 
 export default {
   component: ContentGroupTemplateSelectionComponent,
@@ -148,10 +138,6 @@ export default {
           useValue: {
             snapshot: { data: {}, queryParams: { lang: 'en' } },
           },
-        },
-        {
-          provide: ContentGroupService,
-          useClass: MockContentGroupService,
         },
       ],
     }),

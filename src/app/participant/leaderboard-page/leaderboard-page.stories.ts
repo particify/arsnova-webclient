@@ -5,7 +5,7 @@ import { NEVER, of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
 import {
-  Content,
+  ContentDetailsFragment,
   LeaderboardPage,
   QuestionnaireLeaderboardByQuestionnaireIdGql,
   QuestionnaireLeaderboardUpdatedGql,
@@ -201,7 +201,7 @@ type Story = StoryObj<LeaderboardPageComponent>;
 
 export const Participant: Story = {
   args: {
-    content: { id: 'contentId' } as Content,
+    content: { id: 'contentId' } as ContentDetailsFragment,
     aliasId: '5',
     groupId: 'questionnaireId',
   },
@@ -209,7 +209,7 @@ export const Participant: Story = {
 
 export const ParticipantWithDuration: Story = {
   args: {
-    content: { id: 'contentId', duration: 30 } as Content,
+    content: { id: 'contentId', duration: 30 } as ContentDetailsFragment,
     aliasId: '5',
     groupId: 'questionnaireId',
   },

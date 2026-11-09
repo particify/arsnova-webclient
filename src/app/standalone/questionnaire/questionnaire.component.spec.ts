@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -60,10 +59,6 @@ describe('QuestionnaireComponent', () => {
         { provide: Router, useValue: router },
         { provide: ActivatedRoute, useValue: route },
         { provide: GlobalStorageService, useValue: globalStorageService },
-        {
-          provide: ContentGroupService,
-          useValue: { getQuestionnaireTypeIcons: () => new Map() },
-        },
       ]
     ).compileComponents();
     fixture = TestBed.createComponent(QuestionnaireComponent);

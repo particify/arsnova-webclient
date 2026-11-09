@@ -5,7 +5,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
-import { ContentService } from '@app/core/services/http/content.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
@@ -147,10 +146,6 @@ describe('ContentPresentationMenuComponent', () => {
         },
         { provide: QuestionnaireByIdGql, useValue: questionnaireById },
         { provide: PresentationService, useValue: presentationService },
-        {
-          provide: ContentService,
-          useValue: jasmine.createSpyObj('ContentService', ['goToEdit']),
-        },
         { provide: DialogService, useValue: dialogService },
         {
           provide: NotificationService,

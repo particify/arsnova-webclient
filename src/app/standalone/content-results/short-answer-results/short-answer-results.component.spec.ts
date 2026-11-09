@@ -152,7 +152,7 @@ describe('ShortAnswerResultsComponent', () => {
   }
 
   function gridEntries(): [string, number][] {
-    return (grid()?.answers ?? []).map((a) => [a.answer, a.count]);
+    return (grid()?.answers ?? []).map((a) => [a.text, a.count]);
   }
 
   function summary(): CorrectAnswerResultsComponent | undefined {
@@ -331,8 +331,7 @@ describe('ShortAnswerResultsComponent', () => {
     banButtons()[0].click();
 
     expect(dialogService.openDeleteDialog.calls.mostRecent().args[2]).toBe(
-      answerList()?.answers.find((a) => !answerList()?.isCorrect(a.answer))
-        ?.answer
+      answerList()?.answers.find((a) => !answerList()?.isCorrect(a.text))?.text
     );
   });
 

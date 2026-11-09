@@ -329,9 +329,6 @@ export class ControlBarComponent
         ? lastSort
         : CommentSort.TIME;
     this.setSurveyState(!!this.roomSettings()?.surveyEnabled);
-    // if (this.groupName && this.contentGroups.length > 0) {
-    //   this.setContentGroupState();
-    // }
     this.subscribeToStates();
     this.subscribeToEvents();
     setTimeout(() => {
@@ -441,12 +438,6 @@ export class ControlBarComponent
           { zoom: this.currentCommentZoom }
         );
       });
-    // this.presentationService
-    //   .getContentGroupChanges()
-    //   .pipe(takeUntil(this.destroyed$))
-    //   .subscribe((group) => {
-    //     this.group = group;
-    //   });
   }
 
   evaluateContentState(state?: ContentPresentationState) {
@@ -494,20 +485,6 @@ export class ControlBarComponent
     this.surveyItems[0].name = this.surveyStarted ? 'stop' : 'start';
     this.surveyItems[0].icon = this.surveyStarted ? 'stop' : 'play_arrow';
     this.surveyItems[1].disabled = this.surveyStarted;
-  }
-
-  setContentGroupState() {
-    // const group = this.contentGroups.find((g) => g.name === this.groupName);
-    // if (group) {
-    //   this.group = group;
-    // }
-    // if (
-    //   this.isActiveFeature(RoutingFeature.CONTENTS) &&
-    //   this.group &&
-    //   this.isGroupLocked(this.group)
-    // ) {
-    //   this.publishContentGroup(this.group);
-    // }
   }
 
   setArrowsState(state: PresentationStepPosition) {

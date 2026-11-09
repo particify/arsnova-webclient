@@ -21,7 +21,7 @@ const post: Post = {
   createdAt: new Date().toDateString(),
   favorite: false,
   score: 42,
-  moderationState: ModerationState.Approved,
+  moderationState: ModerationState.Accepted,
   tags: [],
   replies: [
     {

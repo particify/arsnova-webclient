@@ -2,12 +2,9 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { ContentChoiceAnswerComponent } from './content-choice-answer.component';
 
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
-import { AnswerOption } from '@app/core/models/answer-option';
-import { ChoiceAnswer } from '@app/core/models/choice-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { ActivatedRoute } from '@angular/router';
 
 class MockFormattingService {}
@@ -42,25 +39,21 @@ export default {
 type Story = StoryObj<ContentChoiceAnswerComponent>;
 
 const selectableAnswers = [
-  new SelectableAnswer(new AnswerOption('*answer 1*'), false),
-  new SelectableAnswer(new AnswerOption('answer 2'), false),
-  new SelectableAnswer(new AnswerOption('answer 3'), false),
-  new SelectableAnswer(new AnswerOption('answer 4'), false),
+  new SelectableOption({ label: '*answer 1*' }, false),
+  new SelectableOption({ label: 'answer 2' }, false),
+  new SelectableOption({ label: 'answer 3' }, false),
+  new SelectableOption({ label: 'answer 4' }, false),
 ];
 
-selectableAnswers[0].answerOption.renderedLabel = '<b>answer 1</b>';
+selectableAnswers[0].option.labelRendered = '<b>answer 1</b>';
 
 export const ContentChoiceAnswer: Story = {
   args: {
-    answer: new ChoiceAnswer('contentId', 1, ContentType.CHOICE),
-    selectableAnswers: selectableAnswers,
-    isDisabled: false,
+    answerOptions: selectableAnswers,
+    disabled: false,
     multipleAnswersAllowed: false,
-    hasAbstained: false,
-    hasCorrectAnswer: false,
-    isCorrectAnswerPublished: false,
+    correctOptionsPublished: false,
     correctOptionIndexes: [1],
-    contentId: 'contentId',
     dynamicRendering: false,
   },
 };

@@ -15,9 +15,7 @@ import {
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { ContentService } from '@app/core/services/http/content.service';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -69,6 +67,10 @@ import { ScaleContentFormComponent } from './scale-content-form/scale-content-fo
 import { ShortAnswerContentFormComponent } from './short-answer-content-form/short-answer-content-form.component';
 import { SortContentFormComponent } from './sort-content-form/sort-content-form.component';
 import { TextContentFormComponent } from './text-content-form/text-content-form.component';
+import {
+  getContentFormatsOfQuestionnaireType,
+  getContentTypeIcons,
+} from '@app/core/utils/questionnaire-format';
 
 interface ContentFormat {
   type: ContentType;
@@ -124,8 +126,6 @@ export class ContentEditingComponent {
   private readonly translateService = inject(TranslocoService);
   private readonly announceService = inject(AnnounceService);
   private readonly formattingService = inject(FormattingService);
-  private readonly contentService = inject(ContentService);
-  private readonly contentGroupService = inject(ContentGroupService);
   private readonly notificationService = inject(NotificationService);
   private readonly contentPublishService = inject(ContentPublishService);
   private readonly contentById = inject(QuestionnaireContentByIdGql);
@@ -297,11 +297,10 @@ export class ContentEditingComponent {
   questionMaxLength = 2000;
 
   readonly formats = computed(() => {
-    const iconList = this.contentService.getTypeIcons();
-    const supportedTypes =
-      this.contentGroupService.getContentFormatsOfQuestionnaireType(
-        this.questionnaire().type
-      );
+    const iconList = getContentTypeIcons();
+    const supportedTypes = getContentFormatsOfQuestionnaireType(
+      this.questionnaire().type
+    );
 
     return supportedTypes
       .filter((type) => iconList.has(type))

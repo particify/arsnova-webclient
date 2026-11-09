@@ -15,7 +15,7 @@
         <app-answer-list
           [answers]="_listData"
           [isModerator]="allowAnswerModeration()"
-          (deleteClicked)="banAnswer($event.answer)"
+          (deleteClicked)="banAnswer($event.text)"
         ></app-answer-list>
       } @else {
         <app-answer-grid-list [answers]="_listData"></app-answer-grid-list>

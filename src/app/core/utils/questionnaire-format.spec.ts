@@ -1,6 +1,8 @@
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { configureTestModule } from '@testing/test.setup';
+import {
+  getAnswerOptions,
+  getContentFormatsOfQuestionnaireType,
+  isContentCompatibleWithQuestionnaireType,
+} from '@app/core/utils/questionnaire-format';
 import {
   ContentType,
   QuestionnaireType,
@@ -34,32 +36,11 @@ function content(
   };
 }
 
-describe('ContentGroupService', () => {
-  let service: ContentGroupService;
-
-  const globalStorageService = jasmine.createSpyObj('GlobalStorageService', [
-    'getItem',
-    'setItem',
-  ]);
-
-  beforeEach(() => {
-    const testBed = configureTestModule(
-      [],
-      [
-        ContentGroupService,
-        {
-          provide: GlobalStorageService,
-          useValue: globalStorageService,
-        },
-      ]
-    );
-    service = testBed.inject(ContentGroupService);
-  });
-
+describe('questionnaire format', () => {
   describe('getContentFormatsOfQuestionnaireType', () => {
     it('returns every content type for Mixed, in the order offered', () => {
       expect(
-        service.getContentFormatsOfQuestionnaireType(QuestionnaireType.Mixed)
+        getContentFormatsOfQuestionnaireType(QuestionnaireType.Mixed)
       ).toEqual([
         ContentType.Choice,
         ContentType.Scale,
@@ -77,7 +58,7 @@ describe('ContentGroupService', () => {
 
     it('returns Choice, Binary, ShortAnswer, Sort, Numeric and Slide for Quiz', () => {
       expect(
-        service.getContentFormatsOfQuestionnaireType(QuestionnaireType.Quiz)
+        getContentFormatsOfQuestionnaireType(QuestionnaireType.Quiz)
       ).toEqual([
         ContentType.Choice,
         ContentType.Binary,
@@ -90,7 +71,7 @@ describe('ContentGroupService', () => {
 
     it('returns Choice, Scale, Binary, Text, Wordcloud, Prioritization, Numeric and Slide for Survey', () => {
       expect(
-        service.getContentFormatsOfQuestionnaireType(QuestionnaireType.Survey)
+        getContentFormatsOfQuestionnaireType(QuestionnaireType.Survey)
       ).toEqual([
         ContentType.Choice,
         ContentType.Scale,
@@ -105,9 +86,7 @@ describe('ContentGroupService', () => {
 
     it('returns Flashcard and Slide for Flashcards', () => {
       expect(
-        service.getContentFormatsOfQuestionnaireType(
-          QuestionnaireType.Flashcards
-        )
+        getContentFormatsOfQuestionnaireType(QuestionnaireType.Flashcards)
       ).toEqual([ContentType.Flashcard, ContentType.Slide]);
     });
   });
@@ -115,7 +94,7 @@ describe('ContentGroupService', () => {
   describe('isContentCompatibleWithQuestionnaireType', () => {
     it('accepts a flashcard in a Flashcards series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Flashcard, false),
           QuestionnaireType.Flashcards
         )
@@ -124,7 +103,7 @@ describe('ContentGroupService', () => {
 
     it('accepts a slide in a Flashcards series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Slide, false),
           QuestionnaireType.Flashcards
         )
@@ -133,7 +112,7 @@ describe('ContentGroupService', () => {
 
     it('rejects a choice content in a Flashcards series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Choice, false),
           QuestionnaireType.Flashcards
         )
@@ -142,7 +121,7 @@ describe('ContentGroupService', () => {
 
     it('accepts a slide in a Quiz series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Slide, false),
           QuestionnaireType.Quiz
         )
@@ -151,7 +130,7 @@ describe('ContentGroupService', () => {
 
     it('accepts a slide in a Survey series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Slide, false),
           QuestionnaireType.Survey
         )
@@ -160,7 +139,7 @@ describe('ContentGroupService', () => {
 
     it('accepts a numeric content with a correct number in a Quiz series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Numeric, true),
           QuestionnaireType.Quiz
         )
@@ -169,7 +148,7 @@ describe('ContentGroupService', () => {
 
     it('accepts a numeric content without a correct number in a Survey series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Numeric, false),
           QuestionnaireType.Survey
         )
@@ -178,7 +157,7 @@ describe('ContentGroupService', () => {
 
     it('accepts a short answer content in a Quiz series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.ShortAnswer, true),
           QuestionnaireType.Quiz
         )
@@ -187,7 +166,7 @@ describe('ContentGroupService', () => {
 
     it('rejects a short answer content in a Survey series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.ShortAnswer, true),
           QuestionnaireType.Survey
         )
@@ -196,7 +175,7 @@ describe('ContentGroupService', () => {
 
     it('accepts a prioritization content in a Survey series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Prioritization, false),
           QuestionnaireType.Survey
         )
@@ -205,7 +184,7 @@ describe('ContentGroupService', () => {
 
     it('rejects a prioritization content in a Quiz series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Prioritization, false),
           QuestionnaireType.Quiz
         )
@@ -214,7 +193,7 @@ describe('ContentGroupService', () => {
 
     it('accepts a sort content in a Quiz series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Sort, true),
           QuestionnaireType.Quiz
         )
@@ -223,7 +202,7 @@ describe('ContentGroupService', () => {
 
     it('rejects a sort content in a Survey series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Sort, true),
           QuestionnaireType.Survey
         )
@@ -232,11 +211,27 @@ describe('ContentGroupService', () => {
 
     it('rejects a numeric content without a correct number in a Quiz series', () => {
       expect(
-        service.isContentCompatibleWithQuestionnaireType(
+        isContentCompatibleWithQuestionnaireType(
           content(ContentType.Numeric, false),
           QuestionnaireType.Quiz
         )
       ).toBeFalse();
+    });
+  });
+
+  describe('getAnswerOptions', () => {
+    it('marks the options at the correct indexes as correct', () => {
+      expect(getAnswerOptions(['A', 'B', 'C'], [0, 2])).toEqual([
+        jasmine.objectContaining({ option: 'A', correct: true }),
+        jasmine.objectContaining({ option: 'B', correct: false }),
+        jasmine.objectContaining({ option: 'C', correct: true }),
+      ]);
+    });
+
+    it('marks no option as correct without correct indexes', () => {
+      expect(
+        getAnswerOptions(['A', 'B']).map((answer) => answer.correct)
+      ).toEqual([false, false]);
     });
   });
 });
