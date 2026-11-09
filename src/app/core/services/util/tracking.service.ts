@@ -46,7 +46,6 @@ export enum EventCategory {
   ACCOUNT = 'Account',
   USER_DATA_ROOM = 'User data - Room',
   USER_DATA_COMMENT = 'User data - Comment',
-  USER_DATA_CONTENT = 'User data - Content',
   FEATURE_USAGE_SURVEY = 'Feature usage - Survey',
 }
 
@@ -305,15 +304,6 @@ export class TrackingService {
       .on<any>('CommentCreated')
       .subscribe(() =>
         this.addEvent(EventCategory.USER_DATA_COMMENT, 'Comment created')
-      );
-    this.eventService
-      .on<any>('ContentCreated')
-      .subscribe((e) =>
-        this.addEvent(
-          EventCategory.USER_DATA_CONTENT,
-          'Content created',
-          e.format.toString().toLowerCase()
-        )
       );
     this.eventService
       .on<any>('SurveyStarted')

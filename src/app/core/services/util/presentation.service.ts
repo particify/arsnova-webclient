@@ -4,7 +4,6 @@ import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
-import { RoundState } from '@app/core/models/events/round-state';
 import {
   BehaviorSubject,
   Observable,
@@ -13,7 +12,6 @@ import {
   fromEvent,
 } from 'rxjs';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
-import { ContentDetailsFragment } from '@gql/generated/graphql';
 
 const SCALE_FACTOR = 1080;
 const MIN_SCALE = 1;
@@ -23,7 +21,6 @@ export const CARD_WIDTH = 640;
 
 @Injectable()
 export class PresentationService {
-  private currentGroup$ = new Subject<string>();
   private feedbackStarted$ = new Subject<boolean>();
   private contentState$ = new BehaviorSubject<
     ContentPresentationState | undefined
@@ -31,9 +28,6 @@ export class PresentationService {
   private conmmentState$ = new BehaviorSubject<
     CommentPresentationState | undefined
   >(undefined);
-  private multipleRoundState$ = new BehaviorSubject<boolean | undefined>(
-    undefined
-  );
 
   private readonly useRatioScale = signal(true);
   private readonly scaleFactor = signal(SCALE_FACTOR);
@@ -53,12 +47,8 @@ export class PresentationService {
   private commentCategoryChanged = new Subject<string>();
   private commentPeriodChanged = new Subject<number | undefined>();
   private commentZoomChanged = new Subject<number>();
-  private roundStateChanged = new Subject<RoundState>();
-  private countdownChanged = new Subject<ContentDetailsFragment>();
   private wordcloudVisualizationCHanged = new Subject<boolean>();
   private leaderboardDisplayed = new Subject<boolean>();
-
-  private currentContent?: ContentDetailsFragment;
 
   getScale(factor = 1) {
     const ratioScale = innerHeight / innerWidth / ASPECT_RATIO;
@@ -90,24 +80,6 @@ export class PresentationService {
     return state;
   }
 
-  getCurrentGroup(): Observable<string> {
-    return this.currentGroup$;
-  }
-
-  updateCurrentGroup(group: string) {
-    this.currentGroup$.next(group);
-  }
-
-  startContent(contentGroupId: string): void {
-    console.log('start content:', contentGroupId);
-  }
-
-  stopContent(): void {
-    if (this.currentContent) {
-      // TODO: Stop content
-    }
-  }
-
   // States
 
   getContentState(): Observable<ContentPresentationState | undefined> {
@@ -116,7 +88,6 @@ export class PresentationService {
 
   updateContentState(state: ContentPresentationState) {
     this.contentState$.next(state);
-    this.currentContent = state.content;
   }
 
   getCommentState(): Observable<CommentPresentationState | undefined> {
@@ -125,14 +96,6 @@ export class PresentationService {
 
   updateCommentState(state: CommentPresentationState) {
     this.conmmentState$.next(state);
-  }
-
-  getMultipleRoundState(): Observable<boolean | undefined> {
-    return this.multipleRoundState$;
-  }
-
-  updateMultipleRoundState(state: boolean) {
-    this.multipleRoundState$.next(state);
   }
 
   // Events
@@ -185,24 +148,12 @@ export class PresentationService {
     this.commentZoomChanged.next(zoom);
   }
 
-  updateRoundState(state: RoundState) {
-    this.roundStateChanged.next(state);
-  }
-
-  getRoundStateChanges(): Observable<RoundState> {
-    return this.roundStateChanged;
-  }
-
   getFeedbackStarted(): Observable<boolean> {
     return this.feedbackStarted$;
   }
 
   updateFeedbackStarted(started: boolean) {
     this.feedbackStarted$.next(started);
-  }
-
-  getCountdownChanged(): Observable<ContentDetailsFragment> {
-    return this.countdownChanged;
   }
 
   updateWordcloudVisualization(rotateWordcloudItems: boolean) {

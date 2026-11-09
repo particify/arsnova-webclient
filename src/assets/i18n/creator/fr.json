@@ -37,7 +37,6 @@
     "a11y-sort-answer": "Position {{index}} sur {{length}} : {{answer}}.",
     "a11y-content-group-info": "Vous êtes maintenant dans votre série de questions {{name}} qui contient {{contentCount}} contenus.",
     "content-updated": "Votre contenu a été mis à jour.",
-    "answers-deleted": "Les réponses de ce contenu ont été supprimées.",
     "select-one": "Choisissez une option correcte.",
     "submitted": "Votre contenu a été sauvegardé.",
     "publish": "Publier",
@@ -397,7 +396,6 @@
     "correct": "Correct"
   },
   "dialog": {
-    "answers-deleted": "Les réponses à cette question ont été supprimées.",
     "really-delete-announcement": "Voulez-vous vraiment supprimer cette annonce ?",
     "really-delete-comments": "Voulez-vous vraiment supprimer toutes les questions de cette salle ? Cette action est irréversible.",
     "really-start-new-round": "Voulez-vous vraiment comment un nouveau tour ?",

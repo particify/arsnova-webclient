@@ -13,7 +13,6 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { PresentationService } from '@app/core/services/util/presentation.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -48,7 +47,6 @@ export class PresentationComponent implements OnDestroy {
   private readonly router = inject(Router);
   private readonly globalStorageService = inject(GlobalStorageService);
   private readonly translateService = inject(TranslocoService);
-  private readonly presentationService = inject(PresentationService);
   private readonly notificationService = inject(NotificationService);
   private readonly roomSettingsService = inject(RoomSettingsService);
   private readonly focusModeService = inject(FocusModeService);
@@ -106,7 +104,6 @@ export class PresentationComponent implements OnDestroy {
         return;
       }
       this.activeQuestionnaireId.set(questionnaireId);
-      this.presentationService.updateCurrentGroup(questionnaireId);
       this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     }
     const urlList = ['present', this.room().shortId];
