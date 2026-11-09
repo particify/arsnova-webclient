@@ -5,7 +5,7 @@ import { Apollo, onlyCompleteData } from 'apollo-angular';
 import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { TranslocoService } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
-import { TextStatistic } from '@app/core/models/text-statistic';
+import { TextCount } from '@app/core/models/text-count';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
@@ -92,7 +92,7 @@ export class ShortAnswerResultsComponent {
   readonly answers = computed(() => {
     const roundStats = this.roundStats();
     return (roundStats?.texts ?? []).map(
-      (text, i) => new TextStatistic(text, roundStats?.counts?.[i] ?? 0)
+      (text, i) => new TextCount(text, roundStats?.counts?.[i] ?? 0)
     );
   });
 

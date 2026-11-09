@@ -3,7 +3,7 @@
     <mat-card
       appearance="outlined"
       [ngClass]="{
-        'correct-card': showCorrect && isCorrect(answer.answer),
+        'correct-card': showCorrect && isCorrect(answer.text),
       }"
     >
       <div
@@ -12,7 +12,7 @@
         fxLayoutAlign="space-between"
         fxLayoutGap="12px"
       >
-        <span class="answer">{{ answer.answer }}</span>
+        <span class="answer">{{ answer.text }}</span>
         @if (answer.count > 1) {
           <div
             fxLayout="column"
@@ -36,7 +36,7 @@
       <mat-icon
         class="correct-icon"
         [ngClass]="{
-          'show-correct-icon': showCorrect && isCorrect(answer.answer),
+          'show-correct-icon': showCorrect && isCorrect(answer.text),
         }"
         data-testid="short-answer-correct-indicator"
         >check_circle</mat-icon

@@ -86,7 +86,7 @@ describe('ContentScaleParticipantComponent', () => {
   }
 
   function labels(): string[] {
-    return component.answerOptions().map((o) => o.answerOption.label);
+    return component.answerOptions().map((o) => o.option.label);
   }
 
   function choiceAnswer(): ContentChoiceAnswerComponent {

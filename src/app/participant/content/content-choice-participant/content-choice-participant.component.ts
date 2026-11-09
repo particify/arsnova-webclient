@@ -11,8 +11,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
-import { toAnswerOption } from '@app/core/models/answer-option';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import {
   Answer,
@@ -51,8 +50,8 @@ export class ContentChoiceParticipantComponent implements AnswerForm {
   readonly answerOptions = linkedSignal(() =>
     this.contentFormatData().options.map(
       (o, i) =>
-        new SelectableAnswer(
-          toAnswerOption(o),
+        new SelectableOption(
+          o,
           !!this.answerFormatData()?.selectedChoiceIndexes.includes(i)
         )
     )

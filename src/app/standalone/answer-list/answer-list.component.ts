@@ -6,7 +6,7 @@ import {
   Output,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { TextStatistic } from '@app/core/models/text-statistic';
+import { TextCount } from '@app/core/models/text-count';
 import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -30,25 +30,25 @@ import { NgClass } from '@angular/common';
   providers: [provideTranslocoScope('creator')],
 })
 export class AnswerListComponent implements OnInit {
-  @Input({ required: true }) answers!: TextStatistic[];
+  @Input({ required: true }) answers!: TextCount[];
   @Input() banMode = true;
   @Input() isPresentation = false;
   @Input() isModerator = true;
   @Input() showCorrect = false;
   @Input() correctAnswers?: string[];
-  @Output() deleteClicked = new EventEmitter<TextStatistic>();
+  @Output() deleteClicked = new EventEmitter<TextCount>();
 
   ngOnInit(): void {
     this.answers = this.sortAnswers();
   }
 
-  sortAnswers(): TextStatistic[] {
+  sortAnswers(): TextCount[] {
     return this.answers
-      .sort((a, b) => (b.answer > a.answer ? -1 : 1))
+      .sort((a, b) => (b.text > a.text ? -1 : 1))
       .sort((a, b) => b.count - a.count);
   }
 
-  deleteAnswer(answer: TextStatistic): void {
+  deleteAnswer(answer: TextCount): void {
     this.deleteClicked.emit(answer);
   }
 

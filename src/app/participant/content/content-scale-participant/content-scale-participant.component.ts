@@ -13,8 +13,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { mutationHelper } from '@gql/helper/mutation-helper';
-import { AnswerOption } from '@app/core/models/answer-option';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import { AnswerForm } from '@app/participant/content/answer-form';
@@ -66,8 +65,7 @@ export class ContentScaleParticipantComponent implements AnswerForm {
   readonly answerOptions = linkedSignal(() => {
     const rating = this.answerFormatData()?.rating;
     return this.options().labels.map(
-      (label, index) =>
-        new SelectableAnswer(new AnswerOption(label), rating === index)
+      (label, index) => new SelectableOption({ label }, rating === index)
     );
   });
 

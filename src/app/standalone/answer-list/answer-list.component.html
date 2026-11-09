@@ -6,11 +6,11 @@
       [ngClass]="{ moderation: isModerator && !isPresentation }"
       attr.aria-label="{{
         'statistic.a11y-text-evaluation'
-          | transloco: { count: answer.count, answer: answer.answer }
+          | transloco: { count: answer.count, answer: answer.text }
       }}"
     >
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <span fxFlex class="answer">{{ answer.answer }}</span>
+        <span fxFlex class="answer">{{ answer.text }}</span>
         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
             @if (answer.count > 1) {
@@ -20,7 +20,7 @@
               <mat-icon
                 class="correct-icon"
                 [ngClass]="{
-                  'show-correct-icon': showCorrect && isCorrect(answer.answer),
+                  'show-correct-icon': showCorrect && isCorrect(answer.text),
                 }"
                 >check_circle</mat-icon
               >
@@ -30,7 +30,7 @@
             isModerator &&
             (answer.id || banMode) &&
             !isPresentation &&
-            !isCorrect(answer.answer)
+            !isCorrect(answer.text)
           ) {
             <button
               mat-icon-button

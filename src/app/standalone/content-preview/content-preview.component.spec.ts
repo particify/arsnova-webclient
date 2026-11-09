@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
@@ -41,11 +41,11 @@ describe('ContentPreviewComponent', () => {
     fixture.detectChanges();
 
     const inputs = fixture.componentInstance.componentInputs() as {
-      answerOptions: SelectableAnswer[];
+      answerOptions: SelectableOption[];
     };
-    expect(inputs.answerOptions[0].answerOption).toEqual({
+    expect(inputs.answerOptions[0].option).toEqual({
       label: '**A**',
-      renderedLabel: '<p><b>A</b></p>',
+      labelRendered: '<p><b>A</b></p>',
     });
   });
 
@@ -70,16 +70,17 @@ describe('ContentPreviewComponent', () => {
       } as ContentFormatData);
       fixture.detectChanges();
       return fixture.componentInstance.componentInputs() as {
-        answerOptions: SelectableAnswer[];
+        answerOptions: SelectableOption[];
         correctOptionIndexes?: number[];
       };
     }
 
     it('offers yes before no, both unchecked', () => {
       const inputs = inputsFor(true);
-      expect(
-        inputs.answerOptions.map((option) => option.answerOption.label)
-      ).toEqual(['answer.yes', 'answer.no']);
+      expect(inputs.answerOptions.map((o) => o.option.label)).toEqual([
+        'answer.yes',
+        'answer.no',
+      ]);
       expect(inputs.answerOptions.some((option) => option.checked)).toBe(false);
     });
 
@@ -99,9 +100,9 @@ describe('ContentPreviewComponent', () => {
       const labels = () =>
         (
           fixture.componentInstance.componentInputs() as {
-            answerOptions: SelectableAnswer[];
+            answerOptions: SelectableOption[];
           }
-        ).answerOptions.map((option) => option.answerOption.label);
+        ).answerOptions.map((o) => o.option.label);
       inputsFor(true, getTranslocoModuleWithTranslations());
       expect(labels()).toEqual(['Yes', 'No']);
       TestBed.inject(TranslocoService).setActiveLang('de');
@@ -142,9 +143,12 @@ describe('ContentPreviewComponent', () => {
         neutralOption: false,
       });
       const form = answerForm(ContentChoiceAnswerComponent);
-      expect(
-        form.answerOptions().map((option) => option.answerOption.label)
-      ).toEqual(['😀', '🙂', '🙁', '😟']);
+      expect(form.answerOptions().map((o) => o.option.label)).toEqual([
+        '😀',
+        '🙂',
+        '🙁',
+        '😟',
+      ]);
       expect(form.answerOptions().some((option) => option.checked)).toBe(false);
       expect(form.translateOptions()).toBe(false);
     });
@@ -157,9 +161,7 @@ describe('ContentPreviewComponent', () => {
         neutralOption: true,
       });
       const form = answerForm(ContentChoiceAnswerComponent);
-      expect(
-        form.answerOptions().map((option) => option.answerOption.label)
-      ).toEqual([
+      expect(form.answerOptions().map((o) => o.option.label)).toEqual([
         'option-template.agreement-positive-2',
         'option-template.agreement-positive-1',
         'option-template.agreement-neutral',

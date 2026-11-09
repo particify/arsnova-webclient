@@ -13,8 +13,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
-import { AnswerOption } from '@app/core/models/answer-option';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import { AnswerForm } from '@app/participant/content/answer-form';
 import {
@@ -82,7 +81,7 @@ export class ContentBinaryParticipantComponent implements AnswerForm {
 
   readonly answerOptions = linkedSignal<
     { answer?: boolean; labels: string[] },
-    SelectableAnswer[]
+    SelectableOption[]
   >({
     source: () => ({
       answer: this.answerFormatData()?.answer,
@@ -98,8 +97,8 @@ export class ContentBinaryParticipantComponent implements AnswerForm {
           : undefined;
       return labels.map(
         (label, index) =>
-          new SelectableAnswer(
-            new AnswerOption(label),
+          new SelectableOption(
+            { label },
             kept ? kept[index] : answer === answerOfOption(index)
           )
       );

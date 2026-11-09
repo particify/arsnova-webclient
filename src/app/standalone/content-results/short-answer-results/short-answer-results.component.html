@@ -16,7 +16,7 @@
         [banMode]="true"
         [showCorrect]="showCorrect()"
         [correctAnswers]="correctTerms()"
-        (deleteClicked)="banAnswer($event.answer)"
+        (deleteClicked)="banAnswer($event.text)"
       ></app-answer-list>
     } @else {
       <app-answer-grid-list

@@ -27,8 +27,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
-import { SelectableAnswer } from '@app/core/models/selectable-answer';
-import { AnswerOption } from '@app/core/models/answer-option';
+import { SelectableOption } from '@app/core/models/selectable-option';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import { getAnswerOptions } from '@app/core/utils/questionnaire-format';
 
@@ -75,7 +74,7 @@ export class ChoiceContentFormComponent implements ContentForm<ChoiceContentForm
   );
   selectableAnswers = computed(() =>
     this.displayAnswers().map((d) => {
-      return new SelectableAnswer(new AnswerOption(d.option), false);
+      return new SelectableOption({ label: d.option }, false);
     })
   );
   answered = input(false);

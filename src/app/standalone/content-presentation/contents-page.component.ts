@@ -65,7 +65,6 @@ import { ContentStepperComponent } from '@app/standalone/content-stepper/content
 import { ContentGroupLeaderboardComponent } from '@app/standalone/content-group-leaderboard/content-group-leaderboard.component';
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 import { CountComponent } from '@app/standalone/count/count.component';
-import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
@@ -262,7 +261,7 @@ export class ContentsPageComponent {
 
   initialized = false;
   /** The presented content carries its counts, which its queries keep current. */
-  readonly responseCounts = computed<AnswerResponseCounts>(() => ({
+  readonly responseCounts = computed(() => ({
     answers: this.content()?.answerCount ?? 0,
     abstentions: this.content()?.abstentionCount ?? 0,
   }));

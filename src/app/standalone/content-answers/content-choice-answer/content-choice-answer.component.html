@@ -25,8 +25,8 @@
             class="answer-checkbox choice-answer"
           >
             <app-rendered-text
-              [rawText]="checkedAnswer.answerOption.label"
-              [renderedText]="checkedAnswer.answerOption.renderedLabel"
+              [rawText]="checkedAnswer.option.label"
+              [renderedText]="checkedAnswer.option.labelRendered ?? undefined"
             ></app-rendered-text>
           </mat-checkbox>
         }
@@ -39,8 +39,8 @@
             class="answer-checkbox choice-answer"
           >
             <app-rendered-text
-              [rawText]="checkedAnswer.answerOption.label"
-              [renderedText]="checkedAnswer.answerOption.renderedLabel"
+              [rawText]="checkedAnswer.option.label"
+              [renderedText]="checkedAnswer.option.labelRendered ?? undefined"
               [dynamic]="dynamicRendering()"
               [markdown]="false"
             ></app-rendered-text>
@@ -100,8 +100,8 @@
             name="answer"
           >
             <app-rendered-text
-              [rawText]="checkedAnswer.answerOption.label"
-              [renderedText]="checkedAnswer.answerOption.renderedLabel"
+              [rawText]="checkedAnswer.option.label"
+              [renderedText]="checkedAnswer.option.labelRendered ?? undefined"
               [dynamic]="dynamicRendering()"
               [markdown]="false"
             ></app-rendered-text>
