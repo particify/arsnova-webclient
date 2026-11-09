@@ -1,5 +1,6 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { CommentSettingsHintComponent } from './comment-settings-hint.component';
+import { QnaState } from '@gql/generated/graphql';
 
 export default {
   component: CommentSettingsHintComponent,
@@ -14,10 +15,16 @@ export default {
 
 type Story = StoryObj<CommentSettingsHintComponent>;
 
-export const CommentSettingsHint: Story = {
+export const Stopped: Story = {
   args: {
-    disabled: true,
-    readonly: false,
+    state: QnaState.Stopped,
     showToggleButton: true,
+  },
+};
+
+export const Paused: Story = {
+  args: {
+    state: QnaState.Paused,
+    showToggleButton: false,
   },
 };

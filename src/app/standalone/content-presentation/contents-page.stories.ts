@@ -4,13 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
 import { RoutingService } from '@app/core/services/util/routing.service';
 
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -34,29 +28,6 @@ class MockService {}
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(new AuthenticatedUser('userId', true, 'displayId'));
-  }
-}
-
-class MockContentGroupService {
-  getByRoomIdAndName() {
-    return of(
-      new ContentGroup(
-        'roomId',
-        'My mixed series',
-        ['content1', 'content2', 'content3', 'content4', 'content5'],
-        true,
-        true,
-        true,
-        PublishingMode.ALL,
-        0,
-        GroupType.MIXED,
-        false
-      )
-    );
-  }
-
-  getAttributions() {
-    return of([]);
   }
 }
 
@@ -204,10 +175,6 @@ export default {
           useClass: MockAuthenticationService,
         },
         {
-          provide: ContentGroupService,
-          useClass: MockContentGroupService,
-        },
-        {
           provide: QuestionnaireByIdGql,
           useValue: questionnaireByIdGqlMock,
         },
@@ -251,21 +218,9 @@ export default {
                   description: 'This is my awesome room description.',
                   settings: {},
                 },
-                contentGroup: new ContentGroup(
-                  'roomId',
-                  'My mixed series',
-                  ['content1', 'content2', 'content3', 'content4'],
-                  true,
-                  true,
-                  true,
-                  PublishingMode.ALL,
-                  0,
-                  GroupType.MIXED,
-                  false
-                ),
               },
               params: {
-                contentIndex: 1,
+                contentId: 'content-2',
                 seriesName: 'My mixed series',
               },
               queryParams: {},
@@ -285,7 +240,7 @@ export const ContentsPagePresentation: Story = {
     showAnswerCount: true,
     showHotkeyActionButtons: true,
     showResults: true,
-    contentIndex: 1,
+    contentId: 'content-2',
     noControlBar: undefined,
     questionnaireId: 'questionnaireId',
     language: 'de',

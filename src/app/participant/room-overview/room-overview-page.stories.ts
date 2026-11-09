@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
@@ -8,12 +8,6 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
-import { RoomStats } from '@app/core/models/room-stats';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
@@ -24,71 +18,6 @@ class MockService {}
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(new AuthenticatedUser('userId', true, 'displayId'));
-  }
-}
-
-class MockRoomStatsService {
-  getStats() {
-    return of(
-      new RoomStats(
-        [
-          {
-            id: 'contentGroup1',
-            groupName: 'Mixed series',
-            contentCount: 5,
-            groupType: GroupType.MIXED,
-            published: true,
-          },
-        ],
-        42,
-        33,
-        12,
-        42
-      )
-    );
-  }
-}
-class MockContentGroupService {
-  private typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
-    [GroupType.MIXED, 'dashboard'],
-    [GroupType.QUIZ, 'sports_esports'],
-    [GroupType.SURVEY, 'tune'],
-    [GroupType.FLASHCARDS, 'school'],
-  ]);
-  getTypeIcons() {
-    return this.typeIcons;
-  }
-  getByIds(): Observable<ContentGroup[]> {
-    return of([
-      new ContentGroup(
-        'roomId1',
-        'Mixed series',
-        ['content1', 'content2', 'content3', 'content4', 'content5'],
-        true,
-        true,
-        true,
-        PublishingMode.ALL,
-        0,
-        GroupType.MIXED,
-        false
-      ),
-    ]);
-  }
-  sortContentGroupsByName(): ContentGroup[] {
-    return [
-      new ContentGroup(
-        'roomId1',
-        'Mixed series',
-        ['content1', 'content2', 'content3', 'content4', 'content5'],
-        true,
-        true,
-        true,
-        PublishingMode.ALL,
-        0,
-        GroupType.MIXED,
-        false
-      ),
-    ];
   }
 }
 
@@ -129,11 +58,11 @@ export default {
         },
         {
           provide: RoomStatsService,
-          useClass: MockRoomStatsService,
+          useClass: MockService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService,
+          useClass: MockService,
         },
         {
           provide: FocusModeService,
@@ -160,7 +89,9 @@ const room = new Room(
 
 export const Participant: Story = {
   args: {
-    room: room,
+    roomId: 'roomId',
+    shortId: '12345678',
+    legacyRoom: room,
     viewRole: UserRole.PARTICIPANT,
   },
 };

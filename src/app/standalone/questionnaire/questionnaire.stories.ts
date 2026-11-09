@@ -3,6 +3,7 @@ import { QuestionnaireComponent } from './questionnaire.component';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
+  QuestionnairePublishingMode,
   QuestionnaireType,
   ToggleQuestionnairePublishedGql,
 } from '@gql/generated/graphql';
@@ -65,11 +66,15 @@ type Story = StoryObj<QuestionnaireComponent>;
 export const Questionnaire: Story = {
   args: {
     questionnaire: {
+      __typename: 'Questionnaire',
       id: 'questionnaireId',
       name: 'Quiz',
       contentCount: 42,
       published: true,
       type: QuestionnaireType.Quiz,
+      publishingMode: QuestionnairePublishingMode.All,
+      leaderboardEnabled: null,
+      publishedUpToContent: null,
     },
     isParticipant: false,
     showRipple: false,

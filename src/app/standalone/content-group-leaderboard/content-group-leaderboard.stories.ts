@@ -5,7 +5,7 @@ import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { NEVER, of } from 'rxjs';
 import {
   LeaderboardPage,
-  Questionnaire,
+  QuestionnaireDetailsFragment,
   QuestionnaireLeaderboardByQuestionnaireIdGql,
   QuestionnaireLeaderboardUpdatedGql,
 } from '@gql/generated/graphql';
@@ -124,7 +124,7 @@ type Story = StoryObj<ContentGroupLeaderboardComponent>;
 
 export const Editor: Story = {
   args: {
-    questionnaire: { id: 'questionnaireId' } as Questionnaire,
+    questionnaire: { id: 'questionnaireId' } as QuestionnaireDetailsFragment,
     showAll: true,
   },
 };
