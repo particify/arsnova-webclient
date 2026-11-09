@@ -15,12 +15,12 @@ import { TranslocoService } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'app-template-language-selection',
+  selector: 'app-language-selection',
   imports: [CoreModule],
   changeDetection: ChangeDetectionStrategy.Eager,
-  templateUrl: './template-language-selection.component.html',
+  templateUrl: './language-selection.component.html',
 })
-export class TemplateLanguageSelectionComponent extends FormComponent {
+export class LanguageSelectionComponent extends FormComponent {
   private readonly translateService = inject(TranslocoService);
   private readonly langService = inject(LanguageService);
 

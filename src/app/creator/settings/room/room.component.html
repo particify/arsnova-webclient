@@ -90,11 +90,11 @@
       ></app-formatting-toolbar>
     }
   </div>
-  <app-template-language-selection
+  <app-language-selection
     [defaultLang]="language()"
     [allowNoneSelection]="true"
     (selectedLangChange)="language.set($safeNavigationMigration($event?.code))"
-  ></app-template-language-selection>
+  ></app-language-selection>
   <app-settings-slide-toggle
     *appFeatureFlag="'FOCUS_MODE'"
     label="creator.settings.focus-mode"

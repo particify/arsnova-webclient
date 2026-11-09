@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { LanguageSelectionComponent } from '@app/standalone/language-selection/language-selection.component';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import {
   CurrentUserTemplatesGql,
@@ -105,7 +105,7 @@ describe('ContentGroupTemplateSelectionComponent', () => {
           imports: [
             ContentGroupTemplateComponent,
             LoadingIndicatorComponent,
-            TemplateLanguageSelectionComponent,
+            LanguageSelectionComponent,
             TemplateTagSelectionComponent,
           ],
         },

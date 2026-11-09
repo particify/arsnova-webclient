@@ -33,7 +33,7 @@ import { Dir } from '@angular/cdk/bidi';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
-import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { LanguageSelectionComponent } from '@app/standalone/language-selection/language-selection.component';
 import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directive';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { MatButton } from '@angular/material/button';
@@ -71,7 +71,7 @@ import { RoomDeletionStarted } from '@app/core/models/events/room-deletion-start
     HintComponent,
     RenderedTextComponent,
     LanguageContextDirective,
-    TemplateLanguageSelectionComponent,
+    LanguageSelectionComponent,
     FeatureFlagDirective,
     SettingsSlideToggleComponent,
     MatButton,

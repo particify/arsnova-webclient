@@ -7,7 +7,7 @@ import { RoomMembershipService } from '@app/core/services/room-membership.servic
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
-import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { LanguageSelectionComponent } from '@app/standalone/language-selection/language-selection.component';
 import {
   CurrentUserTemplatesGql,
   PublishedTemplatesGql,
@@ -105,7 +105,7 @@ export default {
       imports: [
         ContentGroupTemplateSelectionComponent,
         AddTemplateButtonComponent,
-        TemplateLanguageSelectionComponent,
+        LanguageSelectionComponent,
         TemplateTagSelectionComponent,
       ],
       providers: [
