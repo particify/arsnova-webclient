@@ -495,6 +495,22 @@ export type DeleteAnnouncementMutationVariables = Exact<{
 
 export type DeleteAnnouncementMutation = { deleteAnnouncement: string };
 
+export type LanguageFragment = {
+  __typename: 'Language';
+  code: string;
+  nativeName: string;
+};
+
+export type LanguagesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type LanguagesQuery = {
+  languages: Array<{
+    __typename: 'Language';
+    code: string;
+    nativeName: string;
+  }>;
+};
+
 export type PostDetailsFragment = {
   __typename: 'Post';
   id: string;
@@ -7528,6 +7544,12 @@ export const AdminRoomDetailsFragmentDoc = gql`
     updatedAt
   }
 `;
+export const LanguageFragmentDoc = gql`
+  fragment Language on Language {
+    code
+    nativeName
+  }
+`;
 export const ReplyDetailsFragmentDoc = gql`
   fragment ReplyDetails on Reply {
     id
@@ -8473,6 +8495,28 @@ export class DeleteAnnouncementGql extends Apollo.Mutation<
   DeleteAnnouncementMutationVariables
 > {
   document = DeleteAnnouncementDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const LanguagesDocument = gql`
+  query Languages {
+    languages {
+      ...Language
+    }
+  }
+  ${LanguageFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class LanguagesGql extends Apollo.Query<
+  LanguagesQuery,
+  LanguagesQueryVariables
+> {
+  document = LanguagesDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

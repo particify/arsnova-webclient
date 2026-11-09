@@ -62,14 +62,6 @@ class MockLangService {
     ];
   }
   init() {}
-  getIsoLanguages() {
-    return of([
-      { code: 'en', nativeName: 'English', localizedName: 'Englisch' },
-      { code: 'de', nativeName: 'Deutsch', localizedName: 'German' },
-      { code: 'es', nativeName: 'español', localizedName: 'Spanish' },
-      { code: 'it', nativeName: 'italiano', localizedName: 'Italian' },
-    ]);
-  }
 }
 
 const preview: Preview = {

@@ -8,9 +8,8 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CoreModule } from '@app/core/core.module';
-import { IsoLanguage } from '@app/core/models/iso-language';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { LanguageFragment, LanguagesGql } from '@gql/generated/graphql';
 import { TranslocoService } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
@@ -22,18 +21,20 @@ import { map } from 'rxjs';
 })
 export class LanguageSelectionComponent extends FormComponent {
   private readonly translateService = inject(TranslocoService);
-  private readonly langService = inject(LanguageService);
+  private readonly languagesGql = inject(LanguagesGql);
 
   readonly smaller = input(false);
   readonly defaultLang = input<string>();
   readonly allowNoneSelection = input(false);
-  readonly selectedLang = model<IsoLanguage>();
+  readonly selectedLang = model<LanguageFragment>();
   readonly langs = toSignal(
-    this.langService
-      .getIsoLanguages()
+    this.languagesGql
+      .fetch()
       .pipe(
-        map((l) =>
-          l.toSorted((a, b) => a.nativeName.localeCompare(b.nativeName))
+        map((r) =>
+          (r.data?.languages ?? []).toSorted((a, b) =>
+            a.nativeName.localeCompare(b.nativeName)
+          )
         )
       ),
     { initialValue: [] }
@@ -55,7 +56,7 @@ export class LanguageSelectionComponent extends FormComponent {
     );
   }
 
-  updateLang(lang?: IsoLanguage): void {
+  updateLang(lang?: LanguageFragment): void {
     this.selectedLang.set(lang);
   }
 }
