@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { MatIconModule } from '@angular/material/icon';
 import { provideTranslocoScope } from '@jsverse/transloco';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { QuestionnaireType } from '@gql/generated/graphql';
+import { getQuestionnaireTypeIcons } from '@app/core/utils/questionnaire-format';
 
 @Component({
   selector: 'app-questionnaire-info',
@@ -28,5 +28,5 @@ export class QuestionnaireInfoComponent {
   countColor = input(false);
 
   QuestionnaireType = QuestionnaireType;
-  typeIcons = inject(ContentGroupService).getQuestionnaireTypeIcons();
+  typeIcons = getQuestionnaireTypeIcons();
 }

@@ -5,7 +5,6 @@ import {
   MatDialogContent,
   MatDialogActions,
 } from '@angular/material/dialog';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -29,6 +28,7 @@ import {
   QuestionnairesByRoomIdDocument,
   QuestionnaireType,
 } from '@gql/generated/graphql';
+import { getQuestionnaireTypeIcons } from '@app/core/utils/questionnaire-format';
 
 interface DialogData {
   roomId: string;
@@ -60,7 +60,6 @@ export class QuestionnaireCreationComponent {
     inject<MatDialogRef<QuestionnaireCreationComponent>>(MatDialogRef);
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
-  private readonly contentGroupService = inject(ContentGroupService);
   private readonly createQuestionnaire = inject(CreateQuestionnaireGql);
   private readonly mutations = mutationHelper();
   private readonly data = inject<DialogData>(MAT_DIALOG_DATA);
@@ -74,26 +73,24 @@ export class QuestionnaireCreationComponent {
   radioItems: DetailedRadioGroup[] = [];
 
   constructor() {
-    this.contentGroupService
-      .getQuestionnaireTypeIcons()
-      .forEach((icon, type) => {
-        const typeString = type.toLowerCase();
-        const title = this.translateService.translate(
-          'content.group-type-' + typeString
-        );
-        const description = this.translateService.translate(
-          'creator.content.group-type-description-' + typeString
-        );
-        this.radioItems.push(
-          new DetailedRadioGroup(
-            type,
-            title,
-            description,
-            icon,
-            `var(--${typeString})`
-          )
-        );
-      });
+    getQuestionnaireTypeIcons().forEach((icon, type) => {
+      const typeString = type.toLowerCase();
+      const title = this.translateService.translate(
+        'content.group-type-' + typeString
+      );
+      const description = this.translateService.translate(
+        'creator.content.group-type-description-' + typeString
+      );
+      this.radioItems.push(
+        new DetailedRadioGroup(
+          type,
+          title,
+          description,
+          icon,
+          `var(--${typeString})`
+        )
+      );
+    });
     this.selectedType = this.data.type ?? QuestionnaireType.Mixed;
   }
 

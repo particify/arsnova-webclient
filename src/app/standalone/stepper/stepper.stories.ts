@@ -1,6 +1,5 @@
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { AfterViewInit, Component, input, viewChild } from '@angular/core';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { AnswerResultState, ContentAnswerResult } from '@gql/generated/graphql';
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { StepperComponent } from './stepper.component';
@@ -39,15 +38,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [StepperStoryComponent],
-      providers: [
-        {
-          provide: ContentAnswerService,
-          useValue: {
-            getAnswerResultIcon: (state?: AnswerResultState) =>
-              ContentAnswerService.prototype.getAnswerResultIcon(state),
-          },
-        },
-      ],
     }),
   ],
 } as Meta;

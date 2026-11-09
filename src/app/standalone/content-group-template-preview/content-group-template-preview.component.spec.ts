@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ApolloCache } from '@apollo/client/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ContentService } from '@app/core/services/http/content.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
@@ -149,10 +148,6 @@ describe('ContentGroupTemplatePreviewComponent', () => {
         { provide: AuthenticationService, useValue: authService },
         { provide: RoutingService, useValue: routingService },
         { provide: NotificationService, useValue: notificationService },
-        {
-          provide: ContentService,
-          useValue: { getTypeIcons: () => new Map() },
-        },
       ]
     ).compileComponents();
     fixture = TestBed.createComponent(ContentGroupTemplatePreviewComponent);

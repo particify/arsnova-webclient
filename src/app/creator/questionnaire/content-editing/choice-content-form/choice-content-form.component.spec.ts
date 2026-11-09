@@ -3,7 +3,6 @@ import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { failedOperation } from '@testing/graphql-fixtures';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -28,12 +27,6 @@ describe('ChoiceContentFormComponent', () => {
     TestBed.overrideComponent(ChoiceContentFormComponent, {
       set: { template: '' },
     });
-    const contentService = jasmine.createSpyObj('ContentService', [
-      'getAnswerOptions',
-    ]);
-    contentService.getAnswerOptions.and.callFake(
-      ContentService.prototype.getAnswerOptions
-    );
     updateChoiceContent = jasmine.createSpyObj(
       'UpdateQuestionnaireChoiceContentGql',
       ['mutate']
@@ -43,7 +36,6 @@ describe('ChoiceContentFormComponent', () => {
     configureTestModule(
       [getTranslocoModule(), ChoiceContentFormComponent],
       [
-        { provide: ContentService, useValue: contentService },
         {
           provide: UpdateQuestionnaireChoiceContentGql,
           useValue: updateChoiceContent,
@@ -111,16 +103,9 @@ describe('ChoiceContentFormComponent', () => {
 
   describe('once the content has answers', () => {
     async function render(answered: boolean, contentId?: string) {
-      const contentService = jasmine.createSpyObj('ContentService', [
-        'getAnswerOptions',
-      ]);
-      contentService.getAnswerOptions.and.callFake(
-        ContentService.prototype.getAnswerOptions
-      );
       configureTestModule(
         [getTranslocoModule(), ChoiceContentFormComponent],
         [
-          { provide: ContentService, useValue: contentService },
           {
             provide: UpdateQuestionnaireChoiceContentGql,
             useValue: jasmine.createSpyObj(

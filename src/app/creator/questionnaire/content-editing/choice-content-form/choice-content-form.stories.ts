@@ -1,5 +1,4 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import {
@@ -10,10 +9,6 @@ import {
 } from '@gql/generated/graphql';
 import { of } from 'rxjs';
 import { ChoiceContentFormComponent } from './choice-content-form.component';
-
-class MockContentService {
-  getAnswerOptions = ContentService.prototype.getAnswerOptions;
-}
 
 class MockFormattingService {
   postString(text: string) {
@@ -31,7 +26,6 @@ export default {
     moduleMetadata({
       imports: [ChoiceContentFormComponent],
       providers: [
-        { provide: ContentService, useClass: MockContentService },
         { provide: FormattingService, useClass: MockFormattingService },
         {
           provide: QuestionnairePageService,

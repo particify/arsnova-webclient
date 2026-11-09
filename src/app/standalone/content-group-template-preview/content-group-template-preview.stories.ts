@@ -4,12 +4,10 @@ import { ContentGroupTemplatePreviewComponent } from './content-group-template-p
 
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { of } from 'rxjs';
-import { ContentService } from '@app/core/services/http/content.service';
 
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import {
   ContentType,
@@ -81,34 +79,6 @@ class MockRoutingService {
   }
 }
 
-class MockContentService {
-  getTypeIcons() {
-    return new Map<ContentType, string>([
-      [ContentType.Choice, 'list'],
-      [ContentType.Scale, 'mood'],
-      [ContentType.Binary, 'rule'],
-      [ContentType.Text, 'description'],
-      [ContentType.Wordcloud, 'cloud'],
-      [ContentType.Sort, 'move_up'],
-      [ContentType.Prioritization, 'sort'],
-      [ContentType.Slide, 'info'],
-      [ContentType.Flashcard, 'school'],
-    ]);
-  }
-}
-
-class MockContentGroupService {
-  private typeIcons = new Map<QuestionnaireType, string>([
-    [QuestionnaireType.Mixed, 'dashboard'],
-    [QuestionnaireType.Quiz, 'sports_esports'],
-    [QuestionnaireType.Survey, 'tune'],
-    [QuestionnaireType.Flashcards, 'school'],
-  ]);
-  getQuestionnaireTypeIcons() {
-    return this.typeIcons;
-  }
-}
-
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(new AuthenticatedUser('userId', true, 'displayId'));
@@ -135,10 +105,6 @@ export default {
           useValue: publishedContentsGqlMock,
         },
         {
-          provide: ContentService,
-          useClass: MockContentService,
-        },
-        {
           provide: RoutingService,
           useClass: MockRoutingService,
         },
@@ -149,10 +115,6 @@ export default {
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService,
-        },
-        {
-          provide: ContentGroupService,
-          useClass: MockContentGroupService,
         },
         // Storybook provides no Apollo client.
         { provide: CreateQuestionnaireFromTemplateGql, useClass: MockService },

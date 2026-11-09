@@ -12,14 +12,12 @@ import {
   linkedSignal,
   signal,
 } from '@angular/core';
-import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-base.component';
 import {
@@ -90,6 +88,10 @@ import {
   isRoundOver as isRoundOverAt,
   roundKey,
 } from '@app/standalone/countdown-timer/answering';
+import {
+  getContentTypeIcons,
+  isContentCompatibleWithQuestionnaireType,
+} from '@app/core/utils/questionnaire-format';
 
 @Component({
   selector: 'app-content-list',
@@ -125,13 +127,11 @@ import {
   ],
 })
 export class ContentListComponent extends DragDropBaseComponent<CreatorContentDetailsFragment> {
-  private readonly contentService = inject(ContentService);
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly mutations = mutationHelper();
   private readonly dialogService = inject(DialogService);
   private readonly contentResultsService = inject(ContentResultsService);
-  private readonly contentGroupService = inject(ContentGroupService);
   private readonly contentPublishService = inject(ContentPublishService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
@@ -227,7 +227,7 @@ export class ContentListComponent extends DragDropBaseComponent<CreatorContentDe
     ContentType.Wordcloud,
   ];
 
-  iconList = computed(() => this.contentService.getTypeIcons());
+  readonly iconList = getContentTypeIcons();
 
   readonly answeringEndDate = answeringEndDate;
 
@@ -531,10 +531,7 @@ export class ContentListComponent extends DragDropBaseComponent<CreatorContentDe
     content: CreatorContentDetailsFragment,
     groupType: QuestionnaireType
   ): boolean {
-    return this.contentGroupService.isContentCompatibleWithQuestionnaireType(
-      content,
-      groupType
-    );
+    return isContentCompatibleWithQuestionnaireType(content, groupType);
   }
 
   isText(formatData: ContentFormatData): formatData is TextContentFormatData {

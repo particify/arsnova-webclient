@@ -3,7 +3,6 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
-import { ContentService } from '@app/core/services/http/content.service';
 import { ContentTemplatePreviewComponent } from '@app/standalone/_dialogs/content-template-preview/content-template-preview.component';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -41,6 +40,7 @@ import {
   TemplateDetailsFragment,
 } from '@gql/generated/graphql';
 import { ErrorClassification } from '@gql/helper/handle-operation-error';
+import { getContentTypeIcons } from '@app/core/utils/questionnaire-format';
 
 @Component({
   imports: [
@@ -62,7 +62,6 @@ export class ContentGroupTemplatePreviewComponent {
     QuestionnairePublishedContentsByQuestionnaireIdGql
   );
   private deleteTemplateGql = inject(DeleteTemplateGql);
-  private contentService = inject(ContentService);
   private dialog = inject(MatDialog);
   private translateService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
@@ -171,7 +170,7 @@ export class ContentGroupTemplatePreviewComponent {
   }
 
   getIcon(format: ContentType): string {
-    return this.contentService.getTypeIcons().get(format) || '';
+    return getContentTypeIcons().get(format) || '';
   }
 
   openPreview(content: ContentDetailsFragment): void {

@@ -5,7 +5,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatMenuHarness } from '@angular/material/menu/testing';
 import { CombinedGraphQLErrors } from '@apollo/client';
 import { Router } from '@angular/router';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -106,17 +105,9 @@ describe('ContentListComponent', () => {
       }),
     } as never);
     const contentService = jasmine.createSpyObj('ContentService', [
-      'getTypeIcons',
       'hasFormatRounds',
     ]);
-    contentService.getTypeIcons.and.returnValue(new Map());
     contentService.hasFormatRounds.and.returnValue(true);
-    const contentGroupService = jasmine.createSpyObj('ContentGroupService', [
-      'isContentCompatibleWithQuestionnaireType',
-    ]);
-    contentGroupService.isContentCompatibleWithQuestionnaireType.and.returnValue(
-      true
-    );
     dialogService = jasmine.createSpyObj('DialogService', [
       'openDeleteDialog',
       'openQuestionnaireCreationDialog',
@@ -131,7 +122,6 @@ describe('ContentListComponent', () => {
       [getTranslocoModule(), ContentListComponent],
       [
         { provide: ContentService, useValue: contentService },
-        { provide: ContentGroupService, useValue: contentGroupService },
         { provide: DialogService, useValue: dialogService },
         { provide: NotificationService, useValue: notificationService },
         { provide: FormattingService, useValue: { postString: () => of('') } },

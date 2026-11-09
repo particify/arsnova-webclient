@@ -23,8 +23,8 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { take } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentAnswerResult, AnswerResultState } from '@gql/generated/graphql';
+import { answerResultIcon } from '@app/core/utils/answer-options';
 
 export const STEPPER_ANIMATION_DURATION = 300;
 
@@ -80,7 +80,6 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   private announceService = inject(AnnounceService);
   private hotkeyService = inject(HotkeyService);
   private translateService = inject(TranslocoService);
-  private answerService = inject(ContentAnswerService);
   private changeDetectorRef = inject(ChangeDetectorRef);
 
   answerResults = input<ContentAnswerResult[]>([]);
@@ -292,9 +291,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   getAnswerResultIcon(index: number) {
-    return this.answerService.getAnswerResultIcon(
-      this.answerResults()[index].result
-    );
+    return answerResultIcon(this.answerResults()[index].result);
   }
 
   isLocked(index: number): boolean {

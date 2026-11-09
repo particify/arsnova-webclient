@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { DisplayAnswer } from '@app/creator/questionnaire/content-editing/_models/display-answer';
 import { AnswerOptionListComponent } from '@app/creator/questionnaire/content-editing/answer-option-list/answer-option-list.component';
-import { ContentService } from '@app/core/services/http/content.service';
 import { FlexModule } from '@angular/flex-layout';
 import { CoreModule } from '@app/core/core.module';
 import {
@@ -31,6 +30,7 @@ import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/co
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { mutationHelper } from '@gql/helper/mutation-helper';
+import { getAnswerOptions } from '@app/core/utils/questionnaire-format';
 
 @Component({
   selector: 'app-choice-content-form',
@@ -44,7 +44,6 @@ import { mutationHelper } from '@gql/helper/mutation-helper';
   ],
 })
 export class ChoiceContentFormComponent implements ContentForm<ChoiceContentFormatData> {
-  private contentService = inject(ContentService);
   private readonly createChoiceContent = inject(
     CreateQuestionnaireChoiceContentGql
   );
@@ -66,7 +65,7 @@ export class ChoiceContentFormComponent implements ContentForm<ChoiceContentForm
   preview = input<boolean>(false);
 
   displayAnswers = linkedSignal(() =>
-    this.contentService.getAnswerOptions(
+    getAnswerOptions(
       this.formatData()?.options.map((o) => o.label) ?? [],
       this.formatData()?.correctOptionIndexes ?? undefined
     )

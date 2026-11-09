@@ -1,7 +1,6 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { QuestionnaireComponent } from './questionnaire.component';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   QuestionnairePublishingMode,
   QuestionnaireType,
@@ -10,21 +9,6 @@ import {
 import { of } from 'rxjs';
 
 class MockRoutingService {}
-class MockContentGroupService {
-  private typeIcons: Map<QuestionnaireType, string> = new Map<
-    QuestionnaireType,
-    string
-  >([
-    [QuestionnaireType.Mixed, 'dashboard'],
-    [QuestionnaireType.Quiz, 'sports_esports'],
-    [QuestionnaireType.Survey, 'tune'],
-    [QuestionnaireType.Flashcards, 'school'],
-  ]);
-  getQuestionnaireTypeIcons() {
-    return this.typeIcons;
-  }
-}
-
 const toggleQuestionnairePublishedGqlMock = {
   mutate: () =>
     of({
@@ -51,10 +35,6 @@ export default {
         {
           provide: RoutingService,
           useClass: MockRoutingService,
-        },
-        {
-          provide: ContentGroupService,
-          useClass: MockContentGroupService,
         },
       ],
     }),

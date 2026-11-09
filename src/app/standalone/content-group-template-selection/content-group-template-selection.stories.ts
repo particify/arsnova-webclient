@@ -8,7 +8,6 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   CurrentUserTemplatesGql,
   PublishedTemplatesGql,
@@ -97,18 +96,6 @@ const templateTagsByLanguageGqlMock = {
   fetch: () => of({ data: { templateTagsByLanguage: tags } }),
 };
 
-class MockContentGroupService {
-  private typeIcons = new Map<QuestionnaireType, string>([
-    [QuestionnaireType.Mixed, 'dashboard'],
-    [QuestionnaireType.Quiz, 'sports_esports'],
-    [QuestionnaireType.Survey, 'tune'],
-    [QuestionnaireType.Flashcards, 'school'],
-  ]);
-  getQuestionnaireTypeIcons() {
-    return this.typeIcons;
-  }
-}
-
 export default {
   component: ContentGroupTemplateSelectionComponent,
   title: 'ContentGroupTemplateSelection',
@@ -151,10 +138,6 @@ export default {
           useValue: {
             snapshot: { data: {}, queryParams: { lang: 'en' } },
           },
-        },
-        {
-          provide: ContentGroupService,
-          useClass: MockContentGroupService,
         },
       ],
     }),

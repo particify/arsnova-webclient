@@ -11,13 +11,9 @@ import { IMessage } from '@stomp/stompjs';
 import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ContentType as LegacyContentType } from '@app/core/models/content-type.enum';
 import { ContentCreated } from '@app/core/models/events/content-created';
-import { Router } from '@angular/router';
 import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentState } from '@app/core/models/content-state';
-import { DisplayAnswer } from '@app/creator/questionnaire/content-editing/_models/display-answer';
-import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
-import { ContentType } from '@gql/generated/graphql';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -26,12 +22,10 @@ const httpOptions = {
 @Injectable()
 export class ContentService extends AbstractEntityService<Content> {
   private ws = inject(WsConnectorService);
-  private router = inject(Router);
   private dialogService = inject(DialogService);
 
   private answersDeleted = new Subject<string>();
   private answerBanned = new Subject<string>();
-  private answerCounts$ = new Subject<AnswerResponseCounts>();
 
   serviceApiUrl = {
     answer: '/answer',
@@ -53,20 +47,6 @@ export class ContentService extends AbstractEntityService<Content> {
     [LegacyContentType.NUMERIC, 'numbers'],
     [LegacyContentType.SLIDE, 'info'],
     [LegacyContentType.FLASHCARD, 'school'],
-  ]);
-
-  typeIcons: Map<ContentType, string> = new Map<ContentType, string>([
-    [ContentType.Binary, 'rule'],
-    [ContentType.Choice, 'list'],
-    [ContentType.Flashcard, 'school'],
-    [ContentType.Numeric, 'numbers'],
-    [ContentType.Prioritization, 'sort'],
-    [ContentType.Scale, 'mood'],
-    [ContentType.ShortAnswer, 'sms'],
-    [ContentType.Slide, 'info'],
-    [ContentType.Sort, 'move_up'],
-    [ContentType.Text, 'description'],
-    [ContentType.Wordcloud, 'cloud'],
   ]);
 
   constructor() {
@@ -372,17 +352,6 @@ export class ContentService extends AbstractEntityService<Content> {
     );
   }
 
-  goToEdit(contentId: string, shortId: string, questionnaireId: string) {
-    this.router.navigate([
-      'edit',
-      shortId,
-      'questionnaire',
-      questionnaireId,
-      'edit',
-      contentId,
-    ]);
-  }
-
   deleteAnswersOfContent(
     contentId: string,
     roomId: string,
@@ -412,26 +381,6 @@ export class ContentService extends AbstractEntityService<Content> {
     return this.legacyTypeIcons;
   }
 
-  getTypeIcons(): Map<ContentType, string> {
-    return this.typeIcons;
-  }
-
-  getAnswerOptions(
-    options: string[],
-    correctOptionIndexes?: number[]
-  ): DisplayAnswer[] {
-    const answers: DisplayAnswer[] = [];
-    options?.map((option, i) => {
-      answers.push(
-        new DisplayAnswer(
-          option,
-          correctOptionIndexes ? correctOptionIndexes.includes(i) : false
-        )
-      );
-    });
-    return answers;
-  }
-
   stopContent(roomId: string, contentId: string): Observable<void> {
     const connectionUrl = this.buildUri(`/${contentId}/stop`, roomId);
     return this.http
@@ -443,13 +392,5 @@ export class ContentService extends AbstractEntityService<Content> {
           )
         )
       );
-  }
-
-  updateAnswerCounts(counts: AnswerResponseCounts) {
-    this.answerCounts$.next(counts);
-  }
-
-  getAnswerCounts(): Subject<AnswerResponseCounts> {
-    return this.answerCounts$;
   }
 }

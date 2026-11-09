@@ -13,7 +13,6 @@ import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { updatesOnceOpen } from '@app/standalone/content-results/round-updates';
 import { TranslocoService } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ChoiceAnswerListComponent } from '@app/standalone/content-results/choice-results/choice-answer-list/choice-answer-list.component';
@@ -32,6 +31,7 @@ import {
   sameOrder,
   selectTopCombinations,
 } from './combination-selection';
+import { shuffleOptions } from '@app/core/utils/answer-options';
 
 @Component({
   selector: 'app-sort-results',
@@ -45,7 +45,6 @@ import {
 })
 export class SortResultsComponent {
   private readonly apollo = inject(Apollo);
-  private readonly answerService = inject(ContentAnswerService);
   private readonly presentationService = inject(PresentationService);
   private readonly themeService = inject(ThemeService);
   private readonly translateService = inject(TranslocoService);
@@ -125,10 +124,7 @@ export class SortResultsComponent {
    */
   private readonly shuffledOptions = linkedSignal<string, AnswerOption[]>({
     source: () => JSON.stringify(this.options().map((option) => option.label)),
-    computation: () =>
-      untracked(() =>
-        this.answerService.shuffleAnswerOptions([...this.options()])
-      ),
+    computation: () => untracked(() => shuffleOptions([...this.options()])),
   });
 
   private readonly displayOptions = computed(() => {

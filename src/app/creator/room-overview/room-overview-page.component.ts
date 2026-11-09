@@ -15,7 +15,6 @@ import {
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AbstractRoomOverviewPageComponent } from '@app/common/abstract/abstract-room-overview-page';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { ContentService } from '@app/core/services/http/content.service';
 import { FlexModule } from '@angular/flex-layout';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -46,6 +45,11 @@ import {
 import { switchMap } from 'rxjs';
 import { QuestionnaireComponent } from '@app/standalone/questionnaire/questionnaire.component';
 import { refetchOn } from '@gql/helper/refetch-on';
+import {
+  getContentFormatsOfQuestionnaireType,
+  getContentTypeIcons,
+  getQuestionnaireTypeIcons,
+} from '@app/core/utils/questionnaire-format';
 
 @Component({
   selector: 'app-creator-overview',
@@ -80,7 +84,6 @@ export class RoomOverviewPageComponent extends AbstractRoomOverviewPageComponent
   protected readonly router = inject(Router);
   protected readonly dialogService = inject(DialogService);
   protected readonly globalStorageService = inject(GlobalStorageService);
-  private readonly contentService = inject(ContentService);
   private readonly questionnairesByRoomId = inject(QuestionnairesByRoomIdGql);
   private readonly questionnairesChanged = inject(QuestionnairesChangedGql);
 
@@ -108,7 +111,7 @@ export class RoomOverviewPageComponent extends AbstractRoomOverviewPageComponent
   readonly userRole = input.required<UserRole>();
   readonly isModerator = computed(() => this.userRole() === UserRole.MODERATOR);
 
-  quesionnaireTypes: Map<QuestionnaireType, string>;
+  quesionnaireTypes: ReadonlyMap<QuestionnaireType, string>;
   readonly questionnaireContentFormatIcons = new Map<
     QuestionnaireType,
     Map<ContentType, string>
@@ -118,19 +121,16 @@ export class RoomOverviewPageComponent extends AbstractRoomOverviewPageComponent
 
   constructor() {
     super();
-    this.quesionnaireTypes =
-      this.contentGroupService.getQuestionnaireTypeIcons();
+    this.quesionnaireTypes = getQuestionnaireTypeIcons();
     this.quesionnaireTypes.forEach((_, key) => {
       const groupTypeIcons = new Map<ContentType, string>();
-      const typeIcons = this.contentService.getTypeIcons();
-      this.contentGroupService
-        .getContentFormatsOfQuestionnaireType(key)
-        .forEach((type) => {
-          const icon = typeIcons.get(type);
-          if (icon && type !== ContentType.Slide) {
-            groupTypeIcons.set(type, icon);
-          }
-        });
+      const typeIcons = getContentTypeIcons();
+      getContentFormatsOfQuestionnaireType(key).forEach((type) => {
+        const icon = typeIcons.get(type);
+        if (icon && type !== ContentType.Slide) {
+          groupTypeIcons.set(type, icon);
+        }
+      });
       this.questionnaireContentFormatIcons.set(key, groupTypeIcons);
     });
     const expandDescription = this.globalStorageService.getItem(

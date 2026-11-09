@@ -6,7 +6,6 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentService } from '@app/core/services/http/content.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -77,16 +76,6 @@ describe('RoomOverviewPageComponent (creator)', () => {
     roomByShortId.fetch.and.returnValue(
       of({ data: { roomByShortId: { id: 'room-1', name: 'Room' } } })
     );
-    const contentService = jasmine.createSpyObj('ContentService', [
-      'getTypeIcons',
-    ]);
-    contentService.getTypeIcons.and.returnValue(
-      new Map([
-        [ContentType.Choice, 'list'],
-        [ContentType.Slide, 'info'],
-        [ContentType.Wordcloud, 'cloud'],
-      ])
-    );
     dialogService = jasmine.createSpyObj('DialogService', [
       'openQuestionnaireCreationDialog',
     ]);
@@ -111,7 +100,6 @@ describe('RoomOverviewPageComponent (creator)', () => {
         },
         { provide: QuestionnairesChangedGql, useValue: questionnairesChanged },
         { provide: RoomByShortIdGql, useValue: roomByShortId },
-        { provide: ContentService, useValue: contentService },
         { provide: DialogService, useValue: dialogService },
         { provide: GlobalStorageService, useValue: globalStorageService },
         ContentGroupService,
@@ -154,39 +142,25 @@ describe('RoomOverviewPageComponent (creator)', () => {
     const formats = (type: QuestionnaireType) => [
       ...(component.questionnaireContentFormatIcons.get(type)?.keys() ?? []),
     ];
-    expect(formats(QuestionnaireType.Quiz)).toEqual([ContentType.Choice]);
-    expect(formats(QuestionnaireType.Mixed)).toEqual([
-      ContentType.Choice,
-      ContentType.Wordcloud,
+    expect(formats(QuestionnaireType.Flashcards)).toEqual([
+      ContentType.Flashcard,
     ]);
+    expect(formats(QuestionnaireType.Quiz)).not.toContain(ContentType.Slide);
   });
 
   it('shows the formats in the order they are offered, not by icon', () => {
     setUp();
-    const contentService = TestBed.inject(
-      ContentService
-    ) as jasmine.SpyObj<ContentService>;
-    // An icon map in alphabetical order must not dictate the order shown
-    contentService.getTypeIcons.and.returnValue(
-      new Map([
-        [ContentType.Binary, 'rule'],
-        [ContentType.Choice, 'list'],
-        [ContentType.Scale, 'mood'],
-        [ContentType.Wordcloud, 'cloud'],
-      ])
-    );
-    fixture = TestBed.createComponent(RoomOverviewPageComponent);
-    component = fixture.componentInstance;
 
     expect([
       ...(component.questionnaireContentFormatIcons
-        .get(QuestionnaireType.Mixed)
+        .get(QuestionnaireType.Quiz)
         ?.keys() ?? []),
     ]).toEqual([
       ContentType.Choice,
-      ContentType.Scale,
       ContentType.Binary,
-      ContentType.Wordcloud,
+      ContentType.ShortAnswer,
+      ContentType.Sort,
+      ContentType.Numeric,
     ]);
   });
 

@@ -4,7 +4,6 @@ import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import {
   AdvancedSnackBarTypes,
@@ -75,15 +74,10 @@ describe('ContentSortParticipantComponent', () => {
           provide: FormattingService,
           useValue: { postString: () => of({ html: '' }) },
         },
-        // Reversing stands in for the shuffle, which is otherwise random.
-        {
-          provide: ContentAnswerService,
-          useValue: {
-            shuffleAnswerOptions: <T>(items: T[]) => items.reverse(),
-          },
-        },
       ]
     ).compileComponents();
+    // Always swapping with the first item turns A, B, C, D into B, C, D, A.
+    spyOn(Math, 'random').and.returnValue(0);
 
     fixture = TestBed.createComponent(ContentSortParticipantComponent);
     component = fixture.componentInstance;
@@ -125,12 +119,12 @@ describe('ContentSortParticipantComponent', () => {
 
   it('shuffles the items instead of showing their correct order', () => {
     setUp();
-    expect(displayed()).toEqual(['D', 'C', 'B', 'A']);
+    expect(displayed()).toEqual(['B', 'C', 'D', 'A']);
     expect(
       list()
         .answerOptions()
         .map((option) => option.label)
-    ).toEqual(['D', 'C', 'B', 'A']);
+    ).toEqual(['B', 'C', 'D', 'A']);
   });
 
   it('leaves the list answerable until an answer is given', () => {
@@ -150,17 +144,17 @@ describe('ContentSortParticipantComponent', () => {
   it('submits the displayed order as positions in the stored order', () => {
     setUp();
     component.submitAnswer();
-    expect(submittedIndexes()).toEqual([3, 2, 1, 0]);
+    expect(submittedIndexes()).toEqual([1, 2, 3, 0]);
   });
 
   it('submits the order after the participant has reordered it', () => {
     setUp();
-    list().drop(3, 0);
+    list().drop(3, 1);
     fixture.detectChanges();
-    expect(displayed()).toEqual(['A', 'D', 'C', 'B']);
+    expect(displayed()).toEqual(['B', 'A', 'C', 'D']);
 
     component.submitAnswer();
-    expect(submittedIndexes()).toEqual([0, 3, 2, 1]);
+    expect(submittedIndexes()).toEqual([1, 0, 2, 3]);
   });
 
   it('submits the correct order as the identity permutation', () => {
@@ -220,7 +214,7 @@ describe('ContentSortParticipantComponent', () => {
 
   it('keeps the arrangement when the content re-emits unchanged', () => {
     setUp();
-    list().drop(3, 0);
+    list().drop(3, 1);
     fixture.detectChanges();
     const arranged = displayed();
 

@@ -1,5 +1,4 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import {
@@ -10,13 +9,6 @@ import {
 } from '@gql/generated/graphql';
 import { NEVER, of } from 'rxjs';
 import { SortResultsComponent } from './sort-results.component';
-
-/** Reverses instead of shuffling, so the stories render the same every time. */
-class MockContentAnswerService {
-  shuffleAnswerOptions<T>(answers: T[]): T[] {
-    return answers.reverse();
-  }
-}
 
 const statsMock = {
   watch: () => ({
@@ -56,7 +48,6 @@ export default {
     moduleMetadata({
       imports: [SortResultsComponent],
       providers: [
-        { provide: ContentAnswerService, useClass: MockContentAnswerService },
         { provide: FormattingService, useValue: {} },
         { provide: PresentationService, useValue: { getScale: () => 1 } },
         {

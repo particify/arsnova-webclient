@@ -1,22 +1,9 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { ContentGroupTemplateComponent } from './content-group-template.component';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   QuestionnaireType,
   TemplateDetailsFragment,
 } from '@gql/generated/graphql';
-
-class MockContentGroupService {
-  private typeIcons = new Map<QuestionnaireType, string>([
-    [QuestionnaireType.Mixed, 'dashboard'],
-    [QuestionnaireType.Quiz, 'sports_esports'],
-    [QuestionnaireType.Survey, 'tune'],
-    [QuestionnaireType.Flashcards, 'school'],
-  ]);
-  getQuestionnaireTypeIcons() {
-    return this.typeIcons;
-  }
-}
 
 export default {
   component: ContentGroupTemplateComponent,
@@ -25,12 +12,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [ContentGroupTemplateComponent],
-      providers: [
-        {
-          provide: ContentGroupService,
-          useClass: MockContentGroupService,
-        },
-      ],
+      providers: [],
     }),
   ],
 } as Meta;

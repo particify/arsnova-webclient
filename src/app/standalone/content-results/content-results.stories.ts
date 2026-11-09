@@ -1,6 +1,5 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { of } from 'rxjs';
-import { ContentService } from '@app/core/services/http/content.service';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -15,10 +14,6 @@ import {
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ContentResultsService } from './content-results.service';
-
-class MockContentService {
-  updateAnswerCounts() {}
-}
 
 class MockPresentationService {
   scale() {
@@ -128,10 +123,6 @@ export default {
     moduleMetadata({
       imports: [ContentResultsComponent],
       providers: [
-        {
-          provide: ContentService,
-          useClass: MockContentService,
-        },
         ContentResultsService,
         {
           provide: FormattingService,

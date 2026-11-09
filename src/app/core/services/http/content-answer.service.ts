@@ -8,7 +8,6 @@ import { Answer } from '@app/core/models/answer';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
 import { AnswerResponse } from '@app/core/models/answer-response';
-import { AnswerResultState } from '@gql/generated/graphql';
 
 @Injectable()
 export class ContentAnswerService extends AbstractEntityService<Answer> {
@@ -189,29 +188,5 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     return this.http
       .post<void>(url, null)
       .pipe(catchError(this.handleError<void>('hideAnswer')));
-  }
-
-  /** Shuffles in place and returns the same array. */
-  shuffleAnswerOptions<T>(answers: T[]): T[] {
-    for (let i = answers.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * i);
-      const temp = answers[i];
-      answers[i] = answers[j];
-      answers[j] = temp;
-    }
-    return answers;
-  }
-
-  getAnswerResultIcon(state?: AnswerResultState) {
-    switch (state) {
-      case AnswerResultState.Correct:
-        return 'check';
-      case AnswerResultState.Wrong:
-        return 'close';
-      case AnswerResultState.Unanswered:
-        return 'horizontal_rule';
-      default:
-        return 'fiber_manual_record';
-    }
   }
 }

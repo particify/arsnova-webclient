@@ -11,7 +11,6 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { SeriesOverviewComponent } from '@app/participant/series-overview/series-overview.component';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
   AnswerResultOverview,
   AnswerResultType,
@@ -300,21 +299,6 @@ class MockContentCarouselService {
   setLastContentAnswered() {}
 }
 
-class MockContentAnswerService {
-  getAnswerResultIcon(state: AnswerResultType) {
-    switch (state) {
-      case AnswerResultType.CORRECT:
-        return 'check';
-      case AnswerResultType.WRONG:
-        return 'close';
-      case AnswerResultType.UNANSWERED:
-        return 'horizontal_rule';
-      default:
-        return 'fiber_manual_record';
-    }
-  }
-}
-
 export default {
   component: SeriesOverviewComponent,
   title: 'ParticipantSeriesOverview',
@@ -350,10 +334,6 @@ export default {
         {
           provide: ContentCarouselService,
           useClass: MockContentCarouselService,
-        },
-        {
-          provide: ContentAnswerService,
-          useClass: MockContentAnswerService,
         },
         {
           provide: QuestionnaireAnswerResultsByQuestionnaireIdGql,

@@ -12,7 +12,6 @@ import {
   provideNoopAnimations,
 } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { StepperComponent } from './stepper.component';
@@ -48,12 +47,6 @@ describe('StepperComponent', () => {
       [
         // configureTestModule only types plain providers; environment ones work too.
         animations as Provider,
-        {
-          provide: ContentAnswerService,
-          useValue: jasmine.createSpyObj('ContentAnswerService', [
-            'getAnswerResultIcon',
-          ]),
-        },
       ]
     ).compileComponents();
 
