@@ -11,7 +11,6 @@
     <mat-accordion>
       @for (setting of settings; track setting) {
         <mat-expansion-panel
-          [disabled]="setting.name === 'access' && !isOwner()"
           class="settings-panel"
           [expanded]="currentRoute === setting.name"
           (opened)="updateUrl(setting.name)"
@@ -41,9 +40,6 @@
                 <app-comment-settings
                   [roomId]="roomId()"
                 ></app-comment-settings>
-              }
-              @case ('access') {
-                <app-access [roomId]="roomId()"></app-access>
               }
             }
           </div>

@@ -1,7 +1,7 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
-import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
+import { MemberSettings } from '@e2e/fixtures/creator/member-settings';
 import {
   VERIFIED_ADMIN_STORAGE_STATE,
   VERIFIED_USER,
@@ -13,69 +13,93 @@ import {
 // in their own room.
 const GRANT_TARGET = VERIFIED_USER;
 
-test.describe('room access settings', () => {
+test.describe('room team', () => {
   test.use({ storageState: VERIFIED_ADMIN_STORAGE_STATE });
 
-  let header: Header;
+  let memberSettings: MemberSettings;
   let roomSettings: RoomSettingsPage;
-  let homePage: HomePage;
   let shortId: string;
 
   test.beforeEach(async ({ page, baseURL }) => {
-    header = new Header(page);
+    memberSettings = new MemberSettings(page);
     roomSettings = new RoomSettingsPage(page, baseURL);
-    homePage = new HomePage(page, baseURL);
+    const homePage = new HomePage(page, baseURL);
     await homePage.goto();
     shortId = await homePage.createRoom('Room 1');
-    await header.goToSettings('Access rights');
   });
 
   test.afterEach(async () => {
     await roomSettings.deleteRoomById(shortId);
   });
 
-  test('go to access settings', async ({ page }) => {
-    await page.waitForURL(/\/settings\/access/);
-  });
-
-  test('add moderator', async ({ page }) => {
-    await addModerator(page);
-    await expect(page.getByText(GRANT_TARGET.loginId).first()).toBeVisible();
+  test('add an existing account as moderator and see them in the share menu', async ({
+    page,
+  }) => {
+    await memberSettings.open();
+    await memberSettings.addMember(GRANT_TARGET.loginId);
     await expect(
-      page.getByText('Moderator', { exact: true }).first()
+      memberSettings.member(memberSettings.dialog, GRANT_TARGET.loginId)
+    ).toContainText('Moderator');
+    await page.keyboard.press('Escape');
+    await expect(memberSettings.dialog).toBeHidden();
+
+    await memberSettings.openTeamTab();
+    const shown = memberSettings.member(
+      memberSettings.menu,
+      GRANT_TARGET.loginId
+    );
+    await expect(shown).toContainText('Moderator');
+    await expect(shown.getByTestId('member-role-select')).toBeHidden();
+    await expect(
+      memberSettings.menu.getByTestId('member-settings-button')
     ).toBeVisible();
   });
 
-  test('add editor', async ({ page }) => {
-    await addModerator(page, 'editor');
-    await expect(page.getByText(GRANT_TARGET.loginId).first()).toBeVisible();
-    await expect(
-      page.getByText('Editor', { exact: true }).first()
-    ).toBeVisible();
+  test('invite someone without an account by mail address', async () => {
+    await memberSettings.open();
+    test.skip(
+      !(await memberSettings.loginIdIsEmail()),
+      'Invitations need login IDs that are mail addresses.'
+    );
+    const invitee = `invitee-${Date.now()}@example.com`;
+
+    await memberSettings.inviteByMail(invitee);
+
+    const member = memberSettings.member(memberSettings.dialog, invitee);
+    await expect(member).toContainText('Moderator');
+    await expect(member).toContainText('unverified');
   });
 
-  test('remove moderator', async ({ page }) => {
-    await addModerator(page);
-    await expect(page.getByText(GRANT_TARGET.loginId).first()).toBeVisible();
+  test('add editor', async () => {
+    await memberSettings.open();
+    await memberSettings.addMember(GRANT_TARGET.loginId, 'Editor');
     await expect(
-      page.getByText('Moderator', { exact: true }).first()
-    ).toBeVisible();
-    await page.getByTestId('remove-access-rights-btn').click();
-    await page.getByRole('button', { name: 'Remove', exact: true }).click();
-    await expect(page.getByText(GRANT_TARGET.loginId).first()).toBeHidden();
+      memberSettings.member(memberSettings.dialog, GRANT_TARGET.loginId)
+    ).toContainText('Editor');
+  });
+
+  test('change the role of a member', async () => {
+    await memberSettings.open();
+    await memberSettings.addMember(GRANT_TARGET.loginId);
+
+    await memberSettings.changeRole(GRANT_TARGET.loginId, 'Editor');
+    await expect(
+      memberSettings.member(memberSettings.dialog, GRANT_TARGET.loginId)
+    ).toContainText('Editor');
+  });
+
+  test('remove members in the member settings', async ({ page }) => {
+    await memberSettings.open();
+    await memberSettings.addMember(GRANT_TARGET.loginId);
+    const member = memberSettings.member(
+      memberSettings.dialog,
+      GRANT_TARGET.loginId
+    );
+    await expect(member).toBeVisible();
+
+    await memberSettings.removeMember(GRANT_TARGET.loginId);
+    await expect(member).toBeHidden();
+    await page.keyboard.press('Escape');
+    await expect(memberSettings.dialog).toBeHidden();
   });
 });
-
-async function addModerator(page: Page, role?: string) {
-  await page.getByLabel('User', { exact: true }).fill(GRANT_TARGET.loginId);
-  if (role) {
-    await page.getByLabel('Role', { exact: true }).click();
-    await page.getByRole('option', { name: role }).click();
-  }
-  await Promise.all([
-    page.waitForResponse(
-      (res) => !!res.request().postData()?.includes('GrantRoomRole') && res.ok()
-    ),
-    page.getByRole('button', { name: 'add user' }).click(),
-  ]);
-}

@@ -1,0 +1,50 @@
+@use '../../../../variables' as *;
+
+.invite {
+  display: flex;
+  flex-direction: column;
+
+  // Keeps the floating label of the role field from being clipped.
+  padding-top: $spacing;
+}
+
+.guest-hint {
+  margin-bottom: $spacing;
+}
+
+.fields {
+  // Both fields reserve the same subscript line, which is all the space between them and the
+  // button. Should one still grow, such as by a wrapping error, the other keeps its height.
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-1;
+}
+
+.login-id {
+  flex: 2 1 220px;
+}
+
+.role {
+  flex: 1 1 140px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.higher-option {
+  padding: $spacing $spacing-2;
+}
+
+.option-name {
+  display: block;
+  font-size: $s-font-size;
+  font-weight: $font-weight-bold;
+}
+
+.option-description {
+  display: block;
+  font-size: $xs-font-size;
+}

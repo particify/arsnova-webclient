@@ -440,6 +440,17 @@ div {
   flex-grow: initial !important;
 }
 
+// The share menu's tabs split its width in equal halves, against the rule above
+.share-tabs {
+  .mat-mdc-tab-list {
+    flex-grow: 1 !important;
+  }
+
+  .mat-mdc-tab {
+    flex: 1 1 0;
+  }
+}
+
 .tab-icon-link.mat-mdc-tab-link.mdc-tab {
   min-width: unset;
   padding-left: 12px;
@@ -847,6 +858,12 @@ mat-card {
     min-width: 500px;
     max-height: 70vh;
   }
+}
+
+// Role select panels, wide enough for the role descriptions rather than as narrow as their trigger.
+.mat-mdc-select-panel.role-select-panel {
+  min-width: 280px;
+  max-width: 360px;
 }
 
 .mat-mdc-menu-panel.wider-panel {

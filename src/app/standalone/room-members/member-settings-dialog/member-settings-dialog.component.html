@@ -1,0 +1,19 @@
+<div class="header">
+  <h2 mat-dialog-title>{{ 'share.manage-members' | transloco }}</h2>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    [aria-label]="'dialog.close' | transloco"
+    [matTooltip]="'dialog.close' | transloco"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content class="content">
+  <app-member-invite-form [roomId]="data.roomId"></app-member-invite-form>
+  <app-member-list
+    [roomId]="data.roomId"
+    [members]="members()"
+    (lastRemoved)="focusInviteField()"
+  ></app-member-list>
+</mat-dialog-content>
