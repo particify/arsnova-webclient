@@ -507,6 +507,12 @@ export type JoinRoomInput =
   | { id: Scalars['ID']['input']; shortId?: never }
   | { id?: never; shortId: Scalars['ID']['input'] };
 
+export type Language = {
+  __typename?: 'Language';
+  code: Scalars['String']['output'];
+  nativeName: Scalars['String']['output'];
+};
+
 export type LeaderboardCurrentResult = {
   __typename?: 'LeaderboardCurrentResult';
   correct: Scalars['Boolean']['output'];
@@ -1300,6 +1306,7 @@ export type Query = {
   announcementsMetaForCurrentUser?: Maybe<AnnouncementsMeta>;
   currentUser?: Maybe<User>;
   currentUserTemplates?: Maybe<TemplateConnection>;
+  languages: Array<Language>;
   publishedQuestionnairesByRoomId?: Maybe<Array<Questionnaire>>;
   publishedTemplates?: Maybe<TemplateConnection>;
   qnaPostCountsByQnaId?: Maybe<PostCountSummary>;

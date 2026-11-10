@@ -10,6 +10,7 @@ import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-sele
 import { LanguageSelectionComponent } from '@app/standalone/language-selection/language-selection.component';
 import {
   CurrentUserTemplatesGql,
+  LanguagesGql,
   PublishedTemplatesGql,
   QuestionnaireType,
   TemplateDetailsFragment,
@@ -92,6 +93,17 @@ const currentUserTemplatesGqlMock = {
     of({ data: { currentUserTemplates: connection(templates.slice(0, 1)) } }),
 };
 
+const languages = [
+  { code: 'de', nativeName: 'Deutsch' },
+  { code: 'en', nativeName: 'English' },
+  { code: 'es', nativeName: 'español' },
+  { code: 'it', nativeName: 'italiano' },
+].map((l) => ({ __typename: 'Language' as const, ...l }));
+
+const languagesGqlMock = {
+  fetch: () => of({ data: { languages } }),
+};
+
 const templateTagsByLanguageGqlMock = {
   fetch: () => of({ data: { templateTagsByLanguage: tags } }),
 };
@@ -109,6 +121,10 @@ export default {
         TemplateTagSelectionComponent,
       ],
       providers: [
+        {
+          provide: LanguagesGql,
+          useValue: languagesGqlMock,
+        },
         {
           provide: PublishedTemplatesGql,
           useValue: publishedTemplatesGqlMock,

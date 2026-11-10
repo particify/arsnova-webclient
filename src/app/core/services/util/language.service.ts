@@ -8,9 +8,7 @@ import {
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
-import { map, Observable } from 'rxjs';
-import { IsoLanguage } from '@app/core/models/iso-language';
-import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
+import { map } from 'rxjs';
 import dayjs from 'dayjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
@@ -18,13 +16,14 @@ import { GlobalHintType } from '@app/standalone/global-hints/global-hint';
 import { DialogService } from './dialog.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslocoService } from '@jsverse/transloco';
 
 export const BROWSER_LANG = new InjectionToken<string>('BROWSER_LANG');
 
 @Injectable({
   providedIn: 'root',
 })
-export class LanguageService extends AbstractHttpService<void> {
+export class LanguageService {
   private globalStorageService = inject(GlobalStorageService);
   private document = inject<Document>(DOCUMENT);
   private browserLang = inject(BROWSER_LANG);
@@ -32,6 +31,7 @@ export class LanguageService extends AbstractHttpService<void> {
   private globalHintsService = inject(GlobalHintsService);
   private dialogService = inject(DialogService);
   private readonly apiConfigService = inject(ApiConfigService);
+  private readonly translateService = inject(TranslocoService);
 
   private readonly translateUrl = toSignal(
     this.apiConfigService
@@ -77,7 +77,6 @@ export class LanguageService extends AbstractHttpService<void> {
   };
 
   constructor() {
-    super('/language');
     this.authService.getAuthenticatedUserChanges().subscribe((u) => {
       if (u?.language) {
         this.setLang(u.language);
@@ -141,10 +140,6 @@ export class LanguageService extends AbstractHttpService<void> {
 
   getLangs() {
     return this.langs;
-  }
-
-  getIsoLanguages(): Observable<IsoLanguage[]> {
-    return this.http.get<IsoLanguage[]>(this.buildUri('/'));
   }
 
   ensureValidLang(lang?: string): string {
