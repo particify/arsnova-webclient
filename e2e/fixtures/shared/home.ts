@@ -16,12 +16,7 @@ export class HomePage {
     this.openCreateDialogButton = page.getByRole('button', {
       name: 'create room',
     });
-    // By label, not by role: an extension can turn this field into a combobox, so the role
-    // differs between builds while the label stays the same.
-    // An LMS extension may attach an autocomplete panel carrying the same label.
-    this.roomNameInput = page
-      .getByLabel('room name')
-      .and(page.locator('input'));
+    this.roomNameInput = page.getByRole('textbox', { name: 'room name' });
     this.submitRoomCreationButton = page.getByRole('button', {
       name: 'create room',
     });
@@ -41,8 +36,6 @@ export class HomePage {
   async createRoom(roomName: string): Promise<string> {
     await this.openCreateDialogButton.click();
     await this.roomNameInput.fill(roomName);
-    // Workaround for blocking LMS extension
-    await this.page.waitForTimeout(500);
     const response$ = this.page.waitForResponse(
       (res) => !!res.request().postData()?.includes('CreateRoom') && res.ok()
     );

@@ -71,7 +71,7 @@ test.describe('room list', () => {
     await page.getByTestId('more-room-options-btn-0').click();
     await page.getByRole('menuitem', { name: 'Duplicate room' }).click();
     await page
-      .getByRole('combobox', { name: 'room name' })
+      .getByRole('textbox', { name: 'room name' })
       .fill('My duplicated room');
     await page
       .getByRole('button', { name: 'Create Room', exact: true })

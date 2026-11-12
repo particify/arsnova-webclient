@@ -20,7 +20,6 @@ export class Room {
   passwordProtected = false;
   closed: boolean;
   language?: string;
-  lmsCourseId?: string;
 
   constructor(
     ownerId = '',
