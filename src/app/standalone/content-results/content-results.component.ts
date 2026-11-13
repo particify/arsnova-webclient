@@ -7,6 +7,7 @@ import {
   input,
   linkedSignal,
   model,
+  untracked,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -262,20 +263,15 @@ export class ContentResultsComponent {
 
   constructor() {
     effect(() => {
-      if (this.active()) {
-        if (this.directShow() != null) {
-          setTimeout(() => {
-            this.contentResultsService.setResultsVisible(this.directShow());
-          });
-        }
-        if (this.showCorrect() != null) {
-          setTimeout(() => {
-            this.contentResultsService.setCorrectResultsVisible(
-              this.showCorrect()
-            );
-          });
-        }
+      if (!this.active()) {
+        return;
       }
+      const directShow = this.directShow();
+      const showCorrect = this.showCorrect();
+      untracked(() => {
+        this.contentResultsService.setResultsVisible(directShow);
+        this.contentResultsService.setCorrectResultsVisible(showCorrect);
+      });
     });
   }
 

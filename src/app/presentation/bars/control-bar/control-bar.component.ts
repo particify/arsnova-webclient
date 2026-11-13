@@ -630,13 +630,11 @@ export class ControlBarComponent
   }
 
   private determineResultsItemHighlighted() {
-    setTimeout(() => {
-      const resultsItemIndex = this.getIndexOfGroupItem('results');
-      if (resultsItemIndex > -1) {
-        this.groupItems[resultsItemIndex].highlighted =
-          this.contentResultsVisible();
-      }
-    });
+    const resultsItemIndex = this.getIndexOfGroupItem('results');
+    if (resultsItemIndex > -1) {
+      this.groupItems[resultsItemIndex].highlighted =
+        this.contentResultsVisible();
+    }
   }
 
   private determineCorrectItemHighlighted() {
