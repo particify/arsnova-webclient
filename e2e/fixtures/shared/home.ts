@@ -17,9 +17,11 @@ export class HomePage {
       name: 'create room',
     });
     this.roomNameInput = page.getByRole('textbox', { name: 'room name' });
-    this.submitRoomCreationButton = page.getByRole('button', {
-      name: 'create room',
-    });
+    this.submitRoomCreationButton = page
+      .getByRole('dialog')
+      .getByRole('button', {
+        name: 'create room',
+      });
   }
 
   async goto() {
