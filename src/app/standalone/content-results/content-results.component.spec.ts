@@ -1,3 +1,6 @@
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { ThemeService } from '@app/core/theme/theme.service';
+import { ChoiceResultsComponent } from '@app/standalone/content-results/choice-results/choice-results.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
@@ -200,6 +203,18 @@ describe('ContentResultsComponent', () => {
     fixture.detectChanges();
   }
 
+  function stubFormatResults() {
+    TestBed.overrideComponent(ChoiceResultsComponent, {
+      set: { template: '' },
+    });
+    TestBed.overrideProvider(ThemeService, {
+      useValue: { getBarColors: () => [], getColor: () => '' },
+    });
+    TestBed.overrideProvider(PresentationService, {
+      useValue: { scale: () => 1 },
+    });
+  }
+
   function scoringInputs(): { showCorrect: boolean; isPresentation: boolean } {
     return component.componentInputs() as {
       showCorrect: boolean;
@@ -320,6 +335,35 @@ describe('ContentResultsComponent', () => {
     expect(
       (component.componentInputs() as { roundIds: string[] }).roundIds
     ).toEqual(['round-1', 'round-2']);
+  });
+
+  describe('results toggle', () => {
+    beforeEach(() => stubFormatResults());
+
+    function activate(active = true) {
+      fixture.componentRef.setInput('active', active);
+      fixture.detectChanges();
+    }
+
+    it('applies the settings as soon as the content becomes active', () => {
+      setUp();
+      fixture.componentRef.setInput('directShow', true);
+      activate();
+
+      expect(contentResultsService.resultsVisible()).toBeTrue();
+    });
+
+    it('starts over with the settings once the content is active again', () => {
+      setUp();
+      activate();
+      component.toggleAnswers();
+      expect(contentResultsService.resultsVisible()).toBeTrue();
+
+      activate(false);
+      activate();
+
+      expect(contentResultsService.resultsVisible()).toBeFalse();
+    });
   });
 
   it('lets a wordcloud ban keywords only where answers may be moderated', () => {

@@ -74,6 +74,7 @@ export class KeyNavBarItem extends NavBarItem {
   displayKey: string;
   disabled: boolean;
   highlighted: boolean;
+  toggle: boolean;
 
   constructor(
     name: string,
@@ -81,7 +82,8 @@ export class KeyNavBarItem extends NavBarItem {
     url: string,
     key: string,
     disabled = false,
-    highlighted = false
+    highlighted = false,
+    toggle = false
   ) {
     super(name, icon, url, false);
     const keyInfo = HotkeyService.getKeyDisplayInfo(key);
@@ -91,6 +93,7 @@ export class KeyNavBarItem extends NavBarItem {
       : keyInfo.keySymbol;
     this.disabled = disabled;
     this.highlighted = highlighted;
+    this.toggle = toggle;
   }
 }
 
@@ -197,7 +200,7 @@ export class ControlBarComponent
     new NavBarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
   ];
   groupItems: KeyNavBarItem[] = [
-    new KeyNavBarItem('results', 'insert_chart', '', ' '),
+    new KeyNavBarItem('results', 'insert_chart', '', ' ', false, false, true),
   ];
   surveyItems: KeyNavBarItem[] = [
     new KeyNavBarItem('start', 'play_arrow', '', ' '),
@@ -599,7 +602,15 @@ export class ControlBarComponent
     ) {
       if (this.getIndexOfGroupItem('correct') === -1) {
         this.groupItems.push(
-          new KeyNavBarItem('correct', 'check_circle', '', 'c')
+          new KeyNavBarItem(
+            'correct',
+            'check_circle',
+            '',
+            'c',
+            false,
+            false,
+            true
+          )
         );
       } else {
         if (this.content && !this.content.hasCorrectAnswer) {
@@ -621,7 +632,15 @@ export class ControlBarComponent
     if (this.leaderboardEnabled()) {
       if (leaderboardItemIndex === -1) {
         this.groupItems.push(
-          new KeyNavBarItem('leaderboard', 'emoji_events', '', 'l')
+          new KeyNavBarItem(
+            'leaderboard',
+            'emoji_events',
+            '',
+            'l',
+            false,
+            false,
+            true
+          )
         );
       }
     } else if (leaderboardItemIndex > -1) {
@@ -630,13 +649,11 @@ export class ControlBarComponent
   }
 
   private determineResultsItemHighlighted() {
-    setTimeout(() => {
-      const resultsItemIndex = this.getIndexOfGroupItem('results');
-      if (resultsItemIndex > -1) {
-        this.groupItems[resultsItemIndex].highlighted =
-          this.contentResultsVisible();
-      }
-    });
+    const resultsItemIndex = this.getIndexOfGroupItem('results');
+    if (resultsItemIndex > -1) {
+      this.groupItems[resultsItemIndex].highlighted =
+        this.contentResultsVisible();
+    }
   }
 
   private determineCorrectItemHighlighted() {

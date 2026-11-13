@@ -133,6 +133,10 @@ export class PresentationModePage {
   async showResults() {
     await this.hoverControlBar();
     await this.page.getByRole('button', { name: 'Results' }).click();
+    await expect(this.page.getByTestId('results-btn')).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    );
   }
 
   async showCorrectResults() {
