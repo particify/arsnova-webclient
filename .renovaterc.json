@@ -22,6 +22,11 @@
       "enabled": false
     },
     {
+      "description": "Resolutions hold versions back deliberately",
+      "matchDepTypes": ["resolutions"],
+      "enabled": false
+    },
+    {
       "matchPackageNames": [
         "ng-packagr",
         "typescript",
