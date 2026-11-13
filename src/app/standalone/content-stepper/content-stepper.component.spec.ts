@@ -5,7 +5,13 @@ import { configureTestModule } from '@testing/test.setup';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
-import { Content, UserUiSettings } from '@gql/generated/graphql';
+import {
+  Content,
+  QuestionnaireContentsByQuestionnaireIdGql,
+  TemplateContentAttributionsByQuestionnaireIdGql,
+  UserUiSettings,
+} from '@gql/generated/graphql';
+import { NEVER } from 'rxjs';
 import { ContentStepperComponent } from './content-stepper.component';
 
 function content(id: string): Content {
@@ -29,11 +35,21 @@ describe('ContentStepperComponent', () => {
       'setCorrectResultsVisible',
     ]);
 
+    const unanswered = { watch: () => ({ valueChanges: NEVER }) };
+
     configureTestModule(
       [getTranslocoModule(), ContentStepperComponent, StepperComponent],
       [
         provideNoopAnimations(),
         { provide: ContentResultsService, useValue: contentResultsService },
+        {
+          provide: QuestionnaireContentsByQuestionnaireIdGql,
+          useValue: unanswered,
+        },
+        {
+          provide: TemplateContentAttributionsByQuestionnaireIdGql,
+          useValue: unanswered,
+        },
       ]
     ).compileComponents();
 
@@ -108,6 +124,32 @@ describe('ContentStepperComponent', () => {
     component.updateIndex(1);
 
     expect(emitted).toEqual([1]);
+  });
+
+  describe('attributions', () => {
+    function present(attributionsQuestionnaireId?: string) {
+      setUp();
+      fixture.componentRef.setInput('startIndex', 0);
+      fixture.componentRef.setInput(
+        'attributionsQuestionnaireId',
+        attributionsQuestionnaireId
+      );
+      fixture.detectChanges();
+    }
+
+    it('appends a step for the attributions of the given questionnaire', () => {
+      present('q-1');
+
+      expect(component.stepper().steps.length).toBe(4);
+      expect(component.stepper().listLength).toBe(4);
+    });
+
+    it('adds no step without a questionnaire to credit', () => {
+      present();
+
+      expect(component.stepper().steps.length).toBe(3);
+      expect(component.stepper().listLength).toBe(3);
+    });
   });
 
   describe('in live mode', () => {

@@ -18,6 +18,7 @@ import {
   QuestionnaireByIdGql,
   QuestionnairePublishingMode,
   QuestionnaireType,
+  TemplateContentAttributionsByQuestionnaireIdGql,
 } from '@gql/generated/graphql';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 
@@ -148,6 +149,15 @@ const questionnaireContentsByQuestionnaireIdGql = {
   }),
 };
 
+const templateContentAttributionsByQuestionnaireIdGql = {
+  watch: () => ({
+    valueChanges: of({
+      dataState: 'complete',
+      data: { templateContentAttributionsByQuestionnaireId: [] },
+    }),
+  }),
+};
+
 export default {
   component: ContentsPageComponent,
   title: 'ContentsPage',
@@ -183,6 +193,10 @@ export default {
         {
           provide: QuestionnaireContentsByQuestionnaireIdGql,
           useValue: questionnaireContentsByQuestionnaireIdGql,
+        },
+        {
+          provide: TemplateContentAttributionsByQuestionnaireIdGql,
+          useValue: templateContentAttributionsByQuestionnaireIdGql,
         },
         LikertScaleService,
         PresentationService,

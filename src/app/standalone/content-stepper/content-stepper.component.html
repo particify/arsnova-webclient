@@ -1,7 +1,7 @@
 <app-stepper
   fxFill
   (newIndex)="updateIndex($event)"
-  [listLength]="contents().length"
+  [listLength]="stepCount()"
   [showSteps]="!hideControls()"
   [fixedWitdth]="false"
 >
@@ -49,6 +49,18 @@
       </div>
       <div tabindex="0" class="visually-hidden">
         {{ 'statistic.a11y-no-more-answers' | transloco }}
+      </div>
+    </cdk-step>
+  }
+  @let _attributionsQuestionnaireId = attributionsQuestionnaireId();
+  @if (_attributionsQuestionnaireId) {
+    <cdk-step>
+      <div fxLayoutAlign="center" id="step">
+        <mat-card [ngClass]="{ 'no-card-appearance': hideControls() }">
+          <app-attributions-info
+            [questionnaireId]="_attributionsQuestionnaireId"
+          ></app-attributions-info>
+        </mat-card>
       </div>
     </cdk-step>
   }

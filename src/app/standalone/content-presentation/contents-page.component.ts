@@ -7,6 +7,7 @@ import {
   ChangeDetectionStrategy,
   computed,
   effect,
+  signal,
   untracked,
   viewChild,
   DestroyRef,
@@ -45,6 +46,7 @@ import {
   QuestionnairePublishingMode,
   StartQuestionnaireContentGql,
   StopQuestionnaireContentGql,
+  TemplateContentAttributionsByQuestionnaireIdGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
@@ -74,11 +76,18 @@ import {
   toSignal,
 } from '@angular/core/rxjs-interop';
 import { mutationHelper } from '@gql/helper/mutation-helper';
+import { onlyCompleteData } from 'apollo-angular';
+import { isLicensedAttribution } from '@app/standalone/attributions-info/attributions-info.component';
 import {
   answeringEndDate,
   isRoundOver,
   roundKey,
 } from '@app/standalone/countdown-timer/answering';
+
+/** A step's position follows from its index and the step count. */
+function stepKey(state?: ContentPresentationState): string | undefined {
+  return state && [state.index, state.stepCount, state.content?.id].join('|');
+}
 
 @Component({
   selector: 'app-contents-page',
@@ -127,6 +136,9 @@ export class ContentsPageComponent {
   private readonly questionnaireById = inject(QuestionnaireByIdGql);
   private readonly publishQuestionnaireContentUpTo = inject(
     PublishQuestionnaireUpToContentGql
+  );
+  private readonly attributionsByQuestionnaireId = inject(
+    TemplateContentAttributionsByQuestionnaireIdGql
   );
 
   // Route data input below
@@ -184,7 +196,32 @@ export class ContentsPageComponent {
       this.contents().length === 0
   );
 
-  readonly stepCount = computed(() => this.contents()?.length ?? 0);
+  private readonly attributions = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((questionnaireId) =>
+        this.attributionsByQuestionnaireId
+          .watch({ variables: { questionnaireId } })
+          .valueChanges.pipe(
+            onlyCompleteData(),
+            map((r) => r.data.templateContentAttributionsByQuestionnaireId),
+            catchError(() => EMPTY)
+          )
+      )
+    ),
+    { initialValue: [] }
+  );
+
+  /** Licensed template contents are credited on a slide after the last content. */
+  readonly hasAttributions = computed(() => {
+    const contentIds = new Set(this.contents().map((c) => c.id));
+    return this.attributions().some(
+      (a) => contentIds.has(a.contentId) && isLicensedAttribution(a)
+    );
+  });
+
+  readonly stepCount = computed(
+    () => this.contents().length + (this.hasAttributions() ? 1 : 0)
+  );
 
   readonly showContentResultsDirectly = linkedSignal(
     () => this.settings().showContentResultsDirectly || this.showResults()
@@ -198,6 +235,11 @@ export class ContentsPageComponent {
 
   readonly content = computed(() =>
     this.contentPresentationService.currentContent()
+  );
+
+  readonly isAttributionStep = computed(
+    () =>
+      this.hasAttributions() && this.currentIndex() === this.contents().length
   );
 
   readonly startedContentId = computed(
@@ -259,7 +301,7 @@ export class ContentsPageComponent {
     };
   });
 
-  initialized = false;
+  readonly initialized = signal(false);
   /** The presented content carries its counts, which its queries keep current. */
   readonly responseCounts = computed(() => ({
     answers: this.content()?.answerCount ?? 0,
@@ -268,6 +310,25 @@ export class ContentsPageComponent {
   canAnswerContent = false;
   showLeaderboard = false;
   isPublishing = false;
+
+  /** A content's own updates, such as its answer counts, do not change its step. */
+  readonly stepState = computed(
+    () => {
+      const content = this.content();
+      if (!this.initialized() || (!content && !this.isAttributionStep())) {
+        return;
+      }
+      const index = this.currentIndex();
+      const stepCount = this.stepCount();
+      return new ContentPresentationState(
+        this.presentationService.getStepState(index, stepCount),
+        index,
+        stepCount,
+        content
+      );
+    },
+    { equal: (a, b) => stepKey(a) === stepKey(b) }
+  );
 
   private hotkeyRefs: symbol[] = [];
   private publishingOfferedFor?: string;
@@ -280,24 +341,18 @@ export class ContentsPageComponent {
         STORAGE_KEYS.LAST_GROUP,
         this.questionnaireId()
       );
-      // Use index from route if available. Otherwise use the stored index or 0 as fallback.
-      if (this.contents()?.length > 0 && this.stepper()) {
-        if (!this.initialized) {
-          const contentId = this.contentId();
-          const entryIndex = contentId
-            ? this.contents().find((c) => c.id === contentId)?.position
-            : (this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) ?? 0);
-          const index = entryIndex < this.stepCount() ? entryIndex : 0;
-          this.contentPresentationService.setCurrentContentIndex(index);
-          // Deferred out of the change detection pass this effect runs in, because the control bar
-          // reads the step state and would otherwise change after it has been checked.
-          queueMicrotask(() => this.enterContent(index));
-          this.initialized = true;
-        }
+      if (this.contents().length > 0 && this.stepper() && !this.initialized()) {
+        untracked(() => this.enterPresentation());
       }
       this.contentPresentationService.setQuestionnaireId(
         this.questionnaireId()
       );
+    });
+    effect(() => {
+      const state = this.stepState();
+      if (state) {
+        untracked(() => this.presentationService.updateContentState(state));
+      }
     });
     effect(() => {
       const questionnaire = this.questionnaire();
@@ -372,9 +427,16 @@ export class ContentsPageComponent {
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
-  private enterContent(index: number) {
+  /** Enters at the content of the route, else at the stored index or the first step. */
+  private enterPresentation() {
+    const contentId = this.contentId();
+    const entryIndex = contentId
+      ? this.contents().find((c) => c.id === contentId)?.position
+      : (this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) ?? 0);
+    const index = entryIndex < this.stepCount() ? entryIndex : 0;
+    this.contentPresentationService.setCurrentContentIndex(index);
+    this.initialized.set(true);
     this.setCurrentContent(index);
-    this.sendContentStepState(index);
     if (this.questionnaire()?.published) {
       this.updateStateChange();
     }
@@ -390,7 +452,6 @@ export class ContentsPageComponent {
     this.contentPresentationService.setCurrentContentIndex(index);
     this.setCurrentContent(index);
     this.updateRoute();
-    this.sendContentStepState(index);
     this.showLeaderboard = false;
     if (this.questionnaire()?.published) {
       this.updateStateChange();
@@ -426,21 +487,6 @@ export class ContentsPageComponent {
         this.questionnaireId(),
         name
       );
-    }
-  }
-
-  sendContentStepState(index: number, emptyList = false) {
-    const content = this.content();
-    if (!content) {
-      return;
-    }
-    if (!emptyList) {
-      const state = new ContentPresentationState(
-        this.presentationService.getStepState(index, this.stepCount()),
-        index,
-        content
-      );
-      this.presentationService.updateContentState(state);
     }
   }
 

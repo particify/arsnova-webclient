@@ -7,6 +7,7 @@ import {
   output,
   effect,
   booleanAttribute,
+  computed,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { ContentDetailsFragment, UserUiSettings } from '@gql/generated/graphql';
@@ -15,6 +16,7 @@ import { ContentStepInfoComponent } from '@app/standalone/content-step-info/cont
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
+import { AttributionsInfoComponent } from '@app/standalone/attributions-info/attributions-info.component';
 
 @Component({
   selector: 'app-content-stepper',
@@ -25,6 +27,7 @@ import { ContentResultsService } from '@app/standalone/content-results/content-r
     ContentResultsComponent,
     ContentStepInfoComponent,
     LoadingIndicatorComponent,
+    AttributionsInfoComponent,
   ],
   templateUrl: './content-stepper.component.html',
   styleUrl: './content-stepper.component.scss',
@@ -43,15 +46,21 @@ export class ContentStepperComponent {
   showStepInfo = input(true);
   isLiveMode = input(false, { transform: booleanAttribute });
   language = input<string>();
+  /** Appends a step crediting the series' licensed template contents. */
+  attributionsQuestionnaireId = input<string>();
 
   indexChanged = output<number>();
+
+  readonly stepCount = computed(
+    () => this.contents().length + (this.attributionsQuestionnaireId() ? 1 : 0)
+  );
 
   currentStep?: number;
 
   constructor() {
     effect(() => {
       if (this.stepper()) {
-        this.stepper().init(this.startIndex(), this.contents().length);
+        this.stepper().init(this.startIndex(), this.stepCount());
         this.currentStep = this.startIndex();
       }
     });

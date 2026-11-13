@@ -161,6 +161,8 @@
                 [questionnaireId]="_questionnaireId"
                 [shortId]="room().shortId"
               ></app-content-presentation-menu>
+            }
+            @if (_questionnaireId) {
               <div class="bar-divider"></div>
               <app-key-button-bar
                 [items]="arrowItems"
