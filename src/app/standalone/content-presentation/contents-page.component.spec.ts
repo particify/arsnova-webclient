@@ -14,6 +14,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 import {
@@ -28,6 +29,7 @@ import {
   StartQuestionnaireContentDocument,
   StartQuestionnaireContentGql,
   StopQuestionnaireContentGql,
+  TemplateContentAttributionsByQuestionnaireIdGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
@@ -48,6 +50,8 @@ describe('ContentsPageComponent', () => {
   );
 
   let contents$: BehaviorSubject<unknown>;
+  let attributions$: BehaviorSubject<unknown>;
+  let presentationService: jasmine.SpyObj<PresentationService>;
 
   function contentsResult(loading: boolean) {
     return {
@@ -56,6 +60,29 @@ describe('ContentsPageComponent', () => {
         questionnaireContentsByQuestionnaireId: {
           edges: contents.map((node) => ({ node })),
         },
+      },
+    };
+  }
+
+  function attributionsResult(
+    contentIds: string[],
+    license: { id: string; name: string } | null = {
+      id: 'CC-BY-4.0',
+      name: 'CC BY 4.0',
+    }
+  ) {
+    return {
+      dataState: 'complete',
+      data: {
+        templateContentAttributionsByQuestionnaireId: contentIds.map(
+          (contentId) => ({
+            contentId,
+            templateId: 't-1',
+            attribution: null,
+            license,
+            upstreamAttributions: [],
+          })
+        ),
       },
     };
   }
@@ -82,7 +109,7 @@ describe('ContentsPageComponent', () => {
     return gql.get(token)!.calls.mostRecent().args[0].variables;
   }
 
-  function setUp(q = questionnaire()) {
+  function setUp(q = questionnaire(), attributions = attributionsResult([])) {
     // Navigation and publishing are tested here; the stepper has its own specs.
     TestBed.overrideComponent(ContentsPageComponent, {
       set: { template: '', imports: [] },
@@ -97,16 +124,22 @@ describe('ContentsPageComponent', () => {
     const contentsGql = jasmine.createSpyObj('ContentsGql', ['watch']);
     contents$ = new BehaviorSubject<unknown>(contentsResult(false));
     contentsGql.watch.and.returnValue({ valueChanges: contents$ });
+    const attributionsGql = jasmine.createSpyObj('AttributionsGql', ['watch']);
+    attributions$ = new BehaviorSubject<unknown>(attributions);
+    attributionsGql.watch.and.returnValue({ valueChanges: attributions$ });
     contentUpdated = jasmine.createSpyObj('QuestionnaireContentUpdatedGql', [
       'subscribe',
     ]);
     contentUpdated.subscribe.and.returnValue(of({ data: undefined }));
-    const presentationService = jasmine.createSpyObj('PresentationService', [
+    presentationService = jasmine.createSpyObj('PresentationService', [
       'getScale',
       'getStepState',
       'updateContentState',
       'updateLeaderboardDisplayed',
     ]);
+    presentationService.getStepState.and.callFake(
+      PresentationService.prototype.getStepState
+    );
 
     configureTestModule(
       [getTranslocoModule(), ContentsPageComponent],
@@ -121,6 +154,10 @@ describe('ContentsPageComponent', () => {
           useValue: contentsGql,
         },
         { provide: QuestionnaireContentUpdatedGql, useValue: contentUpdated },
+        {
+          provide: TemplateContentAttributionsByQuestionnaireIdGql,
+          useValue: attributionsGql,
+        },
         { provide: PresentationService, useValue: presentationService },
         {
           provide: FocusModeService,
@@ -299,6 +336,175 @@ describe('ContentsPageComponent', () => {
     expect(gql.get(PublishQuestionnaireUpToContentGql)).not.toHaveBeenCalled();
   });
 
+  describe('attribution step', () => {
+    function focusUpdate() {
+      return TestBed.inject(FocusModeService).updateContentState as jasmine.Spy;
+    }
+
+    function lastState() {
+      return presentationService.updateContentState.calls.mostRecent().args[0];
+    }
+
+    function present(attributions = attributionsResult(['c-1'])) {
+      setUp(questionnaire(), attributions);
+      // The stepper is not rendered here, which would otherwise start the presentation.
+      component.initialized.set(true);
+      TestBed.tick();
+    }
+
+    function navigate(index: number) {
+      component.updateURL(index);
+      TestBed.tick();
+    }
+
+    function moveToAttributions() {
+      navigate(2);
+      focusUpdate().calls.reset();
+      gql.get(PublishQuestionnaireUpToContentGql)!.calls.reset();
+      presentationService.updateContentState.calls.reset();
+      navigate(3);
+    }
+
+    it('follows the last content once a content carries a licence', () => {
+      setUp(questionnaire(), attributionsResult(['c-1']));
+
+      expect(component.hasAttributions()).toBeTrue();
+      expect(component.stepCount()).toBe(4);
+    });
+
+    it('is left out without attributions', () => {
+      setUp();
+
+      expect(component.stepCount()).toBe(3);
+    });
+
+    it('is left out for contents copied without a licence', () => {
+      setUp(questionnaire(), attributionsResult(['c-1'], null));
+
+      expect(component.stepCount()).toBe(3);
+    });
+
+    it('is left out once the credited contents are deleted', () => {
+      setUp(questionnaire(), attributionsResult(['c-9']));
+
+      expect(component.stepCount()).toBe(3);
+    });
+
+    it('is presented as the end without a content', () => {
+      present();
+
+      moveToAttributions();
+
+      expect(component.isAttributionStep()).toBeTrue();
+      expect(presentationService.updateContentState).toHaveBeenCalledTimes(1);
+      expect(lastState().position).toBe(PresentationStepPosition.END);
+      expect(lastState().index).toBe(3);
+      expect(lastState().stepCount).toBe(4);
+      expect(lastState().content).toBeUndefined();
+    });
+
+    it('neither publishes nor focuses anything', () => {
+      present();
+
+      moveToAttributions();
+
+      expect(focusUpdate()).not.toHaveBeenCalled();
+      expect(
+        gql.get(PublishQuestionnaireUpToContentGql)
+      ).not.toHaveBeenCalled();
+    });
+
+    it('leads back to the last content', () => {
+      present();
+      moveToAttributions();
+
+      navigate(2);
+
+      expect(component.isAttributionStep()).toBeFalse();
+      expect(lastState().position).toBe(PresentationStepPosition.MIDDLE);
+      expect(lastState().content?.id).toBe('c-2');
+      expect(focusUpdate()).toHaveBeenCalledWith('c-2', 2, 'q-1', 'Quiz');
+    });
+
+    it('moves the last content off the end once attributions arrive late', () => {
+      present(attributionsResult([]));
+      navigate(2);
+      expect(lastState().position).toBe(PresentationStepPosition.END);
+
+      attributions$.next(attributionsResult(['c-1']));
+      TestBed.tick();
+
+      expect(lastState().position).toBe(PresentationStepPosition.MIDDLE);
+      expect(lastState().stepCount).toBe(4);
+    });
+
+    it('reports a step once, however often its content is updated', () => {
+      present();
+      navigate(2);
+      presentationService.updateContentState.calls.reset();
+
+      contents$.next({
+        loading: false,
+        data: {
+          questionnaireContentsByQuestionnaireId: {
+            edges: contents.map((node) => ({
+              node: { ...node, answerCount: 7 },
+            })),
+          },
+        },
+      });
+      TestBed.tick();
+
+      expect(component.content()?.answerCount).toBe(7);
+      expect(presentationService.updateContentState).not.toHaveBeenCalled();
+    });
+
+    it('reports nothing before the presentation has started', () => {
+      setUp(questionnaire(), attributionsResult(['c-1']));
+
+      navigate(2);
+
+      expect(presentationService.updateContentState).not.toHaveBeenCalled();
+    });
+
+    describe('of a series with a single content', () => {
+      function presentOnly(
+        attributions: ReturnType<typeof attributionsResult>
+      ) {
+        present(attributions);
+        contents$.next({
+          loading: false,
+          data: {
+            questionnaireContentsByQuestionnaireId: {
+              edges: [{ node: contents[0] }],
+            },
+          },
+        });
+        TestBed.tick();
+      }
+
+      it('makes two steps to move between', () => {
+        presentOnly(attributionsResult(['c-0']));
+        expect(lastState().stepCount).toBe(2);
+        expect(lastState().position).toBe(PresentationStepPosition.START);
+
+        navigate(1);
+        expect(lastState().stepCount).toBe(2);
+        expect(lastState().position).toBe(PresentationStepPosition.END);
+
+        navigate(0);
+        expect(lastState().stepCount).toBe(2);
+        expect(lastState().position).toBe(PresentationStepPosition.START);
+      });
+
+      it('is a single step without attributions', () => {
+        presentOnly(attributionsResult([]));
+
+        expect(lastState().stepCount).toBe(1);
+      });
+    });
+  });
+
   describe('countdown', () => {
     const now = new Date('2026-10-01T12:00:00Z');
     const round = (answeringEndTime?: string, answerable = true) => ({
@@ -408,6 +614,8 @@ describe('ContentsPageComponent (last visited questionnaire)', () => {
       ['subscribe']
     );
     contentUpdated.subscribe.and.returnValue(NEVER);
+    const attributionsGql = jasmine.createSpyObj('AttributionsGql', ['watch']);
+    attributionsGql.watch.and.returnValue({ valueChanges: NEVER });
     const contentPresentationService = jasmine.createSpyObj(
       'ContentPresentationService',
       ['setQuestionnaireId', 'setCurrentContentIndex'],
@@ -426,6 +634,10 @@ describe('ContentsPageComponent (last visited questionnaire)', () => {
         { provide: GlobalStorageService, useValue: globalStorageService },
         { provide: QuestionnaireByIdGql, useValue: questionnaireById },
         { provide: QuestionnaireContentUpdatedGql, useValue: contentUpdated },
+        {
+          provide: TemplateContentAttributionsByQuestionnaireIdGql,
+          useValue: attributionsGql,
+        },
         {
           provide: ContentPresentationService,
           useValue: contentPresentationService,

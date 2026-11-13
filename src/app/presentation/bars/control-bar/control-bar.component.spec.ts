@@ -16,7 +16,10 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
+import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import {
+  ContentDetailsFragment,
+  ContentType,
   PublishedQuestionnairesByRoomIdGql,
   QnaStateChangedGql,
   QuestionnairesByRoomIdGql,
@@ -28,6 +31,9 @@ import {
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { BehaviorSubject, NEVER, map, of } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { KeyButtonBarComponent } from '@app/presentation/bars/key-button-bar/key-button-bar.component';
+import { ContentPresentationMenuComponent } from '@app/standalone/content-presentation-menu/content-presentation-menu.component';
 import { ControlBarComponent } from './control-bar.component';
 
 describe('ControlBarComponent', () => {
@@ -36,6 +42,8 @@ describe('ControlBarComponent', () => {
   let contentResultsService: ContentResultsService;
   // The listed questionnaires, as the cache hands them out after each change.
   let questionnaires$: BehaviorSubject<QuestionnaireSummaryFragment[]>;
+  // Only specs about what the bar shows need its real template.
+  let renderTemplate = false;
 
   const quiz = {
     id: 'q-1',
@@ -66,7 +74,9 @@ describe('ControlBarComponent', () => {
 
   beforeEach(() => {
     // The bar's own template is irrelevant to the initialisation under test.
-    TestBed.overrideComponent(ControlBarComponent, { set: { template: '' } });
+    if (!renderTemplate) {
+      TestBed.overrideComponent(ControlBarComponent, { set: { template: '' } });
+    }
     const roomStatsById = jasmine.createSpyObj('RoomStatsByIdGql', ['watch']);
     roomStatsById.watch.and.returnValue({
       valueChanges: of({ data: { roomById: { stats: {} } } }),
@@ -215,6 +225,93 @@ describe('ControlBarComponent', () => {
 
       listQuestionnaires(true);
       expect(offersLeaderboard()).toBeTrue();
+      fixture.destroy();
+    }));
+  });
+
+  describe('content arrows', () => {
+    const stepState = PresentationService.prototype.getStepState;
+    const content = {
+      id: 'c-0',
+      formatData: { format: ContentType.Choice },
+    } as ContentDetailsFragment;
+
+    function arrowsDisabled() {
+      return fixture.componentInstance.arrowItems.map((i) => i.disabled);
+    }
+
+    function present(
+      index: number,
+      stepCount: number,
+      presented?: ContentDetailsFragment
+    ) {
+      fixture.componentInstance.evaluateContentState(
+        new ContentPresentationState(
+          stepState(index, stepCount),
+          index,
+          stepCount,
+          presented
+        )
+      );
+    }
+
+    beforeEach(fakeAsync(() => {
+      questionnaires$.next([{ ...quiz, contentCount: 1 }]);
+      fixture.detectChanges();
+      flush();
+      fixture.detectChanges();
+    }));
+
+    afterEach(() => fixture.destroy());
+
+    it('moves on from the only content of a series to its attributions', () => {
+      present(0, 2, content);
+
+      expect(arrowsDisabled()).toEqual([true, false]);
+    });
+
+    it('moves back from the attributions to the only content', () => {
+      present(1, 2);
+
+      expect(arrowsDisabled()).toEqual([false, true]);
+    });
+
+    it('offers no way to move from the only content of a series without attributions', () => {
+      present(0, 1, content);
+
+      expect(arrowsDisabled()).toEqual([true, true]);
+    });
+  });
+
+  describe('on a step without a content', () => {
+    beforeAll(() => (renderTemplate = true));
+    afterAll(() => (renderTemplate = false));
+
+    it('keeps the arrows but drops the content menu', fakeAsync(() => {
+      const component = fixture.componentInstance;
+      fixture.componentRef.setInput('questionnaireId', quiz.id);
+      fixture.detectChanges();
+      flush();
+      component.updateFeature('questionnaire');
+      component.evaluateContentState(
+        new ContentPresentationState(
+          PresentationService.prototype.getStepState(1, 2),
+          1,
+          2
+        )
+      );
+      fixture.detectChanges();
+      flush();
+
+      const barItems = fixture.debugElement
+        .queryAll(By.directive(KeyButtonBarComponent))
+        .map((bar) => bar.componentInstance.items);
+      expect(barItems).toContain(component.arrowItems);
+      expect(
+        fixture.debugElement.query(
+          By.directive(ContentPresentationMenuComponent)
+        )
+      ).toBeNull();
       fixture.destroy();
     }));
   });

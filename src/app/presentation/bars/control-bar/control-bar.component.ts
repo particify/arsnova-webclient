@@ -183,6 +183,7 @@ export class ControlBarComponent
   barItems: KeyNavBarItem[] = [];
   surveyStarted = false;
   contentStepState = PresentationStepPosition.START;
+  contentStepCount = 0;
   commentStepState = PresentationStepPosition.START;
   menuOpen = false;
   currentCommentZoom = 100;
@@ -446,22 +447,14 @@ export class ControlBarComponent
   evaluateContentState(state?: ContentPresentationState) {
     if (state) {
       this.contentStepState = state.position;
+      this.contentStepCount = state.stepCount;
       this.contentIndex = state.index;
       this.content = state.content;
       this.globalStorageService.setItem(
         STORAGE_KEYS.LAST_INDEX,
         this.contentIndex
       );
-      const questionnaire = this.activeQuestionnaire();
-      if (
-        questionnaire &&
-        questionnaire.contentCount &&
-        questionnaire.contentCount > 1
-      ) {
-        this.setArrowsState(this.contentStepState);
-      } else {
-        this.setArrowItemsState(true, true);
-      }
+      this.setContentArrowsState();
     }
     this.groupItems.forEach((item) => {
       item.disabled = false;
@@ -503,6 +496,14 @@ export class ControlBarComponent
     }
   }
 
+  private setContentArrowsState() {
+    if (this.contentStepCount > 1) {
+      this.setArrowsState(this.contentStepState);
+    } else {
+      this.setArrowItemsState(true, true);
+    }
+  }
+
   setArrowItemsState(leftDisabled: boolean, rightDisabled: boolean) {
     this.arrowItems[0].disabled = leftDisabled;
     this.arrowItems[1].disabled = rightDisabled;
@@ -521,7 +522,7 @@ export class ControlBarComponent
       this.getCurrentRouteIndex(feature);
       this.activeFeature.emit(feature);
       if (feature === RoutingFeature.CONTENTS) {
-        this.setArrowsState(this.contentStepState);
+        this.setContentArrowsState();
       } else if (feature === RoutingFeature.COMMENTS) {
         this.setArrowsState(this.commentStepState);
       }

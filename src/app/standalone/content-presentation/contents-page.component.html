@@ -78,6 +78,9 @@
           [startedContentId]="
             questionnaire()?.activeRound?.contentId ?? undefined
           "
+          [attributionsQuestionnaireId]="
+            hasAttributions() ? questionnaireId() : undefined
+          "
           (indexChanged)="updateURL($event)"
         >
         </app-content-stepper>
@@ -160,6 +163,7 @@
     showHotkeyActionButtons() &&
     _questionnaire.published &&
     !isPublished() &&
+    !isAttributionStep() &&
     !this.isPublishing
   ) {
     <app-hotkey-action-button
