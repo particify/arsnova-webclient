@@ -1,12 +1,6 @@
 <lib-extension-point extensionId="external-instance-hint"></lib-extension-point>
 
 <div fxLayout="column" fxLayoutGap="10px">
-  @if (userId()) {
-    <lib-extension-point
-      extensionId="lms-course-room-list"
-      [extensionData]="{ userId: userId(), excludeRoomIds: roomIds() }"
-    ></lib-extension-point>
-  }
   <div>
     <mat-card class="account-memberships">
       <div

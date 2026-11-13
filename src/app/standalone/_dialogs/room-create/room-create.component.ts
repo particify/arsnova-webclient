@@ -41,7 +41,6 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { CreateRoomGql, DuplicateRoomGql } from '@gql/generated/graphql';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { first, take } from 'rxjs';
 
 @Component({
@@ -49,7 +48,6 @@ import { first, take } from 'rxjs';
   templateUrl: './room-create.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    ExtensionPointModule,
     FormsModule,
     HintComponent,
     LoadingButtonComponent,

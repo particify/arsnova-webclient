@@ -1,35 +1,27 @@
 <form mat-dialog-content (ngSubmit)="checkNameAndLogin()">
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
-    <lib-extension-point
-      extensionId="lms-course-autocomplete"
-      [extensionData]="{
-        userId: $safeNavigationMigration(auth?.userId),
-        room: newRoom,
-      }"
-    >
-      <mat-form-field appearance="outline" fxFill>
-        <mat-label>{{ 'dialog.room-name' | transloco }}</mat-label>
-        <input
-          [disabled]="formDisabled"
-          (keypress)="resetEmptyInputs()"
-          matInput
-          #roomName
-          class="input-block"
-          type="text"
-          autocomplete="off"
-          maxlength="50"
-          [(ngModel)]="newRoom.name"
-          name="roomName"
-        />
-        @if (!emptyInputs) {
-          <mat-hint align="end"
-            ><span aria-hidden="true"
-              >{{ roomName.value.length }} / 50</span
-            ></mat-hint
-          >
-        }
-      </mat-form-field>
-    </lib-extension-point>
+    <mat-form-field appearance="outline" fxFill>
+      <mat-label>{{ 'dialog.room-name' | transloco }}</mat-label>
+      <input
+        [disabled]="formDisabled"
+        (keypress)="resetEmptyInputs()"
+        matInput
+        #roomName
+        class="input-block"
+        type="text"
+        autocomplete="off"
+        maxlength="50"
+        [(ngModel)]="newRoom.name"
+        name="roomName"
+      />
+      @if (!emptyInputs) {
+        <mat-hint align="end"
+          ><span aria-hidden="true"
+            >{{ roomName.value.length }} / 50</span
+          ></mat-hint
+        >
+      }
+    </mat-form-field>
     @if (!auth?.verified) {
       <app-hint
         [type]="HintType.WARNING"

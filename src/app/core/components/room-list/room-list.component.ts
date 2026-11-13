@@ -48,7 +48,6 @@ import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
 import { NgClass } from '@angular/common';
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { INDICATOR_SIZE } from '@app/standalone/loading-button/loading-button.component';
 
 const ACTIVE_ROOM_THRESHOLD = 15;
@@ -84,7 +83,6 @@ export class RoomListComponent implements AfterViewInit, OnInit {
   private readonly translateService = inject(TranslocoService);
   private readonly deleteRoom = inject(DeleteRoomGql);
   private readonly revokeMembership = inject(RevokeRoomMembershipGql);
-  private readonly authenticationService = inject(AuthenticationService);
 
   private readonly searchInput =
     viewChild.required<ElementRef<HTMLInputElement>>('search');
@@ -132,16 +130,9 @@ export class RoomListComponent implements AfterViewInit, OnInit {
       catchError(() => of(true))
     )
   );
-  readonly userId = toSignal(
-    this.authenticationService.getCurrentAuthentication().pipe(
-      first(),
-      map((u) => u.userId)
-    )
-  );
   readonly isFetchMore = signal(false);
   readonly RoomRole = RoomRole;
   readonly roles = new Map<RoomRole, string>();
-  readonly roomIds = signal<string[]>([]);
   readonly buttonIndicatorSize = INDICATOR_SIZE;
 
   ngOnInit() {
