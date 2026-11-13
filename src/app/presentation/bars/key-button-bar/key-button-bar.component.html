@@ -22,6 +22,7 @@
         ')'
       "
       [attr.data-testid]="item.name + '-btn'"
+      [attr.aria-pressed]="item.toggle ? item.highlighted : null"
     >
       <mat-icon [ngClass]="{ 'nav-icon': withText }">{{ item.icon }}</mat-icon>
       @if (withText) {
