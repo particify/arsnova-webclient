@@ -59,7 +59,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-devkit/architect@npm:0.2202.6, @angular-devkit/architect@npm:>= 0.2200.0 < 0.2300.0":
+"@angular-devkit/architect@npm:0.2202.7":
+  version: 0.2202.7
+  resolution: "@angular-devkit/architect@npm:0.2202.7"
+  dependencies:
+    "@angular-devkit/core": "npm:22.2.7"
+    rxjs: "npm:7.8.2"
+  bin:
+    architect: bin/cli.js
+  checksum: 10c0/3db84743b18e2998f03476a1f5d1f0eddbd84e68215e0aef20186b1639f19cb0654f4fc96744bf73cd80d513fa0358e3ec7f0795149df5c06d7d1dd932a5eca4
+  languageName: node
+  linkType: hard
+
+"@angular-devkit/architect@npm:>= 0.2200.0 < 0.2300.0":
   version: 0.2202.6
   resolution: "@angular-devkit/architect@npm:0.2202.6"
   dependencies:
@@ -90,7 +102,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-devkit/schematics@npm:22.2.6, @angular-devkit/schematics@npm:>= 22.0.0 < 23.0.0":
+"@angular-devkit/core@npm:22.2.7":
+  version: 22.2.7
+  resolution: "@angular-devkit/core@npm:22.2.7"
+  dependencies:
+    ajv: "npm:8.20.0"
+    ajv-formats: "npm:3.0.1"
+    jsonc-parser: "npm:3.3.1"
+    picomatch: "npm:4.0.7"
+    rxjs: "npm:7.8.2"
+    source-map: "npm:0.8.0"
+  peerDependencies:
+    chokidar: ^5.0.0
+  peerDependenciesMeta:
+    chokidar:
+      optional: true
+  checksum: 10c0/a9eaa3b84f6226dc4f7ca5a8850797b9b7bdf6b78bdefe1ad04f032f78a42b0f71f278f43e50fd61b2dd426edef40f2d7de05915e06ba221ed545d00d03d06ca
+  languageName: node
+  linkType: hard
+
+"@angular-devkit/schematics@npm:22.2.7":
+  version: 22.2.7
+  resolution: "@angular-devkit/schematics@npm:22.2.7"
+  dependencies:
+    "@angular-devkit/core": "npm:22.2.7"
+    jsonc-parser: "npm:3.3.1"
+    magic-string: "npm:1.4.1"
+    ora: "npm:9.4.1"
+    rxjs: "npm:7.8.2"
+  checksum: 10c0/3d455e5a3cbe9891ad30e20661355bc588e5bb6b4348aa260faf6bb4de82bb484eedc50eace12065f9d409b0bc5b87c5fbdec5a9beb180478dd13ab0da45a1fa
+  languageName: node
+  linkType: hard
+
+"@angular-devkit/schematics@npm:>= 22.0.0 < 23.0.0":
   version: 22.2.6
   resolution: "@angular-devkit/schematics@npm:22.2.6"
   dependencies:
@@ -208,12 +252,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/build@npm:22.2.6":
-  version: 22.2.6
-  resolution: "@angular/build@npm:22.2.6"
+"@angular/build@npm:22.2.7":
+  version: 22.2.7
+  resolution: "@angular/build@npm:22.2.7"
   dependencies:
     "@ampproject/remapping": "npm:2.3.0"
-    "@angular-devkit/architect": "npm:0.2202.6"
+    "@angular-devkit/architect": "npm:0.2202.7"
     "@babel/core": "npm:8.0.5"
     "@inquirer/confirm": "npm:6.3.2"
     "@oxc-parser/binding-wasm32-wasi": "npm:0.156.0"
@@ -249,7 +293,7 @@ __metadata:
     "@angular/platform-browser": ^22.0.0
     "@angular/platform-server": ^22.0.0
     "@angular/service-worker": ^22.0.0
-    "@angular/ssr": ^22.2.6
+    "@angular/ssr": ^22.2.7
     istanbul-lib-instrument: ^6.0.0
     karma: ^6.4.0
     less: ^4.2.0
@@ -294,7 +338,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 10c0/76873c8a6ea17e906f278e9d4bdb05769b2a9307c93346184886a81c0ae7e4b3e13a3523dd3a776f08891e0123a7ed6104a56d9a05a95469042638f186bfbc56
+  checksum: 10c0/d47102543951c0a277ba0fd1eb7cbdc2d1f98a162f2c9aaddae55e9a396e2c6bff0b16c20ed7ed1135b0e42a8c3a4f9ab29ff815288409b97df4d63f8832cff8
   languageName: node
   linkType: hard
 
@@ -314,17 +358,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cli@npm:22.2.6":
-  version: 22.2.6
-  resolution: "@angular/cli@npm:22.2.6"
+"@angular/cli@npm:22.2.7":
+  version: 22.2.7
+  resolution: "@angular/cli@npm:22.2.7"
   dependencies:
-    "@angular-devkit/architect": "npm:0.2202.6"
-    "@angular-devkit/core": "npm:22.2.6"
-    "@angular-devkit/schematics": "npm:22.2.6"
+    "@angular-devkit/architect": "npm:0.2202.7"
+    "@angular-devkit/core": "npm:22.2.7"
+    "@angular-devkit/schematics": "npm:22.2.7"
     "@inquirer/prompts": "npm:8.7.2"
     "@listr2/prompt-adapter-inquirer": "npm:4.2.7"
     "@modelcontextprotocol/server": "npm:2.3.1"
-    "@schematics/angular": "npm:22.2.6"
+    "@schematics/angular": "npm:22.2.7"
     jsonc-parser: "npm:3.3.1"
     listr2: "npm:11.1.0"
     npm-package-arg: "npm:14.0.0"
@@ -334,7 +378,7 @@ __metadata:
     zod: "npm:4.6.6"
   bin:
     ng: bin/ng.js
-  checksum: 10c0/4050afe0a6418e7766a825a2680ac124198ef53e94b4f2832fa93027a7fe825bd491236f24371e62107e11dcde524c0c6edb8e8621633381a099023c03b88022
+  checksum: 10c0/905d466f30ceebf22a93f8da552d0989f39b0d9436c9f67cb96acf90157248eb32ae1f7be12ecb0c0cd9b80437f87febc307c1ff6a8acc4c03cf9a220c3699c1
   languageName: node
   linkType: hard
 
@@ -4165,16 +4209,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@schematics/angular@npm:22.2.6":
-  version: 22.2.6
-  resolution: "@schematics/angular@npm:22.2.6"
+"@schematics/angular@npm:22.2.7":
+  version: 22.2.7
+  resolution: "@schematics/angular@npm:22.2.7"
   dependencies:
-    "@angular-devkit/core": "npm:22.2.6"
-    "@angular-devkit/schematics": "npm:22.2.6"
+    "@angular-devkit/core": "npm:22.2.7"
+    "@angular-devkit/schematics": "npm:22.2.7"
     jsonc-parser: "npm:3.3.1"
     oxc-parser: "npm:0.156.0"
     typescript: "npm:6.0.3"
-  checksum: 10c0/eec6731dbbe4cadc8ba05dbbf6b58dea559bcf05e1c3697074d3a85894b07ef064a19f3b0277972bef7b44d4490b0acf8ebc4dd4e459d2e547f4d1f2f47048b4
+  checksum: 10c0/d483f4d16ba7930e736393ca7562bab377b0bcbfc4e5eeb0ab5303412ab6d868c852363ac83e67aa0d00fa66abbdf1d543e53d14f1c22ca5fbf833e8c372d2dd
   languageName: node
   linkType: hard
 
@@ -5606,13 +5650,13 @@ __metadata:
   dependencies:
     "@analogjs/storybook-angular": "npm:2.9.7"
     "@analogjs/vite-plugin-angular": "npm:2.9.7"
-    "@angular-devkit/architect": "npm:0.2202.6"
-    "@angular-devkit/core": "npm:22.2.6"
+    "@angular-devkit/architect": "npm:0.2202.7"
+    "@angular-devkit/core": "npm:22.2.7"
     "@angular-eslint/builder": "npm:22.6.0"
     "@angular/animations": "npm:22.2.6"
-    "@angular/build": "npm:22.2.6"
+    "@angular/build": "npm:22.2.7"
     "@angular/cdk": "npm:22.2.7"
-    "@angular/cli": "npm:22.2.6"
+    "@angular/cli": "npm:22.2.7"
     "@angular/common": "npm:22.2.6"
     "@angular/compiler": "npm:22.2.6"
     "@angular/compiler-cli": "npm:22.2.6"
