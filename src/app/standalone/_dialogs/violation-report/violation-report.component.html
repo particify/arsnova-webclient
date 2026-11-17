@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>
-  {{ 'violation-report.report-' + targetTypeString | transloco }}
+  {{ titleKey | transloco }}
 </h2>
 <div mat-dialog-content>
   <form fxLayout="column" fxLayoutGap="1em" [formGroup]="formGroup">
@@ -13,11 +13,10 @@
       fxLayout="column"
       fxLayoutAlign="center"
       formControlName="reason"
-      [(ngModel)]="selectedReason"
     >
-      @for (reason of reasons; track reason) {
-        <mat-radio-button [value]="reason">
-          {{ 'violation-report.reason-' + getReasonString(reason) | transloco }}
+      @for (option of reasons; track option.reason) {
+        <mat-radio-button [value]="option.reason">
+          {{ option.labelKey | transloco }}
         </mat-radio-button>
       }
     </mat-radio-group>
@@ -25,18 +24,17 @@
       <mat-label>{{ 'violation-report.description' | transloco }}</mat-label>
       <textarea
         matInput
-        [(ngModel)]="description"
         #descriptionInput
         cdkTextareaAutosize
         cdkAutosizeMinRows="3"
         cdkAutosizeMaxRows="10"
-        maxlength="500"
+        [maxlength]="descriptionMaxLength"
         formControlName="description"
         dir="auto"
       ></textarea>
       <mat-hint align="end"
         ><span aria-hidden="true"
-          >{{ description.length || 0 }} / 500</span
+          >{{ descriptionLength() }} / {{ descriptionMaxLength }}</span
         ></mat-hint
       >
     </mat-form-field>

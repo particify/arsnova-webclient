@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  ChangeDetectionStrategy,
-  computed,
-} from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NetworkStatus } from '@apollo/client';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -24,20 +19,50 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { MatCard } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import {
   AdminDecideViolationReportGql,
   AdminViolationReportsByDecidedGql,
   ViolationReportDecision,
   ViolationReportDetailsFragment,
-  ViolationReportReason,
   ViolationReportTargetType,
 } from '@gql/generated/graphql';
+
+const REPORTED_CONTENT_ROUTES: Record<ViolationReportTargetType, string> = {
+  [ViolationReportTargetType.Room]: '/admin/rooms',
+  [ViolationReportTargetType.Template]: '/templates',
+};
+
+interface ReportItem {
+  report: ViolationReportDetailsFragment;
+  decisionKey?: string;
+  deleteKey: string;
+  link: string[];
+  reasonKey: string;
+  targetTypeKey: string;
+  viewKey: string;
+}
+
+function toReportItem(report: ViolationReportDetailsFragment): ReportItem {
+  const targetType = getViolationReportTargetTypeKey(report.targetType);
+  return {
+    report,
+    decisionKey: report.decision
+      ? 'admin.admin-area.' + report.decision.toLowerCase()
+      : undefined,
+    deleteKey: 'admin.admin-area.delete-' + targetType,
+    link: [REPORTED_CONTENT_ROUTES[report.targetType], report.targetId],
+    reasonKey:
+      'violation-report.reason-' + getViolationReportReasonKey(report.reason),
+    targetTypeKey: 'violation-report.' + targetType,
+    viewKey: 'admin.admin-area.view-' + targetType,
+  };
+}
 
 @Component({
   selector: 'app-report-management',
   templateUrl: './report-management.component.html',
   styleUrl: '../admin-styles.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     AdminPageHeaderComponent,
@@ -47,6 +72,7 @@ import {
     MatCard,
     MatButton,
     MatIcon,
+    RouterLink,
     TranslocoPipe,
   ],
 })
@@ -57,7 +83,10 @@ export class ReportManagementComponent {
   private translateService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
 
-  selectedTab = 0;
+  readonly decided = signal(false);
+  readonly noReportsKey = computed(
+    () => 'admin.admin-area.no-reports-' + (this.decided() ? 'closed' : 'open')
+  );
 
   /*
    * The cached list shows right away, while the network revalidates it: reports decided since
@@ -77,6 +106,7 @@ export class ReportManagementComponent {
   readonly reports = computed(
     () => this.connection()?.edges?.flatMap((e) => (e ? [e.node] : [])) ?? []
   );
+  readonly reportItems = computed(() => this.reports().map(toReportItem));
   readonly hasMore = computed(
     () => this.connection()?.pageInfo.hasNextPage ?? false
   );
@@ -100,28 +130,9 @@ export class ReportManagementComponent {
     }
   }
 
-  switchList(index: number): void {
-    this.selectedTab = index;
-    this.reportsQueryRef.setVariables({ decided: index === 1 });
-  }
-
-  getReasonString(reason: ViolationReportReason): string {
-    return getViolationReportReasonKey(reason);
-  }
-
-  getTargetType(targetType: ViolationReportTargetType): string {
-    return getViolationReportTargetTypeKey(targetType);
-  }
-
-  goToReportedContent(report: ViolationReportDetailsFragment): void {
-    switch (report.targetType) {
-      case ViolationReportTargetType.Room:
-        window.open('admin/rooms/' + report.targetId, '_blank');
-        break;
-      case ViolationReportTargetType.Template:
-        window.open('templates/' + report.targetId, '_blank');
-        break;
-    }
+  switchList(decided: boolean): void {
+    this.decided.set(decided);
+    this.reportsQueryRef.setVariables({ decided });
   }
 
   openSubmitDialog(

@@ -4,8 +4,8 @@
 
 <div fxLayout="column" fxLayoutGap="1em">
   <mat-tab-group
-    (selectedTabChange)="switchList($event.index)"
-    [selectedIndex]="selectedTab"
+    (selectedTabChange)="switchList($event.index === 1)"
+    [selectedIndex]="decided() ? 1 : 0"
     [dynamicHeight]="true"
   >
     <mat-tab [label]="'admin.admin-area.open' | transloco"></mat-tab>
@@ -14,10 +14,7 @@
 
   @if (!isLoading() && reports().length === 0) {
     <p class="hint">
-      {{
-        'admin.admin-area.no-reports-' + (selectedTab === 0 ? 'open' : 'closed')
-          | transloco
-      }}
+      {{ noReportsKey() | transloco }}
     </p>
   }
 
@@ -26,69 +23,55 @@
   }
   @if (!isLoading() && reports().length > 0) {
     <div fxLayout="column" fxLayoutGap="10px">
-      @for (report of reports(); track report.id) {
+      @for (item of reportItems(); track item.report.id) {
         <mat-card appearance="outlined">
           <div>
             <p>
               {{ 'admin.admin-area.type' | transloco }}:
-              {{
-                'violation-report.' + getTargetType(report.targetType)
-                  | transloco
-              }}
+              {{ item.targetTypeKey | transloco }}
             </p>
             <p>
               {{ 'admin.admin-area.reason' | transloco }}:
-              {{
-                'violation-report.reason-' + getReasonString(report.reason)
-                  | transloco
-              }}
+              {{ item.reasonKey | transloco }}
             </p>
             <p>
               {{ 'admin.admin-area.description' | transloco }}:
-              {{ report.description }}
+              {{ item.report.description }}
             </p>
-            @if (report.decision) {
+            @if (item.decisionKey) {
               <p>
                 {{ 'admin.admin-area.decision' | transloco }}:
-                {{
-                  'admin.admin-area.' + report.decision.toLowerCase()
-                    | transloco
-                }}
+                {{ item.decisionKey | transloco }}
               </p>
             }
           </div>
-          @if (!report.decision) {
+          @if (!item.report.decision) {
             <div
               fxLayout="row"
               fxLayoutAlign="space-between"
               fxLayoutGap="10px"
             >
-              <button
+              <a
                 mat-button
                 color="primary"
-                (click)="goToReportedContent(report)"
+                [routerLink]="item.link"
+                target="_blank"
               >
                 <mat-icon>open_in_new</mat-icon>
-                {{
-                  'admin.admin-area.view-' + getTargetType(report.targetType)
-                    | transloco
-                }}
-              </button>
+                {{ item.viewKey | transloco }}
+              </a>
               <div fxLayoutGap="10px">
                 <button
                   mat-stroked-button
-                  (click)="openSubmitDialog(report, false)"
+                  (click)="openSubmitDialog(item.report, false)"
                 >
                   {{ 'admin.admin-area.dismiss-report' | transloco }}
                 </button>
                 <button
                   mat-stroked-button
-                  (click)="openSubmitDialog(report, true)"
+                  (click)="openSubmitDialog(item.report, true)"
                 >
-                  {{
-                    'admin.admin-area.delete-' +
-                      getTargetType(report.targetType) | transloco
-                  }}
+                  {{ item.deleteKey | transloco }}
                 </button>
               </div>
             </div>

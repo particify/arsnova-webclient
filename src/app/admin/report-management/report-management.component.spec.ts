@@ -134,6 +134,13 @@ describe('ReportManagementComponent', () => {
     expect(component.hasMore()).toBeTrue();
   });
 
+  it('links each report to its reported content', () => {
+    expect(component.reportItems()[0].link).toEqual([
+      '/templates',
+      't-report-1',
+    ]);
+  });
+
   it('appends the next page after the end cursor', fakeAsync(() => {
     const next = createReport('report-2');
     component.loadMore();
@@ -151,7 +158,7 @@ describe('ReportManagementComponent', () => {
 
   it('loads the closed reports when switching tabs', fakeAsync(() => {
     const closed = createReport('report-3', ViolationReportDecision.Invalid);
-    component.switchList(1);
+    component.switchList(true);
     flush();
     expect(component.isLoading()).toBeTrue();
     respondToReports({ decided: true }, [closed], false);
@@ -162,10 +169,10 @@ describe('ReportManagementComponent', () => {
 
   it('shows the cached open reports while revalidating them', fakeAsync(() => {
     const added = createReport('report-4');
-    component.switchList(1);
+    component.switchList(true);
     flush();
     respondToReports({ decided: true }, [], false);
-    component.switchList(0);
+    component.switchList(false);
     flush();
     expect(component.isLoading()).toBeFalse();
     expect(component.reports()).toEqual([report]);
