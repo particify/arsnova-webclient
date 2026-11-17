@@ -1,5 +1,7 @@
 overwrite: true
-schema: http://user%40example.com:user@apisix:9080/api/graphql
+schema:
+  - 'http://user%40example.com:user@apisix:9080/api/graphql':
+      oneOf: true
 documents: src/graphql/*.graphql
 config:
   scalars:
