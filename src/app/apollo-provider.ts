@@ -123,6 +123,7 @@ export const apolloProvider = provideApollo(() => {
       typePolicies: {
         Query: {
           fields: {
+            adminViolationReportsByDecided: relayStylePagination(['decided']),
             users: relayStylePagination(),
             rooms: relayStylePagination(),
             roomMemberships: relayStylePagination(),

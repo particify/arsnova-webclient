@@ -1,19 +1,20 @@
 import {
   Component,
-  OnInit,
   inject,
   ChangeDetectionStrategy,
+  computed,
 } from '@angular/core';
-import {
-  ViolationReport,
-  ViolationReportDecision,
-} from '@app/core/models/violation-report';
-import { ViolationReportService } from '@app/core/services/http/violation-report.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NetworkStatus } from '@apollo/client';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import {
+  getViolationReportReasonKey,
+  getViolationReportTargetTypeKey,
+} from '@app/core/utils/violation-report';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
@@ -23,7 +24,14 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { MatCard } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { AdminDeleteTemplateGql } from '@gql/generated/graphql';
+import {
+  AdminDecideViolationReportGql,
+  AdminViolationReportsByDecidedGql,
+  ViolationReportDecision,
+  ViolationReportDetailsFragment,
+  ViolationReportReason,
+  ViolationReportTargetType,
+} from '@gql/generated/graphql';
 
 @Component({
   selector: 'app-report-management',
@@ -42,57 +50,84 @@ import { AdminDeleteTemplateGql } from '@gql/generated/graphql';
     TranslocoPipe,
   ],
 })
-export class ReportManagementComponent implements OnInit {
-  private violationReportService = inject(ViolationReportService);
+export class ReportManagementComponent {
+  private adminViolationReports = inject(AdminViolationReportsByDecidedGql);
+  private adminDecideViolationReport = inject(AdminDecideViolationReportGql);
   private dialogService = inject(DialogService);
   private translateService = inject(TranslocoService);
-  private adminDeleteTemplate = inject(AdminDeleteTemplateGql);
   private notificationService = inject(NotificationService);
 
-  isLoading = true;
   selectedTab = 0;
-  reports: ViolationReport[] = [];
 
-  panelOpenState = false;
+  /*
+   * The cached list shows right away, while the network revalidates it: reports decided since
+   * the closed list was last loaded only reach it that way.
+   */
+  private readonly reportsQueryRef = this.adminViolationReports.watch({
+    variables: { decided: false },
+    fetchPolicy: 'cache-and-network',
+  });
+  private readonly reportsResult = toSignal(this.reportsQueryRef.valueChanges);
+  private readonly connection = computed(() => {
+    const result = this.reportsResult();
+    return result?.dataState === 'complete'
+      ? result.data.adminViolationReportsByDecided
+      : undefined;
+  });
+  readonly reports = computed(
+    () => this.connection()?.edges?.flatMap((e) => (e ? [e.node] : [])) ?? []
+  );
+  readonly hasMore = computed(
+    () => this.connection()?.pageInfo.hasNextPage ?? false
+  );
+  readonly isLoading = computed(() => {
+    const result = this.reportsResult();
+    return (
+      !result ||
+      ((result.networkStatus === NetworkStatus.loading ||
+        result.networkStatus === NetworkStatus.setVariables) &&
+        result.dataState !== 'complete')
+    );
+  });
+  readonly isLoadingMore = computed(
+    () => this.reportsResult()?.networkStatus === NetworkStatus.fetchMore
+  );
 
-  ngOnInit(): void {
-    this.loadReports();
-  }
-
-  loadReports(hasDecision = false) {
-    this.isLoading = true;
-    this.violationReportService
-      .getViolationReports(hasDecision)
-      .subscribe((reports) => {
-        this.reports = reports;
-        this.isLoading = false;
-      });
+  loadMore() {
+    const cursor = this.connection()?.pageInfo.endCursor;
+    if (cursor) {
+      this.reportsQueryRef.fetchMore({ variables: { cursor } });
+    }
   }
 
   switchList(index: number): void {
     this.selectedTab = index;
-    this.loadReports(index === 1);
+    this.reportsQueryRef.setVariables({ decided: index === 1 });
   }
 
-  getReasonString(reason: string): string {
-    return this.violationReportService.getReasonString(reason);
+  getReasonString(reason: ViolationReportReason): string {
+    return getViolationReportReasonKey(reason);
   }
 
-  getTargetType(targetType: string): string {
-    return this.violationReportService.getTargetTypeString(targetType);
+  getTargetType(targetType: ViolationReportTargetType): string {
+    return getViolationReportTargetTypeKey(targetType);
   }
 
-  goToReportedContent(report: ViolationReport): void {
-    let prefix = '';
-    if (report.targetType === 'ContentGroupTemplate') {
-      prefix = 'templates/';
+  goToReportedContent(report: ViolationReportDetailsFragment): void {
+    switch (report.targetType) {
+      case ViolationReportTargetType.Room:
+        window.open('admin/rooms/' + report.targetId, '_blank');
+        break;
+      case ViolationReportTargetType.Template:
+        window.open('templates/' + report.targetId, '_blank');
+        break;
     }
-    if (prefix) {
-      window.open(prefix + report.targetId, '_blank');
-    }
   }
 
-  openSubmitDialog(report: ViolationReport, shouldRemove: boolean) {
+  openSubmitDialog(
+    report: ViolationReportDetailsFragment,
+    shouldRemove: boolean
+  ) {
     const action = shouldRemove ? 'confirm' : 'dismiss';
     const dialogRef = this.dialogService.openDeleteDialog(
       'report',
@@ -107,7 +142,6 @@ export class ReportManagementComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.reports = this.reports.filter((r) => r.id !== report.id);
         const action = shouldRemove ? 'confirmed' : 'dismissed';
         const msg = this.translateService.translate(
           'admin.admin-area.report-has-been-' + action
@@ -116,21 +150,24 @@ export class ReportManagementComponent implements OnInit {
           msg,
           AdvancedSnackBarTypes.WARNING
         );
-        if (shouldRemove && report.targetType === 'ContentGroupTemplate') {
-          this.adminDeleteTemplate
-            .mutate({ variables: { id: report.targetId } })
-            .subscribe();
-        }
       }
     });
   }
 
-  closeReport(id: string, shouldRemove: boolean): Observable<ViolationReport> {
-    const changes = {
-      decision: shouldRemove
-        ? ViolationReportDecision.REMOVAL
-        : ViolationReportDecision.INVALID,
-    };
-    return this.violationReportService.patchViolationReport(id, changes);
+  /** A removal also deletes the reported target on the server. */
+  closeReport(id: string, shouldRemove: boolean): Observable<object> {
+    const decision = shouldRemove
+      ? ViolationReportDecision.Removal
+      : ViolationReportDecision.Invalid;
+    return this.adminDecideViolationReport.mutate({
+      variables: { id, decision },
+      update: (cache, result) => {
+        const cacheId = cache.identify({ __typename: 'ViolationReport', id });
+        if (result.data?.adminDecideViolationReport && cacheId) {
+          cache.evict({ id: cacheId });
+          cache.gc();
+        }
+      },
+    });
   }
 }

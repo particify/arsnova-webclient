@@ -38,6 +38,7 @@ import {
   QuestionnairePublishedContentsByQuestionnaireIdGql,
   TemplateByIdGql,
   TemplateDetailsFragment,
+  ViolationReportTargetType,
 } from '@gql/generated/graphql';
 import { ErrorClassification } from '@gql/helper/handle-operation-error';
 import { getContentTypeIcons } from '@app/core/utils/questionnaire-format';
@@ -198,7 +199,7 @@ export class ContentGroupTemplatePreviewComponent {
       width: '600px',
       data: {
         targetId: this.templateId(),
-        targetType: 'ContentGroupTemplate',
+        targetType: ViolationReportTargetType.Template,
       },
     });
   }

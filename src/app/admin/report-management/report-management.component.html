@@ -12,7 +12,7 @@
     <mat-tab [label]="'admin.admin-area.closed' | transloco"></mat-tab>
   </mat-tab-group>
 
-  @if (!isLoading && reports.length === 0) {
+  @if (!isLoading() && reports().length === 0) {
     <p class="hint">
       {{
         'admin.admin-area.no-reports-' + (selectedTab === 0 ? 'open' : 'closed')
@@ -21,12 +21,12 @@
     </p>
   }
 
-  @if (isLoading) {
+  @if (isLoading()) {
     <app-loading-indicator></app-loading-indicator>
   }
-  @if (!isLoading && reports.length > 0) {
+  @if (!isLoading() && reports().length > 0) {
     <div fxLayout="column" fxLayoutGap="10px">
-      @for (report of reports; track report) {
+      @for (report of reports(); track report.id) {
         <mat-card appearance="outlined">
           <div>
             <p>
@@ -94,6 +94,15 @@
             </div>
           }
         </mat-card>
+      }
+      @if (hasMore()) {
+        @if (isLoadingMore()) {
+          <app-loading-indicator></app-loading-indicator>
+        } @else {
+          <button mat-stroked-button (click)="loadMore()">
+            {{ 'room-list.load-more' | transloco }}
+          </button>
+        }
       }
     </div>
   }

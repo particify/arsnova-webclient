@@ -4,11 +4,6 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import {
-  ViolationReport,
-  ViolationReportReason,
-} from '@app/core/models/violation-report';
-import { ViolationReportService } from '@app/core/services/http/violation-report.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormComponent } from '@app/standalone/form/form.component';
 import {
@@ -19,6 +14,15 @@ import { TranslocoService } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  CreateViolationReportGql,
+  ViolationReportReason,
+  ViolationReportTargetType,
+} from '@gql/generated/graphql';
+import {
+  getViolationReportReasonKey,
+  getViolationReportTargetTypeKey,
+} from '@app/core/utils/violation-report';
 
 @Component({
   selector: 'app-violation-report',
@@ -30,14 +34,14 @@ export class ViolationReportComponent extends FormComponent implements OnInit {
   private dialogRef =
     inject<MatDialogRef<ViolationReportComponent>>(MatDialogRef);
   private data = inject<{
-    targetType: string;
+    targetType: ViolationReportTargetType;
     targetId: string;
   }>(MAT_DIALOG_DATA);
-  private violationReportService = inject(ViolationReportService);
+  private createViolationReport = inject(CreateViolationReportGql);
   private translateService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
 
-  reasons = Object.keys(ViolationReportReason);
+  reasons = Object.values(ViolationReportReason);
   selectedReason?: ViolationReportReason;
   description = '';
   targetTypeString?: string;
@@ -47,13 +51,13 @@ export class ViolationReportComponent extends FormComponent implements OnInit {
       reason: new FormControl('', Validators.required),
       description: new FormControl('', Validators.required),
     });
-    this.targetTypeString = this.violationReportService.getTargetTypeString(
+    this.targetTypeString = getViolationReportTargetTypeKey(
       this.data.targetType
     );
   }
 
-  getReasonString(reason: string): string {
-    return this.violationReportService.getReasonString(reason);
+  getReasonString(reason: ViolationReportReason): string {
+    return getViolationReportReasonKey(reason);
   }
 
   sendReport(): void {
@@ -75,14 +79,14 @@ export class ViolationReportComponent extends FormComponent implements OnInit {
       }
       return;
     }
-    const report = new ViolationReport(
-      this.data.targetType,
-      this.data.targetId,
-      this.selectedReason,
-      this.description
-    );
+    const input = {
+      targetType: this.data.targetType,
+      targetId: this.data.targetId,
+      reason: this.selectedReason,
+      description: this.description,
+    };
     this.disableForm();
-    this.violationReportService.postViolationReport(report).subscribe({
+    this.createViolationReport.mutate({ variables: { input } }).subscribe({
       next: () => {
         const msg = this.translateService.translate(
           'violation-report.reported-' + this.targetTypeString
