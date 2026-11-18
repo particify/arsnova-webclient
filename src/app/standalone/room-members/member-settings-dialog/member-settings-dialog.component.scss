@@ -1,0 +1,14 @@
+@use '../../../../variables' as *;
+
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding-right: $spacing-2;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}

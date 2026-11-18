@@ -72,12 +72,14 @@
               <mat-icon>preview</mat-icon>
               {{ 'header.preview' | transloco }}
             </button>
+            <app-share-room
+              [roomName]="room.name"
+              [roomId]="room.id"
+              [isOwner]="hasRole(UserRole.OWNER)"
+              [disabled]="isPreview"
+              [useMenuButton]="true"
+            ></app-share-room>
             @if (hasRole(UserRole.OWNER)) {
-              <app-share-room
-                [roomName]="room.name"
-                [disabled]="isPreview"
-                [useMenuButton]="true"
-              ></app-share-room>
               <button mat-menu-item tabindex="0" (click)="goToSettings()">
                 <mat-icon>settings</mat-icon>
                 <span>{{ 'header.room-settings' | transloco }}</span>
@@ -103,6 +105,8 @@
             </button>
             <app-share-room
               [roomName]="room.name"
+              [roomId]="room.id"
+              [isOwner]="hasRole(UserRole.OWNER)"
               [disabled]="isPreview"
             ></app-share-room>
             @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {

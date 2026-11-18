@@ -1,0 +1,133 @@
+@use '../../../../variables' as *;
+
+// Lets long names truncate instead of widening the menu or dialog around the list.
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.members-label {
+  color: var(--on-surface-light);
+  display: block;
+  font-size: $s-font-size;
+  margin-bottom: $spacing;
+}
+
+.members {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.member {
+  align-items: center;
+  display: flex;
+  gap: $spacing-1;
+  min-height: $spacing-7;
+}
+
+// Dividers only between members.
+.member + .member {
+  border-top: 1px solid var(--border);
+}
+
+.avatar {
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  flex-shrink: 0;
+  font-weight: $font-weight-bold;
+  height: $spacing-5;
+  justify-content: center;
+  width: $spacing-5;
+}
+
+.avatar:not(.primary-variant) {
+  background-color: var(--grey-light);
+}
+
+.identity {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note,
+.role,
+.you,
+.empty {
+  color: var(--on-surface-light);
+  font-size: $s-font-size;
+}
+
+.role-select {
+  border-radius: $border-radius;
+  flex-shrink: 0;
+
+  // Room for the state layer around the text.
+  padding: $spacing * 0.5 $spacing;
+  position: relative;
+  width: auto;
+
+  // A state layer as Material's buttons draw it, in the text's own colour, so it suits both
+  // themes. A disabled select gets none.
+  &::before {
+    background-color: currentcolor;
+    border-radius: inherit;
+    content: '';
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  &:not(.mat-mdc-select-disabled):hover::before {
+    opacity: var(--mat-button-text-hover-state-layer-opacity, 0.04);
+  }
+
+  &:not(.mat-mdc-select-disabled):focus-visible::before {
+    opacity: var(--mat-button-text-focus-state-layer-opacity, 0.12);
+  }
+}
+
+// Keeps the value off the arrow, as the select sizes to its value.
+mat-select-trigger {
+  padding-inline-end: $spacing * 0.5;
+}
+
+.higher-option {
+  padding: $spacing $spacing-2;
+}
+
+.option-name {
+  display: block;
+  font-size: $s-font-size;
+  font-weight: $font-weight-bold;
+}
+
+.option-description {
+  display: block;
+  font-size: $xs-font-size;
+}
+
+.mat-mdc-option.remove-option {
+  color: var(--warn);
+}
+
+.empty {
+  padding: $spacing-1 0;
+}
+
+.unverified .identity,
+.unverified .avatar {
+  opacity: 0.6;
+}

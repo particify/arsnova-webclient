@@ -1,0 +1,88 @@
+<span class="members-label" [id]="labelId">{{
+  'share.members' | transloco
+}}</span>
+@let _members = shownMembers();
+@if (_members === undefined) {
+  <app-loading-indicator [size]="24"></app-loading-indicator>
+} @else {
+  <ul class="members" [attr.aria-labelledby]="labelId">
+    @for (member of _members; track member.user.id) {
+      @let name = member.user.displayId ?? member.user.id;
+      @let roleName =
+        'share.role-' + (member.role ?? '').toLowerCase() | transloco;
+      <li
+        class="member"
+        [class.unverified]="!member.user.verified"
+        [attr.data-member-id]="member.user.id"
+        data-testid="team-member"
+      >
+        <span
+          class="avatar"
+          aria-hidden="true"
+          [class.primary-variant]="member.role === Owner"
+          [class.on-primary-variant]="member.role === Owner"
+          >{{ initial(member) }}</span
+        >
+        <span class="identity">
+          <span class="name"
+            >{{ name }}
+            @if (member.user.id === currentUserId()) {
+              <span class="you">{{ 'share.you' | transloco }}</span>
+            }
+          </span>
+          @if (!member.user.verified) {
+            <span class="note">{{ 'share.unverified' | transloco }}</span>
+          }
+        </span>
+        @if (readonly()) {
+          <span class="role">{{ roleName }}</span>
+        } @else {
+          @let isOwner = member.role === Owner;
+          <mat-select
+            #roleSelect
+            class="role-select"
+            panelClass="role-select-panel"
+            [panelWidth]="null"
+            [value]="member.role"
+            [disabled]="isOwner"
+            [aria-label]="'share.a11y-member-role' | transloco: { name }"
+            (selectionChange)="select(member, $event)"
+            data-testid="member-role-select"
+          >
+            <mat-select-trigger>{{
+              'share.role-' + (roleSelect.value ?? '').toLowerCase() | transloco
+            }}</mat-select-trigger>
+            @for (role of isOwner ? [Owner] : roles(); track role) {
+              <mat-option [value]="role" class="higher-option">
+                <span class="option-name">{{
+                  'share.role-' + role.toLowerCase() | transloco
+                }}</span>
+                @if (!isOwner) {
+                  <span class="option-description">{{
+                    'share.role-' + role.toLowerCase() + '-description'
+                      | transloco
+                  }}</span>
+                }
+              </mat-option>
+            }
+            @if (!isOwner) {
+              <mat-divider></mat-divider>
+              <mat-option
+                [value]="REMOVE"
+                class="remove-option"
+                [attr.aria-label]="
+                  'share.a11y-remove-member' | transloco: { name }
+                "
+                data-testid="remove-member-option"
+              >
+                {{ 'share.remove' | transloco }}
+              </mat-option>
+            }
+          </mat-select>
+        }
+      </li>
+    } @empty {
+      <li class="empty">{{ 'share.no-members' | transloco }}</li>
+    }
+  </ul>
+}

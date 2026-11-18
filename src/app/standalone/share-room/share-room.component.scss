@@ -1,11 +1,54 @@
 @use '../../../variables' as *;
 
-.share-menu-header {
-  font-weight: $font-weight-bold;
-  color: var(--on-surface);
+.tab-subtitle {
+  color: var(--on-surface-light);
+  font-size: $xs-font-size;
 }
 
 .qr {
   pointer-events: none;
   height: 99px;
+}
+
+.share-tabs .participants {
+  // Room for the touch targets of the buttons at the end, as in the team tab.
+  padding: $spacing-2 0 $spacing;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+
+  // Room for the touch target of the button at the end, which the tab would otherwise scroll for.
+  padding: $spacing-2 0 $spacing;
+}
+
+.empty-team-title {
+  font-size: $m-font-size;
+  font-weight: $font-weight-bold;
+  margin: 0 0 $spacing-1;
+}
+
+.empty-team-text {
+  color: var(--on-surface-light);
+  font-size: $s-font-size;
+  margin: 0;
+}
+
+// Under the names of the members listed, past their initials.
+.more-members {
+  color: var(--on-surface-light);
+  font-size: $s-font-size;
+  margin: 0;
+  padding-left: $spacing-5 + $spacing-1;
+}
+
+// Continues the dividers between the members, under the last one.
+app-member-list {
+  border-bottom: 1px solid var(--border);
+}
+
+.member-settings {
+  align-self: center;
 }

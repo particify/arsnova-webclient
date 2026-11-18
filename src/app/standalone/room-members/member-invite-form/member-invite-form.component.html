@@ -1,0 +1,68 @@
+<div class="invite">
+  @if (isGuest()) {
+    <app-hint
+      class="guest-hint"
+      [text]="'share.disabled-for-guests'"
+      [type]="HintType.WARNING"
+    ></app-hint>
+  }
+  <div class="fields">
+    <mat-form-field
+      class="login-id"
+      appearance="outline"
+      subscriptSizing="fixed"
+    >
+      <mat-label>{{
+        (loginIdIsEmail ? 'share.email' : 'share.login-id') | transloco
+      }}</mat-label>
+      <input
+        matInput
+        type="email"
+        autocomplete="off"
+        [formControl]="usernameFormControl"
+        (keydown.enter)="submit()"
+        data-testid="team-login-id"
+      />
+      @if (loginIdIsEmail && usernameFormControl.hasError('email')) {
+        <mat-error>{{ 'login.email-invalid' | transloco }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field class="role" appearance="outline" subscriptSizing="fixed">
+      <mat-label>{{ 'share.role' | transloco }}</mat-label>
+      <mat-select
+        panelClass="role-select-panel"
+        [(value)]="selectedRole"
+        [disabled]="formDisabled || roles().length === 1"
+        data-testid="invite-role-select"
+      >
+        <mat-select-trigger>{{
+          'share.role-' + selectedRole.toLowerCase() | transloco
+        }}</mat-select-trigger>
+        @for (role of roles(); track role) {
+          <mat-option [value]="role" class="higher-option">
+            <span class="option-name">{{
+              'share.role-' + role.toLowerCase() | transloco
+            }}</span>
+            <span class="option-description">{{
+              'share.role-' + role.toLowerCase() + '-description' | transloco
+            }}</span>
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="actions">
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      class="submit-button"
+      [disabled]="!canSubmit()"
+      (click)="submit()"
+      data-testid="invite-submit-button"
+    >
+      <mat-icon>{{ loginIdIsEmail ? 'mail' : 'person_add' }}</mat-icon>
+      {{ (loginIdIsEmail ? 'share.invite' : 'share.add') | transloco }}
+    </button>
+  </div>
+</div>

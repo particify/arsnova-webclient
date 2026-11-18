@@ -28,7 +28,6 @@ import {
 import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
 import { RoomComponent } from '@app/creator/settings/room/room.component';
 import { CommentSettingsComponent } from '@app/creator/settings/comment-settings/comment-settings.component';
-import { AccessComponent } from '@app/creator/settings/access/access.component';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 export interface Settings {
@@ -53,7 +52,6 @@ export interface Settings {
     SettingsPanelHeaderComponent,
     RoomComponent,
     CommentSettingsComponent,
-    AccessComponent,
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,
@@ -87,11 +85,6 @@ export class SettingsPageComponent implements OnInit {
         name: 'comments',
         icon: 'comment',
         hotkey: '2',
-      },
-      {
-        name: 'access',
-        icon: 'admin_panel_settings',
-        hotkey: '3',
       },
     ];
     this.translateService.setActiveLang(

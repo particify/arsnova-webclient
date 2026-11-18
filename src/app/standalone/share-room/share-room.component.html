@@ -23,6 +23,7 @@
   xPosition="before"
   panelClass="wider-panel"
   class="wider-panel"
+  (closed)="selectedTab.set(0)"
 >
   <div #hiddenQr class="visually-hidden">
     <qr-code
@@ -32,12 +33,74 @@
       [errorCorrectionLevel]="'M'"
     ></qr-code>
   </div>
-  <mat-menu-content
+  <div
+    class="share-menu-content"
     (click)="$event.stopPropagation()"
-    fxLayout="column"
-    fxLayoutGap="24px"
+    (keydown)="keepMenuOpen($event)"
   >
-    <span class="share-menu-header">{{
+    @if (isOwner()) {
+      <mat-tab-group
+        class="share-tabs"
+        animationDuration="0"
+        [selectedIndex]="selectedTab()"
+        (selectedIndexChange)="selectedTab.set($event)"
+      >
+        <mat-tab [label]="'share.participants' | transloco">
+          <ng-container *ngTemplateOutlet="participants"></ng-container>
+        </mat-tab>
+        <mat-tab [label]="'share.team' | transloco">
+          <ng-template matTabContent>
+            <div class="team">
+              @let _members = members();
+              @if (_members && _members.length <= 1) {
+                <div data-testid="team-empty-state">
+                  <p class="empty-team-title">
+                    {{ 'share.invite-members' | transloco }}
+                  </p>
+                  <p class="empty-team-text">
+                    {{ 'share.members-empty-hint' | transloco }}
+                  </p>
+                </div>
+              } @else {
+                <app-member-list
+                  [roomId]="roomId()"
+                  [members]="_members"
+                  [limit]="memberLimit"
+                  [readonly]="true"
+                ></app-member-list>
+                @if (_members && _members.length > memberLimit) {
+                  <p class="more-members" data-testid="team-more-members">
+                    {{
+                      'share.more-members'
+                        | transloco: { count: _members.length - memberLimit }
+                    }}
+                  </p>
+                }
+              }
+              @if (_members) {
+                <button
+                  mat-button
+                  class="member-settings"
+                  (click)="openMemberSettings()"
+                  data-testid="member-settings-button"
+                >
+                  <mat-icon>manage_accounts</mat-icon>
+                  {{ 'share.manage-members' | transloco }}
+                </button>
+              }
+            </div>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    } @else {
+      <ng-container *ngTemplateOutlet="participants"></ng-container>
+    }
+  </div>
+</mat-menu>
+
+<ng-template #participants>
+  <div class="participants" fxLayout="column" fxLayoutGap="24px">
+    <span class="tab-subtitle">{{
       'share.share-room-with-participants' | transloco
     }}</span>
     <mat-form-field class="no-field-hint" appearance="outline">
@@ -91,5 +154,5 @@
         </button>
       </div>
     </div>
-  </mat-menu-content>
-</mat-menu>
+  </div>
+</ng-template>
