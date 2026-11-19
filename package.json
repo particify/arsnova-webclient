@@ -82,7 +82,7 @@
     "eslint-plugin-jsdoc": "59.1.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-storybook": "10.6.7",
-    "jasmine-core": "5.10.0",
+    "jasmine-core": "5.13.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.4",
     "karma-chrome-launcher": "3.2.0",
