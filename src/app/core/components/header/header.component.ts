@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Router } from '@angular/router';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
@@ -46,6 +51,7 @@ import { environment } from '@environments/environment';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   providers: [CustomPageTitleStrategy],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatToolbar,
     FlexModule,

@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { AnswerResultType } from '@app/core/models/answer-result';
@@ -16,6 +21,7 @@ import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
   imports: [FlexModule, FormsModule, ContentTextAnswerComponent, TranslocoPipe],
   templateUrl: './content-short-answer-participant.component.html',
   styleUrl: './content-short-answer-participant.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentShortAnswerParticipantComponent extends ContentParticipantBaseComponent {

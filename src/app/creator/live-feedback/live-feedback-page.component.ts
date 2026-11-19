@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import {
   HotkeyAction,
@@ -28,6 +35,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
   selector: 'app-live-feedback-page',
   templateUrl: './live-feedback-page.component.html',
   styleUrls: ['./live-feedback-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AutofocusDirective,
     LoadingIndicatorComponent,

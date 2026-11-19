@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { takeUntil } from 'rxjs';
 import {
@@ -31,6 +38,7 @@ import { ExpandableCardComponent } from '@app/standalone/expandable-card/expanda
   selector: 'app-participant-overview',
   templateUrl: './room-overview-page.component.html',
   styleUrls: ['../../common/styles/room-overview.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     CoreModule,

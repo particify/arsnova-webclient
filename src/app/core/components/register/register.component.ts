@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormControl,
   Validators,
@@ -34,6 +41,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatCard,

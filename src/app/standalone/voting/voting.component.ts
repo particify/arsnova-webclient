@@ -1,4 +1,11 @@
-import { Component, Input, Pipe, PipeTransform, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  Pipe,
+  PipeTransform,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Vote } from '@app/core/models/vote';
 import { VoteService } from '@app/core/services/http/vote.service';
@@ -21,6 +28,7 @@ export class VoteAction implements PipeTransform {
   providers: [provideTranslocoScope('participant')],
   selector: 'app-voting',
   templateUrl: './voting.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./voting.component.scss'],
 })
 export class VotingComponent {

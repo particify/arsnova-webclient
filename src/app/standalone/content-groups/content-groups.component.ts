@@ -1,5 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -37,13 +41,13 @@ import {
     TranslocoModule,
     TextOverflowClipComponent,
     ContentGroupInfoComponent,
-    CommonModule,
     MatButtonModule,
     MatRippleModule,
   ],
   providers: [provideTranslocoScope('creator')],
   selector: 'app-content-groups',
   templateUrl: './content-groups.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-groups.component.scss'],
 })
 export class ContentGroupsComponent {

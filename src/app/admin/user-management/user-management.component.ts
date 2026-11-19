@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
@@ -25,6 +30,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['../admin-styles.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AdminPageHeaderComponent,
     SearchBarComponent,

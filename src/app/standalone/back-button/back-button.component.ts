@@ -1,5 +1,10 @@
 import { Location } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-back-button',
   templateUrl: './back-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatButtonModule, MatIconModule],
 })
 export class BackButtonComponent {

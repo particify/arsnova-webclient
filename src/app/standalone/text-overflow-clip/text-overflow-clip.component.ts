@@ -1,4 +1,9 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 
 const INITIAL_SLICE_POSITION = 5;
@@ -6,6 +11,7 @@ const INITIAL_SLICE_POSITION = 5;
 @Component({
   selector: 'app-text-overflow-clip',
   imports: [FlexModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './text-overflow-clip.component.html',
 })
 export class TextOverflowClipComponent implements OnChanges {

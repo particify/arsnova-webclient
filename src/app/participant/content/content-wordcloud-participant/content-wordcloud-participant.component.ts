@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope } from '@jsverse/transloco';
@@ -14,6 +19,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   selector: 'app-content-wordcloud-participant',
   templateUrl: './content-wordcloud-participant.component.html',
   imports: [ContentWordcloudAnswerComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {

@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -13,6 +18,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   selector: 'app-content-numeric-participant',
   templateUrl: './content-numeric-participant.component.html',
   imports: [ContentNumericAnswerComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentNumericParticipantComponent extends ContentParticipantBaseComponent {

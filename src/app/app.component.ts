@@ -4,6 +4,7 @@ import {
   OnInit,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -44,6 +45,7 @@ import { GlobalHintsComponent } from './standalone/global-hints/global-hints.com
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CoreModule,
     FooterLinksComponent,

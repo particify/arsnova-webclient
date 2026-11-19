@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 
@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
   imports: [CommonModule, FlexModule, MatCardModule],
   selector: 'app-base-card',
   templateUrl: './base-card.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./base-card.component.scss'],
 })
 export class BaseCardComponent {

@@ -5,6 +5,7 @@ import {
   OnInit,
   SimpleChanges,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   LikertScaleTemplate,
@@ -35,6 +36,7 @@ import { FlexModule } from '@angular/flex-layout';
       useExisting: ScaleContentFormComponent,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     MatFormField,

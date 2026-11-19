@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import {
@@ -45,6 +46,7 @@ enum HEADER_ANIMATION_STATE {
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],
   providers: [{ provide: CdkStepper, useExisting: StepperComponent }],
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [
     trigger('slideContainer', [
       state(

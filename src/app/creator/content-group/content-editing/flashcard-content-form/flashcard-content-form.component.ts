@@ -4,6 +4,7 @@ import {
   OnChanges,
   SimpleChanges,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -33,6 +34,7 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
       useExisting: FlashcardContentFormComponent,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     MatFormField,

@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { RoomCreated } from '@app/core/models/events/room-created';
@@ -44,6 +49,7 @@ import { ExtensionPointComponent } from '@projects/extension-point/src/public-ap
 @Component({
   selector: 'app-room-create',
   templateUrl: './room-create.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     CdkScrollable,

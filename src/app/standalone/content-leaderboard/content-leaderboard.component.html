@@ -65,27 +65,29 @@
         </div>
       </td>
     </ng-container>
-    <ng-container matColumnDef="currentDuration" *ngIf="contentDuration">
-      <th
-        mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header
-        [matTooltip]="'participant.content.leaderboard-duration' | transloco"
-      >
-        <mat-icon class="timer-icon">timer</mat-icon>
-      </th>
-      <td
-        mat-cell
-        [ngClass]="{
-          'bold-text bg-dark': element.userAlias?.id === aliasId,
-        }"
-        *matCellDef="let element; index as i"
-      >
-        <span class="less-visible">{{
-          element.currentDuration | duration: contentDuration
-        }}</span>
-      </td>
-    </ng-container>
+    @if (contentDuration) {
+      <ng-container matColumnDef="currentDuration">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          [matTooltip]="'participant.content.leaderboard-duration' | transloco"
+        >
+          <mat-icon class="timer-icon">timer</mat-icon>
+        </th>
+        <td
+          mat-cell
+          [ngClass]="{
+            'bold-text bg-dark': element.userAlias?.id === aliasId,
+          }"
+          *matCellDef="let element; index as i"
+        >
+          <span class="less-visible">{{
+            element.currentDuration | duration: contentDuration
+          }}</span>
+        </td>
+      </ng-container>
+    }
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>

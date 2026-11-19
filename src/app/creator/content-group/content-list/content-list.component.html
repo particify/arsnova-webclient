@@ -465,7 +465,11 @@
                 fxLayoutAlign="start center"
                 class="content-stats-info"
               >
-                @if (contentStats.get(content.id)?.count !== undefined) {
+                @if (
+                  $safeNavigationMigration(
+                    contentStats.get(content.id)?.count
+                  ) !== undefined
+                ) {
                   <span>{{
                     (contentStats.get(content.id)?.count === 1
                       ? 'creator.content.answer-count'
@@ -473,17 +477,25 @@
                     )
                       | transloco
                         : {
-                            count: contentStats.get(content.id)?.count,
+                            count: $safeNavigationMigration(
+                              contentStats.get(content.id)?.count
+                            ),
                           }
                   }}</span>
                 }
-                @if (contentStats.get(content.id)?.correct !== undefined) {
+                @if (
+                  $safeNavigationMigration(
+                    contentStats.get(content.id)?.correct
+                  ) !== undefined
+                ) {
                   <span>{{
                     'creator.content.answer-correct'
                       | transloco
                         : {
                             percentage: getPercentageString(
-                              contentStats.get(content.id)?.correct
+                              $safeNavigationMigration(
+                                contentStats.get(content.id)?.correct
+                              )
                             ),
                           }
                   }}</span>

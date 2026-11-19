@@ -1,5 +1,12 @@
 import { Location, AsyncPipe } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
@@ -32,6 +39,7 @@ const TAB_GROUP_HEIGHT = 48;
   selector: 'app-comments-page',
   templateUrl: './comments-page.component.html',
   styleUrls: ['../../common/styles/comments-page.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatTabGroup,

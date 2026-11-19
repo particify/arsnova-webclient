@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormControl,
   Validators,
@@ -27,6 +32,7 @@ import { BackButtonComponent } from '@app/standalone/back-button/back-button.com
   selector: 'app-request-password-reset',
   templateUrl: './request-password-reset.component.html',
   styleUrls: ['./request-password-reset.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatCard,

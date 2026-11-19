@@ -8,6 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -82,6 +83,7 @@ function setDefaultTrue(value: boolean | undefined): boolean {
     BaseCardComponent,
     ContentWaitingComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class ParticipantContentCarouselPageComponent

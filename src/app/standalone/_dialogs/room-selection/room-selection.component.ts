@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomSummary } from '@app/core/models/room-summary';
@@ -12,6 +18,7 @@ import { Membership } from '@app/core/models/membership';
 @Component({
   selector: 'app-room-selection',
   imports: [CoreModule, LoadingIndicatorComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './room-selection.component.html',
 })
 export class RoomSelectionComponent implements OnInit, OnDestroy {

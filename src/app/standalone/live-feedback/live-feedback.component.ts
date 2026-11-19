@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,6 +36,7 @@ class LiveFeedback {
   ],
   selector: 'app-live-feedback',
   templateUrl: './live-feedback.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./live-feedback.component.scss'],
 })
 export class LiveFeedbackComponent implements OnInit, OnDestroy {

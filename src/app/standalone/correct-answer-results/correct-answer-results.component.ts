@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslocoPipe } from '@jsverse/transloco';
 
@@ -7,6 +7,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
   selector: 'app-correct-answer-results',
   imports: [NgClass, TranslocoPipe, FlexLayoutModule],
   templateUrl: './correct-answer-results.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './correct-answer-results.component.scss',
 })
 export class CorrectAnswerResultsComponent {

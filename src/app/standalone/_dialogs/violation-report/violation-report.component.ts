@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   ViolationReport,
   ViolationReportReason,
@@ -18,6 +23,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-violation-report',
   imports: [CoreModule, LoadingButtonComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './violation-report.component.html',
 })
 export class ViolationReportComponent extends FormComponent implements OnInit {

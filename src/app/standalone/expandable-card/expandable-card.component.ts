@@ -1,5 +1,11 @@
 import { NgStyle } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 
@@ -7,6 +13,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-expandable-card',
   imports: [MatCard, MatIcon, NgStyle],
   templateUrl: './expandable-card.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './expandable-card.component.scss',
 })
 export class ExpandableCardComponent implements AfterViewInit {

@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
@@ -31,6 +37,7 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
   providers: [provideTranslocoScope('creator')],
   selector: 'app-comment-answer',
   templateUrl: './comment-answer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./comment-answer.component.scss'],
 })
 export class CommentAnswerComponent extends FormComponent {

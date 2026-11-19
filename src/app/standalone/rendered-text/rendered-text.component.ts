@@ -6,6 +6,7 @@ import {
   OnChanges,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
@@ -18,6 +19,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
   imports: [CommonModule, LoadingIndicatorComponent],
   selector: 'app-rendered-text',
   templateUrl: './rendered-text.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./rendered-text.component.scss'],
 })
 export class RenderedTextComponent implements OnChanges {

@@ -5,6 +5,7 @@ import {
   OnInit,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { Announcement } from '@app/core/models/announcement';
@@ -36,6 +37,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
   selector: 'app-announcement-settings',
   templateUrl: './announcement-settings.component.html',
   styleUrls: ['./announcement-settings.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     FormsModule,

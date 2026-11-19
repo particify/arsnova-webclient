@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '@app/core/models/user';
 import { AdminService } from '@app/core/services/http/admin.service';
 import { UserService } from '@app/core/services/http/user.service';
 
 @Component({
   selector: 'app-user-search',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '',
 })
 export class UserSearchComponent {

@@ -1,4 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
 import {
@@ -19,6 +24,7 @@ import { provideTranslocoScope } from '@jsverse/transloco';
   styleUrl: './publish-content-group-dialog.component.scss',
   standalone: true,
   imports: [CoreModule, LoadingButtonComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('creator')],
 })
 export class PublishContentGroupDialogComponent

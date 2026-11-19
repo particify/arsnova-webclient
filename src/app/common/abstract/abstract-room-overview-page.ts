@@ -6,10 +6,16 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AbstractRoomOverviewPageComponent {

@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
@@ -30,6 +35,7 @@ interface DialogData {
   selector: 'app-update-info',
   templateUrl: './update-info.component.html',
   styleUrls: ['./update-info.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CdkScrollable,
     MatDialogContent,

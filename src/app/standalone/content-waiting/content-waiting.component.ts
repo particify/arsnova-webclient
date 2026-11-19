@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -11,6 +18,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   selector: 'app-content-waiting',
   imports: [CoreModule, ContentStepInfoComponent, LoadingButtonComponent],
   templateUrl: './content-waiting.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-waiting.component.scss',
 })
 export class ContentWaitingComponent extends FormComponent {

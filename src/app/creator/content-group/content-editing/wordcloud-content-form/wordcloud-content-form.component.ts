@@ -4,6 +4,7 @@ import {
   OnChanges,
   SimpleChanges,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -31,6 +32,7 @@ const MAX_KEYWORDS = 10;
       useExisting: WordcloudContentFormComponent,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatFormField, MatLabel, MatInput, FormsModule, TranslocoPipe],
 })
 export class WordcloudContentFormComponent

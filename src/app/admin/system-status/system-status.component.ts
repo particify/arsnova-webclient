@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { catchError, of, shareReplay } from 'rxjs';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
@@ -22,6 +27,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
   selector: 'app-system-status',
   templateUrl: './system-status.component.html',
   styleUrls: ['./system-status.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AdminPageHeaderComponent,
     LoadingIndicatorComponent,

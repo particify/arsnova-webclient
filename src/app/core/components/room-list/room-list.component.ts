@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomService } from '@app/core/services/http/room.service';
@@ -70,6 +77,7 @@ interface RoomDataView {
   selector: 'app-room-list',
   templateUrl: './room-list.component.html',
   styleUrls: ['./room-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     LoadingIndicatorComponent,
     ExtensionPointComponent,

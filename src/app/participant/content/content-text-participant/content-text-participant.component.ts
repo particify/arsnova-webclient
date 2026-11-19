@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
@@ -16,6 +21,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   selector: 'app-content-text-participant',
   templateUrl: './content-text-participant.component.html',
   imports: [FlexModule, FormsModule, ContentTextAnswerComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentTextParticipantComponent extends ContentParticipantBaseComponent {

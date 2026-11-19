@@ -1,4 +1,9 @@
-import { Component, ErrorHandler, inject } from '@angular/core';
+import {
+  Component,
+  ErrorHandler,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatBadge } from '@angular/material/badge';
 import { MatIconButton } from '@angular/material/button';
@@ -10,6 +15,7 @@ import { AppErrorHandler } from '@app/app-error-handler';
   selector: 'app-dev-error-indicator',
   templateUrl: './dev-error-indicator.component.html',
   styleUrl: './dev-error-indicator.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatBadge, MatIcon, MatIconButton, MatTooltip],
 })
 export class DevErrorIndicatorComponent {

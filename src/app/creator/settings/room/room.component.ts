@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import {
@@ -48,6 +49,7 @@ import { RoomSettingsService } from '@app/core/services/http/room-settings.servi
 @Component({
   selector: 'app-room-edit',
   templateUrl: './room.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatFormField,

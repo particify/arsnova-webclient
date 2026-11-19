@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -30,6 +37,7 @@ import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-re
     FlexLayoutModule,
     DisabledIfReadonlyDirective,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './comments-card.component.html',
 })
 export class CommentsCardComponent implements OnDestroy, OnInit {
