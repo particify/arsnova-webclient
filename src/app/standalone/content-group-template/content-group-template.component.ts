@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { CoreModule } from '@app/core/core.module';
@@ -11,6 +17,7 @@ import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/co
   imports: [CoreModule, TemplateLicenseComponent, ContentGroupInfoComponent],
   selector: 'app-content-group-template',
   templateUrl: './content-group-template.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-group-template.component.scss'],
 })
 export class ContentGroupTemplateComponent {

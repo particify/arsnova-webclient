@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -31,6 +36,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   selector: 'app-user-activation',
   templateUrl: './user-activation.component.html',
   styleUrls: ['./user-activation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CdkScrollable,
     MatDialogContent,

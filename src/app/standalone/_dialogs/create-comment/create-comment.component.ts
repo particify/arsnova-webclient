@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import {
   AdvancedSnackBarTypes,
@@ -30,6 +35,7 @@ export interface DialogData {
 @Component({
   imports: [CoreModule, ExtensionPointModule, LoadingButtonComponent],
   selector: 'app-submit-comment',
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './create-comment.component.html',
 })
 export class CreateCommentComponent extends FormComponent implements OnInit {

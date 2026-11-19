@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextRoundStatistics } from '@app/core/models/round-statistics';
@@ -19,6 +26,7 @@ import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer
   selector: 'app-statistic-wordcloud',
   templateUrl: './statistic-wordcloud.component.html',
   styleUrls: ['../text-statistic-content.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NgClass,
     FlexModule,

@@ -1,5 +1,11 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
@@ -33,6 +39,7 @@ import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-re
     CommentListFloatingButtonsComponent,
     DisabledIfReadonlyDirective,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class CommentsPageComponent

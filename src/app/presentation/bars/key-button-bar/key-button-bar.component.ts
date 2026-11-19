@@ -1,5 +1,11 @@
 import { NgClass } from '@angular/common';
-import { Component, Input, inject, DOCUMENT } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  DOCUMENT,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { KeyNavBarItem } from '@app/presentation/bars/control-bar/control-bar.component';
 import { FlexModule } from '@angular/flex-layout';
 import { ExtendedModule } from '@angular/flex-layout/extended';
@@ -12,6 +18,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
   selector: 'app-key-button-bar',
   templateUrl: './key-button-bar.component.html',
   styleUrls: ['./key-button-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     NgClass,

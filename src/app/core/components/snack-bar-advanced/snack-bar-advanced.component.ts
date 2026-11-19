@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { FlexModule } from '@angular/flex-layout';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -11,6 +11,7 @@ export const LOADING_ICON = '_loading';
   selector: 'app-snack-bar-advanced',
   templateUrl: './snack-bar-advanced.component.html',
   styleUrls: ['./snack-bar-advanced.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FlexModule, MatProgressSpinner, MatIcon],
 })
 export class SnackBarAdvancedComponent {

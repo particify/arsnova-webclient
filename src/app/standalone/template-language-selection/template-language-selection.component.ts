@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { IsoLanguage } from '@app/core/models/iso-language';
@@ -15,6 +16,7 @@ import { TranslocoService } from '@jsverse/transloco';
 @Component({
   selector: 'app-template-language-selection',
   imports: [CoreModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './template-language-selection.component.html',
 })
 export class TemplateLanguageSelectionComponent

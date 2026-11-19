@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 
@@ -21,6 +27,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
   ],
   selector: 'app-footer',
   templateUrl: './footer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnDestroy, OnInit {

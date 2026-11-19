@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import {
@@ -32,6 +37,7 @@ import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
   selector: 'app-room-join',
   templateUrl: './room-join.component.html',
   styleUrls: ['./room-join.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     FormsModule,

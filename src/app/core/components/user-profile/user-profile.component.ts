@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
@@ -48,6 +54,7 @@ export class FormField {
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AutofocusDirective,
     FlexModule,

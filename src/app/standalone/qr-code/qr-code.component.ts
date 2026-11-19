@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { takeUntil } from 'rxjs/operators';
@@ -23,6 +24,7 @@ import { Room } from '@app/core/models/room';
   selector: 'app-qr-code',
   imports: [CoreModule, QrCodeModule, ExtensionPointModule, CopyUrlComponent],
   templateUrl: './qr-code.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./qr-code.component.scss'],
 })
 export class QrCodeComponent implements OnInit, OnDestroy {

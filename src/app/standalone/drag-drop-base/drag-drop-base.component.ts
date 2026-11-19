@@ -1,10 +1,17 @@
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  QueryList,
+  ViewChildren,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatListItem } from '@angular/material/list';
 
 @Component({
   selector: 'app-drag-drop-base',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
 })
 export class DragDropBaseComponent {

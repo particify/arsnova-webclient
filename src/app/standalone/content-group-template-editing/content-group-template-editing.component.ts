@@ -7,6 +7,7 @@ import {
   ViewChild,
   ViewChildren,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
@@ -33,6 +34,7 @@ import { TranslocoService } from '@jsverse/transloco';
   ],
   selector: 'app-content-group-template-editing',
   templateUrl: './content-group-template-editing.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-group-template-editing.component.scss'],
 })
 export class ContentGroupTemplateEditingComponent

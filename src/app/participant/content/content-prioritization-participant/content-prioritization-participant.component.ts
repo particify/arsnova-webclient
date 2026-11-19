@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
@@ -15,6 +20,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   selector: 'app-content-prioritization-participant',
   templateUrl: './content-prioritization-participant.component.html',
   imports: [ContentPrioritizationAnswerComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentPrioritizationParticipantComponent extends ContentParticipantBaseComponent {

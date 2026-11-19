@@ -5,6 +5,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -26,6 +27,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
       useExisting: SortContentFormComponent,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [AnswerOptionListComponent, TranslocoPipe],
 })
 export class SortContentFormComponent

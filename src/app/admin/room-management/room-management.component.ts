@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -25,6 +25,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-room-management',
   templateUrl: './room-management.component.html',
   styleUrls: ['../admin-styles.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AdminPageHeaderComponent,
     SearchBarComponent,

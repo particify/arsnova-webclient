@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +24,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   ],
   selector: 'app-comment-list-floating-buttons',
   templateUrl: './comment-list-floating-buttons.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./comment-list-floating-buttons.component.scss'],
 })
 export class CommentListFloatingButtonsComponent implements OnInit {

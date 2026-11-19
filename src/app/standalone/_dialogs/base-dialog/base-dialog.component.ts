@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -22,6 +22,7 @@ interface DialogData {
 @Component({
   imports: [CoreModule, LoadingButtonComponent],
   selector: 'app-base-dialog',
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './base-dialog.component.html',
 })
 export class BaseDialogComponent extends FormComponent {

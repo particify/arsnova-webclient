@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -8,6 +14,7 @@ import { HotkeyAction } from '@app/core/directives/hotkey.directive';
   imports: [CoreModule, LoadingIndicatorComponent],
   selector: 'app-loading-button',
   templateUrl: './loading-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./loading-button.component.scss'],
 })
 export class LoadingButtonComponent extends FormComponent {

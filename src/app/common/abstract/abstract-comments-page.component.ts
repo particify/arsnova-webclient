@@ -1,4 +1,10 @@
-import { Component, Input, inject, input } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { TranslocoService } from '@jsverse/transloco';
@@ -34,6 +40,7 @@ export const BAR_PADDING = 16;
 const APP_PADDING = innerWidth < 600 ? 16 : 24;
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AbstractCommentsPageComponent {

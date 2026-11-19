@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Comment } from '@app/core/models/comment';
 import { Room } from '@app/core/models/room';
@@ -26,6 +33,7 @@ import { ExtensionPointComponent } from '@projects/extension-point/src/lib/exten
   styleUrls: [
     '../../../standalone/comment-list-bar/comment-list-bar.component.scss',
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatIconButton,

@@ -1,4 +1,9 @@
-import { Component, EventEmitter, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   FormControl,
   Validators,
@@ -52,6 +57,7 @@ export interface DialogData {
     MatButton,
     TranslocoPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [AdminService],
 })
 export class InputDialogComponent extends UserSearchComponent {

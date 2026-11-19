@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import {
   GlobalStorageService,
@@ -26,6 +33,7 @@ import { RoomSettingsService } from '@app/core/services/http/room-settings.servi
   selector: 'app-presentation',
   templateUrl: './presentation.component.html',
   styleUrl: './presentation.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ControlBarComponent,
     AutofocusDirective,

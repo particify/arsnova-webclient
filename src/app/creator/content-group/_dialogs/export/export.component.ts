@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   MatDialogRef,
   MatDialogContent,
@@ -26,6 +26,7 @@ export interface ExportOptions {
 
 @Component({
   templateUrl: './export.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CdkScrollable,
     MatDialogContent,

@@ -38,7 +38,8 @@
                 selectedFormat?.icon
               }}</mat-icon>
               <span>{{
-                'creator.content.format-' + selectedFormat?.name | transloco
+                'creator.content.format-' +
+                  $safeNavigationMigration(selectedFormat?.name) | transloco
               }}</span>
             </mat-select-trigger>
             @for (format of formats; track format) {

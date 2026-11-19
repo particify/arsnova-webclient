@@ -5,6 +5,7 @@ import {
   Input,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   UntypedFormControl,
@@ -60,6 +61,7 @@ const PATTERNS: RegExp[] = [
   selector: 'app-password-entry',
   templateUrl: './password-entry.component.html',
   styleUrls: ['./password-entry.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFormField,
     NgClass,

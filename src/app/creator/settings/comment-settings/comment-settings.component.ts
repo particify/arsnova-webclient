@@ -1,4 +1,11 @@
-import { Component, DestroyRef, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -29,6 +36,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
   selector: 'app-comment-settings',
   templateUrl: './comment-settings.component.html',
   styleUrls: ['./comment-settings.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     LoadingIndicatorComponent,
     FlexModule,

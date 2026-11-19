@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
@@ -59,6 +66,7 @@ export class NavBarItem {
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss'],
   providers: [FocusModeService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatButton,

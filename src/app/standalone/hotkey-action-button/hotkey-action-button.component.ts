@@ -1,5 +1,11 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 
@@ -15,6 +21,7 @@ export const hotkeyEnterLeaveAnimation = trigger('hotkeyEnterLeaveAnimation', [
   selector: 'app-hotkey-action-button',
   imports: [CoreModule],
   templateUrl: './hotkey-action-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './hotkey-action-button.component.scss',
 })
 export class HotkeyActionButtonComponent {

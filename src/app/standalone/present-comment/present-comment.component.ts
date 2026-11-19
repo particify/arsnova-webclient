@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { Comment } from '@app/core/models/comment';
@@ -11,6 +18,7 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
   selector: 'app-present-comment',
   templateUrl: './present-comment.component.html',
   styleUrls: ['./present-comment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FlexModule, LanguageContextDirective, TranslocoPipe],
 })
 export class PresentCommentComponent implements OnInit, OnDestroy {

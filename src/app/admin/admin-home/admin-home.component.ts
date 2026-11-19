@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
   GlobalStorageService,
@@ -22,6 +27,7 @@ import { SummaryBarComponent } from '@app/admin/summary-bar/summary-bar.componen
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NavigationDrawerComponent,
     FlexModule,

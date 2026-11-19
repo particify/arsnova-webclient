@@ -5,6 +5,7 @@ import {
   EventEmitter,
   OnDestroy,
   Input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +32,7 @@ import { MatIconButton } from '@angular/material/button';
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFormField,
     MatLabel,

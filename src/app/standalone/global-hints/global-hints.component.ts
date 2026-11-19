@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -10,6 +10,7 @@ import { map } from 'rxjs';
   selector: 'app-global-hints',
   templateUrl: './global-hints.component.html',
   styleUrl: './global-hints.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [HintComponent, ExtensionPointComponent, FlexLayoutModule],
 })
 export class GlobalHintsComponent {

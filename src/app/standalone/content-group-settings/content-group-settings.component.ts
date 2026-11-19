@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
@@ -25,6 +30,7 @@ import { provideTranslocoScope } from '@jsverse/transloco';
   ],
   providers: [provideTranslocoScope('creator')],
   templateUrl: './content-group-settings.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-group-settings.component.scss',
 })
 export class ContentGroupSettingsComponent

@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { ActivatedRoute } from '@angular/router';
 import { FlexModule } from '@angular/flex-layout';
@@ -54,6 +60,7 @@ export class AdminStats {
   selector: 'app-system-statistics',
   templateUrl: './system-statistics.component.html',
   styleUrls: ['../admin-styles.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     AdminPageHeaderComponent,

@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
@@ -22,6 +27,7 @@ import { takeUntil } from 'rxjs';
 @Component({
   selector: 'app-add-template-button',
   imports: [CoreModule, LoadingButtonComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './add-template-button.component.html',
 })
 export class AddTemplateButtonComponent extends FormComponent {

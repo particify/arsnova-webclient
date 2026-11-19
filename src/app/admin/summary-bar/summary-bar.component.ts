@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   SummarizedStats,
   SystemInfoService,
@@ -15,6 +20,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
   selector: 'app-admin-summary-bar',
   templateUrl: './summary-bar.component.html',
   styleUrls: ['./summary-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FlexModule, HealthStatusComponent, AsyncPipe, TranslocoPipe],
 })
 export class SummaryBarComponent {

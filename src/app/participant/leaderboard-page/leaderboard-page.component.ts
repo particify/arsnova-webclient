@@ -1,4 +1,11 @@
-import { Component, DestroyRef, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
@@ -15,6 +22,7 @@ import { provideTranslocoScope } from '@jsverse/transloco';
   selector: 'app-leaderboard-page',
   templateUrl: './leaderboard-page.component.html',
   imports: [FlexModule, LoadingIndicatorComponent, ContentLeaderboardComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class LeaderboardPageComponent implements OnInit {

@@ -5,6 +5,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
@@ -26,6 +27,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
       useExisting: PrioritizationContentFormComponent,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [AnswerOptionListComponent, TranslocoPipe],
 })
 export class PrioritizationContentFormComponent

@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   UntypedFormControl,
   FormGroupDirective,
@@ -47,6 +54,7 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   selector: 'app-password-reset',
   templateUrl: './password-reset.component.html',
   styleUrls: ['./password-reset.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatCard,

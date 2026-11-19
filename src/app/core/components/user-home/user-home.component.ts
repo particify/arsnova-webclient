@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { FlexModule } from '@angular/flex-layout';
@@ -11,6 +16,7 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
   selector: 'app-user-home',
   templateUrl: './user-home.component.html',
   styleUrls: ['./user-home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     AutofocusDirective,

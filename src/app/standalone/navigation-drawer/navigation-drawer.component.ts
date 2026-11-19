@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
@@ -37,6 +43,7 @@ export class NavButton {
   selector: 'app-navigation-drawer',
   imports: [CoreModule, FooterComponent],
   templateUrl: './navigation-drawer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./navigation-drawer.component.scss'],
 })
 export class NavigationDrawerComponent implements OnInit {

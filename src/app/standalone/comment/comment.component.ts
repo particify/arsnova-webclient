@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -51,6 +52,7 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [
     trigger('slide', [
       state('hidden', style({ opacity: 0, transform: 'translateY(-10px)' })),

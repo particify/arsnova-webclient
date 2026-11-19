@@ -1,4 +1,9 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
@@ -26,6 +31,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   selector: 'app-create-content-group-template',
   templateUrl: './create-content-group-template.component.html',
   styleUrls: ['./create-content-group-template.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatDialogTitle,
     CdkScrollable,

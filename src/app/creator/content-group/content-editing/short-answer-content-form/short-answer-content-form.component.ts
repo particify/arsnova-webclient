@@ -4,6 +4,7 @@ import {
   OnChanges,
   SimpleChanges,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { Content } from '@app/core/models/content';
@@ -26,6 +27,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
       useExisting: ShortAnswerContentFormComponent,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [AnswerOptionListComponent, TranslocoPipe],
 })
 export class ShortAnswerContentFormComponent

@@ -8,6 +8,7 @@ import {
   Output,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -62,6 +63,7 @@ import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
   selector: 'app-content-list',
   templateUrl: './content-list.component.html',
   styleUrls: ['./content-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatActionList,

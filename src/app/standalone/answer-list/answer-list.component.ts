@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
 import { MatIcon } from '@angular/material/icon';
@@ -19,6 +26,7 @@ import { NgClass } from '@angular/common';
     MatIcon,
     TranslocoPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('creator')],
 })
 export class AnswerListComponent implements OnInit {

@@ -8,6 +8,7 @@ import {
   OnInit,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
@@ -42,6 +43,7 @@ import { FormService } from '@app/core/services/util/form.service';
     CommentListHintComponent,
     CommentComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('creator')],
 })
 export class CommentsPageComponent

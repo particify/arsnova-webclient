@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -78,6 +79,7 @@ interface ContentFormat {
   selector: 'app-content-editing',
   templateUrl: './content-editing.component.html',
   styleUrls: ['./content-editing.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatFormField,

@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -40,6 +46,7 @@ interface DialogData {
   selector: 'app-content-group-creation',
   templateUrl: './content-group-creation.component.html',
   styleUrl: './content-group-creation.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     CdkScrollable,

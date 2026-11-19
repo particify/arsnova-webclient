@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { Router } from '@angular/router';
@@ -46,6 +52,7 @@ export interface Settings {
   selector: 'app-settings-page',
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AutofocusDirective,
     FlexModule,

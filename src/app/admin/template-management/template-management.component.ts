@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { TemplateService } from '@app/admin/template-management/template.service';
@@ -35,6 +40,7 @@ enum FILTER {
   selector: 'app-template-management',
   templateUrl: './template-management.component.html',
   styleUrls: ['./template-management.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     AdminPageHeaderComponent,
