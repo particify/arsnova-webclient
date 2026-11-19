@@ -1,6 +1,8 @@
+include: .gitlab/ci/variables.yml
+
 variables:
   BUILD_DIR: dist
-  CHROME_IMAGE_TAG: 149.0.7827.53-1-nodejs-24.16.0
+  CHROME_IMAGE_TAG: 158.0.8127.36-1-nodejs-26.13.1
   DEPENDENCY_CACHE_IMAGE: $CI_REGISTRY/particify/dev/foss/arsnova-webclient/dependency-cache-chromebrowser-nodejs
 
 workflow:
@@ -21,6 +23,7 @@ default:
   interruptible: true
   before_script:
     - date
+    - npm install --global "corepack@$COREPACK_VERSION"
     - corepack enable
     - yarn install --immutable
   after_script:
