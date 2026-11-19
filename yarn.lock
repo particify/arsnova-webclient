@@ -4813,21 +4813,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stomp/rx-stomp@npm:2.1.0":
-  version: 2.1.0
-  resolution: "@stomp/rx-stomp@npm:2.1.0"
+"@stomp/rx-stomp@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@stomp/rx-stomp@npm:2.4.0"
   peerDependencies:
     "@stomp/stompjs": ^7.2.0
     rxjs: ^7.2.0
-    uuid: ">=9.0.0 <12.0.0"
-  checksum: 10c0/45562598aa5daef3df3ce19bf21ff6ec14734cf466006253fdfae79f1f33b4837c96a094a59e62a0d918b99a95f92575d0c017ace7e4eef79335919cf3f9a21e
+    uuid: ">=9.0.0 <15.0.0"
+  checksum: 10c0/d5467dcc3d194bc55b300b222e1f37150a2368accf1cf4f8c2a14c375f69644780b5a37ebee47412212fe268bd43a018055a61391d9b448e7e4a254082d88f7e
   languageName: node
   linkType: hard
 
-"@stomp/stompjs@npm:7.2.1":
-  version: 7.2.1
-  resolution: "@stomp/stompjs@npm:7.2.1"
-  checksum: 10c0/c204a551e549ede739b47a47ac179d8b836060e1e8c9473a877ffcbd8341688e996c8021e11f308934e3d92e8a43f59d808aecce24dc6acb338691037ade8149
+"@stomp/stompjs@npm:7.5.0":
+  version: 7.5.0
+  resolution: "@stomp/stompjs@npm:7.5.0"
+  checksum: 10c0/94b1c173ae35a7ebf0002e9b41fb2027b865813fad6bfacb038b2c3f60ffea48520bfe308b652399b0417988887e6b7b415ad8dc9f311341c26ca453fb38abd6
   languageName: node
   linkType: hard
 
@@ -6425,8 +6425,8 @@ __metadata:
     "@fontsource/roboto": "npm:5.3.0"
     "@jsverse/transloco": "npm:7.6.1"
     "@playwright/test": "npm:1.55.1"
-    "@stomp/rx-stomp": "npm:2.1.0"
-    "@stomp/stompjs": "npm:7.2.1"
+    "@stomp/rx-stomp": "npm:2.4.0"
+    "@stomp/stompjs": "npm:7.5.0"
     "@storybook/addon-docs": "npm:9.1.21"
     "@storybook/angular": "npm:9.1.21"
     "@types/d3-cloud": "npm:1.2.9"
