@@ -1,4 +1,4 @@
-include: .gitlab/ci/variables.yml
+include: .gitlab/ci/versions.yml
 
 variables:
   BUILD_DIR: dist
