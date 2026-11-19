@@ -4618,7 +4618,7 @@ __metadata:
     karma-chrome-launcher: "npm:3.2.0"
     karma-coverage-istanbul-reporter: "npm:3.0.3"
     karma-jasmine: "npm:5.1.0"
-    karma-jasmine-html-reporter: "npm:2.1.0"
+    karma-jasmine-html-reporter: "npm:2.3.0"
     karma-viewport: "npm:1.0.9"
     katex: "npm:0.19.1"
     lru-cache: "npm:11.5.3"
@@ -8086,14 +8086,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"karma-jasmine-html-reporter@npm:2.1.0":
-  version: 2.1.0
-  resolution: "karma-jasmine-html-reporter@npm:2.1.0"
+"karma-jasmine-html-reporter@npm:2.3.0":
+  version: 2.3.0
+  resolution: "karma-jasmine-html-reporter@npm:2.3.0"
   peerDependencies:
-    jasmine-core: ^4.0.0 || ^5.0.0
+    jasmine-core: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
     karma: ^6.0.0
     karma-jasmine: ^5.0.0
-  checksum: 10c0/c20b0b52eada370d66fb06eda1a767f2043fecc6c4647691c889f4f62aa0f8948811dc64f033ebab02085a2e27e79099034ebe1699facf4e24e6bbc5ad0c203f
+  checksum: 10c0/bbd8735ea5dafb0eca570889141bc0c08620897e231fe5a4de5f3ce166832163fafea9ee6d0cf9d92472b37eea728b4de0d7a01af6425835347cf9b1332cc208
   languageName: node
   linkType: hard
 
