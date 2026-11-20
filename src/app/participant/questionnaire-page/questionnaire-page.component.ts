@@ -7,6 +7,7 @@ import {
   inject,
   input,
   linkedSignal,
+  signal,
   untracked,
   viewChild,
 } from '@angular/core';
@@ -21,17 +22,24 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Location } from '@angular/common';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
+  asyncScheduler,
   catchError,
+  debounce,
+  defer,
   distinctUntilChanged,
   EMPTY,
   filter,
   ignoreElements,
   map,
   merge,
+  MonoTypeOperatorFunction,
   of,
+  share,
   shareReplay,
   switchMap,
   take,
+  tap,
+  timer,
 } from 'rxjs';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
@@ -73,19 +81,63 @@ function setDefaultTrue(value: boolean | undefined): boolean {
   return value ?? true;
 }
 
+const REFETCH_DEBOUNCE_MS = 500;
+const REFETCH_MAX_WAIT_MS = 2000;
+
+// Closing a round is left out: it changes neither the contents nor the answer
+// results, and the subscription delivers it into the normalized round.
 function publishedContentsKey(
   questionnaire: QuestionnaireDetailsFragment
 ): string {
   return [
+    questionnaire.id,
     questionnaire.published,
     questionnaire.publishingMode,
     questionnaire.publishedUpToContent?.id,
     questionnaire.contentCount,
     questionnaire.activeRound?.id,
-    questionnaire.activeRound?.closed,
     // Solutions are withheld from participants until they are published.
     questionnaire.correctOptionsPublished,
   ].join('|');
+}
+
+// Changes when a round starts or another questionnaire is opened. Such a change
+// must not wait, since the answering time runs from the start.
+function startedRoundKey(questionnaire: QuestionnaireDetailsFragment): string {
+  return [questionnaire.id, questionnaire.activeRound?.id].join('|');
+}
+
+/**
+ * Debounces changes while their key stays the same. A change of the key passes
+ * at once, replacing a pending value, and starts a new burst. A burst is passed
+ * on at the latest after the maximum wait.
+ */
+function debounceWithinKey<T>(
+  keyOf: (value: T) => string,
+  dueTime: number,
+  maxWait: number
+): MonoTypeOperatorFunction<T> {
+  return (source) =>
+    defer(() => {
+      let lastKey: string | undefined;
+      let burstStart: number | undefined;
+      return source.pipe(
+        debounce((value) => {
+          const key = keyOf(value);
+          if (key !== lastKey) {
+            lastKey = key;
+            burstStart = undefined;
+            return of(value);
+          }
+          const now = asyncScheduler.now();
+          burstStart ??= now;
+          const wait = Math.min(dueTime, burstStart + maxWait - now);
+          return timer(Math.max(wait, 0)).pipe(
+            tap(() => (burstStart = undefined))
+          );
+        })
+      );
+    });
 }
 
 @Component({
@@ -176,16 +228,30 @@ export class QuestionnairePageComponent {
     )
   );
 
+  // One trigger for the contents and the answer results keeps them consistent
+  // with each other.
+  private readonly publishedContentsChanged$ = toObservable(
+    this.questionnaire
+  ).pipe(
+    filter((q): q is QuestionnaireDetailsFragment => !!q),
+    distinctUntilChanged(
+      (a, b) => publishedContentsKey(a) === publishedContentsKey(b)
+    ),
+    debounceWithinKey(
+      startedRoundKey,
+      REFETCH_DEBOUNCE_MS,
+      REFETCH_MAX_WAIT_MS
+    ),
+    map((q) => q.id),
+    share()
+  );
+
   private readonly contentsResult = toSignal(
-    toObservable(this.questionnaire).pipe(
-      filter((q): q is QuestionnaireDetailsFragment => !!q),
-      distinctUntilChanged(
-        (a, b) => publishedContentsKey(a) === publishedContentsKey(b)
-      ),
-      switchMap((questionnaire) => {
+    this.publishedContentsChanged$.pipe(
+      switchMap((questionnaireId) => {
         return this.contentsByQuestionnareId
           .watch({
-            variables: { questionnaireId: questionnaire.id },
+            variables: { questionnaireId },
             fetchPolicy: 'network-only',
           })
           .valueChanges.pipe(
@@ -220,15 +286,11 @@ export class QuestionnairePageComponent {
   );
 
   private readonly answerResultsResult = toSignal(
-    toObservable(this.questionnaire).pipe(
-      filter((q): q is QuestionnaireDetailsFragment => !!q),
-      distinctUntilChanged(
-        (a, b) => publishedContentsKey(a) === publishedContentsKey(b)
-      ),
-      switchMap((questionnaire) => {
+    this.publishedContentsChanged$.pipe(
+      switchMap((questionnaireId) => {
         return this.answerResultsByQuestionnaireId
           .watch({
-            variables: { questionnaireId: questionnaire.id },
+            variables: { questionnaireId },
             fetchPolicy: 'network-only',
           })
           .valueChanges.pipe(
@@ -326,6 +388,11 @@ export class QuestionnairePageComponent {
   private followedLiveContentId?: string;
   private followedLiveRoundId?: string;
   private stepperInitPending = false;
+  // A released content is offered only once the contents list it, so that
+  // loading it cannot miss.
+  private readonly pendingReleasedContentId = signal<string | undefined>(
+    undefined
+  );
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
   private readonly contentFocusState = toSignal(
     this.focusModeService.getContentState()
@@ -418,6 +485,7 @@ export class QuestionnairePageComponent {
       const questionnaireId = this.questionnaireId();
       if (prevQuestionnaireId && questionnaireId !== prevQuestionnaireId) {
         this.started = false;
+        this.pendingReleasedContentId.set(undefined);
       }
       prevQuestionnaireId = questionnaireId;
     });
@@ -459,9 +527,20 @@ export class QuestionnairePageComponent {
         publishedUpToContentId !== undefined &&
         publishedUpToContentId !== prevPublishedUpToContentId
       ) {
-        this.offerReleasedContent(publishedUpToContentId);
+        this.pendingReleasedContentId.set(publishedUpToContentId);
       }
       prevPublishedUpToContentId = publishedUpToContentId;
+    });
+
+    effect(() => {
+      const releasedContentId = this.pendingReleasedContentId();
+      if (
+        releasedContentId &&
+        this.getIndexOfContentById(releasedContentId) >= 0
+      ) {
+        this.pendingReleasedContentId.set(undefined);
+        untracked(() => this.offerReleasedContent(releasedContentId));
+      }
     });
   }
 
