@@ -33,23 +33,23 @@ const routes: Routes = [
       showCommentPreview: true,
     },
     loadComponent: () =>
-      import(
-        '@app/standalone/comments-presentation/comments-page.component'
-      ).then((m) => m.CommentsPageComponent),
+      import('@app/standalone/comments-presentation/comments-page.component').then(
+        (m) => m.CommentsPageComponent
+      ),
   },
   {
     path: 'feedback',
     loadComponent: () =>
-      import(
-        '@app/standalone/live-feedback-presentation/live-feedback-page.component'
-      ).then((m) => m.LiveFeedbackPageComponent),
+      import('@app/standalone/live-feedback-presentation/live-feedback-page.component').then(
+        (m) => m.LiveFeedbackPageComponent
+      ),
   },
   {
     path: 'series/:seriesName',
     loadComponent: () =>
-      import(
-        '@app/standalone/content-presentation/contents-page.component'
-      ).then((m) => m.ContentsPageComponent),
+      import('@app/standalone/content-presentation/contents-page.component').then(
+        (m) => m.ContentsPageComponent
+      ),
     data: { extendedView: true },
     resolve: {
       contentGroup: ContentGroupResolver,
@@ -58,9 +58,9 @@ const routes: Routes = [
   {
     path: 'series/:seriesName/:contentIndex',
     loadComponent: () =>
-      import(
-        '@app/standalone/content-presentation/contents-page.component'
-      ).then((m) => m.ContentsPageComponent),
+      import('@app/standalone/content-presentation/contents-page.component').then(
+        (m) => m.ContentsPageComponent
+      ),
     data: { extendedView: true },
     resolve: {
       contentGroup: ContentGroupResolver,
