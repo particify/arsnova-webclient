@@ -94,7 +94,7 @@
     "prettier": "3.6.2",
     "sass-embedded": "1.108.2",
     "storybook": "10.6.7",
-    "stylelint": "16.24.0",
+    "stylelint": "16.26.1",
     "stylelint-config-standard-scss": "15.0.1",
     "ts-node": "10.9.2",
     "typescript": "6.0.3",
