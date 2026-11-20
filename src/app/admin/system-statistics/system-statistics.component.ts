@@ -16,7 +16,7 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { MatCard } from '@angular/material/card';
 import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { AdminStatsGql } from '@gql/generated/graphql';
+import { AdminStatsGql, AdminStatsQuery } from '@gql/generated/graphql';
 import { debounceTime, map, Subject } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CoreModule } from '@app/core/core.module';
@@ -33,6 +33,24 @@ export interface AdminStats {
   violationReport?: object;
   announcement?: object;
   comment?: object;
+}
+
+type ViolationReportStats = NonNullable<
+  AdminStatsQuery['adminViolationReportStats']
+>;
+
+/** Keeps the shape of the v3 stats, whose keys have translations. */
+function toViolationReportStats(stats: ViolationReportStats): object {
+  return {
+    totalCount: stats.totalCount,
+    undecidedCount: stats.undecidedCount,
+    countByReason: Object.fromEntries(
+      stats.countsByReason.map((c) => [c.reason, c.count])
+    ),
+    countByDecision: Object.fromEntries(
+      stats.countsByDecision.map((c) => [c.decision, c.count])
+    ),
+  };
 }
 
 @Component({
@@ -73,6 +91,9 @@ export class SystemStatisticsComponent implements OnInit {
   userStats = computed(() => this.adminStats()?.adminUserStats);
   announcementStats = computed(() => this.adminStats()?.adminAnnouncementStats);
   qnaStats = computed(() => this.adminStats()?.adminQnaStats);
+  violationReportStats = computed(
+    () => this.adminStats()?.adminViolationReportStats
+  );
 
   shouldInitTabs$ = new Subject<void>();
 
@@ -85,6 +106,7 @@ export class SystemStatisticsComponent implements OnInit {
       const roomStats = this.roomStats();
       const announcementStats = this.announcementStats();
       const qnaStats = this.qnaStats();
+      const violationReportStats = this.violationReportStats();
       if (userStats) {
         this.core4Stats.userProfile = userStats;
       }
@@ -96,6 +118,10 @@ export class SystemStatisticsComponent implements OnInit {
       }
       if (qnaStats) {
         this.core4Stats.comment = qnaStats;
+      }
+      if (violationReportStats) {
+        this.core4Stats.violationReport =
+          toViolationReportStats(violationReportStats);
       }
       this.shouldInitTabs$.next();
     });
@@ -120,7 +146,6 @@ export class SystemStatisticsComponent implements OnInit {
         this.core3Stats.answer = stats.answer;
         this.core3Stats.contentGroupTemplate = stats.contentGroupTemplate;
         this.core3Stats.contentTemplate = stats.contentTemplate;
-        this.core3Stats.violationReport = stats.violationReport;
         this.shouldInitTabs$.next();
       },
     });

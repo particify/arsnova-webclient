@@ -312,6 +312,21 @@ export type AdminStatsQuery = {
     totalCount: number;
   } | null;
   adminQnaStats: { __typename: 'AdminQnaStats'; postCount: number } | null;
+  adminViolationReportStats: {
+    __typename: 'AdminViolationReportStats';
+    totalCount: number;
+    undecidedCount: number;
+    countsByReason: Array<{
+      __typename: 'ViolationReportReasonCount';
+      reason: Types.ViolationReportReason;
+      count: number;
+    }>;
+    countsByDecision: Array<{
+      __typename: 'ViolationReportDecisionCount';
+      decision: Types.ViolationReportDecision;
+      count: number;
+    }>;
+  } | null;
 };
 
 export type AdminRoomActivityStatsQueryVariables = Exact<{
@@ -7507,6 +7522,76 @@ export type UpdateUserPasswordMutation = {
   updateUserPassword: { __typename: 'User'; id: string } | null;
 };
 
+export type ViolationReportDetailsFragment = {
+  __typename: 'ViolationReport';
+  id: string;
+  targetType: Types.ViolationReportTargetType;
+  targetId: string;
+  reason: Types.ViolationReportReason;
+  description: string;
+  decision: Types.ViolationReportDecision | null;
+  createdAt: string;
+  updatedAt: string | null;
+};
+
+export type CreateViolationReportMutationVariables = Exact<{
+  input: Types.CreateViolationReportInput;
+}>;
+
+export type CreateViolationReportMutation = { createViolationReport: string };
+
+export type AdminViolationReportsByDecidedQueryVariables = Exact<{
+  decided: boolean;
+  cursor?: string | null;
+}>;
+
+export type AdminViolationReportsByDecidedQuery = {
+  adminViolationReportsByDecided: {
+    __typename: 'ViolationReportConnection';
+    edges: Array<{
+      __typename: 'ViolationReportEdge';
+      cursor: string;
+      node: {
+        __typename: 'ViolationReport';
+        id: string;
+        targetType: Types.ViolationReportTargetType;
+        targetId: string;
+        reason: Types.ViolationReportReason;
+        description: string;
+        decision: Types.ViolationReportDecision | null;
+        createdAt: string;
+        updatedAt: string | null;
+      };
+    } | null> | null;
+    pageInfo: {
+      __typename: 'PageInfo';
+      endCursor: string | null;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor: string | null;
+    };
+  } | null;
+};
+
+export type AdminDecideViolationReportMutationVariables = Exact<{
+  id: string;
+  decision: Types.ViolationReportDecision;
+}>;
+
+export type AdminDecideViolationReportMutation = {
+  adminDecideViolationReport: {
+    __typename: 'ViolationReport';
+    id: string;
+    targetType: Types.ViolationReportTargetType;
+    targetId: string;
+    reason: Types.ViolationReportReason;
+    description: string;
+    decision: Types.ViolationReportDecision | null;
+    createdAt: string;
+    updatedAt: string | null;
+  };
+};
+
 export const AdminUserDetailsFragmentDoc = gql`
   fragment AdminUserDetails on AdminUser {
     id
@@ -7940,6 +8025,18 @@ export const TemplateDetailsFragmentDoc = gql`
   ${TemplateLicenseFragmentDoc}
   ${TemplateTagFragmentDoc}
 `;
+export const ViolationReportDetailsFragmentDoc = gql`
+  fragment ViolationReportDetails on ViolationReport {
+    id
+    targetType
+    targetId
+    reason
+    description
+    decision
+    createdAt
+    updatedAt
+  }
+`;
 export const AdminUserByIdDocument = gql`
   query AdminUserById($id: ID!) {
     adminUserById(id: $id) {
@@ -8203,6 +8300,18 @@ export const AdminStatsDocument = gql`
     }
     adminQnaStats {
       postCount
+    }
+    adminViolationReportStats {
+      totalCount
+      undecidedCount
+      countsByReason {
+        reason
+        count
+      }
+      countsByDecision {
+        decision
+        count
+      }
     }
   }
 `;
@@ -12713,6 +12822,83 @@ export class UpdateUserPasswordGql extends Apollo.Mutation<
   UpdateUserPasswordMutationVariables
 > {
   document = UpdateUserPasswordDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateViolationReportDocument = gql`
+  mutation CreateViolationReport($input: CreateViolationReportInput!) {
+    createViolationReport(input: $input)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateViolationReportGql extends Apollo.Mutation<
+  CreateViolationReportMutation,
+  CreateViolationReportMutationVariables
+> {
+  document = CreateViolationReportDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminViolationReportsByDecidedDocument = gql`
+  query AdminViolationReportsByDecided($decided: Boolean!, $cursor: String) {
+    adminViolationReportsByDecided(decided: $decided, after: $cursor) {
+      edges {
+        node {
+          ...ViolationReportDetails
+        }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+  ${ViolationReportDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminViolationReportsByDecidedGql extends Apollo.Query<
+  AdminViolationReportsByDecidedQuery,
+  AdminViolationReportsByDecidedQueryVariables
+> {
+  document = AdminViolationReportsByDecidedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminDecideViolationReportDocument = gql`
+  mutation AdminDecideViolationReport(
+    $id: UUID!
+    $decision: ViolationReportDecision!
+  ) {
+    adminDecideViolationReport(id: $id, decision: $decision) {
+      ...ViolationReportDetails
+    }
+  }
+  ${ViolationReportDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminDecideViolationReportGql extends Apollo.Mutation<
+  AdminDecideViolationReportMutation,
+  AdminDecideViolationReportMutationVariables
+> {
+  document = AdminDecideViolationReportDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

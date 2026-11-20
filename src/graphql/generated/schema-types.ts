@@ -112,6 +112,14 @@ export type AdminUserStats = {
   verifiedCount: Scalars['Int']['output'];
 };
 
+export type AdminViolationReportStats = {
+  __typename?: 'AdminViolationReportStats';
+  countsByDecision: Array<ViolationReportDecisionCount>;
+  countsByReason: Array<ViolationReportReasonCount>;
+  totalCount: Scalars['Int']['output'];
+  undecidedCount: Scalars['Int']['output'];
+};
+
 export type Announcement = {
   __typename?: 'Announcement';
   body: Scalars['String']['output'];
@@ -478,6 +486,13 @@ export type CreateTextContentInput = {
   questionnaireId: Scalars['UUID']['input'];
 };
 
+export type CreateViolationReportInput = {
+  description: Scalars['String']['input'];
+  reason: ViolationReportReason;
+  targetId: Scalars['UUID']['input'];
+  targetType: ViolationReportTargetType;
+};
+
 export type CreateWordcloudAnswerInput = {
   roundId: Scalars['UUID']['input'];
   words: Array<Scalars['String']['input']>;
@@ -547,6 +562,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   acceptQnaPost: Post;
   adminCreateUser: AdminUser;
+  adminDecideViolationReport: ViolationReport;
   adminDeleteRoomById: Scalars['UUID']['output'];
   adminDeleteTemplate: Scalars['UUID']['output'];
   adminDeleteTemplateTag: Scalars['UUID']['output'];
@@ -588,6 +604,7 @@ export type Mutation = {
   createQuestionnaireWordcloudContent?: Maybe<Content>;
   createRoom: Room;
   createTemplateFromQuestionnaire: Template;
+  createViolationReport: Scalars['UUID']['output'];
   deleteAnnouncement: Scalars['ID']['output'];
   deleteQnaPost: Scalars['ID']['output'];
   deleteQnaPostsByQnaId: Scalars['Int']['output'];
@@ -670,6 +687,11 @@ export type MutationAcceptQnaPostArgs = {
 
 export type MutationAdminCreateUserArgs = {
   mailAddress: Scalars['String']['input'];
+};
+
+export type MutationAdminDecideViolationReportArgs = {
+  decision: ViolationReportDecision;
+  id: Scalars['UUID']['input'];
 };
 
 export type MutationAdminDeleteRoomByIdArgs = {
@@ -841,6 +863,10 @@ export type MutationCreateRoomArgs = {
 
 export type MutationCreateTemplateFromQuestionnaireArgs = {
   input: CreateTemplateFromQuestionnaireInput;
+};
+
+export type MutationCreateViolationReportArgs = {
+  input: CreateViolationReportInput;
 };
 
 export type MutationDeleteAnnouncementArgs = {
@@ -1300,6 +1326,8 @@ export type Query = {
   adminUserById?: Maybe<AdminUser>;
   adminUserStats?: Maybe<AdminUserStats>;
   adminUsers?: Maybe<AdminUserConnection>;
+  adminViolationReportStats?: Maybe<AdminViolationReportStats>;
+  adminViolationReportsByDecided?: Maybe<ViolationReportConnection>;
   announcementsByRoomId?: Maybe<AnnouncementConnection>;
   announcementsByUserId?: Maybe<AnnouncementConnection>;
   announcementsForCurrentUser?: Maybe<AnnouncementConnection>;
@@ -1391,6 +1419,14 @@ export type QueryAdminUsersArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryAdminViolationReportsByDecidedArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  decided: Scalars['Boolean']['input'];
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryAnnouncementsByRoomIdArgs = {
@@ -2206,6 +2242,62 @@ export type UserUiSettings = {
   rotateWordcloudItems?: Maybe<Scalars['Boolean']['output']>;
   showContentResultsDirectly?: Maybe<Scalars['Boolean']['output']>;
 };
+
+export type ViolationReport = {
+  __typename?: 'ViolationReport';
+  createdAt: Scalars['DateTime']['output'];
+  createdBy?: Maybe<Scalars['UUID']['output']>;
+  decision?: Maybe<ViolationReportDecision>;
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  reason: ViolationReportReason;
+  targetId: Scalars['UUID']['output'];
+  targetType: ViolationReportTargetType;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedBy?: Maybe<Scalars['UUID']['output']>;
+};
+
+export type ViolationReportConnection = {
+  __typename?: 'ViolationReportConnection';
+  edges?: Maybe<Array<Maybe<ViolationReportEdge>>>;
+  pageInfo: PageInfo;
+};
+
+export enum ViolationReportDecision {
+  Invalid = 'INVALID',
+  Removal = 'REMOVAL',
+}
+
+export type ViolationReportDecisionCount = {
+  __typename?: 'ViolationReportDecisionCount';
+  count: Scalars['Int']['output'];
+  decision: ViolationReportDecision;
+};
+
+export type ViolationReportEdge = {
+  __typename?: 'ViolationReportEdge';
+  cursor: Scalars['String']['output'];
+  node: ViolationReport;
+};
+
+export enum ViolationReportReason {
+  Advertising = 'ADVERTISING',
+  Copyright = 'COPYRIGHT',
+  Disinformation = 'DISINFORMATION',
+  HateSpeech = 'HATE_SPEECH',
+  Other = 'OTHER',
+}
+
+export type ViolationReportReasonCount = {
+  __typename?: 'ViolationReportReasonCount';
+  count: Scalars['Int']['output'];
+  reason: ViolationReportReason;
+};
+
+export enum ViolationReportTargetType {
+  Room = 'ROOM',
+  Template = 'TEMPLATE',
+}
 
 export type VoteInput = {
   postId: Scalars['UUID']['input'];

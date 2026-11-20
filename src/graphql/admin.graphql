@@ -134,6 +134,18 @@ query AdminStats {
   adminQnaStats {
     postCount
   }
+  adminViolationReportStats {
+    totalCount
+    undecidedCount
+    countsByReason {
+      reason
+      count
+    }
+    countsByDecision {
+      decision
+      count
+    }
+  }
 }
 
 query AdminRoomActivityStats($from: DateTime!, $to: DateTime!) {

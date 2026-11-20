@@ -1,0 +1,40 @@
+fragment ViolationReportDetails on ViolationReport {
+  id
+  targetType
+  targetId
+  reason
+  description
+  decision
+  createdAt
+  updatedAt
+}
+
+mutation CreateViolationReport($input: CreateViolationReportInput!) {
+  createViolationReport(input: $input)
+}
+
+query AdminViolationReportsByDecided($decided: Boolean!, $cursor: String) {
+  adminViolationReportsByDecided(decided: $decided, after: $cursor) {
+    edges {
+      node {
+        ...ViolationReportDetails
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+mutation AdminDecideViolationReport(
+  $id: UUID!
+  $decision: ViolationReportDecision!
+) {
+  adminDecideViolationReport(id: $id, decision: $decision) {
+    ...ViolationReportDetails
+  }
+}

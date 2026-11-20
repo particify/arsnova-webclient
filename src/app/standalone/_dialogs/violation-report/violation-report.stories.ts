@@ -4,30 +4,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { ViolationReportComponent } from '@app/standalone/_dialogs/violation-report/violation-report.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { ViolationReportService } from '@app/core/services/http/violation-report.service';
-import { Room } from '@app/core/models/room';
+import {
+  CreateViolationReportGql,
+  ViolationReportTargetType,
+} from '@gql/generated/graphql';
 
 class MockMatDialogRef {}
-class MockViolationReportService {
-  getReasonString(reason: string): string {
-    return reason.toLowerCase().replaceAll(/_/g, '-');
-  }
-
-  getTargetTypeString(targetType: string): string {
-    let type: string;
-    switch (targetType) {
-      case 'ContentGroupTemplate':
-        type = 'template';
-        break;
-      case Room.name:
-        type = 'room';
-        break;
-      default:
-        type = 'content';
-    }
-    return type;
-  }
-}
+class MockCreateViolationReportGql {}
 
 export default {
   component: ViolationReportComponent,
@@ -38,8 +21,8 @@ export default {
       imports: [ViolationReportComponent, LoadingButtonComponent],
       providers: [
         {
-          provide: ViolationReportService,
-          useClass: MockViolationReportService,
+          provide: CreateViolationReportGql,
+          useClass: MockCreateViolationReportGql,
         },
         {
           provide: MatDialogRef,
@@ -48,7 +31,7 @@ export default {
         {
           provide: MAT_DIALOG_DATA,
           useValue: {
-            targetType: 'ContentGroupTemplate',
+            targetType: ViolationReportTargetType.Template,
             targetId: 'templateId',
           },
         },
