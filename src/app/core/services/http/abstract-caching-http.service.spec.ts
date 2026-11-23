@@ -1,6 +1,6 @@
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
 import { Injectable } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { CachingService } from '@app/core/services/util/caching.service';
@@ -57,6 +57,7 @@ const params2 = new HttpParams({ fromObject: { testParam: false } });
 
 describe('AbstractCachingHttpService', () => {
   let httpTestingController: HttpTestingController;
+  let httpClient: HttpClient;
   let testCachingHttpService: TestCachingHttpService;
 
   beforeEach(() => {
@@ -79,6 +80,7 @@ describe('AbstractCachingHttpService', () => {
       ]
     );
     httpTestingController = testBed.inject(HttpTestingController);
+    httpClient = testBed.inject(HttpClient);
     testCachingHttpService = testBed.inject(TestCachingHttpService);
   });
 
@@ -175,6 +177,33 @@ describe('AbstractCachingHttpService', () => {
 
       req1.flush(data1);
       req2.flush(data1);
+    });
+
+    it('should not add the body to the options passed by the caller', () => {
+      const options = {};
+      testCachingHttpService
+        .requestOnce('POST', TEST_URI1, data1, options)
+        .subscribe((data) => expect(data).toEqual(data1));
+      const req = httpTestingController.expectOne(TEST_URI1);
+      expect(req.request.body).toEqual(data1);
+      req.flush(data1);
+
+      expect(options).toEqual({});
+    });
+
+    it('should not leak its body into later requests sharing the options', () => {
+      const options = {};
+      testCachingHttpService
+        .requestOnce('POST', TEST_URI1, data1, options)
+        .subscribe((data) => expect(data).toEqual(data1));
+      httpTestingController.expectOne(TEST_URI1).flush(data1);
+
+      httpClient
+        .post(TEST_URI2, data2, options)
+        .subscribe((data) => expect(data).toEqual(data2));
+      const req = httpTestingController.expectOne(TEST_URI2);
+      expect(req.request.body).toEqual(data2);
+      req.flush(data2);
     });
   });
 });

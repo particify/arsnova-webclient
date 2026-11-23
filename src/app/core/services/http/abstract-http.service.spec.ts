@@ -151,5 +151,20 @@ describe('AbstractHttpService', () => {
         req.flush(data1);
       }
     ));
+
+    it('should not add the body to the options passed by the caller', inject(
+      [TestHttpService],
+      (service: TestHttpService) => {
+        const options = { retry: false };
+        service
+          .performRequest('POST', TEST_URI1, data1, options)
+          .subscribe((data) => expect(data).toEqual(data1));
+        const req = httpTestingController.expectOne(TEST_URI1);
+        expect(req.request.body).toEqual(data1);
+        req.flush(data1);
+
+        expect(options).toEqual({ retry: false });
+      }
+    ));
   });
 });
