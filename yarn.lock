@@ -5710,7 +5710,7 @@ __metadata:
     eslint-plugin-prefer-arrow: "npm:1.2.3"
     eslint-plugin-storybook: "npm:10.6.7"
     graphql: "npm:16.15.0"
-    graphql-ws: "npm:6.4.2"
+    graphql-ws: "npm:6.4.3"
     is-docker: "npm:4.0.0"
     jasmine-core: "npm:6.3.0"
     jasmine-spec-reporter: "npm:7.0.0"
@@ -8305,26 +8305,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-ws@npm:6.4.2":
-  version: 6.4.2
-  resolution: "graphql-ws@npm:6.4.2"
-  peerDependencies:
-    "@fastify/websocket": ^10 || ^11
-    crossws: ~0.3 || ~0.4
-    graphql: ^15.10.1 || ^16 || ^17
-    ws: ^8
-  peerDependenciesMeta:
-    "@fastify/websocket":
-      optional: true
-    crossws:
-      optional: true
-    ws:
-      optional: true
-  checksum: 10c0/53b76a229b7bb5fc065824c9eb708de9fd7ad9037c94ab70c1f496a38c771230b12451b9734e4088e7cdb38d30653db3069a8b58ba1ea6cffaeebf50f660601d
-  languageName: node
-  linkType: hard
-
-"graphql-ws@npm:^6.0.6":
+"graphql-ws@npm:6.4.3, graphql-ws@npm:^6.0.6":
   version: 6.4.3
   resolution: "graphql-ws@npm:6.4.3"
   peerDependencies:
