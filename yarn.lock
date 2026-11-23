@@ -160,6 +160,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular-eslint/builder@npm:22.8.0":
+  version: 22.8.0
+  resolution: "@angular-eslint/builder@npm:22.8.0"
+  dependencies:
+    "@angular-devkit/architect": "npm:>= 0.2200.0 < 0.2300.0"
+    "@angular-devkit/core": "npm:>= 22.0.0 < 23.0.0"
+  peerDependencies:
+    eslint: ^9.0.0 || ^10.0.0
+    typescript: "*"
+  checksum: 10c0/58779d937239823dc6ffec550d05d44dfcbc76cc235d1d560f54288566156473b893b0d57e648849d6a18f5663ffbdfa8898c0f762bb82305e33a6604277781b
+  languageName: node
+  linkType: hard
+
 "@angular-eslint/bundled-angular-compiler@npm:22.7.0":
   version: 22.7.0
   resolution: "@angular-eslint/bundled-angular-compiler@npm:22.7.0"
@@ -5696,7 +5709,7 @@ __metadata:
     "@analogjs/vite-plugin-angular": "npm:2.9.7"
     "@angular-devkit/architect": "npm:0.2202.8"
     "@angular-devkit/core": "npm:22.2.8"
-    "@angular-eslint/builder": "npm:22.7.0"
+    "@angular-eslint/builder": "npm:22.8.0"
     "@angular/animations": "npm:22.3.0"
     "@angular/build": "npm:22.2.8"
     "@angular/cdk": "npm:22.3.0"
