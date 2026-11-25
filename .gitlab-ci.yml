@@ -119,6 +119,7 @@ docker_image:
       --tag "$CONTAINER_IMAGE:$CONTAINER_TAG"
       --file "$CONTAINERFILE"
       --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`"
+      --jobs 2
       "$CONTAINER_CONTEXT"
     - podman push "$CONTAINER_IMAGE:$CONTAINER_TAG"
 
