@@ -22,9 +22,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@analogjs/storybook-angular@npm:2.9.7":
-  version: 2.9.7
-  resolution: "@analogjs/storybook-angular@npm:2.9.7"
+"@analogjs/storybook-angular@npm:2.9.8":
+  version: 2.9.8
+  resolution: "@analogjs/storybook-angular@npm:2.9.8"
   dependencies:
     "@storybook/builder-vite": "npm:^10.0.0"
   peerDependencies:
@@ -32,13 +32,13 @@ __metadata:
     "@storybook/angular": ^10.0.0
     storybook: ^10.0.0
     vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
-  checksum: 10c0/9fb9c13a4964eaae70f5c4ac5f2bead09b4b1f431b898ebdb00bb9c78fbad67343f3b15378b2fa867757de39422b90916c825b1f80847c9f7e1a902932c7307a
+  checksum: 10c0/1371650238e3cc78ff227ffd0a3ed202b3417821469c10b00fc69e61e9d20a0ca4b52e02965d9f26f6bd475ad508be5d85d825d9e1e4b733c45a67e1f3036560
   languageName: node
   linkType: hard
 
-"@analogjs/vite-plugin-angular@npm:2.9.7":
-  version: 2.9.7
-  resolution: "@analogjs/vite-plugin-angular@npm:2.9.7"
+"@analogjs/vite-plugin-angular@npm:2.9.8":
+  version: 2.9.8
+  resolution: "@analogjs/vite-plugin-angular@npm:2.9.8"
   dependencies:
     magic-string: "npm:^0.30.21"
     obug: "npm:^2.1.1"
@@ -55,7 +55,7 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/e286d42301caf338db8872369ef24471832191a31b3ce92301ae35e2a85ec9989891e15a45b488bcf623db2ae331260efb6c8cd4e40c47d092b171e3950aeff1
+  checksum: 10c0/77cdad701f1fc8949203b6af33f25dca97a9c4bfa637db64de17adb9ad28a1c3914c2714c1c715b95f1c362d9722bc29bdddd6ac0f0d0895d11abcc25b089f8c
   languageName: node
   linkType: hard
 
@@ -5686,8 +5686,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "arsnova-webclient@workspace:."
   dependencies:
-    "@analogjs/storybook-angular": "npm:2.9.7"
-    "@analogjs/vite-plugin-angular": "npm:2.9.7"
+    "@analogjs/storybook-angular": "npm:2.9.8"
+    "@analogjs/vite-plugin-angular": "npm:2.9.8"
     "@angular-devkit/architect": "npm:0.2203.0"
     "@angular-devkit/core": "npm:22.3.0"
     "@angular-eslint/builder": "npm:22.8.0"

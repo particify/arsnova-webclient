@@ -63,8 +63,8 @@
     "zone.js": "0.16.3"
   },
   "devDependencies": {
-    "@analogjs/storybook-angular": "2.9.7",
-    "@analogjs/vite-plugin-angular": "2.9.7",
+    "@analogjs/storybook-angular": "2.9.8",
+    "@analogjs/vite-plugin-angular": "2.9.8",
     "@angular-devkit/architect": "0.2203.0",
     "@angular-devkit/core": "22.3.0",
     "@angular-eslint/builder": "22.8.0",
