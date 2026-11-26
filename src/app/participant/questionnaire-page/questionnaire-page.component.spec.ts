@@ -266,6 +266,7 @@ describe('QuestionnairePageComponent (live sync)', () => {
   let component: QuestionnairePageComponent;
   let questionnaire$: BehaviorSubject<Questionnaire>;
   let contentsGql: jasmine.SpyObj<{ watch: unknown }>;
+  let answerResultsGql: jasmine.SpyObj<{ watch: unknown }>;
   let notificationService: jasmine.SpyObj<NotificationService>;
   let snackBarAction$: Subject<void>;
   let router: Router;
@@ -340,9 +341,7 @@ describe('QuestionnairePageComponent (live sync)', () => {
     (contentsGql.watch as jasmine.Spy).and.returnValue({
       valueChanges: options.contents$ ?? of(contentsResponse()),
     });
-    const answerResultsGql = jasmine.createSpyObj('AnswerResultsGql', [
-      'watch',
-    ]);
+    answerResultsGql = jasmine.createSpyObj('AnswerResultsGql', ['watch']);
     const resultsResponse = {
       dataState: 'complete',
       data: {
@@ -351,7 +350,7 @@ describe('QuestionnairePageComponent (live sync)', () => {
         ),
       },
     };
-    answerResultsGql.watch.and.returnValue({
+    (answerResultsGql.watch as jasmine.Spy).and.returnValue({
       valueChanges: options.answerResults$ ?? of(resultsResponse),
     });
     const subscriptionGql = (name: string) => {
@@ -598,7 +597,20 @@ describe('QuestionnairePageComponent (live sync)', () => {
     expect(component.goToContent).not.toHaveBeenCalled();
   });
 
-  it('reloads the published contents when the published range changes', () => {
+  function loadedQuestionnaireIds(gql: jasmine.SpyObj<{ watch: unknown }>) {
+    return (gql.watch as jasmine.Spy).calls
+      .allArgs()
+      .map(([{ variables }]) => variables.questionnaireId);
+  }
+
+  it('loads the contents and answer results at once on entry', () => {
+    setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
+
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1']);
+  });
+
+  it('reloads the published contents when the published range changes', fakeAsync(() => {
     setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
     const loads = (contentsGql.watch as jasmine.Spy).calls.count();
 
@@ -608,11 +620,14 @@ describe('QuestionnairePageComponent (live sync)', () => {
         publishedUpToContent: { id: 'c-1', position: 1 },
       } as never)
     );
+    tick(499);
+    expect((contentsGql.watch as jasmine.Spy).calls.count()).toBe(loads);
 
+    tick(1);
     expect((contentsGql.watch as jasmine.Spy).calls.count()).toBe(loads + 1);
-  });
+  }));
 
-  it('reloads the contents once the correct answers are published', () => {
+  it('reloads the contents once the correct answers are published', fakeAsync(() => {
     setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
     const loads = (contentsGql.watch as jasmine.Spy).calls.count();
 
@@ -622,9 +637,156 @@ describe('QuestionnairePageComponent (live sync)', () => {
         correctOptionsPublished: true,
       } as never)
     );
+    tick(500);
 
     expect((contentsGql.watch as jasmine.Spy).calls.count()).toBe(loads + 1);
-  });
+  }));
+
+  it('reloads the contents and answer results once for a burst of changes', fakeAsync(() => {
+    setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
+    const round = { activeRound: activeRound('c-0') };
+
+    update(questionnaire({ ...round, contentCount: 4 } as never));
+    tick(200);
+    update(
+      questionnaire({
+        ...round,
+        contentCount: 4,
+        correctOptionsPublished: true,
+      } as never)
+    );
+    tick(499);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1']);
+
+    tick(1);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1', 'q-1']);
+  }));
+
+  it('reloads a burst of changes at the latest after the maximum wait', fakeAsync(() => {
+    setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
+    const changeCount = (contentCount: number) =>
+      update(
+        questionnaire({
+          activeRound: activeRound('c-0'),
+          contentCount,
+        } as never)
+      );
+
+    [4, 5, 6, 7].forEach((contentCount) => {
+      changeCount(contentCount);
+      tick(400);
+    });
+    changeCount(8);
+    tick(399);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1']);
+
+    tick(1);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1', 'q-1']);
+
+    changeCount(9);
+    tick(499);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1']);
+    tick(1);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1', 'q-1']);
+  }));
+
+  it('reloads at once when a round starts while a reload is pending', fakeAsync(() => {
+    setUp(questionnaire({ activeRound: activeRound('c-0', true) } as never));
+
+    update(
+      questionnaire({
+        activeRound: activeRound('c-0', true),
+        contentCount: 4,
+      } as never)
+    );
+    tick(200);
+    update(
+      questionnaire({
+        activeRound: activeRound('c-1'),
+        contentCount: 4,
+      } as never)
+    );
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1', 'q-1']);
+
+    // The pending change is carried by the reload and not repeated.
+    tick(2000);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1', 'q-1']);
+  }));
+
+  it('reloads once at the start of a round released just before', fakeAsync(() => {
+    setUp(questionnaire({ activeRound: activeRound('c-0', true) } as never));
+    const released = { publishedUpToContent: { id: 'c-1', position: 1 } };
+
+    update(
+      questionnaire({
+        ...released,
+        activeRound: activeRound('c-0', true),
+      } as never)
+    );
+    tick(200);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1']);
+
+    update(
+      questionnaire({ ...released, activeRound: activeRound('c-1') } as never)
+    );
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1', 'q-1']);
+
+    tick(2000);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1', 'q-1']);
+  }));
+
+  it('starts a new burst after a round start', fakeAsync(() => {
+    setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
+    const round = { activeRound: activeRound('c-1') };
+
+    update(questionnaire({ contentCount: 4, ...round } as never));
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1']);
+
+    update(questionnaire({ ...round, contentCount: 5 } as never));
+    tick(499);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1']);
+    tick(1);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-1', 'q-1']);
+  }));
+
+  it('does not reload the contents or answer results when a round is closed', fakeAsync(() => {
+    setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
+
+    update(questionnaire({ activeRound: activeRound('c-0', true) } as never));
+    tick(2000);
+
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1']);
+  }));
+
+  it('loads another questionnaire at once instead of a pending reload', fakeAsync(() => {
+    setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
+
+    update(
+      questionnaire({
+        activeRound: activeRound('c-0'),
+        contentCount: 4,
+      } as never)
+    );
+    fixture.componentRef.setInput('questionnaireId', 'q-2');
+    update(
+      questionnaire({ id: 'q-2', activeRound: activeRound('c-0') } as never)
+    );
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-2']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1', 'q-2']);
+
+    tick(500);
+    expect(loadedQuestionnaireIds(contentsGql)).toEqual(['q-1', 'q-2']);
+    expect(loadedQuestionnaireIds(answerResultsGql)).toEqual(['q-1', 'q-2']);
+  }));
 
   it('does not reload the contents for an unrelated change', () => {
     setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
@@ -732,6 +894,69 @@ describe('QuestionnairePageComponent (live sync)', () => {
     snackBarAction$.next();
 
     expect(component.goToContent).toHaveBeenCalledWith(1);
+  });
+
+  describe('a released content the contents do not list yet', () => {
+    const upTo = (id: string, position: number) =>
+      questionnaire({
+        publishingMode: QuestionnairePublishingMode.UpTo,
+        publishedUpToContent: { id, position },
+      } as never);
+    let contents$: BehaviorSubject<unknown>;
+
+    function setUpRange() {
+      contents$ = new BehaviorSubject<unknown>(
+        contentsResponse(contents.slice(0, 1))
+      );
+      setUp(upTo('c-0', 0), undefined, undefined, { contents$ });
+      component.started = true;
+    }
+
+    function listContents(count: number) {
+      contents$.next(contentsResponse(contents.slice(0, count)));
+      fixture.detectChanges();
+    }
+
+    it('is offered only once the contents list it', fakeAsync(() => {
+      setUpRange();
+
+      update(upTo('c-1', 1));
+      tick(500);
+      expect(notificationService.show).not.toHaveBeenCalled();
+
+      listContents(2);
+      expect(notificationService.show).toHaveBeenCalledTimes(1);
+
+      snackBarAction$.next();
+      expect(component.goToContent).toHaveBeenCalledWith(1);
+    }));
+
+    it('is replaced by a later release', fakeAsync(() => {
+      setUpRange();
+
+      update(upTo('c-1', 1));
+      update(upTo('c-2', 2));
+      tick(500);
+      listContents(2);
+      expect(notificationService.show).not.toHaveBeenCalled();
+
+      listContents(3);
+      expect(notificationService.show).toHaveBeenCalledTimes(1);
+      snackBarAction$.next();
+      expect(component.goToContent).toHaveBeenCalledOnceWith(2);
+    }));
+
+    it('is dropped when another questionnaire is opened', fakeAsync(() => {
+      setUpRange();
+
+      update(upTo('c-1', 1));
+      fixture.componentRef.setInput('questionnaireId', 'q-2');
+      fixture.detectChanges();
+      listContents(2);
+      tick(500);
+
+      expect(notificationService.show).not.toHaveBeenCalled();
+    }));
   });
 
   describe('template attribution', () => {

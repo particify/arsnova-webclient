@@ -108,6 +108,7 @@ export class MockGraphqlApi {
       id: roundId(position, roundNo),
       contentId: contentId(position),
       roundNo,
+      answeringEndTime: null,
       closed: this.isRoundClosed(position),
       started:
         this.state.publishingMode !== 'LIVE' ||
@@ -127,6 +128,7 @@ export class MockGraphqlApi {
         id: roundId(position, roundNo),
         contentId: contentId(position),
         roundNo,
+        answeringEndTime: null,
         closed: isCurrentRound ? this.isRoundClosed(position) : true,
         started:
           !isCurrentRound ||
